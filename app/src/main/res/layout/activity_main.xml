@@ -3,14 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.gmail.jiangyang5157.cardboard.vr.MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!" />
+    <com.google.vrtoolkit.cardboard.CardboardView
+        android:id="@+id/cardboard_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <com.gmail.jiangyang5157.cardboard.ui.CardboardOverlayView
+        android:id="@+id/cardboard_overlay_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
 </RelativeLayout>
