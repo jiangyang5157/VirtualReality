@@ -2,10 +2,11 @@ package com.gmail.jiangyang5157.cardboard.scene;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+
 /**
  * Created by Yang on 3/21/2016.
  */
-public class SphereLayout extends ModelLayout{
+public class SphereLayout extends ModelLayout {
 
     /**
      * @param rings   defines how many circles exists from the bottom to the top of the sphere

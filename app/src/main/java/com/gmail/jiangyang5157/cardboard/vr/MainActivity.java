@@ -4,12 +4,15 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.opengl.GLES20;
+import android.opengl.GLES31;
 import android.opengl.GLUtils;
 import android.opengl.Matrix;
 import android.os.Vibrator;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.gmail.jiangyang5157.cardboard.scene.Flat;
+import com.gmail.jiangyang5157.cardboard.scene.FlatLayout;
 import com.gmail.jiangyang5157.cardboard.scene.Sphere;
 import com.gmail.jiangyang5157.cardboard.scene.SphereLayout;
 import com.gmail.jiangyang5157.cardboard.ui.CardboardOverlayView;
@@ -28,6 +31,7 @@ import javax.microedition.khronos.egl.EGLConfig;
 
 public class MainActivity extends CardboardActivity implements CardboardView.StereoRenderer {
     private static final String TAG = "MainActivity";
+    private boolean debug = false;
 
     public static final String MODEL_PARAM_NAME = "u_ModelMatrix";
     public static final String MODEL_VIEW_PARAM_NAME = "u_MVMatrix";
@@ -36,6 +40,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
     public static final String POSOTION_PARAM_NAME = "a_Position";
     public static final String NORMAL_PARAM_NAME = "a_Normal";
+    public static final String COLOR_PARAM_NAME = "a_Color";
     public static final String TEXTURE_COORDS_PARAM_NAME = "a_TexCoord";
 
     private static final float CAMERA_Z = 0.01f;
@@ -46,21 +51,25 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     private float[] camera = new float[16];
     private float[] headView = new float[16];
 
-    public float[] modelView = new float[16];
-    public float[] modelViewProjection = new float[16];
-    public int modelViewParam;
-    public int modelViewProjectionParam;
-
     private Sphere earth;
+    public int earthModelViewParam;
+    public int earthModelViewProjectionParam;
     public int earthProgram;
-    //public int earthModelParam;
     public int earthPositionParam;
-    //public int earthNormalParam;
     public int earthTextureCoordsParam;
     public int earthTextureIdParam;
     private final int EARTH_TEXTURE_ID_OFFSET = 1;
-    private final int[] earthBuffers = new int[3];
+    private final int[] earthBuffers = new int[2];
     private final int[] earthTexturesBuffers = new int[1];
+
+    private Flat flat;
+    public int flatModelViewParam;
+    public int flatModelViewProjectionParam;
+    public int flatProgram;
+    public int flatModelParam;
+    public int flatPositionParam;
+    public int flatColorParam;
+    private final int[] flatBuffers = new int[2];
 
     private CardboardOverlayView overlayView;
 
@@ -87,7 +96,9 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         super.onDestroy();
         Log.i(TAG, "onDestroy");
         final int[] buffersToDelete = new int[]{
-                earthBuffers[0], earthBuffers[1], earthBuffers[2], earthTexturesBuffers[0]
+                earthBuffers[0], earthBuffers[1],
+                earthTexturesBuffers[0],
+                flatBuffers[0], flatBuffers[1],
         };
         GLES20.glDeleteBuffers(buffersToDelete.length, buffersToDelete, 0);
     }
@@ -97,6 +108,26 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         Log.i(TAG, "onCardboardTrigger");
         overlayView.show3DToast("onCardboardTrigger");
         vibrator.vibrate(50);
+
+        debug = !debug;
+        test(debug);
+    }
+
+    @Deprecated
+    private void test(boolean center){
+        if (center){
+            Matrix.setIdentityM(earth.model, 0);
+            Matrix.translateM(earth.model, 0, 0.0f, 0.0f, -120.0f);
+            Matrix.setIdentityM(flat.model, 0);
+            Matrix.translateM(flat.model, 0, 0.0f, -20.0f, 0.0f);
+            Matrix.setLookAtM(camera, 0, 0.0f, 0.0f, CAMERA_Z, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+        }else{
+            Matrix.setIdentityM(earth.model, 0);
+            Matrix.translateM(earth.model, 0, 0.0f, 0.0f, 0.0f);
+            Matrix.setIdentityM(flat.model, 0);
+            Matrix.translateM(flat.model, 0, 0.0f, -120.0f, 0.0f);
+            Matrix.setLookAtM(camera, 0, 0.0f, 0.0f, CAMERA_Z, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+        }
     }
 
     @Override
@@ -118,9 +149,11 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         float[] perspective = eye.getPerspective(Z_NEAR, Z_FAR);
 
         Matrix.rotateM(earth.model, 0, 0.2f, 0, 1, 0);
+        Matrix.multiplyMM(earth.modelView, 0, view, 0, earth.model, 0);
+        Matrix.multiplyMM(earth.modelViewProjection, 0, perspective, 0, earth.modelView, 0);
 
-        Matrix.multiplyMM(modelView, 0, view, 0, earth.model, 0);
-        Matrix.multiplyMM(modelViewProjection, 0, perspective, 0, modelView, 0);
+        Matrix.multiplyMM(flat.modelView, 0, view, 0, flat.model, 0);
+        Matrix.multiplyMM(flat.modelViewProjection, 0, perspective, 0, flat.modelView, 0);
 
         drawScene();
     }
@@ -128,9 +161,8 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     private void drawScene() {
         GLES20.glUseProgram(earthProgram);
 
-        // GLES20.glUniformMatrix4fv(earthModelParam, 1, false, earth.model, 0);
-        GLES20.glUniformMatrix4fv(modelViewParam, 1, false, modelView, 0);
-        GLES20.glUniformMatrix4fv(modelViewProjectionParam, 1, false, modelViewProjection, 0);
+        GLES20.glUniformMatrix4fv(earthModelViewParam, 1, false, earth.modelView, 0);
+        GLES20.glUniformMatrix4fv(earthModelViewProjectionParam, 1, false, earth.modelViewProjection, 0);
         GLES20.glUniform1i(earthTextureIdParam, EARTH_TEXTURE_ID_OFFSET);
 
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, earthBuffers[0]);
@@ -138,12 +170,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         GLES20.glVertexAttribPointer(earthPositionParam, 3, GLES20.GL_FLOAT, false, 0, 0);
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
 
-//        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, earthBuffers[1]);
-//        GLES20.glEnableVertexAttribArray(earthNormalParam);
-//        GLES20.glVertexAttribPointer(earthNormalParam, 3, GLES20.GL_FLOAT, false, 0, 0);
-//        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
-
-        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, earthBuffers[2]);
+        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, earthBuffers[1]);
         GLES20.glEnableVertexAttribArray(earthTextureCoordsParam);
         GLES20.glVertexAttribPointer(earthTextureCoordsParam, 2, GLES20.GL_FLOAT, false, 0, 0);
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
@@ -153,10 +180,36 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
         GLES20.glDrawElements(GLES20.GL_TRIANGLES, earth.getModelLayout().getIndexes().length, GLES20.GL_UNSIGNED_SHORT, earth.getModelLayout().getIndexesBuff());
 
+        GLES20.glUseProgram(0);
+
+        checkGLError("Earth - draw");
+
+        /**
+         * ################
+         */
+
+        GLES20.glUseProgram(flatProgram);
+
+        GLES20.glUniformMatrix4fv(flatModelParam, 1, false, flat.model, 0);
+        GLES20.glUniformMatrix4fv(flatModelViewParam, 1, false, flat.modelView, 0);
+        GLES20.glUniformMatrix4fv(flatModelViewProjectionParam, 1, false, flat.modelViewProjection, 0);
+
+        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, flatBuffers[0]);
+        GLES20.glEnableVertexAttribArray(flatPositionParam);
+        GLES20.glVertexAttribPointer(flatPositionParam, 3, GLES20.GL_FLOAT, false, 0, 0);
+        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
+
+        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, flatBuffers[1]);
+        GLES20.glEnableVertexAttribArray(flatColorParam);
+        GLES20.glVertexAttribPointer(flatColorParam, 4, GLES20.GL_FLOAT, false, 0, 0);
+        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
+
+        final int VERTEX_COUNT = 6;
+        GLES31.glDrawArrays(GLES31.GL_TRIANGLES, 0, VERTEX_COUNT);
 
         GLES20.glUseProgram(0);
 
-        checkGLError("Sphere - draw");
+        checkGLError("Flat - draw");
     }
 
     @Override
@@ -171,7 +224,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
     @Override
     public void onSurfaceCreated(EGLConfig eglConfig) {
-        earth = new Sphere(new SphereLayout(111, 111, 11));
+        earth = new Sphere(new SphereLayout(100, 100, 60));
 
         //
         earthProgram = GLES20.glCreateProgram();
@@ -179,15 +232,13 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         GLES20.glAttachShader(earthProgram, loadGLShader(GLES20.GL_FRAGMENT_SHADER, R.raw.earth_fragment));
         GLES20.glLinkProgram(earthProgram);
         GLES20.glUseProgram(earthProgram);
-        checkGLError("Sphere - createProgram");
+        checkGLError("Earth - createProgram");
 
-        //earthModelParam = GLES20.glGetUniformLocation(earthProgram, MODEL_PARAM_NAME);
-        modelViewParam = GLES20.glGetUniformLocation(earthProgram, MODEL_VIEW_PARAM_NAME);
-        modelViewProjectionParam = GLES20.glGetUniformLocation(earthProgram, MODEL_VIEW_PROJECTION_PARAM_NAME);
+        earthModelViewParam = GLES20.glGetUniformLocation(earthProgram, MODEL_VIEW_PARAM_NAME);
+        earthModelViewProjectionParam = GLES20.glGetUniformLocation(earthProgram, MODEL_VIEW_PROJECTION_PARAM_NAME);
         earthTextureIdParam = GLES20.glGetUniformLocation(earthProgram, TEXTURE_ID_PARAM_NAME);
 
         earthPositionParam = GLES20.glGetAttribLocation(earthProgram, POSOTION_PARAM_NAME);
-        //earthNormalParam = GLES20.glGetAttribLocation(earthProgram, NORMAL_PARAM_NAME);
         earthTextureCoordsParam = GLES20.glGetAttribLocation(earthProgram, TEXTURE_COORDS_PARAM_NAME);
 
         //
@@ -197,11 +248,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, earth.getModelLayout().getVerticesBuff().capacity() * 4, earth.getModelLayout().getVerticesBuff(), GLES20.GL_STATIC_DRAW);
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
 
-//        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, earthBuffers[1]);
-//        GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, earth.getModelLayout().getNormalsBuff().capacity() * 4, earth.getModelLayout().getNormalsBuff(), GLES20.GL_STATIC_DRAW);
-//        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
-
-        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, earthBuffers[2]);
+        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, earthBuffers[1]);
         GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, earth.getModelLayout().getTexturesBuff().capacity() * 4, earth.getModelLayout().getTexturesBuff(), GLES20.GL_STATIC_DRAW);
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
 
@@ -215,15 +262,51 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, earthTexturesBuffers[0]);
         GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR);
         GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_REPEAT);
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_REPEAT);
         GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
         bitmap.recycle();
+        checkGLError("Earth - createProgram end");
 
-        Matrix.setIdentityM(earth.model, 0);
-        //Matrix.translateM(earth.model, 0, 0.0f, 0.0f, -22.0f);
-        Matrix.translateM(earth.model, 0, 0.0f, 0.0f, 0.0f);
+        /**
+         * ################
+         */
 
-        Matrix.setLookAtM(camera, 0, 0.0f, 0.0f, CAMERA_Z, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+        flat = new Flat(new FlatLayout());
+
+        //
+        flatProgram = GLES20.glCreateProgram();
+        GLES20.glAttachShader(flatProgram, loadGLShader(GLES20.GL_VERTEX_SHADER, R.raw.flat_vertex));
+        GLES20.glAttachShader(flatProgram, loadGLShader(GLES20.GL_FRAGMENT_SHADER, R.raw.flat_fragment));
+        GLES20.glLinkProgram(flatProgram);
+        GLES20.glUseProgram(flatProgram);
+        checkGLError("Flat - createProgram");
+
+        flatModelParam = GLES20.glGetUniformLocation(flatProgram, MODEL_PARAM_NAME);
+        flatModelViewParam = GLES20.glGetUniformLocation(flatProgram, MODEL_VIEW_PARAM_NAME);
+        flatModelViewProjectionParam = GLES20.glGetUniformLocation(flatProgram, MODEL_VIEW_PROJECTION_PARAM_NAME);
+
+        flatPositionParam = GLES20.glGetAttribLocation(flatProgram, POSOTION_PARAM_NAME);
+        flatColorParam = GLES20.glGetAttribLocation(flatProgram, COLOR_PARAM_NAME);
+
+        //
+        GLES20.glGenBuffers(flatBuffers.length, flatBuffers, 0);
+
+        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, flatBuffers[0]);
+        GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, flat.getModelLayout().getVerticesBuff().capacity() * 4, flat.getModelLayout().getVerticesBuff(), GLES20.GL_STATIC_DRAW);
+        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
+
+        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, flatBuffers[1]);
+        GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, flat.getModelLayout().getColorsBuff().capacity() * 4, flat.getModelLayout().getColorsBuff(), GLES20.GL_STATIC_DRAW);
+        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
+        checkGLError("Flat - createProgram end");
+
+        /**
+         * ################
+         */
+
+        test(debug);
     }
 
     @Override

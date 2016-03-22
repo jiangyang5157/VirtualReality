@@ -16,6 +16,9 @@ public abstract class ModelLayout {
     float[] normals;
     FloatBuffer normalsBuff;
 
+    float[] colors;
+    FloatBuffer colorsBuff;
+
     float[] textures;
     FloatBuffer texturesBuff;
 
@@ -36,6 +39,14 @@ public abstract class ModelLayout {
 
     public FloatBuffer getNormalsBuff() {
         return normalsBuff;
+    }
+
+    public float[] getColors() {
+        return colors;
+    }
+
+    public FloatBuffer getColorsBuff() {
+        return colorsBuff;
     }
 
     public float[] getTextures() {
