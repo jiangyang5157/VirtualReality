@@ -53,9 +53,9 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
     private Sphere earth;
     public int earthProgram;
-    public int earthModelParam;
+    //public int earthModelParam;
     public int earthPositionParam;
-    public int earthNormalParam;
+    //public int earthNormalParam;
     public int earthTextureCoordsParam;
     public int earthTextureIdParam;
     private final int EARTH_TEXTURE_ID_OFFSET = 1;
@@ -128,7 +128,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     private void drawScene() {
         GLES20.glUseProgram(earthProgram);
 
-        GLES20.glUniformMatrix4fv(earthModelParam, 1, false, earth.model, 0);
+        // GLES20.glUniformMatrix4fv(earthModelParam, 1, false, earth.model, 0);
         GLES20.glUniformMatrix4fv(modelViewParam, 1, false, modelView, 0);
         GLES20.glUniformMatrix4fv(modelViewProjectionParam, 1, false, modelViewProjection, 0);
         GLES20.glUniform1i(earthTextureIdParam, EARTH_TEXTURE_ID_OFFSET);
@@ -175,21 +175,19 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
         //
         earthProgram = GLES20.glCreateProgram();
-        int sphereVertexShader = loadGLShader(GLES20.GL_VERTEX_SHADER, R.raw.sphere_vertex);
-        int sphereFragmentShader = loadGLShader(GLES20.GL_FRAGMENT_SHADER, R.raw.sphere_fragment);
-        GLES20.glAttachShader(earthProgram, sphereVertexShader);
-        GLES20.glAttachShader(earthProgram, sphereFragmentShader);
+        GLES20.glAttachShader(earthProgram, loadGLShader(GLES20.GL_VERTEX_SHADER, R.raw.earth_vertex));
+        GLES20.glAttachShader(earthProgram, loadGLShader(GLES20.GL_FRAGMENT_SHADER, R.raw.earth_fragment));
         GLES20.glLinkProgram(earthProgram);
         GLES20.glUseProgram(earthProgram);
         checkGLError("Sphere - createProgram");
 
-        earthModelParam = GLES20.glGetUniformLocation(earthProgram, MODEL_PARAM_NAME);
+        //earthModelParam = GLES20.glGetUniformLocation(earthProgram, MODEL_PARAM_NAME);
         modelViewParam = GLES20.glGetUniformLocation(earthProgram, MODEL_VIEW_PARAM_NAME);
         modelViewProjectionParam = GLES20.glGetUniformLocation(earthProgram, MODEL_VIEW_PROJECTION_PARAM_NAME);
         earthTextureIdParam = GLES20.glGetUniformLocation(earthProgram, TEXTURE_ID_PARAM_NAME);
 
         earthPositionParam = GLES20.glGetAttribLocation(earthProgram, POSOTION_PARAM_NAME);
-//        earthNormalParam = GLES20.glGetAttribLocation(earthProgram, NORMAL_PARAM_NAME);
+        //earthNormalParam = GLES20.glGetAttribLocation(earthProgram, NORMAL_PARAM_NAME);
         earthTextureCoordsParam = GLES20.glGetAttribLocation(earthProgram, TEXTURE_COORDS_PARAM_NAME);
 
         //
