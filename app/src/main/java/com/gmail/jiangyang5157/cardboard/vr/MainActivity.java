@@ -36,7 +36,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
     public static final String POSOTION_PARAM_NAME = "a_Position";
     public static final String NORMAL_PARAM_NAME = "a_Normal";
-    public static final String TEXTURE_COORDS_PARAM_NAME = "a_TexCoords";
+    public static final String TEXTURE_COORDS_PARAM_NAME = "a_TexCoord";
 
     private static final float CAMERA_Z = 0.01f;
     private static final float Z_NEAR = 0.1f;
