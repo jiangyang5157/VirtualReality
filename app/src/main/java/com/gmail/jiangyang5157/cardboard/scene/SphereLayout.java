@@ -2,25 +2,10 @@ package com.gmail.jiangyang5157.cardboard.scene;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.nio.CharBuffer;
-import java.nio.FloatBuffer;
-
 /**
  * Created by Yang on 3/21/2016.
  */
-public class SphereLayout {
-
-    private float[] vertices;
-    private FloatBuffer verticesBuff;
-
-    private float[] normals;
-    private FloatBuffer normalsBuff;
-
-    private float[] textures;
-    private FloatBuffer texturesBuff;
-
-    public char[] indexes;
-    private CharBuffer indexesBuff;
+public class SphereLayout extends ModelLayout{
 
     /**
      * @param rings   defines how many circles exists from the bottom to the top of the sphere
@@ -92,48 +77,16 @@ public class SphereLayout {
     }
 
     private void buildBuffs() {
-        verticesBuff = ByteBuffer.allocateDirect(vertices.length * ModelLayout.BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
+        verticesBuff = ByteBuffer.allocateDirect(vertices.length * BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
         verticesBuff.put(vertices).position(0);
 
-        normalsBuff = ByteBuffer.allocateDirect(normals.length * ModelLayout.BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
+        normalsBuff = ByteBuffer.allocateDirect(normals.length * BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
         normalsBuff.put(normals).position(0);
 
-        texturesBuff = ByteBuffer.allocateDirect(textures.length * ModelLayout.BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
+        texturesBuff = ByteBuffer.allocateDirect(textures.length * BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
         texturesBuff.put(textures).position(0);
 
-        indexesBuff = ByteBuffer.allocateDirect(indexes.length * ModelLayout.BYTES_PER_CHAR).order(ByteOrder.nativeOrder()).asCharBuffer();
+        indexesBuff = ByteBuffer.allocateDirect(indexes.length * BYTES_PER_CHAR).order(ByteOrder.nativeOrder()).asCharBuffer();
         indexesBuff.put(indexes).position(0);
-    }
-
-    public float[] getVertices() {
-        return vertices;
-    }
-
-    public float[] getNormals() {
-        return normals;
-    }
-
-    public float[] getTextures() {
-        return textures;
-    }
-
-    public char[] getIndexes() {
-        return indexes;
-    }
-
-    public FloatBuffer getVerticesBuff() {
-        return verticesBuff;
-    }
-
-    public FloatBuffer getNormalsBuff() {
-        return normalsBuff;
-    }
-
-    public FloatBuffer getTexturesBuff() {
-        return texturesBuff;
-    }
-
-    public CharBuffer getIndexesBuff() {
-        return indexesBuff;
     }
 }
