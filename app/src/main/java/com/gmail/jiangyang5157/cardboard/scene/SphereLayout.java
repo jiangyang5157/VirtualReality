@@ -9,8 +9,8 @@ import java.nio.ByteOrder;
 public class SphereLayout extends ModelLayout {
 
     /**
-     * @param rings   defines how many circles exists from the bottom to the top of the sphere
-     * @param sectors defines how many vertexes define a single ring
+     * @param rings   defines how many circles exists from the bottom to the top of the sphere (longitude)
+     * @param sectors defines how many vertexes define a single ring (latitude)
      * @param radius  defines the distance of every vertex from the center of the sphere
      */
     public SphereLayout(int rings, int sectors, float radius) {
@@ -31,7 +31,6 @@ public class SphereLayout extends ModelLayout {
 
         final float R = 1f / (float) (rings - 1);
         final float S = 1f / (float) (sectors - 1);
-
         for (int r = 0; r < rings; r++) {
             for (int s = 0; s < sectors; s++) {
                 float y = (float) Math.sin((-Math.PI / 2f) + Math.PI * r * R);
@@ -41,19 +40,16 @@ public class SphereLayout extends ModelLayout {
                 vertices[vertexIndex] = x * radius;
                 vertices[vertexIndex + 1] = y * radius;
                 vertices[vertexIndex + 2] = z * radius;
-
                 vertexIndex += 3;
 
                 normals[normalIndex] = x;
                 normals[normalIndex + 1] = y;
                 normals[normalIndex + 2] = z;
-
                 normalIndex += 3;
 
                 if (textures != null) {
                     textures[textureIndex] = s * S;
                     textures[textureIndex + 1] = r * R;
-
                     textureIndex += 2;
                 }
             }
@@ -63,7 +59,6 @@ public class SphereLayout extends ModelLayout {
             for (int s = 0; s < sectors; s++) {
                 int r1 = (r + 1 == rings) ? 0 : r + 1;
                 int s1 = (s + 1 == sectors) ? 0 : s + 1;
-
                 indexes[indexIndex] = (char) (r * sectors + s);
                 indexes[indexIndex + 1] = (char) (r * sectors + (s1));
                 indexes[indexIndex + 2] = (char) ((r1) * sectors + (s1));

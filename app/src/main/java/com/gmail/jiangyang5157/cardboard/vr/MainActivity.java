@@ -47,6 +47,9 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     private static final float Z_NEAR = 0.1f;
     private static final float Z_FAR = 100.0f;
 
+    private static final float YAW_LIMIT = 0.12f;
+    private static final float PITCH_LIMIT = 0.12f;
+
     private float[] view = new float[16];
     private float[] camera = new float[16];
     private float[] headView = new float[16];
@@ -120,20 +123,36 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
             Matrix.translateM(earth.model, 0, 0.0f, 0.0f, -120.0f);
             Matrix.setIdentityM(flat.model, 0);
             Matrix.translateM(flat.model, 0, 0.0f, -20.0f, 0.0f);
-            Matrix.setLookAtM(camera, 0, 0.0f, 0.0f, CAMERA_Z, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
         }else{
             Matrix.setIdentityM(earth.model, 0);
             Matrix.translateM(earth.model, 0, 0.0f, 0.0f, 0.0f);
             Matrix.setIdentityM(flat.model, 0);
             Matrix.translateM(flat.model, 0, 0.0f, -120.0f, 0.0f);
-            Matrix.setLookAtM(camera, 0, 0.0f, 0.0f, CAMERA_Z, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
         }
+    }
+
+    private boolean isLookingAtObject(float[] model, float[] modelView) {
+        float[] initVec = {0, 0, 0, 1.0f};
+        float[] objPositionVec = new float[4];
+
+        // Convert object space to camera space. Use the headView from onNewFrame.
+        Matrix.multiplyMM(modelView, 0, headView, 0, model, 0);
+        Matrix.multiplyMV(objPositionVec, 0, modelView, 0, initVec, 0);
+
+        float pitch = (float) Math.atan2(objPositionVec[1], -objPositionVec[2]);
+        float yaw = (float) Math.atan2(objPositionVec[0], -objPositionVec[2]);
+
+        return Math.abs(pitch) < PITCH_LIMIT && Math.abs(yaw) < YAW_LIMIT;
     }
 
     @Override
     public void onNewFrame(HeadTransform headTransform) {
         GLES20.glClearColor(0.1f, 0.1f, 0.1f, 0.5f);
+
+        Matrix.setLookAtM(camera, 0, 0.0f, 0.0f, CAMERA_Z, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
         headTransform.getHeadView(headView, 0);
+
+        checkGLError("MainActivity - onNewFrame");
     }
 
     @Override
@@ -156,6 +175,10 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         Matrix.multiplyMM(flat.modelViewProjection, 0, perspective, 0, flat.modelView, 0);
 
         drawScene();
+
+        if(isLookingAtObject(earth.model, earth.modelView)){
+            overlayView.show3DToast("earth");
+        }
     }
 
     private void drawScene() {
