@@ -280,7 +280,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
         final BitmapFactory.Options options = new BitmapFactory.Options();
         options.inScaled = false;
-        final Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.texture_earth_500x250, options);
+        final Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.no_ice_clouds_mts_4k, options);
 
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, earthTexturesBuffers[0]);
         GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR);
