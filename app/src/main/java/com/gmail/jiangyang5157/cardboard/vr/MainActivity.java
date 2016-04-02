@@ -13,6 +13,7 @@ import android.util.Log;
 
 import com.gmail.jiangyang5157.cardboard.scene.Flat;
 import com.gmail.jiangyang5157.cardboard.scene.FlatLayout;
+import com.gmail.jiangyang5157.cardboard.scene.ModelLayout;
 import com.gmail.jiangyang5157.cardboard.scene.Sphere;
 import com.gmail.jiangyang5157.cardboard.scene.SphereLayout;
 import com.gmail.jiangyang5157.cardboard.ui.CardboardOverlayView;
@@ -268,11 +269,11 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         GLES20.glGenBuffers(earthBuffers.length, earthBuffers, 0);
 
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, earthBuffers[0]);
-        GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, earth.getModelLayout().getVerticesBuff().capacity() * 4, earth.getModelLayout().getVerticesBuff(), GLES20.GL_STATIC_DRAW);
+        GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, earth.getModelLayout().getVerticesBuff().capacity() * ModelLayout.BYTES_PER_FLOAT, earth.getModelLayout().getVerticesBuff(), GLES20.GL_STATIC_DRAW);
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
 
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, earthBuffers[1]);
-        GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, earth.getModelLayout().getTexturesBuff().capacity() * 4, earth.getModelLayout().getTexturesBuff(), GLES20.GL_STATIC_DRAW);
+        GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, earth.getModelLayout().getTexturesBuff().capacity() * ModelLayout.BYTES_PER_FLOAT, earth.getModelLayout().getTexturesBuff(), GLES20.GL_STATIC_DRAW);
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
 
         //
@@ -317,11 +318,11 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         GLES20.glGenBuffers(flatBuffers.length, flatBuffers, 0);
 
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, flatBuffers[0]);
-        GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, flat.getModelLayout().getVerticesBuff().capacity() * 4, flat.getModelLayout().getVerticesBuff(), GLES20.GL_STATIC_DRAW);
+        GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, flat.getModelLayout().getVerticesBuff().capacity() * ModelLayout.BYTES_PER_FLOAT, flat.getModelLayout().getVerticesBuff(), GLES20.GL_STATIC_DRAW);
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
 
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, flatBuffers[1]);
-        GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, flat.getModelLayout().getColorsBuff().capacity() * 4, flat.getModelLayout().getColorsBuff(), GLES20.GL_STATIC_DRAW);
+        GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, flat.getModelLayout().getColorsBuff().capacity() * ModelLayout.BYTES_PER_FLOAT, flat.getModelLayout().getColorsBuff(), GLES20.GL_STATIC_DRAW);
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
         checkGLError("Flat - createProgram end");
 
