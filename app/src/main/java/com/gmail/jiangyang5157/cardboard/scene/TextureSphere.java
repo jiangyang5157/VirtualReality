@@ -15,16 +15,16 @@ import java.nio.ByteOrder;
  */
 public class TextureSphere extends GlEsModel{
 
-    int rings;
-    int sectors;
-    float radius;
-    int textureDrawableResource;
+    private int rings;
+    private int sectors;
+    private float radius;
+    private int textureDrawableResource;
 
-    int indicesBufferCapacity;
+    private int indicesBufferCapacity;
 
-    final int[] buffers = new int[3];
-    final int[] texBuffers = new int[1];
-    final int TEX_ID_OFFSET = 1;
+    private final int[] buffers = new int[3];
+    private final int[] texBuffers = new int[1];
+    private final int TEX_ID_OFFSET = 1;
 
     public TextureSphere(Context context, int vertexShaderRawResource, int fragmentShaderRawResource, int rings, int sectors, float radius, int textureDrawableResource) {
         super(context, vertexShaderRawResource, fragmentShaderRawResource);
@@ -41,7 +41,7 @@ public class TextureSphere extends GlEsModel{
         bindBuffers();
     }
 
-    void buildArrays(int rings, int sectors, float radius) {
+    private void buildArrays(int rings, int sectors, float radius) {
         vertices = new float[rings * sectors * 3];
         indices = new short[rings * sectors * 6];
         normals = new float[rings * sectors * 3];
@@ -93,14 +93,10 @@ public class TextureSphere extends GlEsModel{
         }
     }
 
-    void buildBuffers() {
+    private void buildBuffers() {
         verticesBuffer = ByteBuffer.allocateDirect(vertices.length * BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
         verticesBuffer.put(vertices).position(0);
         vertices = null;
-
-        normalsBuffer = ByteBuffer.allocateDirect(normals.length * BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
-        normalsBuffer.put(normals).position(0);
-        normals = null;
 
         indicesBuffer = ByteBuffer.allocateDirect(indices.length * BYTES_PER_SHORT).order(ByteOrder.nativeOrder()).asShortBuffer();
         indicesBuffer.put(indices).position(0);
@@ -112,7 +108,7 @@ public class TextureSphere extends GlEsModel{
         textures = null;
     }
 
-    void bindBuffers() {
+    private void bindBuffers() {
         GLES20.glGenBuffers(buffers.length, buffers, 0);
         verticesBuffHandle = buffers[0];
         indicesBuffHandle = buffers[1];
@@ -148,8 +144,6 @@ public class TextureSphere extends GlEsModel{
         GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, 0);
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
-
-        checkGlEsError("TextureSphere - bindBuffers end");
     }
 
     @Override

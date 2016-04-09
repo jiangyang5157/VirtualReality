@@ -133,9 +133,9 @@ public abstract class GlEsModel implements Geometry {
         }
     }
 
-    abstract void create();
+    public abstract void create();
 
-    abstract void draw();
+    public abstract void draw();
 
-    abstract void destroy();
+    public abstract void destroy();
 }

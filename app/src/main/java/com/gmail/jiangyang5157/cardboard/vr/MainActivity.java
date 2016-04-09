@@ -7,6 +7,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.gmail.jiangyang5157.cardboard.scene.GlEsModel;
+import com.gmail.jiangyang5157.cardboard.scene.Icosphere;
 import com.gmail.jiangyang5157.cardboard.scene.TextureSphere;
 import com.gmail.jiangyang5157.cardboard.ui.CardboardOverlayView;
 import com.google.vrtoolkit.cardboard.CardboardActivity;
@@ -33,6 +34,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     private float[] headView = new float[16];
 
     private TextureSphere tsEarth;
+    private Icosphere iEarth;
 
     private CardboardOverlayView overlayView;
 
@@ -59,6 +61,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     protected void onDestroy() {
         super.onDestroy();
         tsEarth.destroy();
+        iEarth.destroy();
     }
 
     @Override
@@ -104,11 +107,16 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         Matrix.multiplyMM(tsEarth.modelView, 0, view, 0, tsEarth.model, 0);
         Matrix.multiplyMM(tsEarth.modelViewProjection, 0, perspective, 0, tsEarth.modelView, 0);
 
+        Matrix.rotateM(iEarth.model, 0, 0.2f, 0, 1, 0);
+        Matrix.multiplyMM(iEarth.modelView, 0, view, 0, iEarth.model, 0);
+        Matrix.multiplyMM(iEarth.modelViewProjection, 0, perspective, 0, iEarth.modelView, 0);
+
         drawScene();
     }
 
     private void drawScene() {
         tsEarth.draw();
+        iEarth.draw();
     }
 
     private boolean isLookingAtObject(float[] model, float[] modelView) {
@@ -129,8 +137,11 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     public void onSurfaceCreated(EGLConfig eglConfig) {
         Matrix.setLookAtM(camera, 0, 0.0f, 0.0f, CAMERA_Z, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
 
-        tsEarth = new TextureSphere(this, R.raw.earth_vertex, R.raw.earth_fragment, 100, 100, 1, R.drawable.no_ice_clouds_mts_4k);
+        tsEarth = new TextureSphere(this, R.raw.earth_vertex, R.raw.earth_fragment, 100, 100, 10, R.drawable.no_ice_clouds_mts_4k);
         tsEarth.create();
+
+        iEarth = new Icosphere(this, R.raw.icosphere_vertex, R.raw.icosphere_fragment, 0);
+        iEarth.create();
 
         test(debug);
     }
@@ -150,14 +161,20 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     }
 
     @Deprecated
-    private void test(boolean center) {
-        if (center) {
+    private void test(boolean debug) {
+        if (debug) {
             Matrix.setIdentityM(tsEarth.model, 0);
-            Matrix.translateM(tsEarth.model, 0, 0.0f, 0.0f, -2.0f);
+            Matrix.translateM(tsEarth.model, 0, 0.0f, 0.0f, -20.0f);
+
+            Matrix.setIdentityM(iEarth.model, 0);
+            Matrix.translateM(iEarth.model, 0, 5.0f, 5.0f, -5.0f);
         } else {
             Matrix.setIdentityM(tsEarth.model, 0);
             Matrix.translateM(tsEarth.model, 0, 0.0f, 0.0f, 0.0f);
+
+            Matrix.setIdentityM(iEarth.model, 0);
+            Matrix.translateM(iEarth.model, 0, 5.0f, 5.0f, -5.0f);
         }
-        debug = !debug;
+        this.debug = !this.debug;
     }
 }
