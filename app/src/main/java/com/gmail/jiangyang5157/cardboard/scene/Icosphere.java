@@ -25,12 +25,11 @@ public class Icosphere extends GlEsModel {
      * ...
      */
     private static final short[] vertexCounts = new short[]{12, 42, 162, 642, 2562, 10242};
+
     private int recursionLevel;
 
     private int indicesBufferCapacity;
-    private final int[] buffers = new int[2];
-
-    private float[] color;
+    private final int[] buffers = new int[3];
 
     public Icosphere(Context context, int vertexShaderRawResource, int fragmentShaderRawResource, float radius, int recursionLevel, float[] color) {
         super(context, vertexShaderRawResource, fragmentShaderRawResource);
@@ -39,7 +38,7 @@ public class Icosphere extends GlEsModel {
         }
         this.radius = radius;
         this.recursionLevel = recursionLevel;
-        this.color = color;
+        this.color = color.clone();
     }
 
     @Override
@@ -141,6 +140,18 @@ public class Icosphere extends GlEsModel {
             indices = newIndices;
             iLength = iIndex;
         }
+
+        iLength = indices.length;
+        int faceCount = iLength / 3;
+        for (int faceIndex = 0; faceIndex < faceCount; faceIndex++) {
+            short v1 = indices[faceIndex * 3];
+            short v2 = indices[faceIndex * 3 + 1];
+            short v3 = indices[faceIndex * 3 + 2];
+            float[] normal = createNormal(getVertex(v1), getVertex(v2), getVertex(v3));
+            addNormal(normal[0], normal[1], normal[2], v1);
+            addNormal(normal[0], normal[1], normal[2], v2);
+            addNormal(normal[0], normal[1], normal[2], v3);
+        }
     }
 
     /**
@@ -172,25 +183,53 @@ public class Icosphere extends GlEsModel {
         return value;
     }
 
-    private void addVertex(float x, float y, float z, int vertexIndex) {
+    private void addVertex(float x, float y, float z, int index) {
         float length = Matrix.length(x, y, z);
         x = x / length;
         y = y / length;
         z = z / length;
+        vertices[index * 3] = x * radius;
+        vertices[index * 3 + 1] = y * radius;
+        vertices[index * 3 + 2] = z * radius;
+    }
 
-        normals[vertexIndex * 3] = x;
-        normals[vertexIndex * 3 + 1] = y;
-        normals[vertexIndex * 3 + 2] = z;
+    private float[] getVertex(short index) {
+        return new float[]{
+                vertices[index * 3],
+                vertices[index * 3 + 1],
+                vertices[index * 3 + 2]
+        };
+    }
 
-        vertices[vertexIndex * 3] = x * radius;
-        vertices[vertexIndex * 3 + 1] = y * radius;
-        vertices[vertexIndex * 3 + 2] = z * radius;
+    private float[] createNormal(float[] v1, float[] v2, float[] v3) {
+        float[] vU = {v2[0] - v1[0], v2[1] - v1[1], v2[2] - v1[2]};
+        float[] vV = {v3[0] - v1[0], v3[1] - v1[1], v3[2] - v1[2]};
+        float[] normal = {
+                (vU[1] * vV[2]) - (vU[2] * vV[1]),
+                (vU[2] * vV[0]) - (vU[0] * vV[2]),
+                (vU[0] * vV[1]) - (vU[1] * vV[0])};
+
+        final float length = Matrix.length(normal[0], normal[1], normal[2]);
+        normal[0] /= length;
+        normal[1] /= length;
+        normal[2] /= length;
+        return normal;
+    }
+
+    private void addNormal(float x, float y, float z, int index) {
+        normals[index * 3] = x;
+        normals[index * 3 + 1] = y;
+        normals[index * 3 + 2] = z;
     }
 
     private void fillBuffers() {
         verticesBuffer = ByteBuffer.allocateDirect(vertices.length * BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
         verticesBuffer.put(vertices).position(0);
         vertices = null;
+
+        normalsBuffer = ByteBuffer.allocateDirect(normals.length * BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
+        normalsBuffer.put(normals).position(0);
+        normals = null;
 
         indicesBuffer = ByteBuffer.allocateDirect(indices.length * BYTES_PER_SHORT).order(ByteOrder.nativeOrder()).asShortBuffer();
         indicesBuffer.put(indices).position(0);
@@ -201,12 +240,18 @@ public class Icosphere extends GlEsModel {
     private void bindBuffers() {
         GLES20.glGenBuffers(buffers.length, buffers, 0);
         verticesBuffHandle = buffers[0];
-        indicesBuffHandle = buffers[1];
+        normalsBuffHandle = buffers[1];
+        indicesBuffHandle = buffers[2];
 
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, verticesBuffHandle);
         GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, verticesBuffer.capacity() * BYTES_PER_FLOAT, verticesBuffer, GLES20.GL_STATIC_DRAW);
         verticesBuffer.limit(0);
         verticesBuffer = null;
+
+        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, normalsBuffHandle);
+        GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, normalsBuffer.capacity() * BYTES_PER_FLOAT, normalsBuffer, GLES20.GL_STATIC_DRAW);
+        normalsBuffer.limit(0);
+        normalsBuffer = null;
 
         GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, indicesBuffHandle);
         GLES20.glBufferData(GLES20.GL_ELEMENT_ARRAY_BUFFER, indicesBuffer.capacity() * BYTES_PER_SHORT, indicesBuffer, GLES20.GL_STATIC_DRAW);
@@ -218,23 +263,30 @@ public class Icosphere extends GlEsModel {
     }
 
     @Override
-    public void draw() {
+    public void draw(float[] lightPosInEyeSpace) {
         GLES20.glUseProgram(program);
-        GLES20.glEnableVertexAttribArray(positionHandle);
+        GLES20.glEnableVertexAttribArray(vertexHandle);
+        GLES20.glEnableVertexAttribArray(normalHandle);
 
         GLES20.glUniformMatrix4fv(mvMatrixHandle, 1, false, modelView, 0);
         GLES20.glUniformMatrix4fv(mvpMatrixHandle, 1, false, modelViewProjection, 0);
         GLES20.glUniform4fv(colorHandle, 1, color, 0);
+        GLES20.glUniform3fv(lightPosHandle, 1, lightPosInEyeSpace, 0);
 
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, verticesBuffHandle);
-        GLES20.glVertexAttribPointer(positionHandle, 3, GLES20.GL_FLOAT, false, 0, 0);
+        GLES20.glVertexAttribPointer(vertexHandle, 3, GLES20.GL_FLOAT, false, 0, 0);
+        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
+
+        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, normalsBuffHandle);
+        GLES20.glVertexAttribPointer(normalHandle, 3, GLES20.GL_FLOAT, false, 0, 0);
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
 
         GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, indicesBuffHandle);
         GLES20.glDrawElements(GLES20.GL_TRIANGLES, indicesBufferCapacity, GLES20.GL_UNSIGNED_SHORT, 0);
         GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, 0);
 
-        GLES20.glDisableVertexAttribArray(positionHandle);
+        GLES20.glDisableVertexAttribArray(vertexHandle);
+        GLES20.glDisableVertexAttribArray(normalHandle);
         GLES20.glUseProgram(0);
 
         checkGlEsError("Icosphere - draw end");
@@ -244,5 +296,9 @@ public class Icosphere extends GlEsModel {
     public void destroy() {
         Log.d("Icosphere", "destroy");
         GLES20.glDeleteBuffers(buffers.length, buffers, 0);
+    }
+
+    public int getVertexCounts() {
+        return vertexCounts[recursionLevel];
     }
 }

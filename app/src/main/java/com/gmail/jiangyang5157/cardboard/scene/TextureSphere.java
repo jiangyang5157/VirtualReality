@@ -43,7 +43,6 @@ public class TextureSphere extends GlEsModel {
 
     private void buildArrays() {
         vertices = new float[rings * sectors * 3];
-        normals = new float[rings * sectors * 3];
         indices = new short[rings * sectors * 6];
         textures = new float[rings * sectors * 2];
 
@@ -58,10 +57,6 @@ public class TextureSphere extends GlEsModel {
                 float y = (float) Math.sin((-Math.PI / 2) + Math.PI * r * FAT_RINGS);
                 float x = (float) Math.cos(2 * Math.PI * s * FAT_SECTORS) * (float) Math.sin(Math.PI * r * FAT_RINGS);
                 float z = (float) Math.sin(2 * Math.PI * s * FAT_SECTORS) * (float) Math.sin(Math.PI * r * FAT_RINGS);
-
-                normals[vertexIndex] = x;
-                normals[vertexIndex + 1] = y;
-                normals[vertexIndex + 2] = z;
 
                 vertices[vertexIndex] = x * radius;
                 vertices[vertexIndex + 1] = y * radius;
@@ -145,9 +140,9 @@ public class TextureSphere extends GlEsModel {
     }
 
     @Override
-    public void draw() {
+    public void draw(float[] lightPosInEyeSpace) {
         GLES20.glUseProgram(program);
-        GLES20.glEnableVertexAttribArray(positionHandle);
+        GLES20.glEnableVertexAttribArray(vertexHandle);
         GLES20.glEnableVertexAttribArray(texCoordHandle);
 
         GLES20.glUniformMatrix4fv(mvMatrixHandle, 1, false, modelView, 0);
@@ -155,7 +150,7 @@ public class TextureSphere extends GlEsModel {
         GLES20.glUniform1i(texIdHandle, TEX_ID_OFFSET);
 
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, verticesBuffHandle);
-        GLES20.glVertexAttribPointer(positionHandle, 3, GLES20.GL_FLOAT, false, 0, 0);
+        GLES20.glVertexAttribPointer(vertexHandle, 3, GLES20.GL_FLOAT, false, 0, 0);
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
 
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, texturesBuffHandle);
@@ -169,7 +164,7 @@ public class TextureSphere extends GlEsModel {
         GLES20.glDrawElements(GLES20.GL_TRIANGLES, indicesBufferCapacity, GLES20.GL_UNSIGNED_SHORT, 0);
         GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, 0);
 
-        GLES20.glDisableVertexAttribArray(positionHandle);
+        GLES20.glDisableVertexAttribArray(vertexHandle);
         GLES20.glDisableVertexAttribArray(texCoordHandle);
         GLES20.glUseProgram(0);
 

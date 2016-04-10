@@ -27,8 +27,9 @@ public abstract class GlEsModel implements Geometry {
     static final String MODEL_VIEW_PROJECTION_HANDLE = "u_MVPMatrix";
     static final String TEXTURE_ID_HANDLE = "u_TexId";
     static final String COLOR_HANDLE = "u_Color";
+    static final String LIGHT_POSITION_HANDLE = "u_LightPos";
 
-    static final String POSOTION_HANDLE = "a_Position";
+    static final String VERTEX_HANDLE = "a_Position";
     static final String NORMAL_HANDLE = "a_Normal";
     static final String TEXTURE_COORDS_HANDLE = "a_TexCoord";
 
@@ -36,10 +37,11 @@ public abstract class GlEsModel implements Geometry {
     int mvMatrixHandle;
     int mvpMatrixHandle;
     int texIdHandle;
-
-    int positionHandle;
-    int normalHandle;
     int colorHandle;
+    int lightPosHandle;
+
+    int vertexHandle;
+    int normalHandle;
     int texCoordHandle;
 
     final int program;
@@ -47,22 +49,20 @@ public abstract class GlEsModel implements Geometry {
     public float[] model = new float[16];
     public float[] modelView = new float[16];
     public float[] modelViewProjection = new float[16];
+    float[] color = new float[4];
 
     float[] vertices;
     float[] normals;
-    float[] colors;
     short[] indices;
     float[] textures;
 
     FloatBuffer verticesBuffer;
     FloatBuffer normalsBuffer;
-    FloatBuffer colorsBuffer;
     ShortBuffer indicesBuffer;
     FloatBuffer texturesBuffer;
 
     int verticesBuffHandle;
     int normalsBuffHandle;
-    int colorsBuffHandle;
     int indicesBuffHandle;
     int texturesBuffHandle;
 
@@ -82,8 +82,9 @@ public abstract class GlEsModel implements Geometry {
         mvpMatrixHandle = GLES20.glGetUniformLocation(program, MODEL_VIEW_PROJECTION_HANDLE);
         texIdHandle = GLES20.glGetUniformLocation(program, TEXTURE_ID_HANDLE);
         colorHandle = GLES20.glGetUniformLocation(program, COLOR_HANDLE);
+        lightPosHandle = GLES20.glGetUniformLocation(program, LIGHT_POSITION_HANDLE);
 
-        positionHandle = GLES20.glGetAttribLocation(program, POSOTION_HANDLE);
+        vertexHandle = GLES20.glGetAttribLocation(program, VERTEX_HANDLE);
         normalHandle = GLES20.glGetAttribLocation(program, NORMAL_HANDLE);
         texCoordHandle = GLES20.glGetAttribLocation(program, TEXTURE_COORDS_HANDLE);
     }
@@ -101,7 +102,7 @@ public abstract class GlEsModel implements Geometry {
             shader = 0;
         }
         if (shader == 0) {
-            throw new RuntimeException("GlEsError - Unable to create shader.");
+            throw new RuntimeException("GlEsError - Unable to create shader:\n" + code);
         }
         return shader;
     }
@@ -135,7 +136,7 @@ public abstract class GlEsModel implements Geometry {
 
     public abstract void create();
 
-    public abstract void draw();
+    public abstract void draw(float[] lightPosInEyeSpace);
 
     public abstract void destroy();
 }
