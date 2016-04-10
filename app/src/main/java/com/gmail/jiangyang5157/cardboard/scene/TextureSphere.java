@@ -51,13 +51,15 @@ public class TextureSphere extends GlEsModel {
         int textureIndex = 0;
         int indexIndex = 0;
 
-        final float FAT_RINGS = 1f / (float) (rings - 1);
-        final float FAT_SECTORS = 1f / (float) (sectors - 1);
+        final float RING_FACTOR = 1f / (float) (rings - 1);
+        final float SECTORS_FACTOR = 1f / (float) (sectors - 1);
         for (int r = 0; r < rings; r++) {
             for (int s = 0; s < sectors; s++) {
-                float y = (float) Math.sin((-Math.PI / 2) + Math.PI * r * FAT_RINGS);
-                float x = (float) Math.cos(2 * Math.PI * s * FAT_SECTORS) * (float) Math.sin(Math.PI * r * FAT_RINGS);
-                float z = (float) Math.sin(2 * Math.PI * s * FAT_SECTORS) * (float) Math.sin(Math.PI * r * FAT_RINGS);
+                float sf = s * SECTORS_FACTOR;
+                float rf = r * RING_FACTOR;
+                float x = (float) Math.cos(Math.PI * 2.0f * sf) * (float) Math.sin(Math.PI * rf);
+                float y = (float) Math.sin((-Math.PI / 2.0f) + Math.PI * rf);
+                float z = (float) Math.sin(Math.PI * 2.0f * sf) * (float) Math.sin(Math.PI * rf);
 
                 normals[vertexIndex] = x;
                 normals[vertexIndex + 1] = y;
@@ -68,8 +70,8 @@ public class TextureSphere extends GlEsModel {
                 vertices[vertexIndex + 2] = z * radius;
                 vertexIndex += 3;
 
-                textures[textureIndex] = s * FAT_SECTORS;
-                textures[textureIndex + 1] = r * FAT_RINGS;
+                textures[textureIndex] = sf;
+                textures[textureIndex + 1] = rf;
                 textureIndex += 2;
             }
         }
