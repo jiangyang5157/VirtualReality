@@ -13,7 +13,7 @@ void main()
 
     // Calculate the dot product of the light vector and vertex normal.
     // If the normal and light vector are pointing in the same direction then it will get max illumination.
-    float diffuse = max(dot(v_Normal, lightVector), 0.5);
+    float diffuse = max(dot(v_Normal, lightVector), 0.2);
 
     // Add attenuation.
     float distance = length(u_LightPos - v_Position);
