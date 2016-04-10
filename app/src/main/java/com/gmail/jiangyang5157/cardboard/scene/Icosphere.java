@@ -27,33 +27,6 @@ public class Icosphere extends GlEsModel {
     private static final short[] vertexCounts = new short[]{12, 42, 162, 642, 2562, 10242};
     private int recursionLevel;
 
-    //http://blog.andreaskahler.com/2009/06/creating-icosphere-mesh-in-code.html
-    private static final short initialIndices[] = {
-            0, 11, 5,
-            0, 5, 1,
-            0, 1, 7,
-            0, 7, 10,
-            0, 10, 11,
-
-            1, 5, 9,
-            5, 11, 4,
-            11, 10, 2,
-            10, 7, 6,
-            7, 1, 8,
-
-            3, 9, 4,
-            3, 4, 2,
-            3, 2, 6,
-            3, 6, 8,
-            3, 8, 9,
-
-            4, 9, 5,
-            2, 4, 11,
-            6, 2, 10,
-            8, 6, 7,
-            9, 8, 1,
-    };
-
     private int indicesBufferCapacity;
     private final int[] buffers = new int[2];
 
@@ -75,12 +48,52 @@ public class Icosphere extends GlEsModel {
 
     private void buildArrays() {
         vertices = new float[vertexCounts[recursionLevel] * 3];
-        short vIndex = initializeVertices();
-        indices = initialIndices.clone();
-        int iLength = indices.length;
 
-        // Each edge of the triangle is split in half.
-        // One triangle is formed by the three points sitting in the middle of these edges and three triangles surrounding it
+        // create 12 vertices of a icosahedron - http://blog.andreaskahler.com/2009/06/creating-icosphere-mesh-in-code.html
+        short vIndex = 0;
+        addVertex(-1, GOLDEN_RATIO, 0, vIndex++);
+        addVertex(1, GOLDEN_RATIO, 0, vIndex++);
+        addVertex(-1, -GOLDEN_RATIO, 0, vIndex++);
+        addVertex(1, -GOLDEN_RATIO, 0, vIndex++);
+
+        addVertex(0, -1, GOLDEN_RATIO, vIndex++);
+        addVertex(0, 1, GOLDEN_RATIO, vIndex++);
+        addVertex(0, -1, -GOLDEN_RATIO, vIndex++);
+        addVertex(0, 1, -GOLDEN_RATIO, vIndex++);
+
+        addVertex(GOLDEN_RATIO, 0, -1, vIndex++);
+        addVertex(GOLDEN_RATIO, 0, 1, vIndex++);
+        addVertex(-GOLDEN_RATIO, 0, -1, vIndex++);
+        addVertex(-GOLDEN_RATIO, 0, 1, vIndex++);
+
+        indices = new short[]{
+                0, 11, 5,
+                0, 5, 1,
+                0, 1, 7,
+                0, 7, 10,
+                0, 10, 11,
+
+                1, 5, 9,
+                5, 11, 4,
+                11, 10, 2,
+                10, 7, 6,
+                7, 1, 8,
+
+                3, 9, 4,
+                3, 4, 2,
+                3, 2, 6,
+                3, 6, 8,
+                3, 8, 9,
+
+                4, 9, 5,
+                2, 4, 11,
+                6, 2, 10,
+                8, 6, 7,
+                9, 8, 1,
+        };
+
+        // refine triangles - Each edge of the triangle is split in half. One triangle is formed by the three points sitting in the middle of these edges and three triangles surrounding it.
+        int iLength = indices.length;
         LongSparseArray<Short> vCache = new LongSparseArray<>();
         for (int level = 0; level < recursionLevel; level++) {
             final int newFaceCount = 20 * (int) Math.pow(4, level + 1);
@@ -126,33 +139,22 @@ public class Icosphere extends GlEsModel {
         }
     }
 
-    private short initializeVertices() {
-        short vIndex = 0;
-        addVertex(-1, GOLDEN_RATIO, 0, vIndex++);
-        addVertex(1, GOLDEN_RATIO, 0, vIndex++);
-        addVertex(-1, -GOLDEN_RATIO, 0, vIndex++);
-        addVertex(1, -GOLDEN_RATIO, 0, vIndex++);
-
-        addVertex(0, -1, GOLDEN_RATIO, vIndex++);
-        addVertex(0, 1, GOLDEN_RATIO, vIndex++);
-        addVertex(0, -1, -GOLDEN_RATIO, vIndex++);
-        addVertex(0, 1, -GOLDEN_RATIO, vIndex++);
-
-        addVertex(GOLDEN_RATIO, 0, -1, vIndex++);
-        addVertex(GOLDEN_RATIO, 0, 1, vIndex++);
-        addVertex(-GOLDEN_RATIO, 0, -1, vIndex++);
-        addVertex(-GOLDEN_RATIO, 0, 1, vIndex++);
-        return vIndex;
-    }
-
+    /**
+     * return index of vertex in the middle of v1 and v2
+     */
     private short getMiddleVertexIndex(short v1, short v2, short vIndex, LongSparseArray<Short> vCache) {
         if (v1 > v2) {
             short temp = v1;
             v1 = v2;
             v2 = temp;
         }
+        // first check if we have it already
+        boolean firstIsSmaller = v1 < v2;
+        long smallerIndex = firstIsSmaller ? v1 : v2;
+        long greaterIndex = firstIsSmaller ? v2 : v1;
         //the key always the smaller vIndex is stored as the first
-        long key = (long) v1 << 32 | (long) v2;
+        long key = (smallerIndex << 32) + greaterIndex;
+
         Short value = vCache.get(key);
         if (value == null) {
             value = vIndex;
