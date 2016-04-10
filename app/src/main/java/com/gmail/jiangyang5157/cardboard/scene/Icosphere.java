@@ -13,16 +13,19 @@ import java.nio.ByteOrder;
  * Created by Yang on 4/10/2016.
  */
 public class Icosphere extends GlEsModel {
+
+    private float radius;
+
     /**
      * Faces + Vertices = Edges + 2
-     * geodesic level 0 vertexCount= 12 faceCount=20 edgeCount=30
-     * geodesic level 1 vertexCount= 42 faceCount=80 edgeCount=120
-     * geodesic level 2 vertexCount= 162 faceCount=320 edgeCount=480
-     * geodesic level 3 vertexCount= 642 faceCount=1280 edgeCount=1920
+     * recursion level 0 vertexCount= 12 faceCount=20 edgeCount=30
+     * recursion level 1 vertexCount= 42 faceCount=80 edgeCount=120
+     * recursion level 2 vertexCount= 162 faceCount=320 edgeCount=480
+     * recursion level 3 vertexCount= 642 faceCount=1280 edgeCount=1920
      * ...
      */
     private static final short[] vertexCounts = new short[]{12, 42, 162, 642, 2562, 10242};
-    private int geodesicLevel;
+    private int recursionLevel;
     private static final short initialIndices[] = {
             0, 11, 5,
             0, 5, 1,
@@ -52,32 +55,32 @@ public class Icosphere extends GlEsModel {
     private int indicesBufferCapacity;
     private final int[] buffers = new int[2];
 
-    public Icosphere(Context context, int vertexShaderRawResource, int fragmentShaderRawResource, int geodesicLevel) {
+    public Icosphere(Context context, int vertexShaderRawResource, int fragmentShaderRawResource, int radius, int recursionLevel) {
         super(context, vertexShaderRawResource, fragmentShaderRawResource);
-        if (geodesicLevel > vertexCounts.length - 1) {
-            throw new RuntimeException("Icosphere - Unable to create a Icosphere with geodesic level: " + geodesicLevel);
+        if (recursionLevel > vertexCounts.length - 1) {
+            throw new RuntimeException("Icosphere - Unable to create a Icosphere with recursion level: " + recursionLevel);
         }
-
-        this.geodesicLevel = geodesicLevel;
+        this.radius = radius;
+        this.recursionLevel = recursionLevel;
     }
 
     @Override
     public void create() {
-        buildArrays(geodesicLevel);
+        buildArrays(radius, recursionLevel);
         fillBuffers();
         bindBuffers();
     }
 
-    private void buildArrays(int geodesicLevel) {
-        vertices = new float[vertexCounts[geodesicLevel] * 3];
-        short vIndex = initializeVertices();
+    private void buildArrays(float radius, int recursionLevel) {
+        vertices = new float[vertexCounts[recursionLevel] * 3];
+        short vIndex = initializeVertices(radius);
         indices = initialIndices.clone();
         int iLength = indices.length;
 
         // Each edge of the triangle is split in half.
         // One triangle is formed by the three points sitting in the middle of these edges and three triangles surrounding it
         LongSparseArray<Short> vCache = new LongSparseArray<>();
-        for (int level = 0; level < geodesicLevel; level++) {
+        for (int level = 0; level < recursionLevel; level++) {
             final int newFaceCount = 20 * (int) Math.pow(4, level + 1);
             short newIndices[] = new short[newFaceCount * 3];
             int iIndex = 0;
@@ -121,22 +124,25 @@ public class Icosphere extends GlEsModel {
         }
     }
 
-    private short initializeVertices() {
+    private short initializeVertices(float r) {
         short vIndex = 0;
-        addVertex(-1, GOLDEN_RATIO, 0, vIndex++);
-        addVertex(1, GOLDEN_RATIO, 0, vIndex++);
-        addVertex(-1, -GOLDEN_RATIO, 0, vIndex++);
-        addVertex(1, -GOLDEN_RATIO, 0, vIndex++);
 
-        addVertex(0, -1, GOLDEN_RATIO, vIndex++);
-        addVertex(0, 1, GOLDEN_RATIO, vIndex++);
-        addVertex(0, -1, -GOLDEN_RATIO, vIndex++);
-        addVertex(0, 1, -GOLDEN_RATIO, vIndex++);
+        float t = GOLDEN_RATIO;
 
-        addVertex(GOLDEN_RATIO, 0, -1, vIndex++);
-        addVertex(GOLDEN_RATIO, 0, 1, vIndex++);
-        addVertex(-GOLDEN_RATIO, 0, -1, vIndex++);
-        addVertex(-GOLDEN_RATIO, 0, 1, vIndex++);
+        addVertex(-1, t, 0, vIndex++);
+        addVertex(1, t, 0, vIndex++);
+        addVertex(-1, -t, 0, vIndex++);
+        addVertex(1, -t, 0, vIndex++);
+
+        addVertex(0, -1, t, vIndex++);
+        addVertex(0, 1, t, vIndex++);
+        addVertex(0, -1, -t, vIndex++);
+        addVertex(0, 1, -t, vIndex++);
+
+        addVertex(t, 0, -1, vIndex++);
+        addVertex(t, 0, 1, vIndex++);
+        addVertex(-t, 0, -1, vIndex++);
+        addVertex(-t, 0, 1, vIndex++);
         return vIndex;
     }
 
