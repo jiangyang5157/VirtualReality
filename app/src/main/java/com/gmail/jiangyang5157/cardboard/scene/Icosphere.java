@@ -55,7 +55,7 @@ public class Icosphere extends GlEsModel {
     private int indicesBufferCapacity;
     private final int[] buffers = new int[2];
 
-    public Icosphere(Context context, int vertexShaderRawResource, int fragmentShaderRawResource, int radius, int recursionLevel) {
+    public Icosphere(Context context, int vertexShaderRawResource, int fragmentShaderRawResource, float radius, int recursionLevel) {
         super(context, vertexShaderRawResource, fragmentShaderRawResource);
         if (recursionLevel > vertexCounts.length - 1) {
             throw new RuntimeException("Icosphere - Unable to create a Icosphere with recursion level: " + recursionLevel);
@@ -66,14 +66,14 @@ public class Icosphere extends GlEsModel {
 
     @Override
     public void create() {
-        buildArrays(radius, recursionLevel);
+        buildArrays();
         fillBuffers();
         bindBuffers();
     }
 
-    private void buildArrays(float radius, int recursionLevel) {
+    private void buildArrays() {
         vertices = new float[vertexCounts[recursionLevel] * 3];
-        short vIndex = initializeVertices(radius);
+        short vIndex = initializeVertices();
         indices = initialIndices.clone();
         int iLength = indices.length;
 
@@ -124,25 +124,23 @@ public class Icosphere extends GlEsModel {
         }
     }
 
-    private short initializeVertices(float r) {
+    //http://1.bp.blogspot.com/_-FeuT9Vh6rk/Sj1WHbcQwxI/AAAAAAAAABw/xaFDct6AyOI/s400/icopoints.png
+    private short initializeVertices() {
         short vIndex = 0;
+        addVertex(-1, GOLDEN_RATIO, 0, vIndex++);
+        addVertex(1, GOLDEN_RATIO, 0, vIndex++);
+        addVertex(-1, -GOLDEN_RATIO, 0, vIndex++);
+        addVertex(1, -GOLDEN_RATIO, 0, vIndex++);
 
-        float t = GOLDEN_RATIO;
+        addVertex(0, -1, GOLDEN_RATIO, vIndex++);
+        addVertex(0, 1, GOLDEN_RATIO, vIndex++);
+        addVertex(0, -1, -GOLDEN_RATIO, vIndex++);
+        addVertex(0, 1, -GOLDEN_RATIO, vIndex++);
 
-        addVertex(-1, t, 0, vIndex++);
-        addVertex(1, t, 0, vIndex++);
-        addVertex(-1, -t, 0, vIndex++);
-        addVertex(1, -t, 0, vIndex++);
-
-        addVertex(0, -1, t, vIndex++);
-        addVertex(0, 1, t, vIndex++);
-        addVertex(0, -1, -t, vIndex++);
-        addVertex(0, 1, -t, vIndex++);
-
-        addVertex(t, 0, -1, vIndex++);
-        addVertex(t, 0, 1, vIndex++);
-        addVertex(-t, 0, -1, vIndex++);
-        addVertex(-t, 0, 1, vIndex++);
+        addVertex(GOLDEN_RATIO, 0, -1, vIndex++);
+        addVertex(GOLDEN_RATIO, 0, 1, vIndex++);
+        addVertex(-GOLDEN_RATIO, 0, -1, vIndex++);
+        addVertex(-GOLDEN_RATIO, 0, 1, vIndex++);
         return vIndex;
     }
 
@@ -167,11 +165,14 @@ public class Icosphere extends GlEsModel {
         return value;
     }
 
+    /**
+     * normalize and scale radius
+     */
     private void addVertex(float x, float y, float z, int vIndex) {
         float length = Matrix.length(x, y, z);
-        vertices[vIndex * 3] = x / length;
-        vertices[vIndex * 3 + 1] = y / length;
-        vertices[vIndex * 3 + 2] = z / length;
+        vertices[vIndex * 3] = x / length * radius;
+        vertices[vIndex * 3 + 1] = y / length * radius;
+        vertices[vIndex * 3 + 2] = z / length * radius;
     }
 
     private void fillBuffers() {

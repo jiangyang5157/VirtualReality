@@ -36,12 +36,12 @@ public class TextureSphere extends GlEsModel{
 
     @Override
     public void create() {
-        buildArrays(rings, sectors, radius);
+        buildArrays();
         buildBuffers();
         bindBuffers();
     }
 
-    private void buildArrays(int rings, int sectors, float radius) {
+    private void buildArrays() {
         vertices = new float[rings * sectors * 3];
         indices = new short[rings * sectors * 6];
         normals = new float[rings * sectors * 3];
