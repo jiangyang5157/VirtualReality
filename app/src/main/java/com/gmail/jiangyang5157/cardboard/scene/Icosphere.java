@@ -140,18 +140,6 @@ public class Icosphere extends GlEsModel {
             indices = newIndices;
             iLength = iIndex;
         }
-
-//        iLength = indices.length;
-//        int faceCount = iLength / 3;
-//        for (int faceIndex = 0; faceIndex < faceCount; faceIndex++) {
-//            short v1 = indices[faceIndex * 3];
-//            short v2 = indices[faceIndex * 3 + 1];
-//            short v3 = indices[faceIndex * 3 + 2];
-//            float[] normal = createNormal(getVertex(v1), getVertex(v2), getVertex(v3));
-//            addNormal(normal[0], normal[1], normal[2], v1);
-//            addNormal(normal[0], normal[1], normal[2], v2);
-//            addNormal(normal[0], normal[1], normal[2], v3);
-//        }
     }
 
     /**
