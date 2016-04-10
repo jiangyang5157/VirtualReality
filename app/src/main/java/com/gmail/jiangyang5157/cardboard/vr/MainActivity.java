@@ -144,7 +144,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         tsEarth = new TextureSphere(this, R.raw.earth_vertex, R.raw.earth_fragment, 100, 100, 10, R.drawable.no_ice_clouds_mts_4k);
         tsEarth.create();
 
-        icosphere = new Icosphere(this, R.raw.icosphere_vertex, R.raw.icosphere_fragment, 1, 2, new float[]{1.0f, 0.5f, 0.f, 1.0f});
+        icosphere = new Icosphere(this, R.raw.icosphere_vertex, R.raw.icosphere_fragment, 2, 2, new float[]{1.0f, 0.5f, 0.f, 1.0f});
         icosphere.create();
 
         test(debug);

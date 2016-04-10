@@ -141,17 +141,17 @@ public class Icosphere extends GlEsModel {
             iLength = iIndex;
         }
 
-        iLength = indices.length;
-        int faceCount = iLength / 3;
-        for (int faceIndex = 0; faceIndex < faceCount; faceIndex++) {
-            short v1 = indices[faceIndex * 3];
-            short v2 = indices[faceIndex * 3 + 1];
-            short v3 = indices[faceIndex * 3 + 2];
-            float[] normal = createNormal(getVertex(v1), getVertex(v2), getVertex(v3));
-            addNormal(normal[0], normal[1], normal[2], v1);
-            addNormal(normal[0], normal[1], normal[2], v2);
-            addNormal(normal[0], normal[1], normal[2], v3);
-        }
+//        iLength = indices.length;
+//        int faceCount = iLength / 3;
+//        for (int faceIndex = 0; faceIndex < faceCount; faceIndex++) {
+//            short v1 = indices[faceIndex * 3];
+//            short v2 = indices[faceIndex * 3 + 1];
+//            short v3 = indices[faceIndex * 3 + 2];
+//            float[] normal = createNormal(getVertex(v1), getVertex(v2), getVertex(v3));
+//            addNormal(normal[0], normal[1], normal[2], v1);
+//            addNormal(normal[0], normal[1], normal[2], v2);
+//            addNormal(normal[0], normal[1], normal[2], v3);
+//        }
     }
 
     /**
@@ -188,38 +188,14 @@ public class Icosphere extends GlEsModel {
         x = x / length;
         y = y / length;
         z = z / length;
-        vertices[index * 3] = x * radius;
-        vertices[index * 3 + 1] = y * radius;
-        vertices[index * 3 + 2] = z * radius;
-    }
 
-    private float[] getVertex(short index) {
-        return new float[]{
-                vertices[index * 3],
-                vertices[index * 3 + 1],
-                vertices[index * 3 + 2]
-        };
-    }
-
-    private float[] createNormal(float[] v1, float[] v2, float[] v3) {
-        float[] vU = {v2[0] - v1[0], v2[1] - v1[1], v2[2] - v1[2]};
-        float[] vV = {v3[0] - v1[0], v3[1] - v1[1], v3[2] - v1[2]};
-        float[] normal = {
-                (vU[1] * vV[2]) - (vU[2] * vV[1]),
-                (vU[2] * vV[0]) - (vU[0] * vV[2]),
-                (vU[0] * vV[1]) - (vU[1] * vV[0])};
-
-        final float length = Matrix.length(normal[0], normal[1], normal[2]);
-        normal[0] /= length;
-        normal[1] /= length;
-        normal[2] /= length;
-        return normal;
-    }
-
-    private void addNormal(float x, float y, float z, int index) {
         normals[index * 3] = x;
         normals[index * 3 + 1] = y;
         normals[index * 3 + 2] = z;
+
+        vertices[index * 3] = x * radius;
+        vertices[index * 3 + 1] = y * radius;
+        vertices[index * 3 + 2] = z * radius;
     }
 
     private void fillBuffers() {
