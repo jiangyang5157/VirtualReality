@@ -111,7 +111,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         Matrix.multiplyMM(tsEarth.modelView, 0, view, 0, tsEarth.model, 0);
         Matrix.multiplyMM(tsEarth.modelViewProjection, 0, perspective, 0, tsEarth.modelView, 0);
 
-        Matrix.rotateM(icosphere.model, 0, 0.2f, 0, 1, 0);
+        Matrix.rotateM(icosphere.model, 0, 0.1f, 0, 1, 0);
         Matrix.multiplyMM(icosphere.modelView, 0, view, 0, icosphere.model, 0);
         Matrix.multiplyMM(icosphere.modelViewProjection, 0, perspective, 0, icosphere.modelView, 0);
 
