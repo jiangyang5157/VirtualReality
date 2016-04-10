@@ -175,13 +175,13 @@ public class Icosphere extends GlEsModel {
         y = y / length;
         z = z / length;
 
-        vertices[vertexIndex * 3] = x * radius;
-        vertices[vertexIndex * 3 + 1] = y * radius;
-        vertices[vertexIndex * 3 + 2] = z * radius;
-
         normals[vertexIndex * 3] = x;
         normals[vertexIndex * 3 + 1] = y;
         normals[vertexIndex * 3 + 2] = z;
+
+        vertices[vertexIndex * 3] = x * radius;
+        vertices[vertexIndex * 3 + 1] = y * radius;
+        vertices[vertexIndex * 3 + 2] = z * radius;
     }
 
     private void fillBuffers() {

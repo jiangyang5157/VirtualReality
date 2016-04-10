@@ -48,7 +48,6 @@ public class TextureSphere extends GlEsModel {
         textures = new float[rings * sectors * 2];
 
         int vertexIndex = 0;
-        int normalIndex = 0;
         int textureIndex = 0;
         int indexIndex = 0;
 
@@ -60,15 +59,14 @@ public class TextureSphere extends GlEsModel {
                 float x = (float) Math.cos(2 * Math.PI * s * FAT_SECTORS) * (float) Math.sin(Math.PI * r * FAT_RINGS);
                 float z = (float) Math.sin(2 * Math.PI * s * FAT_SECTORS) * (float) Math.sin(Math.PI * r * FAT_RINGS);
 
+                normals[vertexIndex] = x;
+                normals[vertexIndex + 1] = y;
+                normals[vertexIndex + 2] = z;
+
                 vertices[vertexIndex] = x * radius;
                 vertices[vertexIndex + 1] = y * radius;
                 vertices[vertexIndex + 2] = z * radius;
                 vertexIndex += 3;
-
-                normals[normalIndex] = x;
-                normals[normalIndex + 1] = y;
-                normals[normalIndex + 2] = z;
-                normalIndex += 3;
 
                 textures[textureIndex] = s * FAT_SECTORS;
                 textures[textureIndex + 1] = r * FAT_RINGS;
