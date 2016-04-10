@@ -26,6 +26,8 @@ public class Icosphere extends GlEsModel {
      */
     private static final short[] vertexCounts = new short[]{12, 42, 162, 642, 2562, 10242};
     private int recursionLevel;
+
+    //http://blog.andreaskahler.com/2009/06/creating-icosphere-mesh-in-code.html
     private static final short initialIndices[] = {
             0, 11, 5,
             0, 5, 1,
@@ -124,7 +126,6 @@ public class Icosphere extends GlEsModel {
         }
     }
 
-    //http://1.bp.blogspot.com/_-FeuT9Vh6rk/Sj1WHbcQwxI/AAAAAAAAABw/xaFDct6AyOI/s400/icopoints.png
     private short initializeVertices() {
         short vIndex = 0;
         addVertex(-1, GOLDEN_RATIO, 0, vIndex++);
