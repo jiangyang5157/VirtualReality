@@ -30,13 +30,16 @@ public class Icosphere extends GlEsModel {
     private int indicesBufferCapacity;
     private final int[] buffers = new int[2];
 
-    public Icosphere(Context context, int vertexShaderRawResource, int fragmentShaderRawResource, float radius, int recursionLevel) {
+    private float[] color;
+
+    public Icosphere(Context context, int vertexShaderRawResource, int fragmentShaderRawResource, float radius, int recursionLevel, float[] color) {
         super(context, vertexShaderRawResource, fragmentShaderRawResource);
         if (recursionLevel > vertexCounts.length - 1) {
             throw new RuntimeException("Icosphere - Unable to create a Icosphere with recursion level: " + recursionLevel);
         }
         this.radius = radius;
         this.recursionLevel = recursionLevel;
+        this.color = color;
     }
 
     @Override
@@ -221,6 +224,7 @@ public class Icosphere extends GlEsModel {
 
         GLES20.glUniformMatrix4fv(mvMatrixHandle, 1, false, modelView, 0);
         GLES20.glUniformMatrix4fv(mvpMatrixHandle, 1, false, modelViewProjection, 0);
+        GLES20.glUniform4fv(colorHandle, 1, color, 0);
 
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, verticesBuffHandle);
         GLES20.glVertexAttribPointer(positionHandle, 3, GLES20.GL_FLOAT, false, 0, 0);

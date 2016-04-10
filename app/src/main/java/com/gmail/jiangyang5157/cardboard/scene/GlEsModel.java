@@ -26,10 +26,10 @@ public abstract class GlEsModel implements Geometry {
     static final String MODEL_VIEW_HANDLE = "u_MVMatrix";
     static final String MODEL_VIEW_PROJECTION_HANDLE = "u_MVPMatrix";
     static final String TEXTURE_ID_HANDLE = "u_TexId";
+    static final String COLOR_HANDLE = "u_Color";
 
     static final String POSOTION_HANDLE = "a_Position";
     static final String NORMAL_HANDLE = "a_Normal";
-    static final String COLOR_HANDLE = "a_Color";
     static final String TEXTURE_COORDS_HANDLE = "a_TexCoord";
 
     int mMatrixHandle;
@@ -81,10 +81,10 @@ public abstract class GlEsModel implements Geometry {
         mvMatrixHandle = GLES20.glGetUniformLocation(program, MODEL_VIEW_HANDLE);
         mvpMatrixHandle = GLES20.glGetUniformLocation(program, MODEL_VIEW_PROJECTION_HANDLE);
         texIdHandle = GLES20.glGetUniformLocation(program, TEXTURE_ID_HANDLE);
+        colorHandle = GLES20.glGetUniformLocation(program, COLOR_HANDLE);
 
         positionHandle = GLES20.glGetAttribLocation(program, POSOTION_HANDLE);
         normalHandle = GLES20.glGetAttribLocation(program, NORMAL_HANDLE);
-        colorHandle = GLES20.glGetAttribLocation(program, COLOR_HANDLE);
         texCoordHandle = GLES20.glGetAttribLocation(program, TEXTURE_COORDS_HANDLE);
     }
 
