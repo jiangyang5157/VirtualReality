@@ -49,21 +49,21 @@ public abstract class GlEsModel implements Geometry {
     public float[] modelViewProjection = new float[16];
 
     float[] vertices;
-    short[] indices;
     float[] normals;
     float[] colors;
+    short[] indices;
     float[] textures;
 
     FloatBuffer verticesBuffer;
-    ShortBuffer indicesBuffer;
     FloatBuffer normalsBuffer;
     FloatBuffer colorsBuffer;
+    ShortBuffer indicesBuffer;
     FloatBuffer texturesBuffer;
 
     int verticesBuffHandle;
-    int indicesBuffHandle;
     int normalsBuffHandle;
     int colorsBuffHandle;
+    int indicesBuffHandle;
     int texturesBuffHandle;
 
     Context context;

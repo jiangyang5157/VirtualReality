@@ -48,6 +48,7 @@ public class Icosphere extends GlEsModel {
 
     private void buildArrays() {
         vertices = new float[vertexCounts[recursionLevel] * 3];
+        normals = new float[vertexCounts[recursionLevel] * 3];
 
         // create 12 vertices of a icosahedron - http://blog.andreaskahler.com/2009/06/creating-icosphere-mesh-in-code.html
         short vIndex = 0;
@@ -168,14 +169,19 @@ public class Icosphere extends GlEsModel {
         return value;
     }
 
-    /**
-     * normalize and scale radius
-     */
-    private void addVertex(float x, float y, float z, int vIndex) {
+    private void addVertex(float x, float y, float z, int vertexIndex) {
         float length = Matrix.length(x, y, z);
-        vertices[vIndex * 3] = x / length * radius;
-        vertices[vIndex * 3 + 1] = y / length * radius;
-        vertices[vIndex * 3 + 2] = z / length * radius;
+        x = x / length;
+        y = y / length;
+        z = z / length;
+
+        vertices[vertexIndex * 3] = x * radius;
+        vertices[vertexIndex * 3 + 1] = y * radius;
+        vertices[vertexIndex * 3 + 2] = z * radius;
+
+        normals[vertexIndex * 3] = x;
+        normals[vertexIndex * 3 + 1] = y;
+        normals[vertexIndex * 3 + 2] = z;
     }
 
     private void fillBuffers() {

@@ -13,7 +13,7 @@ import java.nio.ByteOrder;
 /**
  * Created by Yang on 4/9/2016.
  */
-public class TextureSphere extends GlEsModel{
+public class TextureSphere extends GlEsModel {
 
     private int rings;
     private int sectors;
@@ -43,8 +43,8 @@ public class TextureSphere extends GlEsModel{
 
     private void buildArrays() {
         vertices = new float[rings * sectors * 3];
-        indices = new short[rings * sectors * 6];
         normals = new float[rings * sectors * 3];
+        indices = new short[rings * sectors * 6];
         textures = new float[rings * sectors * 2];
 
         int vertexIndex = 0;
@@ -52,13 +52,13 @@ public class TextureSphere extends GlEsModel{
         int textureIndex = 0;
         int indexIndex = 0;
 
-        final float R = 1f / (float) (rings - 1);
-        final float S = 1f / (float) (sectors - 1);
+        final float FAT_RINGS = 1f / (float) (rings - 1);
+        final float FAT_SECTORS = 1f / (float) (sectors - 1);
         for (int r = 0; r < rings; r++) {
             for (int s = 0; s < sectors; s++) {
-                float y = (float) Math.sin((-Math.PI / 2f) + Math.PI * r * R);
-                float x = (float) Math.cos(2f * Math.PI * s * S) * (float) Math.sin(Math.PI * r * R);
-                float z = (float) Math.sin(2f * Math.PI * s * S) * (float) Math.sin(Math.PI * r * R);
+                float y = (float) Math.sin((-Math.PI / 2) + Math.PI * r * FAT_RINGS);
+                float x = (float) Math.cos(2 * Math.PI * s * FAT_SECTORS) * (float) Math.sin(Math.PI * r * FAT_RINGS);
+                float z = (float) Math.sin(2 * Math.PI * s * FAT_SECTORS) * (float) Math.sin(Math.PI * r * FAT_RINGS);
 
                 vertices[vertexIndex] = x * radius;
                 vertices[vertexIndex + 1] = y * radius;
@@ -70,22 +70,22 @@ public class TextureSphere extends GlEsModel{
                 normals[normalIndex + 2] = z;
                 normalIndex += 3;
 
-                textures[textureIndex] = s * S;
-                textures[textureIndex + 1] = r * R;
+                textures[textureIndex] = s * FAT_SECTORS;
+                textures[textureIndex + 1] = r * FAT_RINGS;
                 textureIndex += 2;
             }
         }
 
         for (int r = 0; r < rings; r++) {
             for (int s = 0; s < sectors; s++) {
-                int r1 = (r + 1 == rings) ? 0 : r + 1;
-                int s1 = (s + 1 == sectors) ? 0 : s + 1;
+                int r_ = (r + 1 == rings) ? 0 : r + 1;
+                int s_ = (s + 1 == sectors) ? 0 : s + 1;
                 indices[indexIndex] = (short) (r * sectors + s);
-                indices[indexIndex + 1] = (short) (r * sectors + (s1));
-                indices[indexIndex + 2] = (short) ((r1) * sectors + (s1));
+                indices[indexIndex + 1] = (short) (r * sectors + (s_));
+                indices[indexIndex + 2] = (short) ((r_) * sectors + (s_));
 
-                indices[indexIndex + 3] = (short) ((r1) * sectors + s);
-                indices[indexIndex + 4] = (short) ((r1) * sectors + (s1));
+                indices[indexIndex + 3] = (short) ((r_) * sectors + s);
+                indices[indexIndex + 4] = (short) ((r_) * sectors + (s_));
                 indices[indexIndex + 5] = (short) (r * sectors + s);
 
                 indexIndex += 6;
