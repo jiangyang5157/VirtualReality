@@ -79,11 +79,11 @@ public class TextureSphere extends GlEsModel {
                 int r_ = (r + 1 == rings) ? 0 : r + 1;
                 int s_ = (s + 1 == sectors) ? 0 : s + 1;
                 indices[indexIndex] = (short) (r * sectors + s);
-                indices[indexIndex + 1] = (short) (r * sectors + (s_));
-                indices[indexIndex + 2] = (short) ((r_) * sectors + (s_));
+                indices[indexIndex + 1] = (short) (r * sectors + s_);
+                indices[indexIndex + 2] = (short) (r_ * sectors + s_);
 
-                indices[indexIndex + 3] = (short) ((r_) * sectors + s);
-                indices[indexIndex + 4] = (short) ((r_) * sectors + (s_));
+                indices[indexIndex + 3] = (short) (r_ * sectors + s);
+                indices[indexIndex + 4] = (short) (r_ * sectors + s_);
                 indices[indexIndex + 5] = (short) (r * sectors + s);
 
                 indexIndex += 6;
