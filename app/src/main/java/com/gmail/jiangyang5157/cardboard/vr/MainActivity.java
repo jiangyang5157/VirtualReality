@@ -80,15 +80,6 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     public void onFinishFrame(Viewport viewport) {
         GLES20.glDisable(GLES20.GL_DEPTH_TEST);
 
-        if (isLookingAtObject(tsEarth.model, tsEarth.modelView)) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    overlayView.show3DToast("r=" + tsEarth.getRadius() + "_" + tsEarth.getClass().getSimpleName() + "_rings=" + tsEarth.getRings() + "_sectors=" + tsEarth.getSectors());
-                }
-            });
-        }
-
         if (isLookingAtObject(icosphere.model, icosphere.modelView)) {
             runOnUiThread(new Runnable() {
                 @Override
@@ -110,7 +101,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
     @Override
     public void onCardboardTrigger() {
-
+        overlayView.show3DToast("r=" + tsEarth.getRadius() + "_" + tsEarth.getClass().getSimpleName() + "_rings=" + tsEarth.getRings() + "_sectors=" + tsEarth.getSectors());
     }
 
     @Override
