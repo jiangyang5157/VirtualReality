@@ -20,7 +20,6 @@ import javax.microedition.khronos.egl.EGLConfig;
 
 public class MainActivity extends CardboardActivity implements CardboardView.StereoRenderer {
     private static final String TAG = "MainActivity";
-    private boolean debug = false;
 
     private static final float CAMERA_Z = 0.01f;
     private static final float Z_NEAR = 0.1f;
@@ -33,11 +32,12 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     private float[] camera = new float[16];
     private float[] headView = new float[16];
 
-    private static final float[] LIGHT_POS_IN_WORLD_SPACE = new float[] {5.0f, 0.0f, 0.0f, 1.0f};
+    private static final float[] LIGHT_POS_IN_WORLD_SPACE = new float[]{4.0f, 4.0f, 1.0f, 1.0f};
     private float[] lightPosInEyeSpace = new float[4];
 
     private TextureSphere tsEarth;
     private Icosphere icosphere;
+    private Icosphere icosphere2;
 
     private CardboardOverlayView overlayView;
 
@@ -65,6 +65,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         super.onDestroy();
         tsEarth.destroy();
         icosphere.destroy();
+        icosphere2.destroy();
     }
 
     @Override
@@ -79,11 +80,29 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     public void onFinishFrame(Viewport viewport) {
         GLES20.glDisable(GLES20.GL_DEPTH_TEST);
 
+        if (isLookingAtObject(tsEarth.model, tsEarth.modelView)) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    overlayView.show3DToast("r=" + tsEarth.getRadius() + "_" + tsEarth.getClass().getSimpleName() + "_rings=" + tsEarth.getRings() + "_sectors=" + tsEarth.getSectors());
+                }
+            });
+        }
+
         if (isLookingAtObject(icosphere.model, icosphere.modelView)) {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    overlayView.show3DToast("" + icosphere.getClass().getSimpleName() + " - Vertex counts = " + icosphere.getVertexCounts());
+                    overlayView.show3DToast("r=" + icosphere.getRadius() + "_" + icosphere.getClass().getSimpleName() + "_vCount=" + icosphere.getVertexCounts());
+                }
+            });
+        }
+
+        if (isLookingAtObject(icosphere2.model, icosphere2.modelView)) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    overlayView.show3DToast("r=" + icosphere2.getRadius() + "_" + icosphere2.getClass().getSimpleName() + "_vCount=" + icosphere2.getVertexCounts());
                 }
             });
         }
@@ -91,7 +110,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
     @Override
     public void onCardboardTrigger() {
-        test(debug);
+
     }
 
     @Override
@@ -107,13 +126,16 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         // Build the ModelView and ModelViewProjection matrices for calculating different object's position
         float[] perspective = eye.getPerspective(Z_NEAR, Z_FAR);
 
-        Matrix.rotateM(tsEarth.model, 0, 0.1f, 0, 1, 0);
         Matrix.multiplyMM(tsEarth.modelView, 0, view, 0, tsEarth.model, 0);
         Matrix.multiplyMM(tsEarth.modelViewProjection, 0, perspective, 0, tsEarth.modelView, 0);
 
-        Matrix.rotateM(icosphere.model, 0, 0.1f, 0, 1, 0);
+        Matrix.rotateM(icosphere.model, 0, 1f, 1, 1, 0);
         Matrix.multiplyMM(icosphere.modelView, 0, view, 0, icosphere.model, 0);
         Matrix.multiplyMM(icosphere.modelViewProjection, 0, perspective, 0, icosphere.modelView, 0);
+
+        Matrix.rotateM(icosphere2.model, 0, 1f, 0, 1, 1);
+        Matrix.multiplyMM(icosphere2.modelView, 0, view, 0, icosphere2.model, 0);
+        Matrix.multiplyMM(icosphere2.modelViewProjection, 0, perspective, 0, icosphere2.modelView, 0);
 
         drawScene();
     }
@@ -121,6 +143,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     private void drawScene() {
         tsEarth.draw(lightPosInEyeSpace);
         icosphere.draw(lightPosInEyeSpace);
+        icosphere2.draw(lightPosInEyeSpace);
     }
 
     private boolean isLookingAtObject(float[] model, float[] modelView) {
@@ -143,11 +166,18 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
         tsEarth = new TextureSphere(this, R.raw.earth_vertex, R.raw.earth_fragment, 100, 100, 10, R.drawable.no_ice_clouds_mts_4k);
         tsEarth.create();
+        Matrix.setIdentityM(tsEarth.model, 0);
+        Matrix.translateM(tsEarth.model, 0, 0.0f, 0.0f, 0.0f);
 
-        icosphere = new Icosphere(this, R.raw.icosphere_vertex, R.raw.icosphere_fragment, 2, 2, new float[]{1.0f, 0.5f, 0.f, 1.0f});
+        icosphere = new Icosphere(this, R.raw.icosphere_vertex, R.raw.icosphere_fragment, 1, 5, new float[]{0.2f, 0.2f, 0.7f, 1.0f});
         icosphere.create();
+        Matrix.setIdentityM(icosphere.model, 0);
+        Matrix.translateM(icosphere.model, 0, 2.0f, 0.0f, -4.0f);
 
-        test(debug);
+        icosphere2 = new Icosphere(this, R.raw.icosphere_vertex, R.raw.icosphere_fragment, 1, 0, new float[]{0.0f, 0.5f, 0.0f, 1.0f});
+        icosphere2.create();
+        Matrix.setIdentityM(icosphere2.model, 0);
+        Matrix.translateM(icosphere2.model, 0, -2.0f, 0.0f, -4.0f);
     }
 
     @Override
@@ -162,21 +192,5 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     @Override
     public void onRendererShutdown() {
         Log.d(TAG, "onRendererShutdown");
-    }
-
-    @Deprecated
-    private void test(boolean debug) {
-        if (debug) {
-            Matrix.setIdentityM(tsEarth.model, 0);
-            Matrix.translateM(tsEarth.model, 0, 0.0f, 0.0f, -20.0f);
-            Matrix.setIdentityM(icosphere.model, 0);
-            Matrix.translateM(icosphere.model, 0, 0.0f, -5.0f, -5.0f);
-        } else {
-            Matrix.setIdentityM(tsEarth.model, 0);
-            Matrix.translateM(tsEarth.model, 0, 0.0f, 0.0f, 0.0f);
-            Matrix.setIdentityM(icosphere.model, 0);
-            Matrix.translateM(icosphere.model, 0, 0.0f, -5.0f, -5.0f);
-        }
-        this.debug = !this.debug;
     }
 }

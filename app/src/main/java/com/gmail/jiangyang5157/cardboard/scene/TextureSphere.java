@@ -22,7 +22,7 @@ public class TextureSphere extends GlEsModel {
 
     private int indicesBufferCapacity;
 
-    private final int[] buffers = new int[3];
+    private final int[] buffers = new int[4];
     private final int[] texBuffers = new int[1];
     private final int TEX_ID_OFFSET = 1;
 
@@ -51,15 +51,22 @@ public class TextureSphere extends GlEsModel {
         int textureIndex = 0;
         int indexIndex = 0;
 
+        final float PI = (float) Math.PI;
+        final float PIx2 = PI * 2.0f;
         final float RING_FACTOR = 1f / (float) (rings - 1);
         final float SECTORS_FACTOR = 1f / (float) (sectors - 1);
+
         for (int r = 0; r < rings; r++) {
+            float v = r * RING_FACTOR;
+            float phi = v * PI;
+
             for (int s = 0; s < sectors; s++) {
-                float sf = s * SECTORS_FACTOR;
-                float rf = r * RING_FACTOR;
-                float x = (float) Math.cos(Math.PI * 2.0f * sf) * (float) Math.sin(Math.PI * rf);
-                float y = (float) Math.sin((-Math.PI / 2.0f) + Math.PI * rf);
-                float z = (float) Math.sin(Math.PI * 2.0f * sf) * (float) Math.sin(Math.PI * rf);
+                float u = s * SECTORS_FACTOR;
+                float theta = u * PIx2;
+
+                float x = (float) (Math.cos(theta) * Math.sin(phi));
+                float y = (float) Math.cos(phi);
+                float z = (float) (Math.sin(theta) * Math.sin(phi));
 
                 normals[vertexIndex] = x;
                 normals[vertexIndex + 1] = y;
@@ -70,8 +77,8 @@ public class TextureSphere extends GlEsModel {
                 vertices[vertexIndex + 2] = z * radius;
                 vertexIndex += 3;
 
-                textures[textureIndex] = sf;
-                textures[textureIndex + 1] = rf;
+                textures[textureIndex] = u;
+                textures[textureIndex + 1] = v;
                 textureIndex += 2;
             }
         }
@@ -98,6 +105,10 @@ public class TextureSphere extends GlEsModel {
         verticesBuffer.put(vertices).position(0);
         vertices = null;
 
+        normalsBuffer = ByteBuffer.allocateDirect(normals.length * BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
+        normalsBuffer.put(normals).position(0);
+        normals = null;
+
         indicesBuffer = ByteBuffer.allocateDirect(indices.length * BYTES_PER_SHORT).order(ByteOrder.nativeOrder()).asShortBuffer();
         indicesBuffer.put(indices).position(0);
         indices = null;
@@ -112,12 +123,18 @@ public class TextureSphere extends GlEsModel {
         GLES20.glGenBuffers(buffers.length, buffers, 0);
         verticesBuffHandle = buffers[0];
         indicesBuffHandle = buffers[1];
-        texturesBuffHandle = buffers[2];
+        normalsBuffHandle = buffers[2];
+        texturesBuffHandle = buffers[3];
 
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, verticesBuffHandle);
         GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, verticesBuffer.capacity() * BYTES_PER_FLOAT, verticesBuffer, GLES20.GL_STATIC_DRAW);
         verticesBuffer.limit(0);
         verticesBuffer = null;
+
+        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, normalsBuffHandle);
+        GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, normalsBuffer.capacity() * BYTES_PER_FLOAT, normalsBuffer, GLES20.GL_STATIC_DRAW);
+        normalsBuffer.limit(0);
+        normalsBuffer = null;
 
         GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, indicesBuffHandle);
         GLES20.glBufferData(GLES20.GL_ELEMENT_ARRAY_BUFFER, indicesBuffer.capacity() * BYTES_PER_SHORT, indicesBuffer, GLES20.GL_STATIC_DRAW);
@@ -155,9 +172,14 @@ public class TextureSphere extends GlEsModel {
         GLES20.glUniformMatrix4fv(mvMatrixHandle, 1, false, modelView, 0);
         GLES20.glUniformMatrix4fv(mvpMatrixHandle, 1, false, modelViewProjection, 0);
         GLES20.glUniform1i(texIdHandle, TEX_ID_OFFSET);
+        GLES20.glUniform3fv(lightPosHandle, 1, lightPosInEyeSpace, 0);
 
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, verticesBuffHandle);
         GLES20.glVertexAttribPointer(vertexHandle, 3, GLES20.GL_FLOAT, false, 0, 0);
+        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
+
+        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, normalsBuffHandle);
+        GLES20.glVertexAttribPointer(normalHandle, 3, GLES20.GL_FLOAT, false, 0, 0);
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
 
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, texturesBuffHandle);
@@ -183,5 +205,17 @@ public class TextureSphere extends GlEsModel {
         Log.d("TextureSphere", "destroy");
         GLES20.glDeleteBuffers(buffers.length, buffers, 0);
         GLES20.glDeleteBuffers(texBuffers.length, texBuffers, 0);
+    }
+
+    public float getRadius() {
+        return radius;
+    }
+
+    public int getSectors() {
+        return sectors;
+    }
+
+    public int getRings() {
+        return rings;
     }
 }

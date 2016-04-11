@@ -29,6 +29,7 @@ public class Icosphere extends GlEsModel {
     private int recursionLevel;
 
     private int indicesBufferCapacity;
+
     private final int[] buffers = new int[3];
 
     public Icosphere(Context context, int vertexShaderRawResource, int fragmentShaderRawResource, float radius, int recursionLevel, float[] color) {
@@ -264,5 +265,9 @@ public class Icosphere extends GlEsModel {
 
     public int getVertexCounts() {
         return vertexCounts[recursionLevel];
+    }
+
+    public float getRadius() {
+        return radius;
     }
 }
