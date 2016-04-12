@@ -3,6 +3,7 @@ package com.gmail.jiangyang5157.cardboard.scene;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.opengl.GLES20;
+import android.opengl.Matrix;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -132,6 +133,11 @@ public abstract class GlEsModel implements Geometry {
         for (int error; (error = GLES20.glGetError()) != GLES20.GL_NO_ERROR; ) {
             Log.e("GlEsError", error + " - " + label);
         }
+    }
+
+    public void setPosition(float x, float y, float z){
+        Matrix.setIdentityM(model, 0);
+        Matrix.translateM(model, 0, x, y, z);
     }
 
     public abstract void create();

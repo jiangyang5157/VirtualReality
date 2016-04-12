@@ -84,7 +84,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    overlayView.show3DToast("r=" + icosphere.getRadius() + "_" + icosphere.getClass().getSimpleName() + "_vCount=" + icosphere.getVertexCounts());
+                    overlayView.show3DToast("" + icosphere.getClass().getSimpleName() + " vCount=" + icosphere.getVertexCounts());
                 }
             });
         }
@@ -93,7 +93,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    overlayView.show3DToast("r=" + icosphere2.getRadius() + "_" + icosphere2.getClass().getSimpleName() + "_vCount=" + icosphere2.getVertexCounts());
+                    overlayView.show3DToast("" + icosphere2.getClass().getSimpleName() + " vCount=" + icosphere2.getVertexCounts());
                 }
             });
         }
@@ -101,7 +101,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
     @Override
     public void onCardboardTrigger() {
-        overlayView.show3DToast("r=" + tsEarth.getRadius() + "_" + tsEarth.getClass().getSimpleName() + "_rings=" + tsEarth.getRings() + "_sectors=" + tsEarth.getSectors());
+        overlayView.show3DToast("" + tsEarth.getClass().getSimpleName() + " rings=" + tsEarth.getRings() + " sectors=" + tsEarth.getSectors());
     }
 
     @Override
@@ -157,18 +157,15 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
         tsEarth = new TextureSphere(this, R.raw.earth_vertex, R.raw.earth_fragment, 100, 100, 10, R.drawable.no_ice_clouds_mts_4k);
         tsEarth.create();
-        Matrix.setIdentityM(tsEarth.model, 0);
-        Matrix.translateM(tsEarth.model, 0, 0.0f, 0.0f, 0.0f);
+        tsEarth.setPosition(0, 0, 0);
 
         icosphere = new Icosphere(this, R.raw.icosphere_vertex, R.raw.icosphere_fragment, 1, 5, new float[]{0.2f, 0.2f, 0.7f, 1.0f});
         icosphere.create();
-        Matrix.setIdentityM(icosphere.model, 0);
-        Matrix.translateM(icosphere.model, 0, 2.0f, 0.0f, -4.0f);
+        icosphere.setPosition(2.0f, 0.0f, -4.0f);
 
         icosphere2 = new Icosphere(this, R.raw.icosphere_vertex, R.raw.icosphere_fragment, 1, 0, new float[]{0.0f, 0.5f, 0.0f, 1.0f});
         icosphere2.create();
-        Matrix.setIdentityM(icosphere2.model, 0);
-        Matrix.translateM(icosphere2.model, 0, -2.0f, 0.0f, -4.0f);
+        icosphere2.setPosition(-2.0f, 0.0f, -4.0f);
     }
 
     @Override
