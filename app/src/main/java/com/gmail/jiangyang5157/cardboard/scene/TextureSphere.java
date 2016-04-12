@@ -13,7 +13,7 @@ import java.nio.ByteOrder;
 /**
  * Created by Yang on 4/9/2016.
  */
-public class TextureSphere extends GlEsModel {
+public class TextureSphere extends Model {
 
     private int rings;
     private int sectors;
@@ -35,13 +35,7 @@ public class TextureSphere extends GlEsModel {
     }
 
     @Override
-    public void create() {
-        buildArrays();
-        buildBuffers();
-        bindBuffers();
-    }
-
-    private void buildArrays() {
+    protected void buildArrays() {
         vertices = new float[rings * sectors * 3];
         normals = new float[rings * sectors * 3];
         indices = new short[rings * sectors * 6];
@@ -51,8 +45,6 @@ public class TextureSphere extends GlEsModel {
         int textureIndex = 0;
         int indexIndex = 0;
 
-        final float PI = (float) Math.PI;
-        final float PIx2 = PI * 2.0f;
         final float RING_FACTOR = 1f / (float) (rings - 1);
         final float SECTORS_FACTOR = 1f / (float) (sectors - 1);
 
@@ -100,7 +92,8 @@ public class TextureSphere extends GlEsModel {
         }
     }
 
-    private void buildBuffers() {
+    @Override
+    protected void bindBuffers() {
         verticesBuffer = ByteBuffer.allocateDirect(vertices.length * BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
         verticesBuffer.put(vertices).position(0);
         vertices = null;
@@ -117,9 +110,7 @@ public class TextureSphere extends GlEsModel {
         texturesBuffer = ByteBuffer.allocateDirect(textures.length * BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
         texturesBuffer.put(textures).position(0);
         textures = null;
-    }
 
-    private void bindBuffers() {
         GLES20.glGenBuffers(buffers.length, buffers, 0);
         verticesBuffHandle = buffers[0];
         indicesBuffHandle = buffers[1];

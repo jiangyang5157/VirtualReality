@@ -3,15 +3,13 @@ package com.gmail.jiangyang5157.cardboard.scene;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.opengl.GLES20;
-import android.opengl.Matrix;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.FloatBuffer;
-import java.nio.ShortBuffer;
 
 /**
  * Created by Yang on 4/9/2016.
@@ -19,9 +17,6 @@ import java.nio.ShortBuffer;
 public abstract class GlEsModel implements Geometry {
 
     public static final int GLES_VERSION_REQUIRED = 0x00020000;
-
-    static final int BYTES_PER_FLOAT = 4;
-    static final int BYTES_PER_SHORT = 2;
 
     static final String MODEL_HANDLE = "u_ModelMatrix";
     static final String MODEL_VIEW_HANDLE = "u_MVMatrix";
@@ -47,26 +42,6 @@ public abstract class GlEsModel implements Geometry {
 
     final int program;
 
-    public float[] model = new float[16];
-    public float[] modelView = new float[16];
-    public float[] modelViewProjection = new float[16];
-    float[] color = new float[4];
-
-    float[] vertices;
-    float[] normals;
-    short[] indices;
-    float[] textures;
-
-    FloatBuffer verticesBuffer;
-    FloatBuffer normalsBuffer;
-    ShortBuffer indicesBuffer;
-    FloatBuffer texturesBuffer;
-
-    int verticesBuffHandle;
-    int normalsBuffHandle;
-    int indicesBuffHandle;
-    int texturesBuffHandle;
-
     Context context;
 
     GlEsModel(Context context, int vertexShaderRawResource, int fragmentShaderRawResource){
@@ -77,7 +52,6 @@ public abstract class GlEsModel implements Geometry {
         GLES20.glAttachShader(program, loadShader(GLES20.GL_FRAGMENT_SHADER, fragmentShaderRawResource));
         GLES20.glLinkProgram(program);
 
-        //handles
         mMatrixHandle = GLES20.glGetUniformLocation(program, MODEL_HANDLE);
         mvMatrixHandle = GLES20.glGetUniformLocation(program, MODEL_VIEW_HANDLE);
         mvpMatrixHandle = GLES20.glGetUniformLocation(program, MODEL_VIEW_PROJECTION_HANDLE);
@@ -90,8 +64,7 @@ public abstract class GlEsModel implements Geometry {
         texCoordHandle = GLES20.glGetAttribLocation(program, TEXTURE_COORDS_HANDLE);
     }
 
-    private int loadShader(int type, int resId) {
-        String code = readRawResource(resId);
+    private int loadShader(int type, String code) {
         int shader = GLES20.glCreateShader(type);
         GLES20.glShaderSource(shader, code);
         GLES20.glCompileShader(shader);
@@ -106,6 +79,10 @@ public abstract class GlEsModel implements Geometry {
             throw new RuntimeException("GlEsError - Unable to create shader:\n" + code);
         }
         return shader;
+    }
+
+    private int loadShader(int type, int resId) {
+        return loadShader(type, readRawResource(resId));
     }
 
     private String readRawResource(int resId) {
@@ -134,15 +111,4 @@ public abstract class GlEsModel implements Geometry {
             Log.e("GlEsError", error + " - " + label);
         }
     }
-
-    public void setPosition(float x, float y, float z){
-        Matrix.setIdentityM(model, 0);
-        Matrix.translateM(model, 0, x, y, z);
-    }
-
-    public abstract void create();
-
-    public abstract void draw(float[] lightPosInEyeSpace);
-
-    public abstract void destroy();
 }

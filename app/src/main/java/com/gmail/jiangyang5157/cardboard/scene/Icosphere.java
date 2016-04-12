@@ -3,6 +3,7 @@ package com.gmail.jiangyang5157.cardboard.scene;
 import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
+import android.support.annotation.NonNull;
 import android.support.v4.util.LongSparseArray;
 import android.util.Log;
 
@@ -12,7 +13,7 @@ import java.nio.ByteOrder;
 /**
  * Created by Yang on 4/10/2016.
  */
-public class Icosphere extends GlEsModel {
+public class Icosphere extends Model {
 
     private float radius;
 
@@ -32,24 +33,18 @@ public class Icosphere extends GlEsModel {
 
     private final int[] buffers = new int[3];
 
-    public Icosphere(Context context, int vertexShaderRawResource, int fragmentShaderRawResource, float radius, int recursionLevel, float[] color) {
+    public Icosphere(Context context, int vertexShaderRawResource, int fragmentShaderRawResource, int recursionLevel, float radius, float[] color) {
         super(context, vertexShaderRawResource, fragmentShaderRawResource);
         if (recursionLevel > vertexCounts.length - 1) {
             throw new RuntimeException("Icosphere - Unable to create a Icosphere with recursion level: " + recursionLevel);
         }
-        this.radius = radius;
         this.recursionLevel = recursionLevel;
+        this.radius = radius;
         this.color = color.clone();
     }
 
     @Override
-    public void create() {
-        buildArrays();
-        fillBuffers();
-        bindBuffers();
-    }
-
-    private void buildArrays() {
+    protected void buildArrays() {
         vertices = new float[vertexCounts[recursionLevel] * 3];
         normals = new float[vertexCounts[recursionLevel] * 3];
 
@@ -187,7 +182,8 @@ public class Icosphere extends GlEsModel {
         vertices[index * 3 + 2] = z * radius;
     }
 
-    private void fillBuffers() {
+    @Override
+    protected void bindBuffers() {
         verticesBuffer = ByteBuffer.allocateDirect(vertices.length * BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
         verticesBuffer.put(vertices).position(0);
         vertices = null;
@@ -200,9 +196,7 @@ public class Icosphere extends GlEsModel {
         indicesBuffer.put(indices).position(0);
         indices = null;
         indicesBufferCapacity = indicesBuffer.capacity();
-    }
 
-    private void bindBuffers() {
         GLES20.glGenBuffers(buffers.length, buffers, 0);
         verticesBuffHandle = buffers[0];
         normalsBuffHandle = buffers[1];

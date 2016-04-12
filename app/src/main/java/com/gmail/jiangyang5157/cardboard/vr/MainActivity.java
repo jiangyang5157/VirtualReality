@@ -3,9 +3,11 @@ package com.gmail.jiangyang5157.cardboard.vr;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.gmail.jiangyang5157.cardboard.scene.Earth;
 import com.gmail.jiangyang5157.cardboard.scene.GlEsModel;
 import com.gmail.jiangyang5157.cardboard.scene.Icosphere;
 import com.gmail.jiangyang5157.cardboard.scene.TextureSphere;
@@ -155,17 +157,14 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     public void onSurfaceCreated(EGLConfig eglConfig) {
         Matrix.setLookAtM(camera, 0, 0.0f, 0.0f, CAMERA_Z, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
 
-        tsEarth = new TextureSphere(this, R.raw.earth_vertex, R.raw.earth_fragment, 100, 100, 10, R.drawable.no_ice_clouds_mts_4k);
-        tsEarth.create();
-        tsEarth.setPosition(0, 0, 0);
+        tsEarth = new Earth(this, R.raw.earth_vertex, R.raw.earth_fragment, 100, 100, 10, R.drawable.no_ice_clouds_mts_4k);
+        tsEarth.create(0, 0, 0);
 
-        icosphere = new Icosphere(this, R.raw.icosphere_vertex, R.raw.icosphere_fragment, 1, 5, new float[]{0.2f, 0.2f, 0.7f, 1.0f});
-        icosphere.create();
-        icosphere.setPosition(2.0f, 0.0f, -4.0f);
+        icosphere = new Icosphere(this, R.raw.icosphere_vertex, R.raw.icosphere_fragment, 0, 1, new float[]{0.0f, 0.5f, 0.0f, 1.0f});
+        icosphere.create(-2.0f, 0.0f, -4.0f);
 
-        icosphere2 = new Icosphere(this, R.raw.icosphere_vertex, R.raw.icosphere_fragment, 1, 0, new float[]{0.0f, 0.5f, 0.0f, 1.0f});
-        icosphere2.create();
-        icosphere2.setPosition(-2.0f, 0.0f, -4.0f);
+        icosphere2 = new Icosphere(this, R.raw.icosphere_vertex, R.raw.icosphere_fragment, 5, 1, new float[]{0.2f, 0.2f, 0.7f, 1.0f});
+        icosphere2.create(2.0f, 0.0f, -4.0f);
     }
 
     @Override
