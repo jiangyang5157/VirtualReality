@@ -12,6 +12,7 @@ import com.gmail.jiangyang5157.cardboard.scene.Icosphere;
 import com.gmail.jiangyang5157.cardboard.scene.Placemark;
 import com.gmail.jiangyang5157.cardboard.scene.TextureSphere;
 import com.gmail.jiangyang5157.cardboard.ui.CardboardOverlayView;
+import com.gmail.jiangyang5157.tookit.app.DeviceUtils;
 import com.google.vrtoolkit.cardboard.CardboardActivity;
 import com.google.vrtoolkit.cardboard.CardboardView;
 import com.google.vrtoolkit.cardboard.Eye;
@@ -47,7 +48,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate");
-        if (!GlEsModel.isSupportGlEsVersion(this)) {
+        if (!DeviceUtils.glesValidate(this, GlEsModel.GLES_VERSION_REQUIRED)) {
             Toast.makeText(this, getString(R.string.error_gles_version_not_supported), Toast.LENGTH_SHORT).show();
             finish();
         }

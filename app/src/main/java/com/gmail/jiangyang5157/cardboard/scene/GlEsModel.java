@@ -5,6 +5,7 @@ import android.content.Context;
 import android.opengl.GLES20;
 import android.util.Log;
 
+import com.gmail.jiangyang5157.tookit.data.text.IoUtils;
 import com.gmail.jiangyang5157.tookit.math.Geometry;
 
 import java.io.BufferedReader;
@@ -45,7 +46,7 @@ public abstract class GlEsModel implements Geometry {
 
     Context context;
 
-    GlEsModel(Context context, int vertexShaderRawResource, int fragmentShaderRawResource){
+    GlEsModel(Context context, int vertexShaderRawResource, int fragmentShaderRawResource) {
         this.context = context;
 
         program = GLES20.glCreateProgram();
@@ -83,28 +84,7 @@ public abstract class GlEsModel implements Geometry {
     }
 
     private int loadShader(int type, int resId) {
-        return loadShader(type, readRawResource(resId));
-    }
-
-    private String readRawResource(int resId) {
-        InputStream inputStream = context.getResources().openRawResource(resId);
-        try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-            StringBuilder sb = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                sb.append(line).append("\n");
-            }
-            reader.close();
-            return sb.toString();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public static boolean isSupportGlEsVersion(Context context) {
-        return ((ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE)).getDeviceConfigurationInfo().reqGlEsVersion >= GLES_VERSION_REQUIRED;
+        return loadShader(type, IoUtils.readTextFile(context, resId));
     }
 
     public static void checkGlEsError(String label) {
