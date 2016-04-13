@@ -1,10 +1,10 @@
 uniform mat4 u_MVMatrix;
 uniform mat4 u_MVPMatrix;
+uniform vec4 u_Color;
+uniform vec3 u_LightPos;
 
 attribute vec4 a_Position;
 attribute vec3 a_Normal;
-uniform vec4 u_Color;
-uniform vec3 u_LightPos;
 
 varying vec4 v_Color;
 

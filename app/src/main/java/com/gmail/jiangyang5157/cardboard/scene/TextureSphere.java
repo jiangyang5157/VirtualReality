@@ -114,8 +114,8 @@ public class TextureSphere extends Model {
 
         GLES20.glGenBuffers(buffers.length, buffers, 0);
         verticesBuffHandle = buffers[0];
-        indicesBuffHandle = buffers[1];
-        normalsBuffHandle = buffers[2];
+        normalsBuffHandle = buffers[1];
+        indicesBuffHandle = buffers[2];
         texturesBuffHandle = buffers[3];
 
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, verticesBuffHandle);
@@ -150,20 +150,21 @@ public class TextureSphere extends Model {
         GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
         bitmap.recycle();
 
-        GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, 0);
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
+        GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, 0);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
     }
 
+    // Todo bind normal buffer will create a GlEsError: 1281 happens here
     @Override
     public void draw(float[] lightPosInEyeSpace) {
         GLES20.glUseProgram(program);
         GLES20.glEnableVertexAttribArray(vertexHandle);
+        GLES20.glEnableVertexAttribArray(normalHandle);
         GLES20.glEnableVertexAttribArray(texCoordHandle);
 
         GLES20.glUniformMatrix4fv(mvMatrixHandle, 1, false, modelView, 0);
         GLES20.glUniformMatrix4fv(mvpMatrixHandle, 1, false, modelViewProjection, 0);
-        GLES20.glUniform1i(texIdHandle, TEX_ID_OFFSET);
         GLES20.glUniform3fv(lightPosHandle, 1, lightPosInEyeSpace, 0);
 
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, verticesBuffHandle);
@@ -178,15 +179,19 @@ public class TextureSphere extends Model {
         GLES20.glVertexAttribPointer(texCoordHandle, 2, GLES20.GL_FLOAT, false, 0, 0);
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
 
-        GLES20.glActiveTexture(GLES20.GL_TEXTURE0 + TEX_ID_OFFSET);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texBuffers[0]);
+        GLES20.glActiveTexture(GLES20.GL_TEXTURE0 + TEX_ID_OFFSET);
 
         GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, indicesBuffHandle);
         GLES20.glDrawElements(GLES20.GL_TRIANGLES, indicesBufferCapacity, GLES20.GL_UNSIGNED_SHORT, 0);
         GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, 0);
 
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
+
         GLES20.glDisableVertexAttribArray(vertexHandle);
+        GLES20.glDisableVertexAttribArray(normalHandle);
         GLES20.glDisableVertexAttribArray(texCoordHandle);
+
         GLES20.glUseProgram(0);
 
         checkGlEsError("TextureSphere - draw end");
