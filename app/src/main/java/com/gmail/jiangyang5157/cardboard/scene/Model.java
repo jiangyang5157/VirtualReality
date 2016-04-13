@@ -2,7 +2,6 @@ package com.gmail.jiangyang5157.cardboard.scene;
 
 import android.content.Context;
 import android.opengl.Matrix;
-import android.support.annotation.NonNull;
 
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
@@ -40,20 +39,13 @@ public abstract class Model extends GlEsModel {
         super(context, vertexShaderRawResource, fragmentShaderRawResource);
     }
 
-
-    public void setPosition(float x, float y, float z) {
-        Matrix.setIdentityM(model, 0);
-        Matrix.translateM(model, 0, x, y, z);
-    }
-
     protected abstract void buildArrays();
 
     protected abstract void bindBuffers();
 
-    public void create(float x, float y, float z) {
+    public void create() {
         buildArrays();
         bindBuffers();
-        setPosition(x, y, z);
     }
 
     public abstract void draw(float[] lightPosInEyeSpace);

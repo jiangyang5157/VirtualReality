@@ -1,17 +1,11 @@
 package com.gmail.jiangyang5157.cardboard.scene;
 
-import android.app.ActivityManager;
 import android.content.Context;
 import android.opengl.GLES20;
 import android.util.Log;
 
 import com.gmail.jiangyang5157.tookit.data.text.IoUtils;
 import com.gmail.jiangyang5157.tookit.math.Geometry;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 
 /**
  * Created by Yang on 4/9/2016.

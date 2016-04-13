@@ -3,7 +3,6 @@ package com.gmail.jiangyang5157.cardboard.scene;
 import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
-import android.support.annotation.NonNull;
 import android.support.v4.util.LongSparseArray;
 import android.util.Log;
 
@@ -15,7 +14,7 @@ import java.nio.ByteOrder;
  */
 public class Icosphere extends Model {
 
-    private float radius;
+    float radius;
 
     /**
      * Faces + Vertices = Edges + 2
@@ -27,7 +26,7 @@ public class Icosphere extends Model {
      */
     private static final short[] vertexCounts = new short[]{12, 42, 162, 642, 2562, 10242};
 
-    private int recursionLevel;
+    int recursionLevel;
 
     private int indicesBufferCapacity;
 

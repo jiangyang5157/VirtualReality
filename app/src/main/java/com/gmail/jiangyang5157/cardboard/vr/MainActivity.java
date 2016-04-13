@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.gmail.jiangyang5157.cardboard.scene.Coordinate;
 import com.gmail.jiangyang5157.cardboard.scene.Earth;
 import com.gmail.jiangyang5157.cardboard.scene.GlEsModel;
 import com.gmail.jiangyang5157.cardboard.scene.Icosphere;
@@ -39,8 +40,8 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     private float[] lightPosInEyeSpace = new float[4];
 
     private TextureSphere earth;
-    private Icosphere placemark;
-    private Icosphere placemark2;
+    private Placemark placemark;
+    private Placemark placemark2;
 
     private CardboardOverlayView overlayView;
 
@@ -159,13 +160,17 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         Matrix.setLookAtM(camera, 0, 0.0f, 0.0f, CAMERA_Z, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
 
         earth = new Earth(this, R.raw.earth_vertex, R.raw.earth_fragment, 100, 100, 10, R.drawable.no_ice_clouds_mts_4k);
-        earth.create(0, 0, 0);
+        earth.create();
 
         placemark = new Placemark(this, R.raw.icosphere_vertex, R.raw.icosphere_fragment, 0, 1, new float[]{0.0f, 0.5f, 0.0f, 1.0f});
-        placemark.create(-2.0f, 0.0f, -4.0f);
+        Matrix.setIdentityM(placemark.model, 0);
+        Matrix.translateM(placemark.model, 0, -2.0f, 0.0f, -4.0f);
+        placemark.create();
 
         placemark2 = new Placemark(this, R.raw.icosphere_vertex, R.raw.icosphere_fragment, 5, 1, new float[]{0.2f, 0.2f, 0.7f, 1.0f});
-        placemark2.create(2.0f, 0.0f, -4.0f);
+        Matrix.setIdentityM(placemark2.model, 0);
+        Matrix.translateM(placemark2.model, 0, 2.0f, 0.0f, -4.0f);
+        placemark2.create();
     }
 
     @Override
