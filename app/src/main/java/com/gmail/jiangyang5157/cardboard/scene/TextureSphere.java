@@ -15,8 +15,8 @@ import java.nio.ByteOrder;
  */
 public class TextureSphere extends Model {
 
-    private int rings;
-    private int sectors;
+    private int stacks;
+    private int slices;
     private float radius;
     private int textureDrawableResource;
 
@@ -26,20 +26,20 @@ public class TextureSphere extends Model {
     private final int[] texBuffers = new int[1];
     private final int TEX_ID_OFFSET = 1;
 
-    public TextureSphere(Context context, int vertexShaderRawResource, int fragmentShaderRawResource, int rings, int sectors, float radius, int textureDrawableResource) {
+    public TextureSphere(Context context, int vertexShaderRawResource, int fragmentShaderRawResource, int stacks, int slices, float radius, int textureDrawableResource) {
         super(context, vertexShaderRawResource, fragmentShaderRawResource);
-        this.rings = rings;
-        this.sectors = sectors;
+        this.stacks = stacks;
+        this.slices = slices;
         this.radius = radius;
         this.textureDrawableResource = textureDrawableResource;
     }
 
     @Override
     protected void buildArrays() {
-        vertices = new float[rings * sectors * 3];
-        normals = new float[rings * sectors * 3];
-        indices = new short[rings * sectors * 6];
-        textures = new float[rings * sectors * 2];
+        vertices = new float[stacks * slices * 3];
+        normals = new float[stacks * slices * 3];
+        indices = new short[stacks * slices * 6];
+        textures = new float[stacks * slices * 2];
 
         int vertexIndex = 0;
         int textureIndex = 0;
@@ -47,14 +47,14 @@ public class TextureSphere extends Model {
 
         float PI = (float) Math.PI;
         float PIx2 = PI * 2.0f;
-        final float RING_FACTOR = 1f / (float) (rings - 1);
-        final float SECTORS_FACTOR = 1f / (float) (sectors - 1);
-        for (int r = 0; r < rings; r++) {
-            float v = r * RING_FACTOR;
+        final float STACKS_FACTOR = 1f / (float) (stacks - 1);
+        final float SLICES_FACTOR = 1f / (float) (slices - 1);
+        for (int r = 0; r < stacks; r++) {
+            float v = r * STACKS_FACTOR;
             float phi = v * PI;
 
-            for (int s = 0; s < sectors; s++) {
-                float u = s * SECTORS_FACTOR;
+            for (int s = 0; s < slices; s++) {
+                float u = s * SLICES_FACTOR;
                 float theta = u * PIx2;
 
                 float x = (float) (Math.cos(theta) * Math.sin(phi));
@@ -76,17 +76,17 @@ public class TextureSphere extends Model {
             }
         }
 
-        for (int r = 0; r < rings; r++) {
-            for (int s = 0; s < sectors; s++) {
-                int r_ = (r + 1 == rings) ? 0 : r + 1;
-                int s_ = (s + 1 == sectors) ? 0 : s + 1;
-                indices[indexIndex] = (short) (r * sectors + s);
-                indices[indexIndex + 1] = (short) (r * sectors + s_);
-                indices[indexIndex + 2] = (short) (r_ * sectors + s_);
+        for (int r = 0; r < stacks; r++) {
+            for (int s = 0; s < slices; s++) {
+                int r_ = (r + 1 == stacks) ? 0 : r + 1;
+                int s_ = (s + 1 == slices) ? 0 : s + 1;
+                indices[indexIndex] = (short) (r * slices + s);
+                indices[indexIndex + 1] = (short) (r * slices + s_);
+                indices[indexIndex + 2] = (short) (r_ * slices + s_);
 
-                indices[indexIndex + 3] = (short) (r_ * sectors + s);
-                indices[indexIndex + 4] = (short) (r_ * sectors + s_);
-                indices[indexIndex + 5] = (short) (r * sectors + s);
+                indices[indexIndex + 3] = (short) (r_ * slices + s);
+                indices[indexIndex + 4] = (short) (r_ * slices + s_);
+                indices[indexIndex + 5] = (short) (r * slices + s);
 
                 indexIndex += 6;
             }
@@ -203,11 +203,11 @@ public class TextureSphere extends Model {
         return radius;
     }
 
-    public int getSectors() {
-        return sectors;
+    public int getSlices() {
+        return slices;
     }
 
-    public int getRings() {
-        return rings;
+    public int getStacks() {
+        return stacks;
     }
 }

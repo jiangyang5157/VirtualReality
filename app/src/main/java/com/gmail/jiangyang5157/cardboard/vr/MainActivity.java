@@ -103,7 +103,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
     @Override
     public void onCardboardTrigger() {
-        overlayView.show3DToast("" + earth.getClass().getSimpleName() + " rings=" + earth.getRings() + " sectors=" + earth.getSectors());
+        overlayView.show3DToast("" + earth.getClass().getSimpleName() + " stacks=" + earth.getStacks() + " slices=" + earth.getSlices());
     }
 
     @Override
