@@ -1,4 +1,4 @@
-package com.gmail.jiangyang5157.cardboard.scene;
+package com.gmail.jiangyang5157.tookit.math;
 
 /**
  * Created by Yang on 4/9/2016.
@@ -6,7 +6,8 @@ package com.gmail.jiangyang5157.cardboard.scene;
  * angle [0, 180] = 180 / PI * radian
  * radian [0, PI] = PI / 180 * angle
  */
-interface Geometry {
+public interface Geometry {
+
     //golden ratio: https://en.wikipedia.org/wiki/Regular_icosahedron
     float GOLDEN_RATIO = (float) ((1.0 + Math.sqrt(5.0)) / 2.0);
 

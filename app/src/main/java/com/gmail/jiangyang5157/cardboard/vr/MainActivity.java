@@ -3,13 +3,13 @@ package com.gmail.jiangyang5157.cardboard.vr;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.gmail.jiangyang5157.cardboard.scene.Earth;
 import com.gmail.jiangyang5157.cardboard.scene.GlEsModel;
 import com.gmail.jiangyang5157.cardboard.scene.Icosphere;
+import com.gmail.jiangyang5157.cardboard.scene.Placemark;
 import com.gmail.jiangyang5157.cardboard.scene.TextureSphere;
 import com.gmail.jiangyang5157.cardboard.ui.CardboardOverlayView;
 import com.google.vrtoolkit.cardboard.CardboardActivity;
@@ -37,9 +37,9 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     private static final float[] LIGHT_POS_IN_WORLD_SPACE = new float[]{4.0f, 4.0f, 1.0f, 1.0f};
     private float[] lightPosInEyeSpace = new float[4];
 
-    private TextureSphere tsEarth;
-    private Icosphere icosphere;
-    private Icosphere icosphere2;
+    private TextureSphere earth;
+    private Icosphere placemark;
+    private Icosphere placemark2;
 
     private CardboardOverlayView overlayView;
 
@@ -65,9 +65,9 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        tsEarth.destroy();
-        icosphere.destroy();
-        icosphere2.destroy();
+        earth.destroy();
+        placemark.destroy();
+        placemark2.destroy();
     }
 
     @Override
@@ -82,20 +82,20 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     public void onFinishFrame(Viewport viewport) {
         GLES20.glDisable(GLES20.GL_DEPTH_TEST);
 
-        if (isLookingAtObject(icosphere.model, icosphere.modelView)) {
+        if (isLookingAtObject(placemark.model, placemark.modelView)) {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    overlayView.show3DToast("" + icosphere.getClass().getSimpleName() + " vCount=" + icosphere.getVertexCounts());
+                    overlayView.show3DToast("" + placemark.getClass().getSimpleName() + " vCount=" + placemark.getVertexCounts());
                 }
             });
         }
 
-        if (isLookingAtObject(icosphere2.model, icosphere2.modelView)) {
+        if (isLookingAtObject(placemark2.model, placemark2.modelView)) {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    overlayView.show3DToast("" + icosphere2.getClass().getSimpleName() + " vCount=" + icosphere2.getVertexCounts());
+                    overlayView.show3DToast("" + placemark2.getClass().getSimpleName() + " vCount=" + placemark2.getVertexCounts());
                 }
             });
         }
@@ -103,7 +103,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
     @Override
     public void onCardboardTrigger() {
-        overlayView.show3DToast("" + tsEarth.getClass().getSimpleName() + " rings=" + tsEarth.getRings() + " sectors=" + tsEarth.getSectors());
+        overlayView.show3DToast("" + earth.getClass().getSimpleName() + " rings=" + earth.getRings() + " sectors=" + earth.getSectors());
     }
 
     @Override
@@ -119,24 +119,24 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         // Build the ModelView and ModelViewProjection matrices for calculating different object's position
         float[] perspective = eye.getPerspective(Z_NEAR, Z_FAR);
 
-        Matrix.multiplyMM(tsEarth.modelView, 0, view, 0, tsEarth.model, 0);
-        Matrix.multiplyMM(tsEarth.modelViewProjection, 0, perspective, 0, tsEarth.modelView, 0);
+        Matrix.multiplyMM(earth.modelView, 0, view, 0, earth.model, 0);
+        Matrix.multiplyMM(earth.modelViewProjection, 0, perspective, 0, earth.modelView, 0);
 
-        Matrix.rotateM(icosphere.model, 0, 1f, 1, 1, 0);
-        Matrix.multiplyMM(icosphere.modelView, 0, view, 0, icosphere.model, 0);
-        Matrix.multiplyMM(icosphere.modelViewProjection, 0, perspective, 0, icosphere.modelView, 0);
+        Matrix.rotateM(placemark.model, 0, 1f, 1, 1, 0);
+        Matrix.multiplyMM(placemark.modelView, 0, view, 0, placemark.model, 0);
+        Matrix.multiplyMM(placemark.modelViewProjection, 0, perspective, 0, placemark.modelView, 0);
 
-        Matrix.rotateM(icosphere2.model, 0, 1f, 0, 1, 1);
-        Matrix.multiplyMM(icosphere2.modelView, 0, view, 0, icosphere2.model, 0);
-        Matrix.multiplyMM(icosphere2.modelViewProjection, 0, perspective, 0, icosphere2.modelView, 0);
+        Matrix.rotateM(placemark2.model, 0, 1f, 0, 1, 1);
+        Matrix.multiplyMM(placemark2.modelView, 0, view, 0, placemark2.model, 0);
+        Matrix.multiplyMM(placemark2.modelViewProjection, 0, perspective, 0, placemark2.modelView, 0);
 
         drawScene();
     }
 
     private void drawScene() {
-        tsEarth.draw(lightPosInEyeSpace);
-        icosphere.draw(lightPosInEyeSpace);
-        icosphere2.draw(lightPosInEyeSpace);
+        earth.draw(lightPosInEyeSpace);
+        placemark.draw(lightPosInEyeSpace);
+        placemark2.draw(lightPosInEyeSpace);
     }
 
     private boolean isLookingAtObject(float[] model, float[] modelView) {
@@ -157,14 +157,14 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     public void onSurfaceCreated(EGLConfig eglConfig) {
         Matrix.setLookAtM(camera, 0, 0.0f, 0.0f, CAMERA_Z, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
 
-        tsEarth = new Earth(this, R.raw.earth_vertex, R.raw.earth_fragment, 100, 100, 10, R.drawable.no_ice_clouds_mts_4k);
-        tsEarth.create(0, 0, 0);
+        earth = new Earth(this, R.raw.earth_vertex, R.raw.earth_fragment, 100, 100, 10, R.drawable.no_ice_clouds_mts_4k);
+        earth.create(0, 0, 0);
 
-        icosphere = new Icosphere(this, R.raw.icosphere_vertex, R.raw.icosphere_fragment, 0, 1, new float[]{0.0f, 0.5f, 0.0f, 1.0f});
-        icosphere.create(-2.0f, 0.0f, -4.0f);
+        placemark = new Placemark(this, R.raw.icosphere_vertex, R.raw.icosphere_fragment, 0, 1, new float[]{0.0f, 0.5f, 0.0f, 1.0f});
+        placemark.create(-2.0f, 0.0f, -4.0f);
 
-        icosphere2 = new Icosphere(this, R.raw.icosphere_vertex, R.raw.icosphere_fragment, 5, 1, new float[]{0.2f, 0.2f, 0.7f, 1.0f});
-        icosphere2.create(2.0f, 0.0f, -4.0f);
+        placemark2 = new Placemark(this, R.raw.icosphere_vertex, R.raw.icosphere_fragment, 5, 1, new float[]{0.2f, 0.2f, 0.7f, 1.0f});
+        placemark2.create(2.0f, 0.0f, -4.0f);
     }
 
     @Override

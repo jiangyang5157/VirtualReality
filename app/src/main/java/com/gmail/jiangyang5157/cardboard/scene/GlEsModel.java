@@ -3,8 +3,9 @@ package com.gmail.jiangyang5157.cardboard.scene;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.opengl.GLES20;
-import android.support.annotation.NonNull;
 import android.util.Log;
+
+import com.gmail.jiangyang5157.tookit.math.Geometry;
 
 import java.io.BufferedReader;
 import java.io.IOException;
