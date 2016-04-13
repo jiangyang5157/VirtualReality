@@ -1,4 +1,4 @@
-package com.gmail.jiangyang5157.tookit.data.location;
+package com.gmail.jiangyang5157.cardboard.scene;
 
 public class Coordinate {
 

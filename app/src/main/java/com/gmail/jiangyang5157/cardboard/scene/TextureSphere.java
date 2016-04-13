@@ -45,9 +45,10 @@ public class TextureSphere extends Model {
         int textureIndex = 0;
         int indexIndex = 0;
 
+        float PI = (float) Math.PI;
+        float PIx2 = PI * 2.0f;
         final float RING_FACTOR = 1f / (float) (rings - 1);
         final float SECTORS_FACTOR = 1f / (float) (sectors - 1);
-
         for (int r = 0; r < rings; r++) {
             float v = r * RING_FACTOR;
             float phi = v * PI;
