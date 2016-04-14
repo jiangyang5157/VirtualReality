@@ -48,6 +48,11 @@ public abstract class Model extends GlEsModel {
         bindBuffers();
     }
 
+    public void update(float[] view, float[] perspective) {
+        Matrix.multiplyMM(modelView, 0, view, 0, model, 0);
+        Matrix.multiplyMM(modelViewProjection, 0, perspective, 0, modelView, 0);
+    }
+
     public abstract void draw(float[] lightPosInEyeSpace);
 
     public abstract void destroy();

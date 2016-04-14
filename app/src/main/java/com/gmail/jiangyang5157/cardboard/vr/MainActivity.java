@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.gmail.jiangyang5157.cardboard.scene.Coordinate;
 import com.gmail.jiangyang5157.cardboard.scene.Earth;
 import com.gmail.jiangyang5157.cardboard.scene.GlEsModel;
 import com.gmail.jiangyang5157.cardboard.scene.Placemark;
@@ -38,9 +39,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     private float[] camera = new float[16];
     private float[] headView = new float[16];
 
-    private TextureSphere earth;
-    private Placemark placemark;
-    private Placemark placemark2;
+    private Earth earth;
 
     private CardboardOverlayView overlayView;
 
@@ -66,8 +65,6 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     protected void onDestroy() {
         super.onDestroy();
         earth.destroy();
-        placemark.destroy();
-        placemark2.destroy();
     }
 
     @Override
@@ -82,28 +79,21 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     public void onFinishFrame(Viewport viewport) {
         GLES20.glDisable(GLES20.GL_DEPTH_TEST);
 
-        if (isLookingAtObject(placemark.model, placemark.modelView)) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    overlayView.show3DToast("" + placemark.getClass().getSimpleName() + " vCount=" + placemark.getVertexCounts());
-                }
-            });
-        }
-
-        if (isLookingAtObject(placemark2.model, placemark2.modelView)) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    overlayView.show3DToast("" + placemark2.getClass().getSimpleName() + " vCount=" + placemark2.getVertexCounts());
-                }
-            });
+        for (final Placemark placemark : earth.getPlacemarks()) {
+            if (isLookingAtObject(placemark.model, placemark.modelView)) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        overlayView.show3DToast("" + placemark.getVertexCounts() + " vertices " + placemark.getCoordinate().toString());
+                    }
+                });
+            }
         }
     }
 
     @Override
     public void onCardboardTrigger() {
-        overlayView.show3DToast("" + earth.getClass().getSimpleName() + " stacks=" + earth.getStacks() + " slices=" + earth.getSlices());
+        overlayView.show3DToast("" + earth.getClass().getSimpleName() + ": stacks=" + earth.getStacks() + " slices=" + earth.getSlices());
     }
 
     @Override
@@ -119,24 +109,16 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         // Build the ModelView and ModelViewProjection matrices for calculating different object's position
         float[] perspective = eye.getPerspective(Z_NEAR, Z_FAR);
 
-        Matrix.multiplyMM(earth.modelView, 0, view, 0, earth.model, 0);
-        Matrix.multiplyMM(earth.modelViewProjection, 0, perspective, 0, earth.modelView, 0);
-
-        Matrix.rotateM(placemark.model, 0, 1f, 1, 1, 0);
-        Matrix.multiplyMM(placemark.modelView, 0, view, 0, placemark.model, 0);
-        Matrix.multiplyMM(placemark.modelViewProjection, 0, perspective, 0, placemark.modelView, 0);
-
-        Matrix.rotateM(placemark2.model, 0, 1f, 0, 1, 1);
-        Matrix.multiplyMM(placemark2.modelView, 0, view, 0, placemark2.model, 0);
-        Matrix.multiplyMM(placemark2.modelViewProjection, 0, perspective, 0, placemark2.modelView, 0);
-
+        updateScene(view, perspective);
         drawScene();
+    }
+
+    private void updateScene(float[] view, float[] perspective) {
+        earth.update(view, perspective);
     }
 
     private void drawScene() {
         earth.draw(lightPosInEyeSpace);
-        placemark.draw(lightPosInEyeSpace);
-        placemark2.draw(lightPosInEyeSpace);
     }
 
     private boolean isLookingAtObject(float[] model, float[] modelView) {
@@ -160,15 +142,9 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         earth = new Earth(this, R.raw.earth_vertex, R.raw.earth_fragment, 50, 50, 10, R.drawable.no_ice_clouds_mts_4k);
         earth.create();
 
-        placemark = new Placemark(this, R.raw.icosphere_vertex, R.raw.icosphere_fragment, 0, 1, new float[]{0.0f, 0.4f, 0.0f, 1.0f});
-        Matrix.setIdentityM(placemark.model, 0);
-        Matrix.translateM(placemark.model, 0, -2.0f, 0.0f, -4.0f);
-        placemark.create();
-
-        placemark2 = new Placemark(this, R.raw.icosphere_vertex, R.raw.icosphere_fragment, 5, 1, new float[]{0.0f, 0.4f, 0.0f, 1.0f});
-        Matrix.setIdentityM(placemark2.model, 0);
-        Matrix.translateM(placemark2.model, 0, 2.0f, 0.0f, -4.0f);
-        placemark2.create();
+        earth.addPlacemark(0, 0, 0, 1, new float[]{0.0f, 0.4f, 0.0f, 1.0f});
+        earth.addPlacemark(-30f, 180f, 5, 1, new float[]{0.0f, 0.4f, 0.0f, 1.0f});
+        earth.addPlacemark(-36.866438f, 174.765937f, 5, 1, new float[]{0.0f, 0.4f, 0.0f, 1.0f});
     }
 
     @Override
