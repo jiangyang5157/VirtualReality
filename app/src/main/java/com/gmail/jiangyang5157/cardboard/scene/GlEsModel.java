@@ -48,17 +48,10 @@ public abstract class GlEsModel implements Geometry {
         GLES20.glAttachShader(program, loadShader(GLES20.GL_FRAGMENT_SHADER, fragmentShaderRawResource));
         GLES20.glLinkProgram(program);
 
-        mMatrixHandle = GLES20.glGetUniformLocation(program, MODEL_HANDLE);
-        mvMatrixHandle = GLES20.glGetUniformLocation(program, MODEL_VIEW_HANDLE);
-        mvpMatrixHandle = GLES20.glGetUniformLocation(program, MODEL_VIEW_PROJECTION_HANDLE);
-        texIdHandle = GLES20.glGetUniformLocation(program, TEXTURE_ID_HANDLE);
-        colorHandle = GLES20.glGetUniformLocation(program, COLOR_HANDLE);
-        lightPosHandle = GLES20.glGetUniformLocation(program, LIGHT_POSITION_HANDLE);
-
-        vertexHandle = GLES20.glGetAttribLocation(program, VERTEX_HANDLE);
-        normalHandle = GLES20.glGetAttribLocation(program, NORMAL_HANDLE);
-        texCoordHandle = GLES20.glGetAttribLocation(program, TEXTURE_COORDS_HANDLE);
+        initializeHandle();
     }
+
+    protected abstract void initializeHandle();
 
     private int loadShader(int type, String code) {
         int shader = GLES20.glCreateShader(type);

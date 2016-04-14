@@ -221,6 +221,17 @@ public class Icosphere extends Model {
     }
 
     @Override
+    protected void initializeHandle() {
+        mvMatrixHandle = GLES20.glGetUniformLocation(program, MODEL_VIEW_HANDLE);
+        mvpMatrixHandle = GLES20.glGetUniformLocation(program, MODEL_VIEW_PROJECTION_HANDLE);
+        colorHandle = GLES20.glGetUniformLocation(program, COLOR_HANDLE);
+        lightPosHandle = GLES20.glGetUniformLocation(program, LIGHT_POSITION_HANDLE);
+
+        vertexHandle = GLES20.glGetAttribLocation(program, VERTEX_HANDLE);
+        normalHandle = GLES20.glGetAttribLocation(program, NORMAL_HANDLE);
+    }
+
+    @Override
     public void draw(float[] lightPosInEyeSpace) {
         GLES20.glUseProgram(program);
         GLES20.glEnableVertexAttribArray(vertexHandle);
