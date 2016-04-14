@@ -21,16 +21,7 @@ public class Placemark extends Icosphere {
         float lat = coordinate.getLatitude();
         float lon = coordinate.getLongitude();
         float alt = coordinate.getAltitude();
-        Log.i("####", "lat,lon,alt: " + lat + ", " + lon + ", " + alt);
-//
-//        float f = 0; //flattening
-//        float a = 10;
-//        float seaLevel = (float) Math.atan((1 - f) * (1 - f) * Math.tan(lat));
-//        float seaLevelPoint = (float) Math.sqrt((a * a)/(1 + (1 / (1 - f) * (1 - f) - 1) * Math.sin(seaLevel) * Math.sin(seaLevel)));
-//        Log.i("####", "seaLevel,seaLevelPoint: " + seaLevelPoint + ", " + seaLevelPoint);
-//        float x = (float) (a * Math.cos(seaLevel) * Math.cos(lon) + alt * Math.cos(lat) * Math.cos(lon));
-//        float y = (float) (a * Math.cos(seaLevel) * Math.sin(lon) + alt * Math.cos(lat) * Math.sin(lon));
-//        float z = (float) (a * Math.sin(seaLevel) + alt * Math.sin(lat));
+        Log.i("####", "lla: " + lat + ", " + lon + ", " + alt);
 
         double[] ecrf = lla2ecef(new double[]{lat, lon, alt});
         float x = (float) ecrf[0];
@@ -43,17 +34,25 @@ public class Placemark extends Icosphere {
     }
 
     private double[] lla2ecef(double[] lla) {
-        final double E = 8.1819190842622e-2;
-
-        double a = earth.getRadius();
-        double asq = Math.pow(a, 2);
-        double esq = Math.pow(E, 2);
-
         double lat = lla[0];
         double lon = lla[1];
         double alt = lla[2];
 
-        double N = a / Math.sqrt(1 - esq * Math.pow(Math.sin(lat), 2));
+        final double E = 8.1819190842622e-2;
+        double r = earth.getRadius();
+
+//        float f = 0;
+//        float a = 10;
+//        float seaLevel = (float) Math.atan((1 - f) * (1 - f) * Math.tan(lat));
+//        float seaLevelPoint = (float) Math.sqrt((a * a)/(1 + (1 / (1 - f) * (1 - f) - 1) * Math.sin(seaLevel) * Math.sin(seaLevel)));
+//        float x = (float) (a * Math.cos(seaLevel) * Math.cos(lon) + alt * Math.cos(lat) * Math.cos(lon));
+//        float y = (float) (a * Math.cos(seaLevel) * Math.sin(lon) + alt * Math.cos(lat) * Math.sin(lon));
+//        float z = (float) (a * Math.sin(seaLevel) + alt * Math.sin(lat));
+
+
+        double asq = Math.pow(r, 2);
+        double esq = Math.pow(E, 2);
+        double N = r / Math.sqrt(1 - esq * Math.pow(Math.sin(lat), 2));
 
         double x = (N + alt) * Math.cos(lat) * Math.cos(lon);
         double y = (N + alt) * Math.cos(lat) * Math.sin(lon);
@@ -66,8 +65,8 @@ public class Placemark extends Icosphere {
     private double[] ecef2lla(double[] ecef) {
         final double E = 8.1819190842622e-2;
 
-        double a = earth.getRadius();
-        double asq = Math.pow(a, 2);
+        double r = earth.getRadius();
+        double asq = Math.pow(r, 2);
         double esq = Math.pow(E, 2);
 
         double x = ecef[0];
@@ -78,11 +77,11 @@ public class Placemark extends Icosphere {
         double bsq = Math.pow(b, 2);
         double ep = Math.sqrt((asq - bsq) / bsq);
         double p = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
-        double th = Math.atan2(a * z, b * p);
+        double th = Math.atan2(r * z, b * p);
 
         double lon = Math.atan2(y, x);
-        double lat = Math.atan2((z + Math.pow(ep, 2) * b * Math.pow(Math.sin(th), 3)), (p - esq * a * Math.pow(Math.cos(th), 3)));
-        double N = a / (Math.sqrt(1 - esq * Math.pow(Math.sin(lat), 2)));
+        double lat = Math.atan2((z + Math.pow(ep, 2) * b * Math.pow(Math.sin(th), 3)), (p - esq * r * Math.pow(Math.cos(th), 3)));
+        double N = r / (Math.sqrt(1 - esq * Math.pow(Math.sin(lat), 2)));
         double alt = p / Math.cos(lat) - N;
 
         // mod lat to 0-2pi
