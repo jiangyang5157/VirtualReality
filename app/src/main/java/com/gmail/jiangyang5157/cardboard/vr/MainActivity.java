@@ -84,7 +84,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        overlayView.show3DToast("" + placemark.getVertexCounts() + " vertices " + placemark.getCoordinate().toString());
+                        overlayView.show3DToast("" + placemark.getVertexCounts() + " vertices\n" + placemark.getCoordinate().toString() + "\n" + placemark.getLabel());
                     }
                 });
             }
@@ -93,7 +93,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
     @Override
     public void onCardboardTrigger() {
-        overlayView.show3DToast("" + earth.getClass().getSimpleName() + ": stacks=" + earth.getStacks() + " slices=" + earth.getSlices());
+        overlayView.show3DToast("" + earth.getClass().getSimpleName() + ": r=" + earth.getRadius() + " stacks=" + earth.getStacks() + " slices=" + earth.getSlices());
     }
 
     @Override
@@ -142,9 +142,21 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         earth = new Earth(this, R.raw.earth_vertex, R.raw.earth_fragment, 50, 50, 10, R.drawable.no_ice_clouds_mts_4k);
         earth.create();
 
-        earth.addPlacemark(0, 0, 0, 1, new float[]{0.0f, 0.4f, 0.0f, 1.0f});
-        earth.addPlacemark(-30f, 180f, 5, 1, new float[]{0.0f, 0.4f, 0.0f, 1.0f});
-        earth.addPlacemark(-36.866438f, 174.765937f, 5, 1, new float[]{0.0f, 0.4f, 0.0f, 1.0f});
+        earth.addPlacemark(0, 0, 0, 1, new float[]{0.0f, 0.4f, 0.0f, 1.0f}, "");
+        earth.addPlacemark(90, 0, 0, 1, new float[]{0.0f, 0.4f, 0.0f, 1.0f}, "");
+        earth.addPlacemark(-90, 0, 0, 1, new float[]{0.0f, 0.4f, 0.0f, 1.0f}, "");
+        earth.addPlacemark(0, 180, 5, 1, new float[]{0.0f, 0.4f, 0.0f, 1.0f}, "");
+
+        earth.addPlacemark(-36.84845f, 174.76192f, 0, 0.3f, new float[]{0.5f, 0.0f, 0.0f, 1.0f}, "Auckland");
+        earth.addPlacemark(-41.28646f, 174.77623f, 0, 0.3f, new float[]{0.5f, 0.0f, 0.0f, 1.0f}, "Wellington");
+        earth.addPlacemark(-33.86748f, 151.20699f, 0, 0.3f, new float[]{0.5f, 0.0f, 0.0f, 1.0f}, "Sydney");
+        earth.addPlacemark(52.52000f, 13.40495f, 0, 0.3f, new float[]{0.5f, 0.0f, 0.0f, 1.0f}, "Berlin");
+        earth.addPlacemark(38.90719f, -77.03687f, 0, 0.3f, new float[]{0.5f, 0.0f, 0.0f, 1.0f}, "Washington");
+        earth.addPlacemark(39.90421f, 116.40739f, 0, 0.3f, new float[]{0.5f, 0.0f, 0.0f, 1.0f}, "Beijing");
+        earth.addPlacemark(55.75582f, 37.6173f, 0, 0.3f, new float[]{0.5f, 0.0f, 0.0f, 1.0f}, "Moscow");
+        earth.addPlacemark(51.50735f, -0.12775f, 0, 0.3f, new float[]{0.5f, 0.0f, 0.0f, 1.0f}, "London");
+        earth.addPlacemark(48.85661f, 2.35222f, 0, 0.3f, new float[]{0.5f, 0.0f, 0.0f, 1.0f}, "Paris");
+        earth.addPlacemark(37.56653f, 126.97796f, 0, 0.3f, new float[]{0.5f, 0.0f, 0.0f, 1.0f}, "Seoul");
     }
 
     @Override

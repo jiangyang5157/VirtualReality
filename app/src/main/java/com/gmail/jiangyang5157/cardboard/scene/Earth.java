@@ -22,8 +22,9 @@ public class Earth extends TextureSphere {
         Matrix.rotateM(model, 0, 180.0f, 0, 1, 0);
     }
 
-    public void addPlacemark(float latitude, float longitude, int recursionLevel, float radius, float[] color) {
+    public void addPlacemark(float latitude, float longitude, int recursionLevel, float radius, float[] color, String label) {
         Placemark placemark = new Placemark(context, R.raw.icosphere_vertex, R.raw.icosphere_fragment, recursionLevel, radius, color, this);
+        placemark.setLabel(label);
         placemark.setCoordinate(new Coordinate(latitude, longitude, -radius));
         placemark.create();
 
