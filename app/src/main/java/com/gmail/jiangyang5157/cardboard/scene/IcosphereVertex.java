@@ -2,7 +2,6 @@ package com.gmail.jiangyang5157.cardboard.scene;
 
 import android.opengl.Matrix;
 import android.support.v4.util.LongSparseArray;
-import android.util.Log;
 
 import com.gmail.jiangyang5157.tookit.math.Geometry;
 
@@ -30,7 +29,6 @@ public class IcosphereVertex implements Geometry {
     }
 
     private void build(int recursionLevel) {
-        Log.i("########", "rec = " + recursionLevel);
         final int VERTEX_ARRAY_LENGTH = VERTEX_COUNTS[recursionLevel] * 3;
         vertices = new float[VERTEX_ARRAY_LENGTH];
 

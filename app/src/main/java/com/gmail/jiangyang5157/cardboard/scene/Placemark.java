@@ -15,11 +15,12 @@ public class Placemark extends Icosphere {
 
     public void setCoordinate(Coordinate coordinate) {
         this.coordinate = coordinate;
-        float x = (float) coordinate.ecef[0];
-        float y = (float) coordinate.ecef[1];
-        float z = (float) coordinate.ecef[2];
         Matrix.setIdentityM(model, 0);
-        Matrix.translateM(model, 0, x, y, z);
+        Matrix.translateM(model, 0,
+                (float) coordinate.ecef[0],
+                (float) coordinate.ecef[1],
+                (float) coordinate.ecef[2]
+        );
     }
 
     @Override

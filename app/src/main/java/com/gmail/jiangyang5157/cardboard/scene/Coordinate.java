@@ -2,9 +2,6 @@ package com.gmail.jiangyang5157.cardboard.scene;
 
 import android.util.Log;
 
-import com.google.vrtoolkit.cardboard.sensors.internal.Matrix3x3d;
-import com.google.vrtoolkit.cardboard.sensors.internal.Vector3d;
-
 public class Coordinate {
 
     private static final double WGS84_A = 6378137.0;
@@ -58,18 +55,20 @@ public class Coordinate {
         double sinLam = Math.sin(lam);
         double cosLam = Math.cos(lam);
 
-        Matrix3x3d dataMatrix = new Matrix3x3d(
+        double[] rotation = new double[]{
                 -sinLam, cosLam, 0,
-                -sinPhi * cosLam, -sinPhi * sinLam, cosPhi,
-                cosPhi * cosLam, cosPhi * sinLam, sinPhi
-        );
+                (-sinPhi * cosLam), (-sinPhi * sinLam), cosPhi,
+                (cosPhi * cosLam), (cosPhi * sinLam), sinPhi
+        };
 
-        Vector3d ecefVec = new Vector3d(ecef[0], ecef[1], ecef[2]);
-        Vector3d retVec = new Vector3d();
-        dataMatrix.mult(dataMatrix, ecefVec, retVec);
-
-        double[] ret = {retVec.x, retVec.y, retVec.z};
-        return ret;
+        double enu[] = new double[3];
+        for (int i = 0; i < 3; i++) {
+            enu[i] = 0.0;
+            for (int j = 0; j < 3; j++) {
+                enu[i] += rotation[i * 3 + j] * ecef[j];
+            }
+        }
+        return enu;
     }
 
     @Override
