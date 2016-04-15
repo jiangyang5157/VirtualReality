@@ -82,7 +82,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        overlayView.show3DToast("r=" + placemark.getRadius() + " lla=" + placemark.getCoordinate().toString() + "\n" + placemark.getLabel());
+                        overlayView.show3DToast(placemark.getLabel() + "\n" + "r=" + placemark.getRadius() + "\n" + placemark.getCoordinate().toString());
                     }
                 });
             }
@@ -91,7 +91,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
     @Override
     public void onCardboardTrigger() {
-        overlayView.show3DToast("r=" + earth.getRadius() + " stacks=" + earth.getStacks() + " slices=" + earth.getSlices());
+        overlayView.show3DToast("r=" + earth.getRadius() + "\n" + " stacks=" + earth.getStacks() + " slices=" + earth.getSlices());
     }
 
     @Override
