@@ -33,7 +33,7 @@ public class Coordinate {
     private double[] lla2ecef(double[] lla, double a, double e) {
         double phi = Math.toRadians(lla[0]);
         double lam = Math.toRadians(lla[1]);
-        //match my coord sys - flipped_texcoord
+        // We put camera inside the earth, and flipped the texture of the earth in the shader.
         lam *= -1;
         double h = lla[2];
 
@@ -46,7 +46,9 @@ public class Coordinate {
         double y = distanceFromZ * Math.sin(lam);
         double z = (n * (1 - e2) + h) * sinPhi;
 
-        //match my coord sys - x,yUp,z
+        // Ecef coord system is [y-east z-north(up)], and x points to the 0,0
+        // Our coord system is [x-east, y-north(up)], and x points to the 0,180
+        // So,we reversal x, and use z as y
         double[] ret = {-x, z, y};
         return ret;
     }

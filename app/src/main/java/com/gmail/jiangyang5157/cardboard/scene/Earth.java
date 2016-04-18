@@ -19,7 +19,6 @@ public class Earth extends TextureSphere {
 
         Matrix.setIdentityM(model, 0);
         Matrix.translateM(model, 0, 0, 0, 0);
-//        Matrix.rotateM(model, 0, 180.0f, 0, 1, 0);
     }
 
     public void addPlacemark(double latitude, double longitude, int recursionLevel, float radius, float[] color, String label) {
