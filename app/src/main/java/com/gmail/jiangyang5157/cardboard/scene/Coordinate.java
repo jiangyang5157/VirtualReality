@@ -33,6 +33,8 @@ public class Coordinate {
     private double[] lla2ecef(double[] lla, double a, double e) {
         double phi = Math.toRadians(lla[0]);
         double lam = Math.toRadians(lla[1]);
+        //match my coord sys - flipped_texcoord
+        lam *= -1;
         double h = lla[2];
 
         double e2 = Math.pow(e, 2);
@@ -44,7 +46,7 @@ public class Coordinate {
         double y = distanceFromZ * Math.sin(lam);
         double z = (n * (1 - e2) + h) * sinPhi;
 
-        //match my coord sys
+        //match my coord sys - x,yUp,z
         double[] ret = {-x, z, y};
         return ret;
     }
