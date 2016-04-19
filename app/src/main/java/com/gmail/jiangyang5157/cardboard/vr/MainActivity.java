@@ -155,6 +155,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         earth.addPlacemark(51.50735f, -0.12775f, 0, 0.2f, new float[]{0.5f, 0.0f, 0.0f, 1.0f}, "London");
         earth.addPlacemark(48.85661f, 2.35222f, 0, 0.2f, new float[]{0.5f, 0.0f, 0.0f, 1.0f}, "Paris");
         earth.addPlacemark(37.56653f, 126.97796f, 0, 0.2f, new float[]{0.5f, 0.0f, 0.0f, 1.0f}, "Seoul");
+
     }
 
     @Override
