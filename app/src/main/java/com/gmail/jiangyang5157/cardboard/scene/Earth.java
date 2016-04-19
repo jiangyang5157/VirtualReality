@@ -12,6 +12,10 @@ import java.util.ArrayList;
  */
 public class Earth extends TextureSphere {
 
+    public static final double WGS84_SEMI_MAJOR_AXIS = 6378137.0;
+    public static final double WGS84_FLATTENING = 1.0 / 298.257222101;
+    public static final double WGS84_ECCENTRICITY = Math.sqrt(1 - Math.pow((1 - WGS84_FLATTENING), 2));
+
     private ArrayList<Placemark> placemarks = new ArrayList<>();
 
     public Earth(Context context, int vertexShaderRawResource, int fragmentShaderRawResource, int rings, int sectors, float radius, int textureDrawableResource) {

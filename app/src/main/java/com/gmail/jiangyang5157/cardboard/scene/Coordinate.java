@@ -1,28 +1,16 @@
 package com.gmail.jiangyang5157.cardboard.scene;
 
-import android.util.Log;
-
 public class Coordinate {
-
-    public static final double WGS84_SEMI_MAJOR_AXIS = 6378137.0;
-    public static final double WGS84_FLATTENING = 1.0 / 298.257222101;
-    public static final double WGS84_ECCENTRICITY = Math.sqrt(1 - Math.pow((1 - WGS84_FLATTENING), 2));
 
     double[] lla;
     double[] ecef;
 
     public Coordinate(double latitude, double longitude, double altitude, double a, double e) {
-        setLla(latitude, longitude, altitude);
-        Log.i("####", "lla: " + String.format("%.5f", lla[0]) + ", " + String.format("%.5f", lla[1]) + ", " + String.format("%.5f", lla[2]));
-        ecef = lla2ecef(lla, a, e);
-        Log.i("######", "ecef: " + String.format("%.5f", ecef[0]) + ", " + String.format("%.5f", ecef[1]) + ", " + String.format("%.5f", ecef[2]));
-    }
-
-    public void setLla(double latitude, double longitude, double altitude) {
         if (latitude < -90 || latitude > 90 || longitude < -180 || longitude > 180) {
             throw new IllegalArgumentException("latitude [-90, 90], longitude [-180, 180]");
         }
         lla = new double[]{latitude, longitude, altitude};
+        ecef = lla2ecef(lla, a, e);
     }
 
     /**
