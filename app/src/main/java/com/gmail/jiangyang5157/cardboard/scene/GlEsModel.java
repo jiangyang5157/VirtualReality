@@ -5,12 +5,11 @@ import android.opengl.GLES20;
 import android.util.Log;
 
 import com.gmail.jiangyang5157.tookit.data.text.IoUtils;
-import com.gmail.jiangyang5157.tookit.math.Geometry;
 
 /**
  * Created by Yang on 4/9/2016.
  */
-public abstract class GlEsModel implements Geometry {
+public abstract class GlEsModel {
 
     public static final int GLES_VERSION_REQUIRED = 0x00020000;
 
