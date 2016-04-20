@@ -1,4 +1,4 @@
-package com.gmail.jiangyang5157.cardboard.scene;
+package com.gmail.jiangyang5157.cardboard.scene.projection;
 
 import android.content.Context;
 import android.opengl.Matrix;
@@ -6,17 +6,10 @@ import android.opengl.Matrix;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
 
-/**
- * Created by Yang on 4/12/2016.
- */
-public abstract class Model extends GlEsModel {
+public abstract class Model extends ShaderHandle {
 
     static final int BYTES_PER_FLOAT = 4;
     static final int BYTES_PER_SHORT = 2;
-
-    public float[] model = new float[16];
-    public float[] modelView = new float[16];
-    public float[] modelViewProjection = new float[16];
 
     float[] vertices;
     float[] normals;
@@ -32,6 +25,10 @@ public abstract class Model extends GlEsModel {
     int normalsBuffHandle;
     int indicesBuffHandle;
     int texturesBuffHandle;
+
+    public float[] model = new float[16];
+    public float[] modelView = new float[16];
+    public float[] modelViewProjection = new float[16];
 
     float[] color;
 

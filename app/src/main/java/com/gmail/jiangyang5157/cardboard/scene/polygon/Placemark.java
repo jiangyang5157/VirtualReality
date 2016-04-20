@@ -1,7 +1,9 @@
-package com.gmail.jiangyang5157.cardboard.scene;
+package com.gmail.jiangyang5157.cardboard.scene.polygon;
 
 import android.content.Context;
 import android.opengl.Matrix;
+
+import com.gmail.jiangyang5157.cardboard.scene.projection.Icosphere;
 
 public class Placemark extends Icosphere {
 

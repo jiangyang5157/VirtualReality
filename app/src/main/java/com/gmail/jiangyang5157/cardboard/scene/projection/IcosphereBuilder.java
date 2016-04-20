@@ -1,4 +1,4 @@
-package com.gmail.jiangyang5157.cardboard.scene;
+package com.gmail.jiangyang5157.cardboard.scene.projection;
 
 import java.util.HashMap;
 

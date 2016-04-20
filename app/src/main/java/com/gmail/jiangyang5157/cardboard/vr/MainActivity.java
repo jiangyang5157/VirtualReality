@@ -6,9 +6,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.gmail.jiangyang5157.cardboard.scene.Earth;
-import com.gmail.jiangyang5157.cardboard.scene.GlEsModel;
-import com.gmail.jiangyang5157.cardboard.scene.Placemark;
+import com.gmail.jiangyang5157.cardboard.scene.polygon.Earth;
+import com.gmail.jiangyang5157.cardboard.scene.polygon.Placemark;
+import com.gmail.jiangyang5157.cardboard.scene.projection.ShaderHandle;
 import com.gmail.jiangyang5157.cardboard.ui.CardboardOverlayView;
 import com.gmail.jiangyang5157.tookit.app.DeviceUtils;
 import com.google.vrtoolkit.cardboard.CardboardActivity;
@@ -44,7 +44,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (!DeviceUtils.glesValidate(this, GlEsModel.GLES_VERSION_REQUIRED)) {
+        if (!DeviceUtils.glesValidate(this, ShaderHandle.GLES_VERSION_REQUIRED)) {
             Toast.makeText(this, getString(R.string.error_gles_version_not_supported), Toast.LENGTH_SHORT).show();
             finish();
         }
