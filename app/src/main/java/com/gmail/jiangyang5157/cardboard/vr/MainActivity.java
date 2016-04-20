@@ -7,7 +7,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.gmail.jiangyang5157.cardboard.scene.polygon.Earth;
-import com.gmail.jiangyang5157.cardboard.scene.polygon.Placemark;
+import com.gmail.jiangyang5157.cardboard.scene.polygon.Mark;
 import com.gmail.jiangyang5157.cardboard.scene.projection.ShaderHandle;
 import com.gmail.jiangyang5157.cardboard.ui.CardboardOverlayView;
 import com.gmail.jiangyang5157.tookit.app.DeviceUtils;
@@ -77,12 +77,12 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     public void onFinishFrame(Viewport viewport) {
         GLES20.glDisable(GLES20.GL_DEPTH_TEST);
 
-        for (final Placemark placemark : earth.getPlacemarks()) {
-            if (isLookingAtObject(placemark.model, placemark.modelView)) {
+        for (final Mark mark : earth.getMarks()) {
+            if (isLookingAtObject(mark.model, mark.modelView)) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        overlayView.show3DToast(placemark.getLabel() + "\n" + "r=" + placemark.getRadius() + "\n" + placemark.getCoordinate().toString());
+                        overlayView.show3DToast(mark.getLabel() + "\n" + "r=" + mark.getRadius() + "\n" + mark.getCoordinate().toString());
                     }
                 });
             }
@@ -140,21 +140,21 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         earth = new Earth(this, R.raw.texture_vertex, R.raw.texture_fragment, 50, 50, 10, R.drawable.no_ice_clouds_mts_4k);
         earth.create();
 
-        earth.addPlacemark(0, 0, 0, 1, new float[]{0.0f, 0.8f, 0.0f, 1.0f}, "");
-        earth.addPlacemark(90, 0, 0, 1, new float[]{0.0f, 0.8f, 0.0f, 1.0f}, "");
-        earth.addPlacemark(-90, 0, 0, 1, new float[]{0.0f, 0.8f, 0.0f, 1.0f}, "");
-        earth.addPlacemark(0, 180, 0, 1, new float[]{0.0f, 0.8f, 0.0f, 1.0f}, "");
+        earth.addMark(0, 0, 0, 1, new float[]{0.0f, 0.8f, 0.0f, 1.0f}, "");
+        earth.addMark(90, 0, 0, 1, new float[]{0.0f, 0.8f, 0.0f, 1.0f}, "");
+        earth.addMark(-90, 0, 0, 1, new float[]{0.0f, 0.8f, 0.0f, 1.0f}, "");
+        earth.addMark(0, 180, 0, 1, new float[]{0.0f, 0.8f, 0.0f, 1.0f}, "");
 
-        earth.addPlacemark(-36.84845f, 174.76192f, 0, 0.2f, new float[]{0.8f, 0.0f, 0.0f, 1.0f}, "Auckland");
-        earth.addPlacemark(-41.28646f, 174.77623f, 0, 0.2f, new float[]{0.8f, 0.0f, 0.0f, 1.0f}, "Wellington");
-        earth.addPlacemark(-33.86748f, 151.20699f, 0, 0.2f, new float[]{0.8f, 0.0f, 0.0f, 1.0f}, "Sydney");
-        earth.addPlacemark(52.52000f, 13.40495f, 0, 0.2f, new float[]{0.8f, 0.0f, 0.0f, 1.0f}, "Berlin");
-        earth.addPlacemark(38.90719f, -77.03687f, 0, 0.2f, new float[]{0.8f, 0.0f, 0.0f, 1.0f}, "Washington");
-        earth.addPlacemark(39.90421f, 116.40739f, 0, 0.2f, new float[]{0.8f, 0.0f, 0.0f, 1.0f}, "Beijing");
-        earth.addPlacemark(55.75582f, 37.6173f, 0, 0.2f, new float[]{0.8f, 0.0f, 0.0f, 1.0f}, "Moscow");
-        earth.addPlacemark(51.50735f, -0.12775f, 0, 0.2f, new float[]{0.8f, 0.0f, 0.0f, 1.0f}, "London");
-        earth.addPlacemark(48.85661f, 2.35222f, 0, 0.2f, new float[]{0.8f, 0.0f, 0.0f, 1.0f}, "Paris");
-        earth.addPlacemark(37.56653f, 126.97796f, 0, 0.2f, new float[]{0.8f, 0.0f, 0.0f, 1.0f}, "Seoul");
+        earth.addMark(-36.84845f, 174.76192f, 0, 0.2f, new float[]{0.8f, 0.0f, 0.0f, 1.0f}, "Auckland");
+        earth.addMark(-41.28646f, 174.77623f, 0, 0.2f, new float[]{0.8f, 0.0f, 0.0f, 1.0f}, "Wellington");
+        earth.addMark(-33.86748f, 151.20699f, 0, 0.2f, new float[]{0.8f, 0.0f, 0.0f, 1.0f}, "Sydney");
+        earth.addMark(52.52000f, 13.40495f, 0, 0.2f, new float[]{0.8f, 0.0f, 0.0f, 1.0f}, "Berlin");
+        earth.addMark(38.90719f, -77.03687f, 0, 0.2f, new float[]{0.8f, 0.0f, 0.0f, 1.0f}, "Washington");
+        earth.addMark(39.90421f, 116.40739f, 0, 0.2f, new float[]{0.8f, 0.0f, 0.0f, 1.0f}, "Beijing");
+        earth.addMark(55.75582f, 37.6173f, 0, 0.2f, new float[]{0.8f, 0.0f, 0.0f, 1.0f}, "Moscow");
+        earth.addMark(51.50735f, -0.12775f, 0, 0.2f, new float[]{0.8f, 0.0f, 0.0f, 1.0f}, "London");
+        earth.addMark(48.85661f, 2.35222f, 0, 0.2f, new float[]{0.8f, 0.0f, 0.0f, 1.0f}, "Paris");
+        earth.addMark(37.56653f, 126.97796f, 0, 0.2f, new float[]{0.8f, 0.0f, 0.0f, 1.0f}, "Seoul");
 
     }
 

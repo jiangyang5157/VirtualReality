@@ -17,7 +17,7 @@ public class Earth extends TextureSphere {
     public static final double WGS84_FLATTENING = 1.0 / 298.257222101;
     public static final double WGS84_ECCENTRICITY = Math.sqrt(1 - Math.pow((1 - WGS84_FLATTENING), 2));
 
-    private ArrayList<Placemark> placemarks = new ArrayList<>();
+    private ArrayList<Mark> marks = new ArrayList<>();
 
     public Earth(Context context, int vertexShaderRawResource, int fragmentShaderRawResource, int rings, int sectors, float radius, int textureDrawableResource) {
         super(context, vertexShaderRawResource, fragmentShaderRawResource, rings, sectors, radius, textureDrawableResource);
@@ -26,21 +26,21 @@ public class Earth extends TextureSphere {
         Matrix.translateM(model, 0, 0, 0, 0);
     }
 
-    public void addPlacemark(double latitude, double longitude, int recursionLevel, float radius, float[] color, String label) {
-        Placemark placemark = new Placemark(context, R.raw.color_vertex, R.raw.color_fragment, recursionLevel, radius, color);
-        placemark.setLabel(label);
-        placemark.setCoordinate(new Coordinate(latitude, longitude, -radius, this.getRadius(), 0.0));
-        placemark.create();
+    public void addMark(double latitude, double longitude, int recursionLevel, float radius, float[] color, String label) {
+        Mark mark = new Mark(context, R.raw.color_vertex, R.raw.color_fragment, recursionLevel, radius, color);
+        mark.setLabel(label);
+        mark.setCoordinate(new Coordinate(latitude, longitude, -radius, this.getRadius(), 0.0));
+        mark.create();
 
-        placemarks.add(placemark);
+        marks.add(mark);
     }
 
     @Override
     public void update(float[] view, float[] perspective) {
         super.update(view, perspective);
 
-        for (Placemark placemark : placemarks) {
-            placemark.update(view, perspective);
+        for (Mark mark : marks) {
+            mark.update(view, perspective);
         }
     }
 
@@ -48,8 +48,8 @@ public class Earth extends TextureSphere {
     public void draw(float[] lightPosInEyeSpace) {
         super.draw(lightPosInEyeSpace);
 
-        for (Placemark placemark : placemarks) {
-            placemark.draw(lightPosInEyeSpace);
+        for (Mark mark : marks) {
+            mark.draw(lightPosInEyeSpace);
         }
     }
 
@@ -57,12 +57,12 @@ public class Earth extends TextureSphere {
     public void destroy() {
         super.destroy();
 
-        for (Placemark placemark : placemarks) {
-            placemark.destroy();
+        for (Mark mark : marks) {
+            mark.destroy();
         }
     }
 
-    public ArrayList<Placemark> getPlacemarks() {
-        return placemarks;
+    public ArrayList<Mark> getMarks() {
+        return marks;
     }
 }

@@ -5,13 +5,13 @@ import android.opengl.Matrix;
 
 import com.gmail.jiangyang5157.cardboard.scene.projection.Icosphere;
 
-public class Placemark extends Icosphere {
+public class Mark extends Icosphere {
 
     private Coordinate coordinate;
 
     private String label;
 
-    public Placemark(Context context, int vertexShaderRawResource, int fragmentShaderRawResource, int recursionLevel, float radius, float[] color) {
+    public Mark(Context context, int vertexShaderRawResource, int fragmentShaderRawResource, int recursionLevel, float radius, float[] color) {
         super(context, vertexShaderRawResource, fragmentShaderRawResource, recursionLevel, radius, color);
     }
 
