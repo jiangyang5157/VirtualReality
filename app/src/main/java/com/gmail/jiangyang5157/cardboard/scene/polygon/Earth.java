@@ -27,7 +27,7 @@ public class Earth extends TextureSphere {
     }
 
     public void addPlacemark(double latitude, double longitude, int recursionLevel, float radius, float[] color, String label) {
-        Placemark placemark = new Placemark(context, R.raw.icosphere_vertex, R.raw.icosphere_fragment, recursionLevel, radius, color);
+        Placemark placemark = new Placemark(context, R.raw.color_vertex, R.raw.color_fragment, recursionLevel, radius, color);
         placemark.setLabel(label);
         placemark.setCoordinate(new Coordinate(latitude, longitude, -radius, this.getRadius(), 0.0));
         placemark.create();
