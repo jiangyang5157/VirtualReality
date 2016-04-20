@@ -137,7 +137,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     public void onSurfaceCreated(EGLConfig eglConfig) {
         Matrix.setLookAtM(camera, 0, CAMERA_POS[0], CAMERA_POS[1], CAMERA_POS[2], 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
 
-        earth = new Earth(this, R.raw.earth_vertex, R.raw.earth_fragment, 50, 50, 10, R.drawable.no_ice_clouds_mts_4k);
+        earth = new Earth(this, R.raw.texture_vertex, R.raw.texture_fragment, 50, 50, 10, R.drawable.no_ice_clouds_mts_4k);
         earth.create();
 
         earth.addPlacemark(0, 0, 0, 1, new float[]{0.0f, 0.8f, 0.0f, 1.0f}, "");

@@ -24,7 +24,6 @@ public class TextureSphere extends Model {
 
     private final int[] buffers = new int[4];
     private final int[] texBuffers = new int[1];
-    private final int TEX_ID_OFFSET = 0;
 
     public TextureSphere(Context context, int vertexShaderRawResource, int fragmentShaderRawResource, int stacks, int slices, float radius, int textureDrawableResource) {
         super(context, vertexShaderRawResource, fragmentShaderRawResource);
@@ -138,21 +137,28 @@ public class TextureSphere extends Model {
         texturesBuffer.limit(0);
         texturesBuffer = null;
 
-        GLES20.glGenTextures(texBuffers.length, texBuffers, 0);
-        final BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inScaled = false;
-        final Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), textureDrawableResource, options);
-        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texBuffers[0]);
-        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR);
-        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
-        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_REPEAT);
-        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_REPEAT);
-        GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
-        bitmap.recycle();
+        texBuffers[0] = loadTexture(context, textureDrawableResource);
+    }
 
-        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
-        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
-        GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, 0);
+    private static int loadTexture(final Context context, final int resId) {
+        final int[] textureHandle = new int[1];
+        GLES20.glGenTextures(1, textureHandle, 0);
+
+        if (textureHandle[0] == 0) {
+            throw new RuntimeException("Error loading texture.");
+        } else {
+            final BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inScaled = false;
+            final Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), resId, options);
+            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureHandle[0]);
+            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
+            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_NEAREST);
+            // Load the bitmap into the bound texture.
+            GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
+            // Recycle the bitmap, since its data has been loaded into OpenGL.
+            bitmap.recycle();
+        }
+        return textureHandle[0];
     }
 
     @Override
@@ -163,7 +169,7 @@ public class TextureSphere extends Model {
         lightPosHandle = GLES20.glGetUniformLocation(program, LIGHT_POSITION_HANDLE);
 
         vertexHandle = GLES20.glGetAttribLocation(program, VERTEX_HANDLE);
-//        normalHandle = GLES20.glGetAttribLocation(program, NORMAL_HANDLE);
+        normalHandle = GLES20.glGetAttribLocation(program, NORMAL_HANDLE);
         texCoordHandle = GLES20.glGetAttribLocation(program, TEXTURE_COORDS_HANDLE);
     }
 
@@ -172,37 +178,31 @@ public class TextureSphere extends Model {
     public void draw(float[] lightPosInEyeSpace) {
         GLES20.glUseProgram(program);
         GLES20.glEnableVertexAttribArray(vertexHandle);
-//        GLES20.glEnableVertexAttribArray(normalHandle);
+        GLES20.glEnableVertexAttribArray(normalHandle);
         GLES20.glEnableVertexAttribArray(texCoordHandle);
 
         GLES20.glUniformMatrix4fv(mvMatrixHandle, 1, false, modelView, 0);
         GLES20.glUniformMatrix4fv(mvpMatrixHandle, 1, false, modelViewProjection, 0);
-        GLES20.glUniform1i(texIdHandle, TEX_ID_OFFSET);
         GLES20.glUniform3fv(lightPosHandle, 1, lightPosInEyeSpace, 0);
 
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, verticesBuffHandle);
         GLES20.glVertexAttribPointer(vertexHandle, 3, GLES20.GL_FLOAT, false, 0, 0);
-        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
 
-//        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, normalsBuffHandle);
-//        GLES20.glVertexAttribPointer(normalHandle, 3, GLES20.GL_FLOAT, false, 0, 0);
-//        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
+        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, normalsBuffHandle);
+        GLES20.glVertexAttribPointer(normalHandle, 3, GLES20.GL_FLOAT, false, 0, 0);
 
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, texturesBuffHandle);
         GLES20.glVertexAttribPointer(texCoordHandle, 2, GLES20.GL_FLOAT, false, 0, 0);
-        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
 
+        GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texBuffers[0]);
-        GLES20.glActiveTexture(GLES20.GL_TEXTURE0 + TEX_ID_OFFSET);
+        GLES20.glUniform1i(texIdHandle, 0);
 
         GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, indicesBuffHandle);
         GLES20.glDrawElements(GLES20.GL_TRIANGLES, indicesBufferCapacity, GLES20.GL_UNSIGNED_SHORT, 0);
-        GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, 0);
-
-        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
 
         GLES20.glDisableVertexAttribArray(vertexHandle);
-//        GLES20.glDisableVertexAttribArray(normalHandle);
+        GLES20.glDisableVertexAttribArray(normalHandle);
         GLES20.glDisableVertexAttribArray(texCoordHandle);
         GLES20.glUseProgram(0);
 
