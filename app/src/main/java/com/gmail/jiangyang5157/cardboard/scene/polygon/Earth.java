@@ -13,33 +13,35 @@ import java.util.ArrayList;
  */
 public class Earth extends TextureSphere {
 
-    public static final double WGS84_SEMI_MAJOR_AXIS = 6378137.0;
-    public static final double WGS84_FLATTENING = 1.0 / 298.257222101;
-    public static final double WGS84_ECCENTRICITY = Math.sqrt(1 - Math.pow((1 - WGS84_FLATTENING), 2));
+    private static final int DEFAULT_STACKS = 50;
+    private static final int DEFAULT_SLICES = 50;
+    private static final int DEFAULT_VERTEX_SHADER_RAW_RESOURCE = R.raw.texture_vertex;
+    private static final int DEFAULT_FRAGMENT_SHADER_RAW_RESOURCE = R.raw.texture_fragment;
 
-    private ArrayList<Mark> marks = new ArrayList<>();
+    private ArrayList<Placemark> placemarks = new ArrayList<>();
 
-    public Earth(Context context, int vertexShaderRawResource, int fragmentShaderRawResource, int rings, int sectors, float radius, int textureDrawableResource) {
-        super(context, vertexShaderRawResource, fragmentShaderRawResource, rings, sectors, radius, textureDrawableResource);
+    public Earth(Context context, float radius, int textureDrawableResource) {
+        super(context, DEFAULT_VERTEX_SHADER_RAW_RESOURCE, DEFAULT_FRAGMENT_SHADER_RAW_RESOURCE, DEFAULT_STACKS, DEFAULT_SLICES, radius, textureDrawableResource);
 
         Matrix.setIdentityM(model, 0);
         Matrix.translateM(model, 0, 0, 0, 0);
     }
 
-    public void addMark(double latitude, double longitude, int recursionLevel, float radius, float[] color, String label) {
-        Mark mark = new Mark(context, R.raw.color_vertex, R.raw.color_fragment, recursionLevel, radius, color);
-        mark.setLabel(label);
-        mark.setCoordinate(new Coordinate(latitude, longitude, -radius, this.getRadius(), 0.0));
-        mark.create();
+    public void addPlacemark(double latitude, double longitude, float radius, float[] color, String label) {
+        Placemark placemark = new Placemark(context, radius, color);
+        Coordinate coordinate = new Coordinate(latitude, longitude, -placemark.getRadius(), this.getRadius(), 0.0);
+        placemark.setCoordinate(coordinate);
+        placemark.setLabel(label);
+        placemark.create();
 
-        marks.add(mark);
+        placemarks.add(placemark);
     }
 
     @Override
     public void update(float[] view, float[] perspective) {
         super.update(view, perspective);
 
-        for (Mark mark : marks) {
+        for (Mark mark : placemarks) {
             mark.update(view, perspective);
         }
     }
@@ -48,7 +50,7 @@ public class Earth extends TextureSphere {
     public void draw(float[] lightPosInEyeSpace) {
         super.draw(lightPosInEyeSpace);
 
-        for (Mark mark : marks) {
+        for (Mark mark : placemarks) {
             mark.draw(lightPosInEyeSpace);
         }
     }
@@ -57,12 +59,12 @@ public class Earth extends TextureSphere {
     public void destroy() {
         super.destroy();
 
-        for (Mark mark : marks) {
+        for (Mark mark : placemarks) {
             mark.destroy();
         }
     }
 
-    public ArrayList<Mark> getMarks() {
-        return marks;
+    public ArrayList<Placemark> getPlacemarks() {
+        return placemarks;
     }
 }

@@ -2,6 +2,10 @@ package com.gmail.jiangyang5157.cardboard.scene.polygon;
 
 public class Coordinate {
 
+//    public static final double WGS84_SEMI_MAJOR_AXIS = 6378137.0;
+//    public static final double WGS84_FLATTENING = 1.0 / 298.257222101;
+//    public static final double WGS84_ECCENTRICITY = Math.sqrt(1 - Math.pow((1 - WGS84_FLATTENING), 2));
+
     double[] lla;
     double[] ecef;
 

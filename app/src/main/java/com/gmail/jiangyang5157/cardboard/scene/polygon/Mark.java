@@ -9,8 +9,6 @@ public class Mark extends Icosphere {
 
     private Coordinate coordinate;
 
-    private String label;
-
     public Mark(Context context, int vertexShaderRawResource, int fragmentShaderRawResource, int recursionLevel, float radius, float[] color) {
         super(context, vertexShaderRawResource, fragmentShaderRawResource, recursionLevel, radius, color);
     }
@@ -33,13 +31,5 @@ public class Mark extends Icosphere {
 
     public Coordinate getCoordinate() {
         return coordinate;
-    }
-
-    public String getLabel() {
-        return label;
-    }
-
-    public void setLabel(String label) {
-        this.label = label;
     }
 }
