@@ -25,7 +25,7 @@ public class Mark extends Icosphere {
 
     @Override
     public void update(float[] view, float[] perspective) {
-        Matrix.rotateM(model, 0, 1f, 0, 1, 1);
+        Matrix.rotateM(model, 0, 1, 0, 1, 1);
         super.update(view, perspective);
     }
 
