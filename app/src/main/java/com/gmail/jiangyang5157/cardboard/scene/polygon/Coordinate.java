@@ -43,69 +43,73 @@ public class Coordinate {
         double y = distanceFromZ * Math.sin(lam);
         double z = (n * (1 - e2) + h) * sinPhi;
 
-
-
-
-
-
-//        Vector3d ecefVec = new Vector3d(x, y, z);
-//        Vector3d retVec = rotateVector3d(ecefVec, new Vector3d(0, 0, 1), 90);
-//        retVec = rotateVector3d(retVec, new Vector3d(0, 1, 0), 90);
-//        double[] ret = new double[]{retVec.x, retVec.y, retVec.z};
-
-
-
-//        Vector3d ecefVec = new Vector3d(x, y, z);
-//        Vector3d retzec = new Vector3d();
-//        Vector3d retyVec = new Vector3d();
-//        float[] ecef = new float[]{(float) x, (float) y, (float) z};
-//        double sin90 = Math.sin(Math.PI);
-//        double cos90 = Math.cos(Math.PI);
-//        Matrix3x3d zRotation = new Matrix3x3d(
-//                cos90, sin90, 0,
-//                -sin90, cos90, 0,
-//                0, 0, 1);
-//        Matrix3x3d yRotation = new Matrix3x3d(
-//                cos90, 0, -sin90,
-//                0, 1, 0,
-//                sin90, 0, cos90);
-//        Matrix3x3d.mult(zRotation, ecefVec, retzec);
-//        Matrix3x3d.mult(yRotation, retyVec, retzec);
-//        double[] ret = new double[]{retyVec.x, retyVec.y, retyVec.z};
-
-
-
-
-
-
-
         // Ecef coord system is [y-east z-north(up)], and x points to the 0,0
         // Our coord system is [x-east, y-north(up)], and x points to the 0,180
         // So,we reversal x, and use z as y
         double[] ret = {-x, z, y};
 
+//        Matrix3x3d m = new Matrix3x3d();
+//        m.setIdentity();
+//        //Matrix3x3d.mult(getRotationMatrixFromU(new double[]{1, 0, 0}, 90), m, m);
+//        Vector3d ecefVec = new Vector3d(x, y, z);
+//        double length = ecefVec.length();
+//        ecefVec.normalize();
+//        Matrix3x3d.mult(m, ecefVec, ecefVec);
+//        ecefVec = new Vector3d(ecefVec.x * length, ecefVec.y * length, ecefVec.z * length);
+//        double[] ret = new double[]{-ecefVec.x, ecefVec.z, ecefVec.y};
+
         return ret;
     }
 
-    public static Vector3d rotateVector3d(Vector3d vec, Vector3d axis, double theta) {
-        double x, y, z;
-        double u, v, w;
-        x = vec.x;
-        y = vec.y;
-        z = vec.z;
-        u = axis.x;
-        v = axis.y;
-        w = axis.z;
-        double xPrime = u * (u * x + v * y + w * z) * (1d - Math.cos(theta))
-                + x * Math.cos(theta)
-                + (-w * y + v * z) * Math.sin(theta);
-        double yPrime = v * (u * x + v * y + w * z) * (1d - Math.cos(theta))
-                + y * Math.cos(theta)
-                + (w * x - u * z) * Math.sin(theta);
-        double zPrime = w * (u * x + v * y + w * z) * (1d - Math.cos(theta))
-                + z * Math.cos(theta)
-                + (-v * x + u * y) * Math.sin(theta);
-        return new Vector3d(xPrime, yPrime, zPrime);
+    private Matrix3x3d getRotationMatrixFromX(double angle) {
+        double radian = Math.toRadians(angle);
+        double sin = Math.sin(radian);
+        double cos = Math.cos(radian);
+        return new Matrix3x3d(
+                1, 0, 0,
+                0, cos, sin,
+                0, -sin, cos
+        );
+    }
+
+    private Matrix3x3d getRotationMatrixFromY(double angle) {
+        double radian = Math.toRadians(angle);
+        double sin = Math.sin(radian);
+        double cos = Math.cos(radian);
+        return new Matrix3x3d(
+                cos, 0, -sin,
+                0, 1, 0,
+                sin, 0, cos
+        );
+    }
+
+    private Matrix3x3d getRotationMatrixFromZ(double angle) {
+        double radian = Math.toRadians(angle);
+        double sin = Math.sin(radian);
+        double cos = Math.cos(radian);
+        return new Matrix3x3d(
+                cos, sin, 0,
+                -sin, cos, 0,
+                0, 0, 1
+        );
+    }
+
+    private Matrix3x3d getRotationMatrixFromU(double[] u, double angle) {
+        double radian = Math.toRadians(angle);
+        double sin = Math.sin(radian);
+        double cos = Math.cos(radian);
+        double u0sin = u[0] * sin;
+        double u1sin = u[1] * sin;
+        double u2sin = u[2] * sin;
+        double u0u1 = u[0] * u[1];
+        double u0u2 = u[0] * u[2];
+        double u1u2 = u[1] * u[2];
+
+        return new Matrix3x3d(
+                Math.pow(u[0], 2) * (1.0 - cos) + cos, u0u1 * (1.0 - cos) + u2sin, u0u2 * (1.0 - cos) - u1sin,
+                u0u1 * (1.0 - cos) - u2sin, Math.pow(u[1], 2) * (1.0 - cos) + cos, u1u2 * (1.0 - cos) + u0sin,
+                u0u2 * (1.0 - cos) + u1sin, u1u2 * (1.0 - cos) - u0sin, Math.pow(u[2], 2) * (1.0 - cos) + cos
+        );
     }
 
     @Override
