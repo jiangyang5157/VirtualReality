@@ -7,7 +7,6 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.gmail.jiangyang5157.cardboard.scene.polygon.Earth;
-import com.gmail.jiangyang5157.cardboard.scene.polygon.Mark;
 import com.gmail.jiangyang5157.cardboard.scene.polygon.Placemark;
 import com.gmail.jiangyang5157.cardboard.scene.projection.ShaderHandle;
 import com.gmail.jiangyang5157.cardboard.ui.CardboardOverlayView;
