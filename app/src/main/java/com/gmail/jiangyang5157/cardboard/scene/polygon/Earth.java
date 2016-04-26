@@ -30,11 +30,11 @@ public class Earth extends TextureSphere {
 //        Matrix.rotateM(model, 0, 180, 0, 0, 1);
     }
 
-    public void addPlacemark(double latitude, double longitude, float radius, float[] color, String label) {
+    public void addPlacemark(double latitude, double longitude, float radius, float[] color, String name) {
         Placemark placemark = new Placemark(context, radius, color);
         Coordinate coordinate = new Coordinate(latitude, longitude, -placemark.getRadius(), this.getRadius(), 0.0);
         placemark.setCoordinate(coordinate);
-        placemark.setLabel(label);
+        placemark.setName(name);
         placemark.create();
 
         placemarks.add(placemark);

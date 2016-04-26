@@ -14,18 +14,24 @@ public class Placemark extends Mark {
     private static final int DEFAULT_VERTEX_SHADER_RAW_RESOURCE = R.raw.color_vertex;
     private static final int DEFAULT_FRAGMENT_SHADER_RAW_RESOURCE = R.raw.color_fragment;
 
-
-    private String label;
+    private String name;
+    private String description;
 
     public Placemark(Context context, float radius, float[] color) {
         super(context, DEFAULT_VERTEX_SHADER_RAW_RESOURCE, DEFAULT_FRAGMENT_SHADER_RAW_RESOURCE, RECURSION_LEVEL, radius, color);
     }
 
-    public String getLabel() {
-        return label;
+    public void setName(String name) {
+        this.name = name;
+    }
+    public String getName() {
+        return name;
     }
 
-    public void setLabel(String label) {
-        this.label = label;
+    public void setDescription(String description) {
+        this.description = description;
+    }
+    public String getDescription() {
+        return description;
     }
 }
