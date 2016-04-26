@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.gmail.jiangyang5157.cardboard.kml.KmlLayer;
 import com.gmail.jiangyang5157.cardboard.scene.polygon.Earth;
 import com.gmail.jiangyang5157.cardboard.scene.polygon.Placemark;
 import com.gmail.jiangyang5157.cardboard.scene.projection.ShaderHandle;
@@ -16,6 +17,10 @@ import com.google.vrtoolkit.cardboard.CardboardView;
 import com.google.vrtoolkit.cardboard.Eye;
 import com.google.vrtoolkit.cardboard.HeadTransform;
 import com.google.vrtoolkit.cardboard.Viewport;
+
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
 
 import javax.microedition.khronos.egl.EGLConfig;
 
