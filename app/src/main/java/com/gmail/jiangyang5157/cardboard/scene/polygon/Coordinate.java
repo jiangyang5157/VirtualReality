@@ -13,10 +13,16 @@ public class Coordinate {
     double[] ecef;
 
     public Coordinate(double latitude, double longitude, double altitude, double a, double e) {
-        if (latitude < -90 || latitude > 90 || longitude < -180 || longitude > 180) {
-            throw new IllegalArgumentException("latitude [-90, 90], longitude [-180, 180]");
+        lla = new double[3];
+
+        lla[0] = Math.max(-90.0D, Math.min(90.0D, latitude));
+        if(-180.0D <= longitude && longitude < 180.0D) {
+            lla[1] = longitude;
+        } else {
+            lla[1] = ((longitude - 180.0D) % 360.0D + 360.0D) % 360.0D - 180.0D;
         }
-        lla = new double[]{latitude, longitude, altitude};
+        lla[2] = altitude;
+
         ecef = lla2ecef(lla, a, e);
     }
 
