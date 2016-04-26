@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.gmail.jiangyang5157.cardboard.kml.KmlLayer;
+import com.gmail.jiangyang5157.cardboard.kml.KmlPlacemark;
 import com.gmail.jiangyang5157.cardboard.scene.polygon.Earth;
 import com.gmail.jiangyang5157.cardboard.scene.polygon.Placemark;
 import com.gmail.jiangyang5157.cardboard.scene.projection.ShaderHandle;
@@ -16,6 +18,10 @@ import com.google.vrtoolkit.cardboard.CardboardView;
 import com.google.vrtoolkit.cardboard.Eye;
 import com.google.vrtoolkit.cardboard.HeadTransform;
 import com.google.vrtoolkit.cardboard.Viewport;
+
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
 
 import javax.microedition.khronos.egl.EGLConfig;
 
@@ -157,6 +163,17 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         earth.addPlacemark(51.50735f, -0.12775f, 0.15f, new float[]{0.8f, 0.0f, 0.0f, 1.0f}, "London");
         earth.addPlacemark(48.85661f, 2.35222f, 0.15f, new float[]{0.8f, 0.0f, 0.0f, 1.0f}, "Paris");
         earth.addPlacemark(37.56653f, 126.97796f, 0.15f, new float[]{0.8f, 0.0f, 0.0f, 1.0f}, "Seoul");
+
+        KmlLayer kmlLayer = null;
+        try {
+            kmlLayer = new KmlLayer(R.raw.simple, getApplicationContext());
+        } catch (XmlPullParserException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Log.i("####", "" + kmlLayer.getContainers().toString());
+        Log.i("####", "" + kmlLayer.getPlacemarks().toString());
     }
 
     @Override
