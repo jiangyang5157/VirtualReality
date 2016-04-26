@@ -1,12 +1,36 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2">
 	<Document>
 		<Placemark>
-			<name>Simple Placemark</name>
+			<name>Simple Containers_Placemark</name>
 			<description>South Pole</description>
 			<Point>
-			<coordinates>-90,0</coordinates>
+			    <coordinates>0,-90</coordinates>
 			</Point>
 		</Placemark>
 	</Document>
+
+	<Placemark>
+        <name>Simple Placemark</name>
+        <description>North Pole</description>
+        <Point>
+            <coordinates>0,90</coordinates>
+        </Point>
+    </Placemark>
+
+    <Placemark>
+        <name>Simple Placemark 2</name>
+        <description>00</description>
+        <Point>
+            <coordinates>0,0</coordinates>
+        </Point>
+    </Placemark>
+
+    <Placemark>
+        <name>Simple Placemark 3</name>
+        <description>0180</description>
+        <Point>
+            <coordinates>180,0</coordinates>
+        </Point>
+    </Placemark>
 </kml>
