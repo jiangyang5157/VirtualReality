@@ -2,36 +2,33 @@ package com.gmail.jiangyang5157.cardboard.scene.polygon;
 
 import android.content.Context;
 
+import com.gmail.jiangyang5157.cardboard.kml.KmlCoordinate;
+import com.gmail.jiangyang5157.cardboard.kml.KmlPlacemark;
 import com.gmail.jiangyang5157.cardboard.vr.R;
 
 /**
  * @author Yang
- * @date 4/21/2016
+ * @since 4/12/2016.
  */
 public class Placemark extends Mark {
 
-    private static final int RECURSION_LEVEL = 0;
+    private static final float DEFAULT_RADIUS = 0.5f;
+    private static final float[] DEFAULT_COLOR = new float[]{0.8f, 0.0f, 0.0f, 1.0f};
+
+    private static final int DEFAULT_RECURSION_LEVEL = 0;
     private static final int DEFAULT_VERTEX_SHADER_RAW_RESOURCE = R.raw.color_vertex;
     private static final int DEFAULT_FRAGMENT_SHADER_RAW_RESOURCE = R.raw.color_fragment;
 
-    private String name;
-    private String description;
+    private final Earth earth;
+    public final String name;
+    public final String description;
 
-    public Placemark(Context context, float radius, float[] color) {
-        super(context, DEFAULT_VERTEX_SHADER_RAW_RESOURCE, DEFAULT_FRAGMENT_SHADER_RAW_RESOURCE, RECURSION_LEVEL, radius, color);
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-    public String getName() {
-        return name;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-    public String getDescription() {
-        return description;
+    public Placemark(Context context, Earth earth, KmlPlacemark kmlPlacemark) {
+        super(context, DEFAULT_VERTEX_SHADER_RAW_RESOURCE, DEFAULT_FRAGMENT_SHADER_RAW_RESOURCE, DEFAULT_RECURSION_LEVEL, DEFAULT_RADIUS, DEFAULT_COLOR);
+        KmlCoordinate kmlCoordinate = (KmlCoordinate) kmlPlacemark.getGeometry().getGeometryObject();
+        this.earth = earth;
+        this.name = kmlPlacemark.getProperty("name");
+        this.description = kmlPlacemark.getProperty("description");
+        setCoordinate(new Coordinate(kmlCoordinate.latitude, kmlCoordinate.longitude, -this.getRadius(), this.earth.getRadius()));
     }
 }

@@ -9,9 +9,13 @@ import com.gmail.jiangyang5157.cardboard.vr.R;
 import java.util.ArrayList;
 
 /**
- * Created by Yang on 4/12/2016.
+ * @author Yang
+ * @since 4/12/2016.
  */
 public class Earth extends TextureSphere {
+
+    private static final float DEFAULT_RADIUS = 10f;
+    private static final int DEFAULT_TEXTURE_DRAWABLE_RESOURCE = R.drawable.no_clouds_2k;
 
     private static final int DEFAULT_STACKS = 50;
     private static final int DEFAULT_SLICES = 50;
@@ -20,8 +24,8 @@ public class Earth extends TextureSphere {
 
     private ArrayList<Placemark> placemarks = new ArrayList<>();
 
-    public Earth(Context context, float radius, int textureDrawableResource) {
-        super(context, DEFAULT_VERTEX_SHADER_RAW_RESOURCE, DEFAULT_FRAGMENT_SHADER_RAW_RESOURCE, DEFAULT_STACKS, DEFAULT_SLICES, radius, textureDrawableResource);
+    public Earth(Context context) {
+        super(context, DEFAULT_VERTEX_SHADER_RAW_RESOURCE, DEFAULT_FRAGMENT_SHADER_RAW_RESOURCE, DEFAULT_STACKS, DEFAULT_SLICES, DEFAULT_RADIUS, DEFAULT_TEXTURE_DRAWABLE_RESOURCE);
 
         Matrix.setIdentityM(model, 0);
         Matrix.translateM(model, 0, 0, 0, 0);
@@ -30,13 +34,7 @@ public class Earth extends TextureSphere {
 //        Matrix.rotateM(model, 0, 180, 0, 0, 1);
     }
 
-    public void addPlacemark(double latitude, double longitude, float radius, float[] color, String name) {
-        Placemark placemark = new Placemark(context, radius, color);
-        Coordinate coordinate = new Coordinate(latitude, longitude, -placemark.getRadius(), this.getRadius(), 0.0);
-        placemark.setCoordinate(coordinate);
-        placemark.setName(name);
-        placemark.create();
-
+    public void addPlacemark(Placemark placemark) {
         placemarks.add(placemark);
     }
 

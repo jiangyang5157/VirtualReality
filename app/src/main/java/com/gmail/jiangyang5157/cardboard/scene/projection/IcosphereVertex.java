@@ -7,7 +7,7 @@ import com.gmail.jiangyang5157.tookit.math.Geometry;
 
 /**
  * @author Yang
- * @date 4/15/2016
+ * @since 4/12/2016.
  */
 public class IcosphereVertex implements Geometry {
     /**

@@ -1,29 +1,30 @@
 package com.gmail.jiangyang5157.cardboard.scene.polygon;
 
+import com.gmail.jiangyang5157.cardboard.kml.KmlCoordinate;
 import com.google.vrtoolkit.cardboard.sensors.internal.Matrix3x3d;
 import com.google.vrtoolkit.cardboard.sensors.internal.Vector3d;
 
-public class Coordinate {
+public class Coordinate extends KmlCoordinate {
 
-//    public static final double WGS84_SEMI_MAJOR_AXIS = 6378137.0;
-//    public static final double WGS84_FLATTENING = 1.0 / 298.257222101;
-//    public static final double WGS84_ECCENTRICITY = Math.sqrt(1 - Math.pow((1 - WGS84_FLATTENING), 2));
+    public static final double WGS84_SEMI_MAJOR_AXIS = 6378137.0;
+    public static final double WGS84_FLATTENING = 1.0 / 298.257222101;
+    public static final double WGS84_ECCENTRICITY = Math.sqrt(1 - Math.pow((1 - WGS84_FLATTENING), 2));
 
-    double[] lla;
-    double[] ecef;
+    public static final double ECCENTRICITY = 0;
+
+    public final double altitude;
+
+    public final double[] ecef;
+
+    public Coordinate(double latitude, double longitude, double altitude, double a) {
+        this(latitude, longitude, altitude, a, ECCENTRICITY);
+    }
 
     public Coordinate(double latitude, double longitude, double altitude, double a, double e) {
-        lla = new double[3];
+        super(latitude, longitude);
+        this.altitude = altitude;
 
-        lla[0] = Math.max(-90.0D, Math.min(90.0D, latitude));
-        if(-180.0D <= longitude && longitude < 180.0D) {
-            lla[1] = longitude;
-        } else {
-            lla[1] = ((longitude - 180.0D) % 360.0D + 360.0D) % 360.0D - 180.0D;
-        }
-        lla[2] = altitude;
-
-        ecef = lla2ecef(lla, a, e);
+        ecef = lla2ecef(new double[]{latitude, longitude, altitude}, a, e);
     }
 
     /**
@@ -118,6 +119,6 @@ public class Coordinate {
 
     @Override
     public String toString() {
-        return "lla: " + String.format("%.5f", lla[0]) + ", " + String.format("%.5f", lla[1]) + ", " + String.format("%.5f", lla[2]);
+        return "lat/lng/alt: ( " + this.latitude + "," + this.longitude + ", " + this.altitude + ")";
     }
 }

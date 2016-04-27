@@ -5,6 +5,10 @@ import android.opengl.Matrix;
 
 import com.gmail.jiangyang5157.cardboard.scene.projection.Icosphere;
 
+/**
+ * @author Yang
+ * @since 4/12/2016.
+ */
 public class Mark extends Icosphere {
 
     private Coordinate coordinate;

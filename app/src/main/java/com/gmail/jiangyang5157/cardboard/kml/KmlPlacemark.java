@@ -21,12 +21,31 @@ public class KmlPlacemark {
     }
 
     /**
+     * Gets whether the placemark has a properties
+     *
+     * @return true if there are properties in the properties hashmap, false otherwise
+     */
+    public boolean hasProperties() {
+        return mProperties.size() > 0;
+    }
+
+    /**
      * Gets the property entry set
      *
      * @return property entry set
      */
     public Iterable getProperties() {
         return mProperties.entrySet();
+    }
+
+    /**
+     * Gets whether the basic has a given property
+     *
+     * @param keyValue key value to check
+     * @return true if the key is stored in the properties, false otherwise
+     */
+    public boolean hasProperty(String keyValue) {
+        return mProperties.containsKey(keyValue);
     }
 
     /**
@@ -48,24 +67,6 @@ public class KmlPlacemark {
         return mGeometry;
     }
 
-    /**
-     * Gets whether the basic has a given property
-     *
-     * @param keyValue key value to check
-     * @return true if the key is stored in the properties, false otherwise
-     */
-    public boolean hasProperty(String keyValue) {
-        return mProperties.containsKey(keyValue);
-    }
-
-    /**
-     * Gets whether the placemark has a properties
-     *
-     * @return true if there are properties in the properties hashmap, false otherwise
-     */
-    public boolean hasProperties() {
-        return mProperties.size() > 0;
-    }
 
     @Override
     public String toString() {

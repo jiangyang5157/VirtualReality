@@ -1,49 +1,137 @@
 <?xml version="1.0" encoding="utf-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2">
     <Folder>
-        <name>NS Folder</name>
-        <description>A container holds multiple other objects - north and south pole</description>
+        <name>Poles Folder</name>
+        <description>A container holds multiple objects - pole placemarks</description>
 
 		<Placemark>
-			<name>Simple Containers_Placemark</name>
-			<description>South Pole</description>
+			<name>South Pole</name>
+			<description>South Pole of the earth</description>
             <ExtendedData xmlns:camp="http://campsites.com">
-                <camp:number>14</camp:number>
-                <camp:parkingSpaces>2</camp:parkingSpaces>
+                <camp:number>12</camp:number>
+                <camp:parkingSpaces>4</camp:parkingSpaces>
             </ExtendedData>
 			<Point>
 			    <coordinates>0,-90</coordinates>
 			</Point>
 		</Placemark>
-
         <Placemark>
-            <name>Simple Placemark</name>
-            <description>North Pole</description>
+            <name>North Pole</name>
+            <description>North Pole of the earth</description>
             <Point>
                 <coordinates>0,90</coordinates>
+            </Point>
+        </Placemark>
+        <Placemark>
+            <name>North Pole</name>
+            <description>North Pole of the earth</description>
+            <Point>
+                <coordinates>0,90</coordinates>
+            </Point>
+        </Placemark>
+        <Placemark>
+            <name>lailon0_0</name>
+            <description>lai/lon: 0,0</description>
+            <Point>
+                <coordinates>0,0</coordinates>
+            </Point>
+        </Placemark>
+        <Placemark>
+            <name>lailon0_90</name>
+            <description>lai/lon: 0,90</description>
+            <Point>
+                <coordinates>90,0</coordinates>
+            </Point>
+        </Placemark>
+        <Placemark>
+            <name>lailon0_-90</name>
+            <description>lai/lon: 0,-90</description>
+            <Point>
+                <coordinates>-90,0</coordinates>
+            </Point>
+        </Placemark>
+        <Placemark>
+            <name>lailon0_180</name>
+            <description>lai/lon: 0,180</description>
+            <Point>
+                <coordinates>-180,0</coordinates>
             </Point>
         </Placemark>
     </Folder>
 
     <Folder>
-        <name>Second Folder</name>
-        <description>A container holds multiple other objects</description>
+        <name>Placemarks Folder</name>
+        <description>A container holds multiple objects - specific placemarks</description>
 
         <Placemark>
-            <name>Simple Placemark 2</name>
-            <description>00</description>
+            <name>Auckland</name>
+            <description>Auckland City</description>
             <Point>
-                <coordinates>0,0</coordinates>
+                <coordinates>174.76192,-36.84845</coordinates>
             </Point>
         </Placemark>
-
         <Placemark>
-            <name>Simple Placemark 3</name>
-            <description>0180</description>
+            <name>Wellington</name>
+            <description>Wellington City</description>
             <Point>
-                <coordinates>180,0</coordinates>
+                <coordinates>174.77623,-41.28646</coordinates>
+            </Point>
+        </Placemark>
+        <Placemark>
+            <name>Sydney</name>
+            <description>Sydney City</description>
+            <Point>
+                <coordinates>151.20699,-33.86748</coordinates>
+            </Point>
+        </Placemark>
+        <Placemark>
+            <name>Berlin</name>
+            <description>Berlin City</description>
+            <Point>
+                <coordinates>13.40495,52.52000</coordinates>
+            </Point>
+        </Placemark>
+        <Placemark>
+            <name>Washington</name>
+            <description>Washington City</description>
+            <Point>
+                <coordinates>-77.03687,38.90719</coordinates>
+            </Point>
+        </Placemark>
+        <Placemark>
+            <name>Beijing</name>
+            <description>Beijing City</description>
+            <Point>
+                <coordinates>116.40739,39.90421</coordinates>
+            </Point>
+        </Placemark>
+        <Placemark>
+            <name>Moscow</name>
+            <description>Moscow City</description>
+            <Point>
+                <coordinates>37.6173,55.75582</coordinates>
+            </Point>
+        </Placemark>
+        <Placemark>
+            <name>London</name>
+            <description>London City</description>
+            <Point>
+                <coordinates>-0.12775,51.50735</coordinates>
+            </Point>
+        </Placemark>
+        <Placemark>
+            <name>Paris</name>
+            <description>Paris City</description>
+            <Point>
+                <coordinates>2.35222,48.85661</coordinates>
+            </Point>
+        </Placemark>
+        <Placemark>
+            <name>Seoul</name>
+            <description>Seoul City</description>
+            <Point>
+                <coordinates>126.97796,37.56653</coordinates>
             </Point>
         </Placemark>
     </Folder>
-
 </kml>

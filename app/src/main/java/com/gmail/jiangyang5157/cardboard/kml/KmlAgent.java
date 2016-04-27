@@ -12,26 +12,29 @@ import java.io.InputStream;
 /**
  * Document class allows for users to input their KML data and output it onto the map
  */
-public class KmlLayer {
+public class KmlAgent {
 
-    private final KmlData mData;
+    private final KmlContent mContent;
 
-    public KmlLayer(int resourceId, Context context)
+    private Context mContext;
+
+    public KmlAgent(int resourceId, Context context)
             throws XmlPullParserException, IOException {
         this(context.getResources().openRawResource(resourceId), context);
     }
 
-    public KmlLayer(InputStream stream, Context context)
+    public KmlAgent(InputStream stream, Context context)
             throws XmlPullParserException, IOException {
         if (stream == null) {
             throw new IllegalArgumentException("KML InputStream cannot be null");
         }
-        mData = new KmlData(context);
+        mContext = context;
+        mContent = new KmlContent();
         XmlPullParser xmlPullParser = createXmlParser(stream);
         KmlParser parser = new KmlParser(xmlPullParser);
         parser.parseKml();
         stream.close();
-        mData.storeKmlData(parser.getPlacemarks(), parser.getContainers());
+        mContent.storeKmlData(parser.getPlacemarks(), parser.getContainers());
     }
     /**
      * Creates a new XmlPullParser to allow for the KML file to be parsed
@@ -55,7 +58,7 @@ public class KmlLayer {
      */
 
     public boolean hasPlacemarks() {
-        return mData.hasKmlPlacemarks();
+        return mContent.hasKmlPlacemarks();
     }
 
     /**
@@ -64,16 +67,16 @@ public class KmlLayer {
      * @return iterable of KmlPlacemark objects
      */
     public Iterable<KmlPlacemark> getPlacemarks() {
-        return mData.getKmlPlacemarks();
+        return mContent.getKmlPlacemarks();
     }
 
     /**
      * Checks if the layer contains any KmlContainers
      *
-     * @return true if there is at least 1 container within the KmlLayer, false otherwise
+     * @return true if there is at least 1 container within the KmlAgent, false otherwise
      */
     public boolean hasContainers() {
-        return mData.hasNestedContainers();
+        return mContent.hasNestedContainers();
     }
 
     /**
@@ -82,6 +85,6 @@ public class KmlLayer {
      * @return iterable of KmlContainerInterface objects
      */
     public Iterable<KmlContainer> getContainers() {
-        return mData.getNestedContainers();
+        return mContent.getNestedContainers();
     }
 }

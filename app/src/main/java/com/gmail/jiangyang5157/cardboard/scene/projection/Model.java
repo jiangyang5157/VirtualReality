@@ -6,6 +6,10 @@ import android.opengl.Matrix;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
 
+/**
+ * @author Yang
+ * @since 4/12/2016.
+ */
 public abstract class Model extends ShaderHandle {
 
     static final int BYTES_PER_FLOAT = 4;

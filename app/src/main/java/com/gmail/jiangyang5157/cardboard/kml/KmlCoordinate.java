@@ -2,7 +2,7 @@ package com.gmail.jiangyang5157.cardboard.kml;
 
 /**
  * @author Yang
- * @date 4/27/2016
+ * @since 4/27/2016
  */
 public class KmlCoordinate {
 
@@ -33,6 +33,6 @@ public class KmlCoordinate {
 
     @Override
     public String toString() {
-        return "lat/lng/alt: (" + this.latitude + "," + this.longitude + ")";
+        return "lat/lng: (" + this.latitude + "," + this.longitude + ")";
     }
 }

@@ -6,7 +6,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.gmail.jiangyang5157.cardboard.kml.KmlLayer;
+import com.gmail.jiangyang5157.cardboard.kml.KmlAgent;
+import com.gmail.jiangyang5157.cardboard.kml.KmlContainer;
+import com.gmail.jiangyang5157.cardboard.kml.KmlPlacemark;
 import com.gmail.jiangyang5157.cardboard.scene.polygon.Earth;
 import com.gmail.jiangyang5157.cardboard.scene.polygon.Placemark;
 import com.gmail.jiangyang5157.cardboard.scene.projection.ShaderHandle;
@@ -21,6 +23,7 @@ import com.google.vrtoolkit.cardboard.Viewport;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+import java.util.Iterator;
 
 import javax.microedition.khronos.egl.EGLConfig;
 
@@ -87,7 +90,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        overlayView.show3DToast(mark.getName() + "\n" + "r=" + mark.getRadius() + "\n" + mark.getCoordinate().toString());
+                        overlayView.show3DToast(mark.name + "\n" + "r=" + mark.getRadius() + "\n" + mark.getCoordinate().toString());
                     }
                 });
             }
@@ -142,37 +145,36 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     public void onSurfaceCreated(EGLConfig eglConfig) {
         Matrix.setLookAtM(camera, 0, CAMERA_POS[0], CAMERA_POS[1], CAMERA_POS[2], 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
 
-        earth = new Earth(this, 10f, R.drawable.no_clouds_2k);
+        earth = new Earth(this);
         earth.create();
 
-        earth.addPlacemark(0, 0, 0.7f, new float[]{0.0f, 0.8f, 0.0f, 1.0f}, "");
-        earth.addPlacemark(0, 90, 0.7f, new float[]{0.0f, 0.8f, 0.0f, 1.0f}, "");
-        earth.addPlacemark(0, 180, 0.7f, new float[]{0.0f, 0.8f, 0.0f, 1.0f}, "");
-        earth.addPlacemark(0, -90, 0.7f, new float[]{0.0f, 0.8f, 0.0f, 1.0f}, "");
-        earth.addPlacemark(90, 0, 0.7f, new float[]{0.0f, 0.8f, 0.0f, 1.0f}, "North Pole");
-        earth.addPlacemark(-90, 0, 0.7f, new float[]{0.0f, 0.8f, 0.0f, 1.0f}, "South Pole");
-
-        earth.addPlacemark(-36.84845f, 174.76192f, 0.15f, new float[]{0.8f, 0.0f, 0.0f, 1.0f}, "Auckland");
-        earth.addPlacemark(-41.28646f, 174.77623f, 0.15f, new float[]{0.8f, 0.0f, 0.0f, 1.0f}, "Wellington");
-        earth.addPlacemark(-33.86748f, 151.20699f, 0.15f, new float[]{0.8f, 0.0f, 0.0f, 1.0f}, "Sydney");
-        earth.addPlacemark(52.52000f, 13.40495f, 0.15f, new float[]{0.8f, 0.0f, 0.0f, 1.0f}, "Berlin");
-        earth.addPlacemark(38.90719f, -77.03687f, 0.15f, new float[]{0.8f, 0.0f, 0.0f, 1.0f}, "Washington");
-        earth.addPlacemark(39.90421f, 116.40739f, 0.15f, new float[]{0.8f, 0.0f, 0.0f, 1.0f}, "Beijing");
-        earth.addPlacemark(55.75582f, 37.6173f, 0.15f, new float[]{0.8f, 0.0f, 0.0f, 1.0f}, "Moscow");
-        earth.addPlacemark(51.50735f, -0.12775f, 0.15f, new float[]{0.8f, 0.0f, 0.0f, 1.0f}, "London");
-        earth.addPlacemark(48.85661f, 2.35222f, 0.15f, new float[]{0.8f, 0.0f, 0.0f, 1.0f}, "Paris");
-        earth.addPlacemark(37.56653f, 126.97796f, 0.15f, new float[]{0.8f, 0.0f, 0.0f, 1.0f}, "Seoul");
-
-        KmlLayer kmlLayer = null;
         try {
-            kmlLayer = new KmlLayer(R.raw.simple, getApplicationContext());
+            KmlAgent kmlAgent = new KmlAgent(R.raw.simple, getApplicationContext());
+            if (kmlAgent.hasContainers()) {
+                addPlaceMarks(kmlAgent.getContainers());
+            }
         } catch (XmlPullParserException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Log.i("####", "" + kmlLayer.hasContainers());
-        Log.i("####", "" + kmlLayer.hasPlacemarks());
+    }
+
+    public void addPlaceMarks(Iterable<KmlContainer> containers) {
+        Iterator<KmlContainer> itKmlContainer = containers.iterator();
+        while (itKmlContainer.hasNext()) {
+            KmlContainer container = itKmlContainer.next();
+            if (container.hasContainers()) {
+                addPlaceMarks(container.getContainers());
+            } else if (container.hasPlacemarks()) {
+                Iterator<KmlPlacemark> itKmlPlacemark = container.getPlacemarks().iterator();
+                while (itKmlPlacemark.hasNext()) {
+                    Placemark placemark = new Placemark(this, earth, itKmlPlacemark.next());
+                    placemark.create();
+                    earth.addPlacemark(placemark);
+                }
+            }
+        }
     }
 
     @Override

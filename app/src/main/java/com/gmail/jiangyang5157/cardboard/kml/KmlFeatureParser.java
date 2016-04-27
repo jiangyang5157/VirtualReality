@@ -11,9 +11,9 @@ import static org.xmlpull.v1.XmlPullParser.END_TAG;
 import static org.xmlpull.v1.XmlPullParser.START_TAG;
 
 /**
- * Parses the feature of a given KML file into a KmlPlacemark or KmlGroundOverlay object
+ * Parses the feature of a given KML file into a KmlPlacemark
  */
-/* package */ class KmlFeatureParser {
+class KmlFeatureParser {
 
     private final static String GEOMETRY_REGEX = "Point";
 
@@ -21,7 +21,7 @@ import static org.xmlpull.v1.XmlPullParser.START_TAG;
 
     private final static int LATITUDE_INDEX = 1;
 
-    private final static String PROPERTY_REGEX = "name|description|visibility|open|address|phoneNumber";
+    private final static String PROPERTY_REGEX = "name|description";
 
     private final static String EXTENDED_DATA = "ExtendedData";
 
@@ -33,7 +33,6 @@ import static org.xmlpull.v1.XmlPullParser.START_TAG;
     /* package */
     static KmlPlacemark createPlacemark(XmlPullParser parser)
             throws IOException, XmlPullParserException {
-        String styleId = null;
         HashMap<String, String> properties = new HashMap<String, String>();
         KmlGeometry geometry = null;
         int eventType = parser.getEventType();
@@ -50,29 +49,6 @@ import static org.xmlpull.v1.XmlPullParser.START_TAG;
             eventType = parser.next();
         }
         return new KmlPlacemark(geometry, properties);
-    }
-
-    private static float getRotation(XmlPullParser parser)
-            throws IOException, XmlPullParserException {
-        return -Float.parseFloat(parser.nextText());
-    }
-
-    /**
-     * Retrieves a url from the "href" tag nested within an "Icon" tag, read by
-     * the XmlPullParser.
-     *
-     * @return An image url
-     */
-    private static String getImageUrl(XmlPullParser parser)
-            throws IOException, XmlPullParserException {
-        int eventType = parser.getEventType();
-        while (!(eventType == END_TAG && parser.getName().equals("Icon"))) {
-            if (eventType == START_TAG && parser.getName().equals("href")) {
-                return parser.nextText();
-            }
-            eventType = parser.next();
-        }
-        return null;
     }
 
     /**

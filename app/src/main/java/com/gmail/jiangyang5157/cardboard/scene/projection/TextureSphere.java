@@ -11,7 +11,8 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 /**
- * Created by Yang on 4/9/2016.
+ * @author Yang
+ * @since 4/12/2016.
  */
 public class TextureSphere extends Model {
 

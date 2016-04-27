@@ -8,9 +8,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * Parses a given KML file into KmlStyle, KmlPlacemark, KmlGroundOverlay and KmlContainer objects
+ * Parses a given KML file into KmlPlacemark and KmlContainer objects
  */
-/* package */ class KmlParser {
+class KmlParser {
 
     private final static String PLACEMARK = "Placemark";
 
@@ -37,7 +37,7 @@ import java.util.HashMap;
      *
      * @param parser parser containing the KML file to parse
      */
-    /* package */ KmlParser(XmlPullParser parser) {
+    KmlParser(XmlPullParser parser) {
         mParser = parser;
         mPlacemarks = new HashMap<KmlPlacemark, Object>();
         mContainers = new ArrayList<KmlContainer>();
@@ -46,7 +46,7 @@ import java.util.HashMap;
     /**
      * Parses the KML file and stores the created KmlStyle and KmlPlacemark
      */
-    /* package */ void parseKml() throws XmlPullParserException, IOException {
+    void parseKml() throws XmlPullParserException, IOException {
         int eventType = mParser.getEventType();
         while (eventType != XmlPullParser.END_DOCUMENT) {
             if (eventType == XmlPullParser.START_TAG) {
@@ -67,14 +67,14 @@ import java.util.HashMap;
     /**
      * @return A list of Kml Placemark objects
      */
-    /* package */ HashMap<KmlPlacemark, Object> getPlacemarks() {
+    HashMap<KmlPlacemark, Object> getPlacemarks() {
         return mPlacemarks;
     }
 
     /**
      * @return A list of Kml Folders
      */
-    /* package */ ArrayList<KmlContainer> getContainers() {
+    ArrayList<KmlContainer> getContainers() {
         return mContainers;
     }
 
@@ -82,7 +82,7 @@ import java.util.HashMap;
      * Skips tags from START TAG to END TAG
      * @param parser    XmlPullParser
      */
-    /*package*/ static void skip(XmlPullParser parser)
+    static void skip(XmlPullParser parser)
             throws XmlPullParserException, IOException {
         if (parser.getEventType() != XmlPullParser.START_TAG) {
             throw new IllegalStateException();

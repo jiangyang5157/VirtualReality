@@ -13,10 +13,9 @@ public class KmlContainer {
     private final HashMap<KmlPlacemark, Object> mPlacemarks;
 
     private final ArrayList<KmlContainer> mContainers;
-
     private String mContainerId;
 
-    /*package*/ KmlContainer(
+    KmlContainer(
             HashMap<String, String> properties,
             HashMap<KmlPlacemark, Object> placemarks,
             ArrayList<KmlContainer> containers,
@@ -28,22 +27,20 @@ public class KmlContainer {
     }
 
     /**
-     * Gets the Container ID if it is specified
-     *
-     * @return Container ID or null if not set
-     */
-    public String getContainerId() {
-        return mContainerId;
-    }
-
-    /**
      * @param placemarks Placemark for the container to contain
-     * @param object     Corresponding GoogleMap map object of the basic_placemark (if it has been
-     *                   added
-     *                   to the map)
+     * @param object     Corresponding GoogleMap map object of the basic_placemark (if it has been added to the map)
      */
     /* package */ void setPlacemark(KmlPlacemark placemarks, Object object) {
         mPlacemarks.put(placemarks, object);
+    }
+
+    /**
+     * Gets whether the container has any placemarks
+     *
+     * @return true if there are placemarks, false otherwise
+     */
+    public boolean hasPlacemarks() {
+        return mPlacemarks.size() > 0;
     }
 
     /**
@@ -58,17 +55,8 @@ public class KmlContainer {
      *
      * @return iterable of KmlPlacemarks
      */
-    public Iterable<KmlPlacemark> getPlacemarks() { return mPlacemarks.keySet();
-    }
-
-    /**
-     * Gets the value of a property based on the given key
-     *
-     * @param propertyName property key to find
-     * @return value of property found, null if key doesn't exist
-     */
-    public String getProperty(String propertyName) {
-        return mProperties.get(propertyName);
+    public Iterable<KmlPlacemark> getPlacemarks() {
+        return mPlacemarks.keySet();
     }
 
     /**
@@ -81,6 +69,15 @@ public class KmlContainer {
     }
 
     /**
+     * Gets an iterable of the properties hashmap entries
+     *
+     * @return iterable of the properties hashmap entries
+     */
+    public Iterable<String> getProperties() {
+        return mProperties.keySet();
+    }
+
+    /**
      * Gets whether the given key exists in the properties
      *
      * @param keyValue property key to find
@@ -89,6 +86,17 @@ public class KmlContainer {
     public boolean hasProperty(String keyValue) {
         return mProperties.containsKey(keyValue);
     }
+
+    /**
+     * Gets the value of a property based on the given key
+     *
+     * @param propertyName property key to find
+     * @return value of property found, null if key doesn't exist
+     */
+    public String getProperty(String propertyName) {
+        return mProperties.get(propertyName);
+    }
+
 
     /**
      * Gets whether the container has containers
@@ -109,24 +117,13 @@ public class KmlContainer {
     }
 
     /**
-     * Gets an iterable of the properties hashmap entries
+     * Gets the Container ID if it is specified
      *
-     * @return iterable of the properties hashmap entries
+     * @return Container ID or null if not set
      */
-    public Iterable<String> getProperties() {
-        return mProperties.keySet();
+    public String getContainerId() {
+        return mContainerId;
     }
-
-
-    /**
-     * Gets whether the container has any placemarks
-     *
-     * @return true if there are placemarks, false otherwise
-     */
-    public boolean hasPlacemarks() {
-        return mPlacemarks.size() > 0;
-    }
-
 
     @Override
     public String toString() {
