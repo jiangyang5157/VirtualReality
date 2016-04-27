@@ -119,6 +119,6 @@ public class Coordinate extends KmlCoordinate {
 
     @Override
     public String toString() {
-        return "lat/lng/alt: ( " + this.latitude + "," + this.longitude + ", " + this.altitude + ")";
+        return "lat/lng/alt: (" + this.latitude + "," + this.longitude + "," + this.altitude + ")";
     }
 }
