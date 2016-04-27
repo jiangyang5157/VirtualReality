@@ -15,7 +15,7 @@ import static org.xmlpull.v1.XmlPullParser.START_TAG;
  */
 /* package */ class KmlContainerParser {
 
-    private final static String PROPERTY_REGEX = "name|description|visibility|open|address|phoneNumber";
+    private final static String PROPERTY_REGEX = "name|description";
 
     private final static String CONTAINER_REGEX = "Folder|Document";
 
@@ -57,7 +57,6 @@ import static org.xmlpull.v1.XmlPullParser.START_TAG;
         HashMap<String, String> containerProperties = new HashMap<String, String>();
         HashMap<KmlPlacemark, Object> containerPlacemarks = new HashMap<KmlPlacemark, Object>();
         ArrayList<KmlContainer> nestedContainers = new ArrayList<KmlContainer>();
-        HashMap<String, String> containerStyleMaps = new HashMap<String, String>();
 
         if (parser.getAttributeValue(null, "id") != null) {
             containerId = parser.getAttributeValue(null, "id");

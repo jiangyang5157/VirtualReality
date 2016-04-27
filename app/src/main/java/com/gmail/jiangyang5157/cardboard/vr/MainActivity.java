@@ -171,8 +171,8 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Log.i("####", "" + kmlLayer.getContainers().toString());
-        Log.i("####", "" + kmlLayer.getPlacemarks().toString());
+        Log.i("####", "" + kmlLayer.hasContainers());
+        Log.i("####", "" + kmlLayer.hasPlacemarks());
     }
 
     @Override
