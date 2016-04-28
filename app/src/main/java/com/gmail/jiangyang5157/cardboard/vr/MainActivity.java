@@ -120,12 +120,12 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     }
 
     private void updateScene(float[] view, float[] perspective) {
-        aimPoint.update(view, perspective, headView);
+        aimPoint.update(view, perspective, aimPoint.model, aimPoint.modelView, headView);//test
         earth.update(view, perspective);
     }
 
     private void drawScene() {
-//        aimPoint.draw(lightPosInEyeSpace);
+        aimPoint.draw(lightPosInEyeSpace);
         earth.draw(lightPosInEyeSpace);
     }
 

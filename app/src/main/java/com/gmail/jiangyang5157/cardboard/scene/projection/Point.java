@@ -27,21 +27,20 @@ public class Point extends Icosphere {
         Matrix.translateM(model, 0, 0, -5f, 0f);
     }
 
-    public void update(float[] view, float[] perspective, float[] headView) {
-//        float[] initVec = {0, 0, 0, 1.0f};
-//        float[] objPositionVec = new float[4];
-//        // Convert object space to camera space. Use the headView from onNewFrame.
-//        Matrix.multiplyMM(modelView, 0, headView, 0, model, 0);
-//        Matrix.multiplyMV(objPositionVec, 0, modelView, 0, initVec, 0);
+    public void update(float[] view, float[] perspective, float[] model, float[] modelView, float[] headView) {
+
+        float[] initVec = {0, 0, 0, 1.0f};
+        float[] objPositionVec = new float[4];
+        // Convert object space to camera space. Use the headView from onNewFrame.
+        Matrix.multiplyMM(modelView, 0, headView, 0, model, 0);
+        Matrix.multiplyMV(objPositionVec, 0, modelView, 0, initVec, 0);
 //        Log.i("####", "objPositionVec: " + objPositionVec[0] + "," + objPositionVec[1] + "," + objPositionVec[2]);
-//
 //        Matrix.setIdentityM(model, 0);
 //        Matrix.translateM(model, 0, objPositionVec[0], objPositionVec[1], objPositionVec[2]);
-//
-//        Matrix.multiplyMM(modelView, 0, view, 0, model, 0);
-//        Matrix.multiplyMM(modelViewProjection, 0, perspective, 0, modelView, 0);
 
-        super.update(view, perspective);
+        //
+        Matrix.multiplyMM(modelView, 0, view, 0, model, 0);
+        Matrix.multiplyMM(modelViewProjection, 0, perspective, 0, modelView, 0);
     }
 
     public void update(float[] view, float[] perspective) {
