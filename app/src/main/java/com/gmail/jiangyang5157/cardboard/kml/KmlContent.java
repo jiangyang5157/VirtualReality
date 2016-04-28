@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
+ * "KmlRenderer"
+ *
  * @author Yang
  * @since 4/27/2016
  */

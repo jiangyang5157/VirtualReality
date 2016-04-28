@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
+ * "KmlLayer"
+ *
  * Document class allows for users to input their KML data and output it onto the map
  */
 public class KmlAgent {

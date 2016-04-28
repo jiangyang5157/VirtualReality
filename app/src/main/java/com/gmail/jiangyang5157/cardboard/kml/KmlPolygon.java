@@ -23,7 +23,7 @@ public class KmlPolygon implements KmlGeometry<ArrayList<ArrayList<LatLng>>> {
      * @param innerBoundaryCoordinates multiple arrays of inner boundary coordinates
      */
     public KmlPolygon(ArrayList<LatLng> outerBoundaryCoordinates,
-                      ArrayList<ArrayList<LatLng>> innerBoundaryCoordinates) {
+            ArrayList<ArrayList<LatLng>> innerBoundaryCoordinates) {
         if (outerBoundaryCoordinates == null) {
             throw new IllegalArgumentException("Outer boundary coordinates cannot be null");
         } else {
