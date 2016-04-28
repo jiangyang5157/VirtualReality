@@ -7,7 +7,7 @@
 
         <Placemark>
             <name>South Pole</name>
-                <ExtendedData xmlns:camp="http://campsites.com">
+            <ExtendedData xmlns:camp="http://campsites.com">
                 <camp:number>12</camp:number>
                 <camp:parkingSpaces>4</camp:parkingSpaces>
             </ExtendedData>
@@ -17,6 +17,14 @@
         </Placemark>
         <Placemark>
             <name>North Pole</name>
+            <ExtendedData>
+                <Data name="CampNumber">
+                    <value>12</value>
+                </Data>
+                <Data name="ParkingSpaces">
+                    <value>4</value>
+                </Data>
+            </ExtendedData>
             <Point>
                 <coordinates>0,90</coordinates>
             </Point>
