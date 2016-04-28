@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 /**
  * Represents a KML MultiGeometry. Contains an array of KmlGeometry objects.
+ *
+ * Reference https://github.com/googlemaps/android-maps-utils/tree/master/library/src/com/google/maps/android/kml
  */
 public class KmlMultiGeometry implements KmlGeometry<ArrayList<KmlGeometry>> {
 

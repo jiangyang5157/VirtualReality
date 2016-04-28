@@ -8,6 +8,8 @@ import java.util.Map;
 
 /**
  * Represents a KML Ground Overlay
+ *
+ * Reference https://github.com/googlemaps/android-maps-utils/tree/master/library/src/com/google/maps/android/kml
  */
 public class KmlGroundOverlay {
 

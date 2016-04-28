@@ -13,6 +13,8 @@ import java.util.Random;
 
 /**
  * Represents the defined styles in the KML document
+ *
+ * Reference https://github.com/googlemaps/android-maps-utils/tree/master/library/src/com/google/maps/android/kml
  */
 /* package */ class KmlStyle {
 

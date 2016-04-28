@@ -4,6 +4,8 @@ import com.google.android.gms.maps.model.LatLng;
 
 /**
  * Represents a KML Point. Contains a single coordinate.
+ *
+ * Reference https://github.com/googlemaps/android-maps-utils/tree/master/library/src/com/google/maps/android/kml
  */
 public class KmlPoint implements KmlGeometry<LatLng> {
 

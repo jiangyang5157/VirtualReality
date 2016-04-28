@@ -11,6 +11,8 @@ import java.util.HashMap;
 
 /**
  * Parses a given KML file into KmlStyle, KmlPlacemark, KmlGroundOverlay and KmlContainer objects
+ *
+ * Reference https://github.com/googlemaps/android-maps-utils/tree/master/library/src/com/google/maps/android/kml
  */
 /* package */ class KmlParser {
 

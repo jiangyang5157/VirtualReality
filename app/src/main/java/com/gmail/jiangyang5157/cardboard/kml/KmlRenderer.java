@@ -12,6 +12,9 @@ import java.util.HashMap;
 /**
  * Renders all visible KmlPlacemark and KmlGroundOverlay objects onto the Map as Marker,
  * Polyline, Polygon, GroundOverlay objects. Also removes objects from the map.
+ *
+ * Reference https://github.com/googlemaps/android-maps-utils/tree/master/library/src/com/google/maps/android/kml
+ * Get raid of GoogleMap dependency
  */
 /* package */ class KmlRenderer {
 

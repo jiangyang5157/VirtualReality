@@ -14,6 +14,8 @@ import static org.xmlpull.v1.XmlPullParser.START_TAG;
 
 /**
  * Parses the container of a given KML file into a KmlContainer object
+ *
+ * Reference https://github.com/googlemaps/android-maps-utils/tree/master/library/src/com/google/maps/android/kml
  */
 /* package */ class KmlContainerParser {
 

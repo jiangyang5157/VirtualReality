@@ -7,6 +7,8 @@ import java.util.List;
 
 /**
  * Represents a KML LineString. Contains a single array of coordinates.
+ *
+ * Reference https://github.com/googlemaps/android-maps-utils/tree/master/library/src/com/google/maps/android/kml
  */
 public class KmlLineString implements KmlGeometry<List<LatLng>> {
 

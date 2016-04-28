@@ -7,6 +7,8 @@ import java.util.HashMap;
 
 /**
  * Represents a KML Document or Folder.
+ *
+ * Reference https://github.com/googlemaps/android-maps-utils/tree/master/library/src/com/google/maps/android/kml
  */
 public class KmlContainer {
 

@@ -11,6 +11,8 @@ import static org.xmlpull.v1.XmlPullParser.START_TAG;
 
 /**
  * Parses the styles of a given KML file into a KmlStyle object
+ *
+ * Reference https://github.com/googlemaps/android-maps-utils/tree/master/library/src/com/google/maps/android/kml
  */
 /* package */ class KmlStyleParser {
 

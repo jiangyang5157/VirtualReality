@@ -17,6 +17,8 @@ package com.gmail.jiangyang5157.cardboard.kml;
 
 /**
  * Utility class to help parse Kml boolean entities.
+ *
+ * Reference https://github.com/googlemaps/android-maps-utils/tree/master/library/src/com/google/maps/android/kml
  */
 public class KmlBoolean {
     public static boolean parseBoolean(String text) {

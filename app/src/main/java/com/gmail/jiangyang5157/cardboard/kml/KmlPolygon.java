@@ -7,6 +7,8 @@ import java.util.ArrayList;
 /**
  * Represents a KML Polygon. Contains a single array of outer boundary coordinates and an array of
  * arrays for the inner boundary coordinates.
+ *
+ * Reference https://github.com/googlemaps/android-maps-utils/tree/master/library/src/com/google/maps/android/kml
  */
 public class KmlPolygon implements KmlGeometry<ArrayList<ArrayList<LatLng>>> {
 

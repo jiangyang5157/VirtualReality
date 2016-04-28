@@ -8,6 +8,8 @@ import java.util.HashMap;
  * com.google.maps.android.kml.KmlLineString}, {@link com.google.maps.android.kml.KmlPolygon} or a
  * {@link com.google.maps.android.kml.KmlMultiGeometry}. Stores the properties and styles of the
  * place.
+ *
+ * Reference https://github.com/googlemaps/android-maps-utils/tree/master/library/src/com/google/maps/android/kml
  */
 public class KmlPlacemark {
 
