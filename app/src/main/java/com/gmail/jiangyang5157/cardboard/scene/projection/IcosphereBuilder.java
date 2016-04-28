@@ -1,6 +1,7 @@
 package com.gmail.jiangyang5157.cardboard.scene.projection;
 
-import java.util.HashMap;
+import android.util.ArrayMap;
+import android.util.Log;
 
 /**
  * @author Yang
@@ -10,7 +11,7 @@ public class IcosphereBuilder {
 
     private volatile static IcosphereBuilder uniqueInstance = null;
 
-    private HashMap<Integer, IcosphereVertex> icosphereVertices = new HashMap<>();
+    private ArrayMap<Integer, IcosphereVertex> icosphereVertices = new ArrayMap<>();
 
     public static IcosphereBuilder getInstance() {
         if (uniqueInstance == null) {
@@ -37,6 +38,7 @@ public class IcosphereBuilder {
         if (ret == null) {
             ret = new IcosphereVertex(recursionLevel);
             icosphereVertices.put(vertexCount, ret);
+            Log.d("####", "IcosphereBuilder: created IcosephereVertex object with vertexCount=" + vertexCount);
         }
         return ret;
     }

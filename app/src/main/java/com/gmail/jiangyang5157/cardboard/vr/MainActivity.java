@@ -9,6 +9,7 @@ import android.widget.Toast;
 import com.gmail.jiangyang5157.cardboard.kml.KmlLayer;
 import com.gmail.jiangyang5157.cardboard.scene.polygon.Earth;
 import com.gmail.jiangyang5157.cardboard.scene.polygon.Marker;
+import com.gmail.jiangyang5157.cardboard.scene.projection.Point;
 import com.gmail.jiangyang5157.cardboard.scene.projection.ShaderHandle;
 import com.gmail.jiangyang5157.cardboard.ui.CardboardOverlayView;
 import com.gmail.jiangyang5157.tookit.app.DeviceUtils;
@@ -42,6 +43,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     private float[] camera = new float[16];
     private float[] headView = new float[16];
 
+    private Point aimPoint;
     private Earth earth;
 
     private CardboardOverlayView overlayView;
@@ -67,6 +69,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        aimPoint.destroy();
         earth.destroy();
     }
 
@@ -117,10 +120,12 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     }
 
     private void updateScene(float[] view, float[] perspective) {
+        aimPoint.update(view, perspective, headView);
         earth.update(view, perspective);
     }
 
     private void drawScene() {
+//        aimPoint.draw(lightPosInEyeSpace);
         earth.draw(lightPosInEyeSpace);
     }
 
@@ -141,6 +146,9 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     @Override
     public void onSurfaceCreated(EGLConfig eglConfig) {
         Matrix.setLookAtM(camera, 0, CAMERA_POS[0], CAMERA_POS[1], CAMERA_POS[2], 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+
+        aimPoint = new Point(this);
+        aimPoint.create();
 
         earth = new Earth(this);
         earth.create();

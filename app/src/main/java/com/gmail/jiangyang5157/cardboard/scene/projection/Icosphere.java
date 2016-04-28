@@ -17,11 +17,11 @@ public class Icosphere extends Model {
 
     int recursionLevel;
 
-    private int indicesBufferCapacity;
+    int indicesBufferCapacity;
 
     private final int[] buffers = new int[3];
 
-    private boolean isVisible = true;
+    boolean isVisible = true;
 
     public Icosphere(Context context, int vertexShaderRawResource, int fragmentShaderRawResource, int recursionLevel, float radius, float[] color) {
         super(context, vertexShaderRawResource, fragmentShaderRawResource);

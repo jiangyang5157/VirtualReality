@@ -17,7 +17,7 @@ import java.util.ArrayList;
  */
 public class Earth extends TextureSphere {
 
-    private static final float DEFAULT_RADIUS = 10f;
+    private static final float DEFAULT_RADIUS = 100f;
     private static final int DEFAULT_TEXTURE_DRAWABLE_RESOURCE = R.drawable.no_clouds_2k;
 
     private static final int DEFAULT_STACKS = 50;
@@ -74,7 +74,7 @@ public class Earth extends TextureSphere {
     }
 
     public Marker addMarker(KmlPlacemark kmlPlacemark, MarkerOptions markerUrlStyle) {
-        float radius = 0.5f;
+        float radius = 5f;
         float[] color = new float[]{0.8f, 0.0f, 0.0f, 1.0f};
         String name = kmlPlacemark.getProperty("name");
         LatLng latLng = markerUrlStyle.getPosition();

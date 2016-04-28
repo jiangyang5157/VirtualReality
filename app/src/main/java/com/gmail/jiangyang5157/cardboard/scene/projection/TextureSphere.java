@@ -21,7 +21,7 @@ public class TextureSphere extends Model {
     private float radius;
     private int textureDrawableResource;
 
-    private int indicesBufferCapacity;
+    int indicesBufferCapacity;
 
     private final int[] buffers = new int[4];
     private final int[] texBuffers = new int[1];
