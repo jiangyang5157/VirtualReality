@@ -15,7 +15,7 @@ import java.io.InputStream;
  * Document class allows for users to input their KML data and output it onto the map
  *
  * Reference https://github.com/googlemaps/android-maps-utils/tree/master/library/src/com/google/maps/android/kml
- * Get raid of GoogleMap dependency
+ * Get raid of GoogleMap dependence
  */
 public class KmlLayer {
 
