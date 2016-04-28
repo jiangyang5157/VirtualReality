@@ -14,7 +14,7 @@ import java.util.HashMap;
  * Polyline, Polygon, GroundOverlay objects. Also removes objects from the map.
  *
  * Reference https://github.com/googlemaps/android-maps-utils/tree/master/library/src/com/google/maps/android/kml
- * Get raid of GoogleMap dependence
+ * Get rid of GoogleMap dependence
  */
 /* package */ class KmlRenderer {
 
