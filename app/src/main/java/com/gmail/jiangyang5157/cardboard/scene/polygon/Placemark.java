@@ -2,9 +2,9 @@ package com.gmail.jiangyang5157.cardboard.scene.polygon;
 
 import android.content.Context;
 
-import com.gmail.jiangyang5157.cardboard.kml.KmlCoordinate;
 import com.gmail.jiangyang5157.cardboard.kml.KmlPlacemark;
 import com.gmail.jiangyang5157.cardboard.vr.R;
+import com.google.android.gms.maps.model.LatLng;
 
 /**
  * @author Yang
@@ -25,10 +25,10 @@ public class Placemark extends Mark {
 
     public Placemark(Context context, Earth earth, KmlPlacemark kmlPlacemark) {
         super(context, DEFAULT_VERTEX_SHADER_RAW_RESOURCE, DEFAULT_FRAGMENT_SHADER_RAW_RESOURCE, DEFAULT_RECURSION_LEVEL, DEFAULT_RADIUS, DEFAULT_COLOR);
-        KmlCoordinate kmlCoordinate = (KmlCoordinate) kmlPlacemark.getGeometry().getGeometryObject();
+        LatLng latlng = (LatLng) kmlPlacemark.getGeometry().getGeometryObject();
         this.earth = earth;
         this.name = kmlPlacemark.getProperty("name");
         this.description = kmlPlacemark.getProperty("description");
-        setCoordinate(new Coordinate(kmlCoordinate.latitude, kmlCoordinate.longitude, -this.getRadius(), this.earth.getRadius()));
+        setCoordinate(new Coordinate(latlng.latitude, latlng.longitude, -this.getRadius(), this.earth.getRadius()));
     }
 }

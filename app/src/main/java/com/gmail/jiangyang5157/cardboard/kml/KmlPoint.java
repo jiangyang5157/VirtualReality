@@ -1,20 +1,22 @@
 package com.gmail.jiangyang5157.cardboard.kml;
 
+import com.google.android.gms.maps.model.LatLng;
+
 /**
  * Represents a KML Point. Contains a single coordinate.
  */
-public class KmlPoint implements KmlGeometry<KmlCoordinate> {
+public class KmlPoint implements KmlGeometry<LatLng> {
 
     public static final String GEOMETRY_TYPE = "Point";
 
-    private final KmlCoordinate mCoordinate;
+    private final LatLng mCoordinate;
 
     /**
      * Creates a new KmlPoint
      *
      * @param coordinate coordinate of the KmlPoint
      */
-    public KmlPoint(KmlCoordinate coordinate) {
+    public KmlPoint(LatLng coordinate) {
         if (coordinate == null) {
             throw new IllegalArgumentException("Coordinates cannot be null");
         }
@@ -37,7 +39,7 @@ public class KmlPoint implements KmlGeometry<KmlCoordinate> {
      *
      * @return LatLng with the coordinate of the KmlPoint
      */
-    public KmlCoordinate getGeometryObject() {
+    public LatLng getGeometryObject() {
         return mCoordinate;
     }
 

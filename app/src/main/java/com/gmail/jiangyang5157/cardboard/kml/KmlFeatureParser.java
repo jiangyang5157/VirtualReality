@@ -1,5 +1,7 @@
 package com.gmail.jiangyang5157.cardboard.kml;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -100,7 +102,7 @@ class KmlFeatureParser {
      */
     private static KmlPoint createPoint(XmlPullParser parser)
             throws XmlPullParserException, IOException {
-        KmlCoordinate coordinate = null;
+        LatLng coordinate = null;
         int eventType = parser.getEventType();
         while (!(eventType == END_TAG && parser.getName().equals("Point"))) {
             if (eventType == START_TAG && parser.getName().equals("coordinates")) {
@@ -117,8 +119,8 @@ class KmlFeatureParser {
      * @param coordinatesString coordinates string to convert from
      * @return array of LatLng objects created from the given coordinate string array
      */
-    private static ArrayList<KmlCoordinate> convertToLatLngArray(String coordinatesString) {
-        ArrayList<KmlCoordinate> coordinatesArray = new ArrayList<KmlCoordinate>();
+    private static ArrayList<LatLng> convertToLatLngArray(String coordinatesString) {
+        ArrayList<LatLng> coordinatesArray = new ArrayList<LatLng>();
         // Need to trim to avoid whitespace around the coordinates such as tabs
         String[] coordinates = coordinatesString.trim().split("(\\s+)");
         for (String coordinate : coordinates) {
@@ -133,11 +135,11 @@ class KmlFeatureParser {
      * @param coordinateString coordinate string to convert from
      * @return LatLng object created from given coordinate string
      */
-    private static KmlCoordinate convertToLatLng(String coordinateString) {
+    private static LatLng convertToLatLng(String coordinateString) {
         // Lat and Lng are separated by a ,
         String[] coordinate = coordinateString.split(",");
         Double lat = Double.parseDouble(coordinate[LATITUDE_INDEX]);
         Double lon = Double.parseDouble(coordinate[LONGITUDE_INDEX]);
-        return new KmlCoordinate(lat, lon);
+        return new LatLng(lat, lon);
     }
 }

@@ -1,10 +1,9 @@
 package com.gmail.jiangyang5157.cardboard.scene.polygon;
 
-import com.gmail.jiangyang5157.cardboard.kml.KmlCoordinate;
 import com.google.vrtoolkit.cardboard.sensors.internal.Matrix3x3d;
 import com.google.vrtoolkit.cardboard.sensors.internal.Vector3d;
 
-public class Coordinate extends KmlCoordinate {
+public class Coordinate {
 
     public static final double WGS84_SEMI_MAJOR_AXIS = 6378137.0;
     public static final double WGS84_FLATTENING = 1.0 / 298.257222101;
@@ -12,6 +11,8 @@ public class Coordinate extends KmlCoordinate {
 
     public static final double ECCENTRICITY = 0;
 
+    public final double latitude;
+    public final double longitude;
     public final double altitude;
 
     public final double[] ecef;
@@ -21,7 +22,8 @@ public class Coordinate extends KmlCoordinate {
     }
 
     public Coordinate(double latitude, double longitude, double altitude, double a, double e) {
-        super(latitude, longitude);
+        this.latitude = latitude;
+        this.longitude = longitude;
         this.altitude = altitude;
 
         ecef = lla2ecef(new double[]{latitude, longitude, altitude}, a, e);
