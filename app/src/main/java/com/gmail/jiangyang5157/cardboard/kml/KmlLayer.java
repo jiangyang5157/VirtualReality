@@ -2,6 +2,8 @@ package com.gmail.jiangyang5157.cardboard.kml;
 
 import android.content.Context;
 
+import com.gmail.jiangyang5157.cardboard.scene.polygon.Earth;
+
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -10,34 +12,45 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * "KmlLayer"
- *
  * Document class allows for users to input their KML data and output it onto the map
  */
-public class KmlAgent {
+public class KmlLayer {
 
-    private final KmlContent mContent;
+    private final KmlRenderer mRenderer;
 
-    private Context mContext;
-
-    public KmlAgent(int resourceId, Context context)
+    /**
+     * Creates a new KmlLayer object - addLayerToMap() must be called to trigger rendering onto a map.
+     *
+     * @param map        Map object
+     * @param resourceId Raw resource KML file
+     * @param context    Context object
+     * @throws XmlPullParserException if file cannot be parsed
+     */
+    public KmlLayer(Earth map, int resourceId, Context context)
             throws XmlPullParserException, IOException {
-        this(context.getResources().openRawResource(resourceId), context);
+        this(map, context.getResources().openRawResource(resourceId), context);
     }
 
-    public KmlAgent(InputStream stream, Context context)
+    /**
+     * Creates a new KmlLayer object
+     *
+     * @param map    Map object
+     * @param stream InputStream containing KML file
+     * @throws XmlPullParserException if file cannot be parsed
+     */
+    public KmlLayer(Earth map, InputStream stream, Context context)
             throws XmlPullParserException, IOException {
         if (stream == null) {
             throw new IllegalArgumentException("KML InputStream cannot be null");
         }
-        mContext = context;
-        mContent = new KmlContent();
+        mRenderer = new KmlRenderer(map, context);
         XmlPullParser xmlPullParser = createXmlParser(stream);
         KmlParser parser = new KmlParser(xmlPullParser);
         parser.parseKml();
         stream.close();
-        mContent.storeKmlData(parser.getPlacemarks(), parser.getContainers());
+        mRenderer.storeKmlData(parser.getStyles(), parser.getStyleMaps(), parser.getPlacemarks(), parser.getContainers());
     }
+
     /**
      * Creates a new XmlPullParser to allow for the KML file to be parsed
      *
@@ -54,13 +67,27 @@ public class KmlAgent {
     }
 
     /**
+     * Adds the KML data to the map
+     */
+    public void addLayerToMap() throws IOException, XmlPullParserException {
+        mRenderer.addLayerToMap();
+    }
+
+    /**
+     * Removes all the KML data from the map and clears all the stored placemarks
+     */
+    public void removeLayerFromMap() {
+        mRenderer.removeLayerFromMap();
+    }
+
+    /**
      * Checks if the layer contains placemarks
      *
      * @return true if there are placemarks, false otherwise
      */
 
     public boolean hasPlacemarks() {
-        return mContent.hasKmlPlacemarks();
+        return mRenderer.hasKmlPlacemarks();
     }
 
     /**
@@ -69,16 +96,16 @@ public class KmlAgent {
      * @return iterable of KmlPlacemark objects
      */
     public Iterable<KmlPlacemark> getPlacemarks() {
-        return mContent.getKmlPlacemarks();
+        return mRenderer.getKmlPlacemarks();
     }
 
     /**
      * Checks if the layer contains any KmlContainers
      *
-     * @return true if there is at least 1 container within the KmlAgent, false otherwise
+     * @return true if there is at least 1 container within the KmlLayer, false otherwise
      */
     public boolean hasContainers() {
-        return mContent.hasNestedContainers();
+        return mRenderer.hasNestedContainers();
     }
 
     /**
@@ -87,6 +114,24 @@ public class KmlAgent {
      * @return iterable of KmlContainerInterface objects
      */
     public Iterable<KmlContainer> getContainers() {
-        return mContent.getNestedContainers();
+        return mRenderer.getNestedContainers();
+    }
+
+    /**
+     * Gets the map that objects are being placed on
+     *
+     * @return map
+     */
+    public Earth getMap() {
+        return mRenderer.getMap();
+    }
+
+    /**
+     * Sets the map that objects are being placed on
+     *
+     * @param map map to place placemark, container, style and ground overlays on
+     */
+    public void setMap(Earth map) {
+        mRenderer.setMap(map);
     }
 }

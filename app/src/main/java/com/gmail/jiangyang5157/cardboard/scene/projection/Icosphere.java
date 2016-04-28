@@ -21,6 +21,8 @@ public class Icosphere extends Model {
 
     private final int[] buffers = new int[3];
 
+    private boolean isVisible = true;
+
     public Icosphere(Context context, int vertexShaderRawResource, int fragmentShaderRawResource, int recursionLevel, float radius, float[] color) {
         super(context, vertexShaderRawResource, fragmentShaderRawResource);
         this.recursionLevel = recursionLevel;
@@ -85,6 +87,10 @@ public class Icosphere extends Model {
 
     @Override
     public void draw(float[] lightPosInEyeSpace) {
+        if (isVisible == false){
+            return;
+        }
+
         GLES20.glUseProgram(program);
         GLES20.glEnableVertexAttribArray(vertexHandle);
         GLES20.glEnableVertexAttribArray(normalHandle);
@@ -118,5 +124,9 @@ public class Icosphere extends Model {
 
     public float getRadius() {
         return radius;
+    }
+
+    public void setVisible(boolean visible) {
+        this.isVisible = visible;
     }
 }

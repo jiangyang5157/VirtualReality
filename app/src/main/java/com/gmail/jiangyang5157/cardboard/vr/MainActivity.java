@@ -6,11 +6,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.gmail.jiangyang5157.cardboard.kml.KmlAgent;
-import com.gmail.jiangyang5157.cardboard.kml.KmlContainer;
-import com.gmail.jiangyang5157.cardboard.kml.KmlPlacemark;
+import com.gmail.jiangyang5157.cardboard.kml.KmlLayer;
 import com.gmail.jiangyang5157.cardboard.scene.polygon.Earth;
-import com.gmail.jiangyang5157.cardboard.scene.polygon.Placemark;
+import com.gmail.jiangyang5157.cardboard.scene.polygon.Marker;
 import com.gmail.jiangyang5157.cardboard.scene.projection.ShaderHandle;
 import com.gmail.jiangyang5157.cardboard.ui.CardboardOverlayView;
 import com.gmail.jiangyang5157.tookit.app.DeviceUtils;
@@ -23,7 +21,6 @@ import com.google.vrtoolkit.cardboard.Viewport;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
-import java.util.Iterator;
 
 import javax.microedition.khronos.egl.EGLConfig;
 
@@ -85,7 +82,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     public void onFinishFrame(Viewport viewport) {
         GLES20.glDisable(GLES20.GL_DEPTH_TEST);
 
-        for (final Placemark mark : earth.getPlacemarks()) {
+        for (final Marker mark : earth.getMarkers()) {
             if (isLookingAtObject(mark.model, mark.modelView)) {
                 runOnUiThread(new Runnable() {
                     @Override
@@ -149,31 +146,12 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         earth.create();
 
         try {
-            KmlAgent kmlAgent = new KmlAgent(R.raw.simple, getApplicationContext());
-            if (kmlAgent.hasContainers()) {
-                addPlaceMarks(kmlAgent.getContainers());
-            }
+            KmlLayer kmlLayer = new KmlLayer(earth, R.raw.simple, getApplicationContext());
+            kmlLayer.addLayerToMap();
         } catch (XmlPullParserException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-        }
-    }
-
-    public void addPlaceMarks(Iterable<KmlContainer> containers) {
-        Iterator<KmlContainer> itKmlContainer = containers.iterator();
-        while (itKmlContainer.hasNext()) {
-            KmlContainer container = itKmlContainer.next();
-            if (container.hasContainers()) {
-                addPlaceMarks(container.getContainers());
-            } else if (container.hasPlacemarks()) {
-                Iterator<KmlPlacemark> itKmlPlacemark = container.getPlacemarks().iterator();
-                while (itKmlPlacemark.hasNext()) {
-                    Placemark placemark = new Placemark(this, earth, itKmlPlacemark.next());
-                    placemark.create();
-                    earth.addPlacemark(placemark);
-                }
-            }
         }
     }
 
