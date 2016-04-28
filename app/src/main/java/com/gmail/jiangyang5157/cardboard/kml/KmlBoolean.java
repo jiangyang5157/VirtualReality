@@ -16,24 +16,13 @@
 package com.gmail.jiangyang5157.cardboard.kml;
 
 /**
- * Represents a KML geometry object.
- *
- * @param <T> type of object that the coordinates are stored in
+ * Utility class to help parse Kml boolean entities.
  */
-public interface KmlGeometry<T> {
-
-    /**
-     * Gets the type of geometry
-     *
-     * @return type of geometry
-     */
-    public String getGeometryType();
-
-    /**
-     * Gets the stored KML Geometry object
-     *
-     * @return geometry object
-     */
-    public T getGeometryObject();
-
+public class KmlBoolean {
+    public static boolean parseBoolean(String text) {
+        if ("1".equals(text) || "true".equals(text)) {
+            return true;
+        }
+        return false;
+    }
 }
