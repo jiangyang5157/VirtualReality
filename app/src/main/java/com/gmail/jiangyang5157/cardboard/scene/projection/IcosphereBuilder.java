@@ -27,7 +27,7 @@ public class IcosphereBuilder {
     private IcosphereBuilder() {
     }
 
-    IcosphereVertex build(int recursionLevel) {
+    protected IcosphereVertex build(int recursionLevel) {
         final int MAX_RECURSION_LEVEL = IcosphereVertex.VERTEX_COUNTS.length - 1;
         if (recursionLevel > MAX_RECURSION_LEVEL) {
             throw new RuntimeException("Unable to build a Icosphere with recursion level greater than " + MAX_RECURSION_LEVEL);

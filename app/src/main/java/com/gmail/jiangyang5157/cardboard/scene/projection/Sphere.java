@@ -6,11 +6,11 @@ import android.content.Context;
  * @author Yang
  * @since 4/30/2016
  */
-public abstract class Sphere extends Model{
+public abstract class Sphere extends ShaderModel{
 
     float radius;
 
-    Sphere(Context context, int vertexShaderRawResource, int fragmentShaderRawResource) {
+    public Sphere(Context context, int vertexShaderRawResource, int fragmentShaderRawResource) {
         super(context, vertexShaderRawResource, fragmentShaderRawResource);
     }
 

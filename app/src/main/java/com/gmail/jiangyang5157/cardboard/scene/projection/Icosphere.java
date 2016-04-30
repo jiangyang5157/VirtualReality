@@ -13,7 +13,7 @@ import java.nio.ByteOrder;
  */
 public class Icosphere extends Sphere {
 
-    int recursionLevel;
+    private int recursionLevel;
 
     private final int[] buffers = new int[3];
 

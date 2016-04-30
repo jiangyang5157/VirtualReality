@@ -18,13 +18,13 @@ public class IcosphereVertex implements Geometry {
      * recursion level 3 vertexCount= 642 faceCount=1280 edgeCount=1920
      * ...
      */
-    static final int[] VERTEX_COUNTS = new int[]{12, 42, 162, 642, 2562, 10242};
+    protected static final int[] VERTEX_COUNTS = new int[]{12, 42, 162, 642, 2562, 10242};
 
-    float[] vertices;
+    protected float[] vertices;
 
-    short[] indices;
+    protected short[] indices;
 
-    IcosphereVertex(int recursionLevel) {
+    protected IcosphereVertex(int recursionLevel) {
         build(recursionLevel);
     }
 
@@ -162,7 +162,7 @@ public class IcosphereVertex implements Geometry {
         vertices[indexOffset + 2] = z / length;
     }
 
-    float[] scale(float factor) {
+    protected float[] scale(float factor) {
         if (vertices == null) {
             throw new RuntimeException("Array has not been initialized.");
         }

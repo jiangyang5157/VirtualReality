@@ -11,15 +11,10 @@ import java.nio.ShortBuffer;
 
 /**
  * @author Yang
- * @since 4/12/2016.
+ * @since 4/30/2016
  */
-public abstract class ShaderHandle {
-
+public abstract class ShaderModel extends Model{
     public static final int GLES_VERSION_REQUIRED = 0x00020000;
-
-    protected static final int BYTES_PER_FLOAT = 4;
-    protected static final int BYTES_PER_SHORT = 2;
-
 
     protected static final String MODEL_HANDLE = "u_ModelMatrix";
     protected static final String MODEL_VIEW_HANDLE = "u_MVMatrix";
@@ -41,12 +36,6 @@ public abstract class ShaderHandle {
     protected int normalHandle;
     protected int texCoordHandle;
 
-
-    public float[] model = new float[16];
-    public float[] modelView = new float[16];
-    public float[] modelViewProjection = new float[16];
-
-
     protected float[] vertices;
     protected float[] normals;
     protected short[] indices;
@@ -63,24 +52,24 @@ public abstract class ShaderHandle {
     protected int texturesBuffHandle;
 
     protected float[] color;
+    protected int indicesBufferCapacity;
 
     protected final int program;
 
-
     protected Context context;
 
-    protected ShaderHandle(Context context, int vertexShaderRawResource, int fragmentShaderRawResource) {
+    protected ShaderModel(Context context, int vertexShaderRawResource, int fragmentShaderRawResource) {
         this.context = context;
 
         program = GLES20.glCreateProgram();
-        GLES20.glAttachShader(program, loadShader(GLES20.GL_VERTEX_SHADER, vertexShaderRawResource));
-        GLES20.glAttachShader(program, loadShader(GLES20.GL_FRAGMENT_SHADER, fragmentShaderRawResource));
+        GLES20.glAttachShader(program, compileShader(GLES20.GL_VERTEX_SHADER, vertexShaderRawResource));
+        GLES20.glAttachShader(program, compileShader(GLES20.GL_FRAGMENT_SHADER, fragmentShaderRawResource));
         GLES20.glLinkProgram(program);
 
         initializeHandle();
     }
 
-    private int loadShader(int type, String code) {
+    private int compileShader(int type, String code) {
         int shader = GLES20.glCreateShader(type);
         GLES20.glShaderSource(shader, code);
         GLES20.glCompileShader(shader);
@@ -97,14 +86,23 @@ public abstract class ShaderHandle {
         return shader;
     }
 
-    private int loadShader(int type, int resId) {
-        return loadShader(type, IoUtils.readTextFile(context, resId));
+    private int compileShader(int type, int resId) {
+        return compileShader(type, IoUtils.readTextFile(context, resId));
     }
 
     public static void checkGlEsError(String label) {
         for (int error; (error = GLES20.glGetError()) != GLES20.GL_NO_ERROR; ) {
             Log.e("GlEsError", error + " - " + label);
         }
+    }
+
+    protected abstract void buildArrays();
+
+    protected abstract void bindBuffers();
+
+    public void create() {
+        buildArrays();
+        bindBuffers();
     }
 
     protected abstract void initializeHandle();

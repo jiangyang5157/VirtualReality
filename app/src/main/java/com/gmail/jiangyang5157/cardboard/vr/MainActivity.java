@@ -9,7 +9,7 @@ import android.widget.Toast;
 import com.gmail.jiangyang5157.cardboard.kml.KmlLayer;
 import com.gmail.jiangyang5157.cardboard.scene.polygon.Earth;
 import com.gmail.jiangyang5157.cardboard.scene.polygon.Marker;
-import com.gmail.jiangyang5157.cardboard.scene.projection.ShaderHandle;
+import com.gmail.jiangyang5157.cardboard.scene.projection.ShaderModel;
 import com.gmail.jiangyang5157.cardboard.ui.CardboardOverlayView;
 import com.gmail.jiangyang5157.tookit.app.DeviceUtils;
 import com.google.vrtoolkit.cardboard.CardboardActivity;
@@ -49,7 +49,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (!DeviceUtils.glesValidate(this, ShaderHandle.GLES_VERSION_REQUIRED)) {
+        if (!DeviceUtils.glesValidate(this, ShaderModel.GLES_VERSION_REQUIRED)) {
             Toast.makeText(this, getString(R.string.error_gles_version_not_supported), Toast.LENGTH_SHORT).show();
             finish();
         }
