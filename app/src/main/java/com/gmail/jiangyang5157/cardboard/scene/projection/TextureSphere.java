@@ -14,14 +14,11 @@ import java.nio.ByteOrder;
  * @author Yang
  * @since 4/12/2016.
  */
-public class TextureSphere extends Model {
+public class TextureSphere extends Sphere {
 
     private int stacks;
     private int slices;
-    private float radius;
     private int textureDrawableResource;
-
-    int indicesBufferCapacity;
 
     private final int[] buffers = new int[4];
     private final int[] texBuffers = new int[1];
@@ -34,7 +31,7 @@ public class TextureSphere extends Model {
         this.textureDrawableResource = textureDrawableResource;
     }
 
-    @Override
+@Override
     protected void buildArrays() {
         vertices = new float[stacks * slices * 3];
         normals = new float[stacks * slices * 3];
@@ -174,8 +171,6 @@ public class TextureSphere extends Model {
         texCoordHandle = GLES20.glGetAttribLocation(program, TEXTURE_COORDS_HANDLE);
     }
 
-    // Todo bind normal buffer will create a GlEsError: 1281 happens here
-    @Override
     public void draw(float[] lightPosInEyeSpace) {
         GLES20.glUseProgram(program);
         GLES20.glEnableVertexAttribArray(vertexHandle);
@@ -215,10 +210,6 @@ public class TextureSphere extends Model {
         Log.d("TextureSphere", "destroy");
         GLES20.glDeleteBuffers(buffers.length, buffers, 0);
         GLES20.glDeleteBuffers(texBuffers.length, texBuffers, 0);
-    }
-
-    public float getRadius() {
-        return radius;
     }
 
     public int getSlices() {

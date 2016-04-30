@@ -11,23 +11,19 @@ import java.nio.ByteOrder;
  * @author Yang
  * @since 4/12/2016.
  */
-public class Icosphere extends Model {
-
-    float radius;
+public class Icosphere extends Sphere {
 
     int recursionLevel;
 
-    int indicesBufferCapacity;
-
     private final int[] buffers = new int[3];
-
-    boolean isVisible = true;
 
     public Icosphere(Context context, int vertexShaderRawResource, int fragmentShaderRawResource, int recursionLevel, float radius, float[] color) {
         super(context, vertexShaderRawResource, fragmentShaderRawResource);
         this.recursionLevel = recursionLevel;
         this.radius = radius;
         this.color = color.clone();
+
+        setVisible(true);
     }
 
     @Override
@@ -85,7 +81,6 @@ public class Icosphere extends Model {
         normalHandle = GLES20.glGetAttribLocation(program, NORMAL_HANDLE);
     }
 
-    @Override
     public void draw(float[] lightPosInEyeSpace) {
         if (isVisible == false){
             return;
@@ -120,13 +115,5 @@ public class Icosphere extends Model {
     public void destroy() {
         Log.d("Icosphere", "destroy");
         GLES20.glDeleteBuffers(buffers.length, buffers, 0);
-    }
-
-    public float getRadius() {
-        return radius;
-    }
-
-    public void setVisible(boolean visible) {
-        this.isVisible = visible;
     }
 }

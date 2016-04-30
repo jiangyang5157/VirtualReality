@@ -30,11 +30,15 @@ public abstract class Model extends ShaderHandle {
     int indicesBuffHandle;
     int texturesBuffHandle;
 
+    int indicesBufferCapacity;
+
     public float[] model = new float[16];
     public float[] modelView = new float[16];
     public float[] modelViewProjection = new float[16];
 
     float[] color;
+
+    boolean isVisible;
 
     Model(Context context, int vertexShaderRawResource, int fragmentShaderRawResource) {
         super(context, vertexShaderRawResource, fragmentShaderRawResource);
@@ -54,7 +58,13 @@ public abstract class Model extends ShaderHandle {
         Matrix.multiplyMM(modelViewProjection, 0, perspective, 0, modelView, 0);
     }
 
-    public abstract void draw(float[] lightPosInEyeSpace);
+    public void setVisible(boolean visible) {
+        this.isVisible = visible;
+    }
+
+    public boolean isVisible() {
+        return isVisible;
+    }
 
     public abstract void destroy();
 }

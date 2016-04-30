@@ -30,12 +30,6 @@
             </Point>
         </Placemark>
         <Placemark>
-            <name>North Pole</name>
-            <Point>
-                <coordinates>0,90</coordinates>
-            </Point>
-        </Placemark>
-        <Placemark>
             <Point>
                 <coordinates>0,0</coordinates>
             </Point>
