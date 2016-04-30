@@ -56,6 +56,8 @@ public abstract class ShaderModel extends Model{
 
     protected final int program;
 
+    protected Lighting lighting;
+
     protected Context context;
 
     protected ShaderModel(Context context, int vertexShaderRawResource, int fragmentShaderRawResource) {
@@ -101,6 +103,10 @@ public abstract class ShaderModel extends Model{
     public void create() {
         buildArrays();
         bindBuffers();
+    }
+
+    public void setLighting(Lighting lighting) {
+        this.lighting = lighting;
     }
 
     protected abstract void buildArrays();

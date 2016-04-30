@@ -9,6 +9,7 @@ import android.widget.Toast;
 import com.gmail.jiangyang5157.cardboard.kml.KmlLayer;
 import com.gmail.jiangyang5157.cardboard.scene.polygon.Earth;
 import com.gmail.jiangyang5157.cardboard.scene.polygon.Marker;
+import com.gmail.jiangyang5157.cardboard.scene.projection.Lighting;
 import com.gmail.jiangyang5157.cardboard.scene.projection.ShaderModel;
 import com.gmail.jiangyang5157.cardboard.ui.CardboardOverlayView;
 import com.gmail.jiangyang5157.tookit.app.DeviceUtils;
@@ -121,7 +122,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     }
 
     private void drawScene() {
-        earth.draw(lightPosInEyeSpace);
+        earth.draw();
     }
 
     private boolean isLookingAtObject(float[] model, float[] modelView) {
@@ -144,6 +145,12 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
         earth = new Earth(this);
         earth.create();
+        earth.setLighting(new Lighting() {
+            @Override
+            public float[] getLightPosInEyeSpace() {
+                return lightPosInEyeSpace;
+            }
+        });
 
         try {
             KmlLayer kmlLayer = new KmlLayer(earth, R.raw.simple, getApplicationContext());

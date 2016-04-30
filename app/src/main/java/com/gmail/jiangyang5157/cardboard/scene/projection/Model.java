@@ -23,6 +23,12 @@ public abstract class Model {
         modelViewProjection = new float[16];
     }
 
+    public void draw(){
+        if (isVisible == false){
+            return;
+        }
+    }
+
     public void update(float[] view, float[] perspective) {
         Matrix.multiplyMM(modelView, 0, view, 0, model, 0);
         Matrix.multiplyMM(modelViewProjection, 0, perspective, 0, modelView, 0);

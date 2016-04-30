@@ -81,10 +81,9 @@ public class Icosphere extends Sphere {
         normalHandle = GLES20.glGetAttribLocation(program, NORMAL_HANDLE);
     }
 
-    public void draw(float[] lightPosInEyeSpace) {
-        if (isVisible == false){
-            return;
-        }
+    @Override
+    public void draw() {
+        super.draw();
 
         GLES20.glUseProgram(program);
         GLES20.glEnableVertexAttribArray(vertexHandle);
@@ -93,7 +92,9 @@ public class Icosphere extends Sphere {
         GLES20.glUniformMatrix4fv(mvMatrixHandle, 1, false, modelView, 0);
         GLES20.glUniformMatrix4fv(mvpMatrixHandle, 1, false, modelViewProjection, 0);
         GLES20.glUniform4fv(colorHandle, 1, color, 0);
-        GLES20.glUniform3fv(lightPosHandle, 1, lightPosInEyeSpace, 0);
+        if(lighting != null) {
+            GLES20.glUniform3fv(lightPosHandle, 1, lighting.getLightPosInEyeSpace(), 0);
+        }
 
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, verticesBuffHandle);
         GLES20.glVertexAttribPointer(vertexHandle, 3, GLES20.GL_FLOAT, false, 0, 0);

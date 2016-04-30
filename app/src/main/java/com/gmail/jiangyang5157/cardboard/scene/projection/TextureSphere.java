@@ -31,7 +31,7 @@ public class TextureSphere extends Sphere {
         this.textureDrawableResource = textureDrawableResource;
     }
 
-@Override
+    @Override
     protected void buildArrays() {
         vertices = new float[stacks * slices * 3];
         normals = new float[stacks * slices * 3];
@@ -171,7 +171,10 @@ public class TextureSphere extends Sphere {
         texCoordHandle = GLES20.glGetAttribLocation(program, TEXTURE_COORDS_HANDLE);
     }
 
-    public void draw(float[] lightPosInEyeSpace) {
+    @Override
+    public void draw() {
+        super.draw();
+
         GLES20.glUseProgram(program);
         GLES20.glEnableVertexAttribArray(vertexHandle);
         GLES20.glEnableVertexAttribArray(normalHandle);
@@ -179,7 +182,9 @@ public class TextureSphere extends Sphere {
 
         GLES20.glUniformMatrix4fv(mvMatrixHandle, 1, false, modelView, 0);
         GLES20.glUniformMatrix4fv(mvpMatrixHandle, 1, false, modelViewProjection, 0);
-        GLES20.glUniform3fv(lightPosHandle, 1, lightPosInEyeSpace, 0);
+        if(lighting != null) {
+            GLES20.glUniform3fv(lightPosHandle, 1, lighting.getLightPosInEyeSpace(), 0);
+        }
 
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, verticesBuffHandle);
         GLES20.glVertexAttribPointer(vertexHandle, 3, GLES20.GL_FLOAT, false, 0, 0);

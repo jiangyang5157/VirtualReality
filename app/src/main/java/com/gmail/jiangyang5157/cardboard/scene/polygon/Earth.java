@@ -47,11 +47,11 @@ public class Earth extends TextureSphere {
     }
 
     @Override
-    public void draw(float[] lightPosInEyeSpace) {
-        super.draw(lightPosInEyeSpace);
+    public void draw() {
+        super.draw();
 
         for (Marker marker : markers) {
-            marker.draw(lightPosInEyeSpace);
+            marker.draw();
         }
     }
 
@@ -81,6 +81,7 @@ public class Earth extends TextureSphere {
 
         Marker marker = new Marker(context, this, radius, color, name, latLng);
         marker.create();
+        marker.setLighting(lighting);
         addMarker(marker);
         return marker;
     }
