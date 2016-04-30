@@ -16,9 +16,9 @@ import java.util.ArrayList;
  */
 public class Marker extends Icosphere {
 
-    private static final int DEFAULT_RECURSION_LEVEL = 0;
-    private static final int DEFAULT_VERTEX_SHADER_RAW_RESOURCE = R.raw.color_vertex;
-    private static final int DEFAULT_FRAGMENT_SHADER_RAW_RESOURCE = R.raw.color_fragment;
+    protected static final int DEFAULT_RECURSION_LEVEL = 0;
+    protected static final int DEFAULT_VERTEX_SHADER_RAW_RESOURCE = R.raw.color_vertex;
+    protected static final int DEFAULT_FRAGMENT_SHADER_RAW_RESOURCE = R.raw.color_fragment;
 
     private final Earth earth;
 

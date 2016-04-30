@@ -9,6 +9,7 @@ import android.widget.Toast;
 import com.gmail.jiangyang5157.cardboard.kml.KmlLayer;
 import com.gmail.jiangyang5157.cardboard.scene.polygon.Earth;
 import com.gmail.jiangyang5157.cardboard.scene.polygon.Marker;
+import com.gmail.jiangyang5157.cardboard.scene.projection.Icosphere;
 import com.gmail.jiangyang5157.cardboard.scene.projection.Lighting;
 import com.gmail.jiangyang5157.cardboard.scene.projection.ShaderModel;
 import com.gmail.jiangyang5157.cardboard.ui.CardboardOverlayView;
@@ -42,8 +43,10 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     private float[] view = new float[16];
     private float[] camera = new float[16];
     private float[] headView = new float[16];
+    private float[] forward = new float[3];
 
     private Earth earth;
+    private Icosphere testAimPoint;
 
     private CardboardOverlayView overlayView;
 
@@ -69,6 +72,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     protected void onDestroy() {
         super.onDestroy();
         earth.destroy();
+        testAimPoint.destroy();
     }
 
     @Override
@@ -77,6 +81,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
         GLES20.glClearColor(0.1f, 0.1f, 0.1f, 0.5f);
         headTransform.getHeadView(headView, 0);
+        headTransform.getForwardVector(forward, 0);
     }
 
     @Override
@@ -119,10 +124,16 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
     private void updateScene(float[] view, float[] perspective) {
         earth.update(view, perspective);
+
+        Matrix.setIdentityM(testAimPoint.model, 0);
+        float[] forward2 = new float[]{forward[0] * 40, forward[1] * 40, forward[2] * 40};
+        Matrix.translateM(testAimPoint.model, 0, forward[0], forward[1], forward[2]);
+        testAimPoint.update(view, perspective);
     }
 
     private void drawScene() {
         earth.draw();
+        testAimPoint.draw();
     }
 
     private boolean isLookingAtObject(float[] model, float[] modelView) {
@@ -160,6 +171,9 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        testAimPoint = new Icosphere(this, R.raw.color_vertex, R.raw.color_fragment, 1, 0.02f, new float[]{0.8f, 0.0f, 0.0f, 1.0f});
+        testAimPoint.create();
     }
 
     @Override
