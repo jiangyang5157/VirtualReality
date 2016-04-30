@@ -96,14 +96,14 @@ public abstract class ShaderModel extends Model{
         }
     }
 
-    protected abstract void buildArrays();
-
-    protected abstract void bindBuffers();
+    protected abstract void initializeHandle();
 
     public void create() {
         buildArrays();
         bindBuffers();
     }
 
-    protected abstract void initializeHandle();
+    protected abstract void buildArrays();
+
+    protected abstract void bindBuffers();
 }
