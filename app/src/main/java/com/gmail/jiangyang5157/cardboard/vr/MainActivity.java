@@ -126,7 +126,6 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         earth.update(view, perspective);
 
         Matrix.setIdentityM(testAimPoint.model, 0);
-        float[] forward2 = new float[]{forward[0] * 40, forward[1] * 40, forward[2] * 40};
         Matrix.translateM(testAimPoint.model, 0, forward[0], forward[1], forward[2]);
         testAimPoint.update(view, perspective);
     }
