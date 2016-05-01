@@ -3,12 +3,10 @@ package com.gmail.jiangyang5157.cardboard.scene.polygon;
 import android.content.Context;
 import android.opengl.Matrix;
 
+import com.gmail.jiangyang5157.cardboard.scene.data.Coordinate;
 import com.gmail.jiangyang5157.cardboard.scene.projection.Icosphere;
 import com.gmail.jiangyang5157.cardboard.vr.R;
 import com.google.android.gms.maps.model.LatLng;
-
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 
 /**
  * @author Yang

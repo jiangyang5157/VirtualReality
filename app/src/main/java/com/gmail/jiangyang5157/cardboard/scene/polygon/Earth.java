@@ -31,8 +31,7 @@ public class Earth extends TextureSphere {
         super(context, DEFAULT_VERTEX_SHADER_RAW_RESOURCE, DEFAULT_FRAGMENT_SHADER_RAW_RESOURCE, DEFAULT_STACKS, DEFAULT_SLICES, DEFAULT_RADIUS, DEFAULT_TEXTURE_DRAWABLE_RESOURCE);
 
         Matrix.setIdentityM(model, 0);
-        Matrix.translateM(model, 0, 0, 0, 0);
-
+//        Matrix.translateM(model, 0, 0, 0, 0);
 //        Matrix.rotateM(model, 0, 90, 1, 0, 0);
 //        Matrix.rotateM(model, 0, 180, 0, 0, 1);
     }

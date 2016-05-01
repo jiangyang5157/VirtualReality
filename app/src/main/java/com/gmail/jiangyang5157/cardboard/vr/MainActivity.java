@@ -7,9 +7,9 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.gmail.jiangyang5157.cardboard.kml.KmlLayer;
+import com.gmail.jiangyang5157.cardboard.scene.polygon.AimPoint;
 import com.gmail.jiangyang5157.cardboard.scene.polygon.Earth;
 import com.gmail.jiangyang5157.cardboard.scene.polygon.Marker;
-import com.gmail.jiangyang5157.cardboard.scene.projection.Icosphere;
 import com.gmail.jiangyang5157.cardboard.scene.projection.Lighting;
 import com.gmail.jiangyang5157.cardboard.scene.projection.GLModel;
 import com.gmail.jiangyang5157.cardboard.ui.CardboardOverlayView;
@@ -46,7 +46,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     private float[] forward = new float[3];
 
     private Earth earth;
-    private Icosphere testAimPoint;
+    private AimPoint aimPoint;
 
     private CardboardOverlayView overlayView;
 
@@ -72,7 +72,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     protected void onDestroy() {
         super.onDestroy();
         earth.destroy();
-        testAimPoint.destroy();
+        aimPoint.destroy();
     }
 
     @Override
@@ -82,11 +82,18 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         GLES20.glClearColor(0.1f, 0.1f, 0.1f, 0.5f);
         headTransform.getHeadView(headView, 0);
         headTransform.getForwardVector(forward, 0);
+
+        aimPoint.forward(forward);
     }
 
     @Override
     public void onFinishFrame(Viewport viewport) {
         GLES20.glDisable(GLES20.GL_DEPTH_TEST);
+    }
+
+    @Override
+    public void onCardboardTrigger() {
+//        overlayView.show3DToast("Earth\n" + " stacks/slices: (" + earth.getStacks() + "," + earth.getSlices() + ")");
 
         for (final Marker mark : earth.getMarkers()) {
             if (isLookingAtObject(mark.model, mark.modelView)) {
@@ -96,13 +103,9 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
                         overlayView.show3DToast(mark.name + "\n" + mark.getCoordinate().toString());
                     }
                 });
+                break;
             }
         }
-    }
-
-    @Override
-    public void onCardboardTrigger() {
-        overlayView.show3DToast("Earth\n" + " stacks/slices: (" + earth.getStacks() + "," + earth.getSlices() + ")");
     }
 
     @Override
@@ -124,15 +127,12 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
     private void updateScene(float[] view, float[] perspective) {
         earth.update(view, perspective);
-
-        Matrix.setIdentityM(testAimPoint.model, 0);
-        Matrix.translateM(testAimPoint.model, 0, forward[0], forward[1], forward[2]);
-        testAimPoint.update(view, perspective);
+        aimPoint.update(view, perspective);
     }
 
     private void drawScene() {
         earth.draw();
-        testAimPoint.draw();
+        aimPoint.draw();
     }
 
     private boolean isLookingAtObject(float[] model, float[] modelView) {
@@ -163,7 +163,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         });
 
         try {
-            KmlLayer kmlLayer = new KmlLayer(earth, R.raw.simple, getApplicationContext());
+            KmlLayer kmlLayer = new KmlLayer(earth, R.raw.example, getApplicationContext());
             kmlLayer.addLayerToMap();
         } catch (XmlPullParserException e) {
             e.printStackTrace();
@@ -171,8 +171,8 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
             e.printStackTrace();
         }
 
-        testAimPoint = new Icosphere(this, R.raw.color_vertex, R.raw.color_fragment, 1, 0.02f, new float[]{0.8f, 0.0f, 0.0f, 1.0f});
-        testAimPoint.create();
+        aimPoint = new AimPoint(this);
+        aimPoint.create();
     }
 
     @Override
