@@ -6,7 +6,7 @@ import android.content.Context;
  * @author Yang
  * @since 4/30/2016
  */
-public abstract class Sphere extends ShaderModel{
+public abstract class Sphere extends GLModel {
 
     float radius;
 

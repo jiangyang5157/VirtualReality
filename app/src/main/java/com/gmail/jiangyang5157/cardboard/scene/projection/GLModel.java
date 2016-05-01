@@ -13,7 +13,7 @@ import java.nio.ShortBuffer;
  * @author Yang
  * @since 4/30/2016
  */
-public abstract class ShaderModel extends Model{
+public abstract class GLModel extends Model{
     public static final int GLES_VERSION_REQUIRED = 0x00020000;
 
     protected static final String MODEL_HANDLE = "u_ModelMatrix";
@@ -60,7 +60,7 @@ public abstract class ShaderModel extends Model{
 
     protected Context context;
 
-    protected ShaderModel(Context context, int vertexShaderRawResource, int fragmentShaderRawResource) {
+    protected GLModel(Context context, int vertexShaderRawResource, int fragmentShaderRawResource) {
         this.context = context;
 
         program = GLES20.glCreateProgram();
