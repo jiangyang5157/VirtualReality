@@ -25,6 +25,9 @@ public class Earth extends TextureSphere {
     private static final int DEFAULT_VERTEX_SHADER_RAW_RESOURCE = R.raw.texture_vertex_shader;
     private static final int DEFAULT_FRAGMENT_SHADER_RAW_RESOURCE = R.raw.texture_fragment_shader;
 
+    public static final float LAYER_ALTITUDE_MARKER = -1f;
+    public static final float LAYER_ALTITUDE_AIMPOINT = -6f;
+
     private ArrayList<Marker> markers = new ArrayList<>();
 
     public Earth(Context context) {
@@ -78,7 +81,7 @@ public class Earth extends TextureSphere {
         String name = kmlPlacemark.getProperty("name");
         LatLng latLng = markerUrlStyle.getPosition();
 
-        Marker marker = new Marker(context, this, radius, color, name, latLng);
+        Marker marker = new Marker(context, this, radius, color, name, latLng, LAYER_ALTITUDE_MARKER);
         marker.create();
         marker.setLighting(lighting);
         addMarker(marker);

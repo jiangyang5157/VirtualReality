@@ -23,8 +23,8 @@ public abstract class Model {
         modelViewProjection = new float[16];
     }
 
-    public void draw(){
-        if (isVisible == false){
+    public void draw() {
+        if (isVisible == false) {
             return;
         }
     }
@@ -43,4 +43,8 @@ public abstract class Model {
     }
 
     public abstract void destroy();
+
+    public float[] getPosition() {
+        return new float[]{model[12], model[13], model[14]};
+    }
 }

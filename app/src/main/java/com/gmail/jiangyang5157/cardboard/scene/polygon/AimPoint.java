@@ -23,8 +23,8 @@ public class AimPoint extends Point {
         Matrix.setIdentityM(model, 0);
     }
 
-    public void forward(float[] forward){
+    public void setPosition(float[] position){
         Matrix.setIdentityM(model, 0);
-        Matrix.translateM(model, 0, forward[0], forward[1], forward[2]);
+        Matrix.translateM(model, 0, position[0], position[1], position[2]);
     }
 }

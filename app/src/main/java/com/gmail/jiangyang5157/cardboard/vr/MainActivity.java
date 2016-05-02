@@ -27,23 +27,18 @@ import java.io.IOException;
 import javax.microedition.khronos.egl.EGLConfig;
 
 public class MainActivity extends CardboardActivity implements CardboardView.StereoRenderer {
-    private static final String TAG = "MainActivity";
-
-    private static final float YAW_LIMIT = 0.12f;
-    private static final float PITCH_LIMIT = 0.12f;
+    private static final String TAG = "MainActivity ####";
 
     private final float Z_NEAR = 0.1f;
     private final float Z_FAR = 100.0f;
-
-    private final float[] CAMERA_POS = new float[]{0.0f, 0.0f, 0.01f};
-
+    private final float[] CAMERA_POSITION = new float[]{0.0f, 0.0f, 0.0f};
     private final float[] LIGHT_POS_IN_WORLD_SPACE = new float[]{0.0f, 0.0f, 0.0f, 1.0f};
-    private float[] lightPosInEyeSpace = new float[4];
+    private float[] lightPosInCameraSpace = new float[4];
 
     private float[] view = new float[16];
     private float[] camera = new float[16];
     private float[] headView = new float[16];
-    private float[] forward = new float[3];
+    private float[] forwardDirection = new float[3];
 
     private Earth earth;
     private AimPoint aimPoint;
@@ -81,9 +76,11 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
         GLES20.glClearColor(0.1f, 0.1f, 0.1f, 0.5f);
         headTransform.getHeadView(headView, 0);
-        headTransform.getForwardVector(forward, 0);
+        headTransform.getForwardVector(forwardDirection, 0);
 
-        aimPoint.forward(forward);
+        float dis = earth.getRadius() + Earth.LAYER_ALTITUDE_AIMPOINT;
+        float[] pos = new float[]{forwardDirection[0] * dis, forwardDirection[1] * dis, forwardDirection[2] * dis};
+        aimPoint.setPosition(pos);
     }
 
     @Override
@@ -95,17 +92,20 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     public void onCardboardTrigger() {
 //        overlayView.show3DToast("Earth\n" + " stacks/slices: (" + earth.getStacks() + "," + earth.getSlices() + ")");
 
+        int intersectCount = 0;
         for (final Marker mark : earth.getMarkers()) {
-            if (isLookingAtObject(mark.model, mark.modelView)) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        overlayView.show3DToast(mark.name + "\n" + mark.getCoordinate().toString());
-                    }
-                });
-                break;
+            double t = mark.intersect(CAMERA_POSITION, forwardDirection);
+            if (t > 0) {
+                intersectCount++;
             }
         }
+        final String intersectCountStr = String.valueOf(intersectCount);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                overlayView.show3DToast("intersectCount:" + intersectCountStr);
+            }
+        });
     }
 
     @Override
@@ -116,7 +116,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         Matrix.multiplyMM(view, 0, eye.getEyeView(), 0, camera, 0);
 
         // Set the position of the light
-        Matrix.multiplyMV(lightPosInEyeSpace, 0, view, 0, LIGHT_POS_IN_WORLD_SPACE, 0);
+        Matrix.multiplyMV(lightPosInCameraSpace, 0, view, 0, LIGHT_POS_IN_WORLD_SPACE, 0);
 
         // Build the ModelView and ModelViewProjection matrices for calculating different object's position
         float[] perspective = eye.getPerspective(Z_NEAR, Z_FAR);
@@ -135,30 +135,25 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         aimPoint.draw();
     }
 
-    private boolean isLookingAtObject(float[] model, float[] modelView) {
-        float[] initVec = {0, 0, 0, 1.0f};
-        float[] objPositionVec = new float[4];
-
+    private float[] getModelPositionInEyeSpace(float[] model, float[] modelView) {
+        float[] init = {0, 0, 0, 1.0f};
+        float[] objPosition = new float[4];
         // Convert object space to camera space. Use the headView from onNewFrame.
         Matrix.multiplyMM(modelView, 0, headView, 0, model, 0);
-        Matrix.multiplyMV(objPositionVec, 0, modelView, 0, initVec, 0);
-
-        float pitch = (float) Math.atan2(objPositionVec[1], -objPositionVec[2]);
-        float yaw = (float) Math.atan2(objPositionVec[0], -objPositionVec[2]);
-
-        return Math.abs(pitch) < PITCH_LIMIT && Math.abs(yaw) < YAW_LIMIT;
+        Matrix.multiplyMV(objPosition, 0, modelView, 0, init, 0);
+        return objPosition;
     }
 
     @Override
     public void onSurfaceCreated(EGLConfig eglConfig) {
-        Matrix.setLookAtM(camera, 0, CAMERA_POS[0], CAMERA_POS[1], CAMERA_POS[2], 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+        Matrix.setLookAtM(camera, 0, CAMERA_POSITION[0], CAMERA_POSITION[1], CAMERA_POSITION[2], 0.0f, 0.0f, -0.1f, 0.0f, 1.0f, 0.0f);
 
         earth = new Earth(this);
         earth.create();
         earth.setLighting(new Lighting() {
             @Override
             public float[] getLightPosInEyeSpace() {
-                return lightPosInEyeSpace;
+                return lightPosInCameraSpace;
             }
         });
 

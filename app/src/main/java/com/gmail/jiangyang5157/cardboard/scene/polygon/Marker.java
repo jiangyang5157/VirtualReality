@@ -24,15 +24,15 @@ public class Marker extends Icosphere {
 
     private final Coordinate coordinate;
 
-    public Marker(Context context, Earth earth, float radius, float[] color, String name, LatLng latlng) {
-        this(context, earth, DEFAULT_VERTEX_SHADER_RAW_RESOURCE, DEFAULT_FRAGMENT_SHADER_RAW_RESOURCE, DEFAULT_RECURSION_LEVEL, radius, color, name, latlng);
+    public Marker(Context context, Earth earth, float radius, float[] color, String name, LatLng latlng, float altitude) {
+        this(context, earth, DEFAULT_VERTEX_SHADER_RAW_RESOURCE, DEFAULT_FRAGMENT_SHADER_RAW_RESOURCE, DEFAULT_RECURSION_LEVEL, radius, color, name, latlng, altitude);
     }
 
-    private Marker(Context context, Earth earth, int vertexShaderRawResource, int fragmentShaderRawResource, int recursionLevel, float radius, float[] color, String name, LatLng latlng) {
+    private Marker(Context context, Earth earth, int vertexShaderRawResource, int fragmentShaderRawResource, int recursionLevel, float radius, float[] color, String name, LatLng latlng, float altitude) {
         super(context, vertexShaderRawResource, fragmentShaderRawResource, recursionLevel, radius, color);
         this.earth = earth;
         this.name = name;
-        this.coordinate = new Coordinate(latlng.latitude, latlng.longitude, -this.getRadius(), this.earth.getRadius());
+        this.coordinate = new Coordinate(latlng.latitude, latlng.longitude, altitude, this.earth.getRadius());
 
         Matrix.setIdentityM(model, 0);
         Matrix.translateM(model, 0,
