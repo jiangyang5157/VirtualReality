@@ -9,9 +9,9 @@ import android.util.Log;
  */
 public class IcosphereBuilder {
 
-    private volatile static IcosphereBuilder uniqueInstance = null;
+    private volatile static IcosphereBuilder uniqueInstance;
 
-    private ArrayMap<Integer, IcosphereVertex> icosphereVertices = new ArrayMap<>();
+    private ArrayMap<Integer, IcosphereVertex> icosphereVertices;
 
     public static IcosphereBuilder getInstance() {
         if (uniqueInstance == null) {
@@ -25,6 +25,7 @@ public class IcosphereBuilder {
     }
 
     private IcosphereBuilder() {
+        icosphereVertices = new ArrayMap<>();
     }
 
     protected IcosphereVertex build(int recursionLevel) {
