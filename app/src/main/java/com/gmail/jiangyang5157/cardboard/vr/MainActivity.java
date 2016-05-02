@@ -99,13 +99,15 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
                 intersectCount++;
             }
         }
-        final String intersectCountStr = String.valueOf(intersectCount);
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                overlayView.show3DToast("intersectCount:" + intersectCountStr);
-            }
-        });
+        if(intersectCount > 0) {
+            final String intersectCountStr = String.valueOf(intersectCount);
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    overlayView.show3DToast("intersectCount:" + intersectCountStr);
+                }
+            });
+        }
     }
 
     @Override
