@@ -9,29 +9,42 @@ import android.opengl.Matrix;
 public class Camera {
 
     public static final float Z_NEAR = 0.1f;
-    public static final float Z_FAR = 100.0f;
-
-    public static final float[] INITIALIZED_EYE = new float[]{0.0f, 0.0f, 0.0f};
-    public static final float[] INITIALIZED_CENTER = new float[]{0.0f, 0.0f, -1.0f};
-    public static final float[] INITIALIZED_UP = new float[]{0.0f, 1.0f, 0.0f};
+    public static final float Z_FAR = 1000.0f;
 
     public float[] matrix;
     public float[] view;
 
-    private float[] position;
+    private float[] position = new float[]{0.0f, 0.0f, 0.0f};
+    private float[] lookAtPos = new float[]{0.0f, 0.0f, -1.0f};
+    private float[] upDir = new float[]{0.0f, 1.0f, 0.0f};
 
     public Camera() {
         matrix = new float[16];
         view = new float[16];
-        position = INITIALIZED_EYE.clone();
 
         Matrix.setLookAtM(matrix, 0,
                 position[0], position[1], position[2],
-                INITIALIZED_CENTER[0], INITIALIZED_CENTER[1], INITIALIZED_CENTER[2],
-                INITIALIZED_UP[0], INITIALIZED_UP[1], INITIALIZED_UP[2]);
+                lookAtPos[0], lookAtPos[1], lookAtPos[2],
+                upDir[0], upDir[1], upDir[2]);
     }
 
-    public float[] getPosition(){
-        return position;
+    public float[] getPosition() {
+        return position.clone();
+    }
+
+    public void move(float[] forwardDir, float distance) {
+        forward(position, forwardDir, distance);
+        forward(lookAtPos, forwardDir, distance);
+
+        Matrix.setLookAtM(matrix, 0,
+                position[0], position[1], position[2],
+                lookAtPos[0], lookAtPos[1], lookAtPos[2],
+                upDir[0], upDir[1], upDir[2]);
+    }
+
+    public static void forward(float[] src, float[] dir, float dis) {
+        src[0] += dir[0] * dis;
+        src[1] += dir[1] * dis;
+        src[2] += dir[2] * dis;
     }
 }

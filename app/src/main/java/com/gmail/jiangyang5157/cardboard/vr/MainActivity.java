@@ -32,7 +32,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     private static final String TAG = "MainActivity ####";
 
     private float[] headView = new float[16];
-    private float[] forwardDirection = new float[3];
+    private float[] forwardDir = new float[3];
 
     private Camera camera;
     private Light light;
@@ -73,11 +73,18 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
         GLES20.glClearColor(0.1f, 0.1f, 0.1f, 0.5f);
         headTransform.getHeadView(headView, 0);
-        headTransform.getForwardVector(forwardDirection, 0);
+        headTransform.getForwardVector(forwardDir, 0);
 
-        float dis = earth.getRadius() + Earth.DEFAULT_LAYER_ALTITUDE_AIMPOINT;
-        float[] pos = new float[]{forwardDirection[0] * dis, forwardDirection[1] * dis, forwardDirection[2] * dis};
+        float[] pos = camera.getPosition();
+        float distance = earth.getRadius() + Earth.DEFAULT_LAYER_ALTITUDE_AIMPOINT;
+        Camera.forward(pos, forwardDir, distance);
         aimPoint.setPosition(pos);
+
+        if (go) {
+            camera.move(forwardDir, 0.7f);
+        } else {
+            camera.move(forwardDir, -0.7f);
+        }
     }
 
     @Override
@@ -89,23 +96,27 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     public void onCardboardTrigger() {
 //        overlayView.show3DToast("Earth\n" + " stacks/slices: (" + earth.getStacks() + "," + earth.getSlices() + ")");
 
-        int intersectCount = 0;
-        for (final Marker mark : earth.getMarkers()) {
-            double t = mark.intersect(camera.getPosition(), forwardDirection);
-            if (t > 0) {
-                intersectCount++;
-            }
-        }
-        if (intersectCount > 0) {
-            final String intersectCountStr = String.valueOf(intersectCount);
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    overlayView.show3DToast("intersectCount:" + intersectCountStr);
-                }
-            });
-        }
+//        int intersectCount = 0;
+//        for (final Marker mark : earth.getMarkers()) {
+//            double t = mark.intersect(camera.getPosition(), forwardDir);
+//            if (t > 0) {
+//                intersectCount++;
+//            }
+//        }
+//        if (intersectCount > 0) {
+//            final String intersectCountStr = String.valueOf(intersectCount);
+//            runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    overlayView.show3DToast("intersectCount:" + intersectCountStr);
+//                }
+//            });
+//        }
+
+        go = !go;
     }
+
+    boolean go = false;
 
     @Override
     public void onDrawEye(Eye eye) {

@@ -21,14 +21,14 @@ public abstract class Sphere extends GLModel implements Selectable {
     }
 
     @Override
-    public double intersect(float[] cameraPosition, float[] forwardDirection) {
-        Vector cameraPositionVec = new Vector(cameraPosition[0], cameraPosition[1], cameraPosition[2]);
-        Vector forwardDirectionVec = new Vector(forwardDirection[0], forwardDirection[1], forwardDirection[2]);
+    public double intersect(float[] cameraPos, float[] forwardDir) {
+        Vector cameraPosVec = new Vector(cameraPos[0], cameraPos[1], cameraPos[2]);
+        Vector forwardDirVec = new Vector(forwardDir[0], forwardDir[1], forwardDir[2]);
         float[] position = getPosition();
         Vector positionVec = new Vector(position[0], position[1], position[2]);
-        Vector posToCameraVec = cameraPositionVec.minus(positionVec);
+        Vector posToCameraVec = cameraPosVec.minus(positionVec);
 
-        final double b = forwardDirectionVec.dot(posToCameraVec);
+        final double b = forwardDirVec.dot(posToCameraVec);
         final double c = posToCameraVec.dot(posToCameraVec) - (radius * radius);
 
         // solve the quadratic equation

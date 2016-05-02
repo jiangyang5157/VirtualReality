@@ -25,8 +25,8 @@ public class Earth extends TextureSphere {
     private static final int SLICES = 50;
 
     private static final float DEFAULT_RADIUS = 100f;
-    public static final float DEFAULT_LAYER_ALTITUDE_MARKER = -1f;
-    public static final float DEFAULT_LAYER_ALTITUDE_AIMPOINT = -6f;
+    public static final float DEFAULT_LAYER_ALTITUDE_MARKER = -4f;
+    public static final float DEFAULT_LAYER_ALTITUDE_AIMPOINT = -9f;
 
     private ArrayList<Marker> markers = new ArrayList<>();
 
