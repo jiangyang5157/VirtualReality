@@ -126,7 +126,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         Matrix.multiplyMM(camera.view, 0, eye.getEyeView(), 0, camera.matrix, 0);
 
         // Set the position of the light
-        Matrix.multiplyMV(light.lightPosInCameraSpace, 0, camera.view, 0, light.LIGHT_POS_IN_WORLD_SPACE, 0);
+        Matrix.multiplyMV(light.lightPosInCameraSpace, 0, camera.view, 0, Light.LIGHT_POS_IN_WORLD_SPACE, 0);
 
         // Build the ModelView and ModelViewProjection matrices for calculating different object's position
         float[] perspective = eye.getPerspective(Camera.Z_NEAR, Camera.Z_FAR);
@@ -171,9 +171,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         try {
             KmlLayer kmlLayer = new KmlLayer(earth, R.raw.example, getApplicationContext());
             kmlLayer.addLayerToMap();
-        } catch (XmlPullParserException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (XmlPullParserException | IOException e) {
             e.printStackTrace();
         }
 
