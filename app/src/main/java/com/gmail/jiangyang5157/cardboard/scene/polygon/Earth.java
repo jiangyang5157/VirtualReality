@@ -17,26 +17,26 @@ import java.util.ArrayList;
  */
 public class Earth extends TextureSphere {
 
+    private static final int TEXTURE_DRAWABLE_RESOURCE = R.drawable.no_clouds_2k;
+    private static final int VERTEX_SHADER_RAW_RESOURCE = R.raw.texture_vertex_shader;
+    private static final int FRAGMENT_SHADER_RAW_RESOURCE = R.raw.texture_fragment_shader;
+
+    private static final int STACKS = 50;
+    private static final int SLICES = 50;
+
     private static final float DEFAULT_RADIUS = 100f;
-    private static final int DEFAULT_TEXTURE_DRAWABLE_RESOURCE = R.drawable.no_clouds_2k;
-
-    private static final int DEFAULT_STACKS = 50;
-    private static final int DEFAULT_SLICES = 50;
-    private static final int DEFAULT_VERTEX_SHADER_RAW_RESOURCE = R.raw.texture_vertex_shader;
-    private static final int DEFAULT_FRAGMENT_SHADER_RAW_RESOURCE = R.raw.texture_fragment_shader;
-
-    public static final float LAYER_ALTITUDE_MARKER = -1f;
-    public static final float LAYER_ALTITUDE_AIMPOINT = -6f;
+    public static final float DEFAULT_LAYER_ALTITUDE_MARKER = -1f;
+    public static final float DEFAULT_LAYER_ALTITUDE_AIMPOINT = -6f;
 
     private ArrayList<Marker> markers = new ArrayList<>();
 
     public Earth(Context context) {
-        super(context, DEFAULT_VERTEX_SHADER_RAW_RESOURCE, DEFAULT_FRAGMENT_SHADER_RAW_RESOURCE, DEFAULT_STACKS, DEFAULT_SLICES, DEFAULT_RADIUS, DEFAULT_TEXTURE_DRAWABLE_RESOURCE);
+        super(context, VERTEX_SHADER_RAW_RESOURCE, FRAGMENT_SHADER_RAW_RESOURCE, STACKS, SLICES, DEFAULT_RADIUS, TEXTURE_DRAWABLE_RESOURCE);
 
         Matrix.setIdentityM(model, 0);
-//        Matrix.translateM(model, 0, 0, 0, 0);
-//        Matrix.rotateM(model, 0, 90, 1, 0, 0);
-//        Matrix.rotateM(model, 0, 180, 0, 0, 1);
+//        Matrix.translateM(matrix, 0, 0, 0, 0);
+//        Matrix.rotateM(matrix, 0, 90, 1, 0, 0);
+//        Matrix.rotateM(matrix, 0, 180, 0, 0, 1);
     }
 
     @Override
@@ -81,7 +81,7 @@ public class Earth extends TextureSphere {
         String name = kmlPlacemark.getProperty("name");
         LatLng latLng = markerUrlStyle.getPosition();
 
-        Marker marker = new Marker(context, this, radius, color, name, latLng, LAYER_ALTITUDE_MARKER);
+        Marker marker = new Marker(context, this, radius, color, name, latLng, DEFAULT_LAYER_ALTITUDE_MARKER);
         marker.create();
         marker.setLighting(lighting);
         addMarker(marker);

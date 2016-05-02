@@ -12,13 +12,14 @@ import com.gmail.jiangyang5157.cardboard.vr.R;
  */
 public class AimPoint extends Point {
 
-    private static final int DEFAULT_VERTEX_SHADER_RAW_RESOURCE = R.raw.point_vertex_shader;
-    private static final int DEFAULT_FRAGMENT_SHADER_RAW_RESOURCE = R.raw.point_fragment_shader;
+    private static final int VERTEX_SHADER_RAW_RESOURCE = R.raw.point_vertex_shader;
+    private static final int FRAGMENT_SHADER_RAW_RESOURCE = R.raw.point_fragment_shader;
+
     private static final int DEFAULT_POINT_SIZE = 10;
     private static final float[] DEFAULT_COLOR = new float[]{1f, 0, 0, 1f};
 
     public AimPoint(Context context) {
-        super(context, DEFAULT_VERTEX_SHADER_RAW_RESOURCE, DEFAULT_FRAGMENT_SHADER_RAW_RESOURCE, DEFAULT_POINT_SIZE, DEFAULT_COLOR);
+        super(context, VERTEX_SHADER_RAW_RESOURCE, FRAGMENT_SHADER_RAW_RESOURCE, DEFAULT_POINT_SIZE, DEFAULT_COLOR);
 
         Matrix.setIdentityM(model, 0);
     }

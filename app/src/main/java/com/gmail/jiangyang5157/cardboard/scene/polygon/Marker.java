@@ -3,7 +3,6 @@ package com.gmail.jiangyang5157.cardboard.scene.polygon;
 import android.content.Context;
 import android.opengl.Matrix;
 
-import com.gmail.jiangyang5157.cardboard.scene.data.Coordinate;
 import com.gmail.jiangyang5157.cardboard.scene.projection.Icosphere;
 import com.gmail.jiangyang5157.cardboard.vr.R;
 import com.google.android.gms.maps.model.LatLng;
@@ -14,9 +13,10 @@ import com.google.android.gms.maps.model.LatLng;
  */
 public class Marker extends Icosphere {
 
+    protected static final int VERTEX_SHADER_RAW_RESOURCE = R.raw.color_vertex_shader;
+    protected static final int FRAGMENT_SHADER_RAW_RESOURCE = R.raw.color_fragment_shader;
+
     protected static final int DEFAULT_RECURSION_LEVEL = 0;
-    protected static final int DEFAULT_VERTEX_SHADER_RAW_RESOURCE = R.raw.color_vertex_shader;
-    protected static final int DEFAULT_FRAGMENT_SHADER_RAW_RESOURCE = R.raw.color_fragment_shader;
 
     private final Earth earth;
 
@@ -25,7 +25,7 @@ public class Marker extends Icosphere {
     private final Coordinate coordinate;
 
     public Marker(Context context, Earth earth, float radius, float[] color, String name, LatLng latlng, float altitude) {
-        this(context, earth, DEFAULT_VERTEX_SHADER_RAW_RESOURCE, DEFAULT_FRAGMENT_SHADER_RAW_RESOURCE, DEFAULT_RECURSION_LEVEL, radius, color, name, latlng, altitude);
+        this(context, earth, VERTEX_SHADER_RAW_RESOURCE, FRAGMENT_SHADER_RAW_RESOURCE, DEFAULT_RECURSION_LEVEL, radius, color, name, latlng, altitude);
     }
 
     private Marker(Context context, Earth earth, int vertexShaderRawResource, int fragmentShaderRawResource, int recursionLevel, float radius, float[] color, String name, LatLng latlng, float altitude) {

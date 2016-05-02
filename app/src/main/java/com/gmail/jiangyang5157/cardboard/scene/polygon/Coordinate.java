@@ -1,4 +1,4 @@
-package com.gmail.jiangyang5157.cardboard.scene.data;
+package com.gmail.jiangyang5157.cardboard.scene.polygon;
 
 import com.google.vrtoolkit.cardboard.sensors.internal.Matrix3x3d;
 
@@ -8,7 +8,7 @@ public class Coordinate {
     public static final double WGS84_FLATTENING = 1.0 / 298.257222101;
     private static final double WGS84_ECCENTRICITY = Math.sqrt(1 - Math.pow((1 - WGS84_FLATTENING), 2));
 
-    public static final double ECCENTRICITY = 0;
+    public static final double DEFAULT_ECCENTRICITY = 0;
 
     public final double latitude;
     public final double longitude;
@@ -17,7 +17,7 @@ public class Coordinate {
     public final double[] ecef;
 
     public Coordinate(double latitude, double longitude, double altitude, double a) {
-        this(latitude, longitude, altitude, a, ECCENTRICITY);
+        this(latitude, longitude, altitude, a, DEFAULT_ECCENTRICITY);
     }
 
     public Coordinate(double latitude, double longitude, double altitude, double a, double e) {
@@ -36,7 +36,7 @@ public class Coordinate {
     private double[] lla2ecef(double[] lla, double a, double e) {
         double phi = Math.toRadians(lla[0]);
         double lam = Math.toRadians(lla[1]);
-        // We put camera inside the earth, and flipped the texture of the earth in the shader.
+        // We put matrix inside the earth, and flipped the texture of the earth in the shader.
         lam *= -1;
         double h = lla[2];
 
