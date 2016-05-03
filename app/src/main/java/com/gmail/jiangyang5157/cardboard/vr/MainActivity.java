@@ -10,6 +10,7 @@ import com.gmail.jiangyang5157.cardboard.kml.KmlLayer;
 import com.gmail.jiangyang5157.cardboard.scene.Camera;
 import com.gmail.jiangyang5157.cardboard.scene.polygon.AimPoint;
 import com.gmail.jiangyang5157.cardboard.scene.polygon.Earth;
+import com.gmail.jiangyang5157.cardboard.scene.polygon.Marker;
 import com.gmail.jiangyang5157.cardboard.scene.projection.Light;
 import com.gmail.jiangyang5157.cardboard.scene.projection.Lighting;
 import com.gmail.jiangyang5157.cardboard.scene.projection.GLModel;
@@ -28,6 +29,9 @@ import java.io.IOException;
 import javax.microedition.khronos.egl.EGLConfig;
 
 public class MainActivity extends CardboardActivity implements CardboardView.StereoRenderer {
+
+    boolean debug_camer_movement;
+
     private static final String TAG = "MainActivity ####";
 
     private float[] headView = new float[16];
@@ -74,10 +78,26 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         headTransform.getHeadView(headView, 0);
         headTransform.getForwardVector(forwardDir, 0);
 
-        float[] point = camera.getPosition().clone();
-        Camera.forward(point, forwardDir, Camera.MOVE_UNIT);
-        if (earth.contain(point)) {
-            camera.move(forwardDir, Camera.MOVE_UNIT);
+        if (debug_camer_movement) {
+            float[] point = camera.getPosition().clone();
+            Camera.forward(point, forwardDir, Camera.MOVE_UNIT);
+            if (earth.contain(point)) {
+                camera.move(forwardDir, Camera.MOVE_UNIT);
+            }
+        }
+
+        int intersectMark = 0;
+        float[] cameraPos = camera.getPosition();
+        for (final Marker mark : earth.getMarkers()) {
+            double[] intersectPos = mark.intersect(cameraPos, forwardDir);
+            if (intersectPos != null) {
+                intersectMark++;
+            }
+        }
+        if (intersectMark > 0) {
+            aimPoint.setColor(GLModel.COLOR_GREEN);
+        } else {
+            aimPoint.setColor(GLModel.COLOR_RED);
         }
 
         float[] pos = camera.getPosition();
@@ -93,24 +113,14 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
     @Override
     public void onCardboardTrigger() {
-//        overlayView.show3DToast("Earth\n" + " stacks/slices: (" + earth.getStacks() + "," + earth.getSlices() + ")");
+        debug_camer_movement = !debug_camer_movement;
 
-//        int intersectCount = 0;
-//        for (final Marker mark : earth.getMarkers()) {
-//            double t = mark.intersect(camera.getPosition(), forwardDir);
-//            if (t > 0) {
-//                intersectCount++;
-//            }
-//        }
-//        if (intersectCount > 0) {
-//            final String intersectCountStr = String.valueOf(intersectCount);
-//            runOnUiThread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    overlayView.show3DToast("intersectCount:" + intersectCountStr);
-//                }
-//            });
-//        }
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+//                overlayView.show3DToast("debug_camer_movement: " + debug_camer_movement);
+            }
+        });
     }
 
     @Override

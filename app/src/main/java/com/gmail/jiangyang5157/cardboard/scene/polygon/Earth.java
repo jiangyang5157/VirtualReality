@@ -26,9 +26,9 @@ public class Earth extends TextureSphere {
     private static final int SLICES = 50;
     public static final float RADIUS = 100f;
 
-    public static final float LAYER_ALTITUDE_ACCESSABLE = -10f;
-    public static final float LAYER_ALTITUDE_MARKER = -5f;
-    public static final float LAYER_ALTITUDE_AIMPOINT = -10f;
+    public static final float LAYER_ALTITUDE_ACCESSABLE = -14f;
+    public static final float LAYER_ALTITUDE_MARKER = -6f;
+    public static final float LAYER_ALTITUDE_AIMPOINT = -14f;
 
     private ArrayList<Marker> markers = new ArrayList<>();
 
@@ -75,13 +75,11 @@ public class Earth extends TextureSphere {
     }
 
     public Marker addMarker(KmlPlacemark kmlPlacemark, MarkerOptions markerUrlStyle) {
-        int recursionLevel = 2;
         float radius = 4f;
-        float[] color = new float[]{0.8f, 0.0f, 0.0f, 1.0f};
         String name = kmlPlacemark.getProperty("name");
         LatLng latLng = markerUrlStyle.getPosition();
 
-        Marker marker = new Marker(context, this, recursionLevel, radius, color, name, latLng, LAYER_ALTITUDE_MARKER);
+        Marker marker = new Marker(context, this, radius, name, latLng, LAYER_ALTITUDE_MARKER);
         marker.create();
         marker.setLighting(lighting);
         addMarker(marker);

@@ -17,12 +17,15 @@ public class Icosphere extends Sphere {
 
     private final int[] buffers = new int[3];
 
+    public Icosphere(Context context, int vertexShaderRawResource, int fragmentShaderRawResource, int recursionLevel, float radius, String hex) {
+        this(context, vertexShaderRawResource, fragmentShaderRawResource, recursionLevel, radius, hex2color(hex));
+    }
+
     public Icosphere(Context context, int vertexShaderRawResource, int fragmentShaderRawResource, int recursionLevel, float radius, float[] color) {
         super(context, vertexShaderRawResource, fragmentShaderRawResource);
         this.recursionLevel = recursionLevel;
         this.radius = radius;
         this.color = color.clone();
-
         setVisible(true);
     }
 
@@ -92,7 +95,7 @@ public class Icosphere extends Sphere {
         GLES20.glUniformMatrix4fv(mvMatrixHandle, 1, false, modelView, 0);
         GLES20.glUniformMatrix4fv(mvpMatrixHandle, 1, false, modelViewProjection, 0);
         GLES20.glUniform4fv(colorHandle, 1, color, 0);
-        if(lighting != null) {
+        if (lighting != null) {
             GLES20.glUniform3fv(lightPosHandle, 1, lighting.getLightPosInEyeSpace(), 0);
         }
 

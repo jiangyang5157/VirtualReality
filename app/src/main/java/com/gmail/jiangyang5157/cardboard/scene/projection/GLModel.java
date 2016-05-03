@@ -1,6 +1,7 @@
 package com.gmail.jiangyang5157.cardboard.scene.projection;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.opengl.GLES20;
 import android.util.Log;
 
@@ -13,7 +14,7 @@ import java.nio.ShortBuffer;
  * @author Yang
  * @since 4/30/2016
  */
-public abstract class GLModel extends Model{
+public abstract class GLModel extends Model {
     public static final int GLES_VERSION_REQUIRED = 0x00020000;
 
     protected static final String MODEL_HANDLE = "u_ModelMatrix";
@@ -53,7 +54,12 @@ public abstract class GLModel extends Model{
     protected int indicesBuffHandle;
     protected int texturesBuffHandle;
 
+    public static final float[] COLOR_BLUE_GRAY = hex2color("#607D8B");
+    public static final float[] COLOR_DEEP_ORANGE = hex2color("#FF5722");
+    public static final float[] COLOR_GREEN = hex2color("#4CAF50");
+    public static final float[] COLOR_RED = hex2color("#F44336");
     protected float[] color;
+
     protected int indicesBufferCapacity;
 
     protected final int program;
@@ -114,4 +120,34 @@ public abstract class GLModel extends Model{
     protected abstract void buildArrays();
 
     protected abstract void bindBuffers();
+
+    public void setColor(float[] color) {
+        this.color = color;
+    }
+
+    /**
+     * not handle alpha
+     */
+    public static float[] hex2color(String hex) {
+        return hsv2color(rgb2hsv(hex2rgb(hex)));
+    }
+
+    private static int[] hex2rgb(String hex) {
+        int iHex = Color.parseColor(hex);
+        int r = (iHex & 0xFF0000) >> 16;
+        int g = (iHex & 0xFF00) >> 8;
+        int b = (iHex & 0xFF);
+        return new int[]{r, g, b};
+    }
+
+    private static float[] rgb2hsv(int[] rgb) {
+        float h = rgb[0] / 255f;
+        float s = rgb[1] / 255f;
+        float v = rgb[2] / 255f;
+        return new float[]{h, s, v};
+    }
+
+    private static float[] hsv2color(float[] hsv) {
+        return new float[]{hsv[0], hsv[1], hsv[2], 1.0f};
+    }
 }

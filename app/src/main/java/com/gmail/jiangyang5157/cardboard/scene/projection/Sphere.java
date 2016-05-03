@@ -21,7 +21,7 @@ public abstract class Sphere extends GLModel implements Selectable {
     }
 
     @Override
-    public double intersect(float[] cameraPos, float[] forwardDir) {
+    public double[] intersect(float[] cameraPos, float[] forwardDir) {
         Vector cameraPosVec = new Vector(cameraPos[0], cameraPos[1], cameraPos[2]);
         Vector forwardDirVec = new Vector(forwardDir[0], forwardDir[1], forwardDir[2]);
         float[] position = getPosition();
@@ -34,7 +34,7 @@ public abstract class Sphere extends GLModel implements Selectable {
         // solve the quadratic equation
         final double f = b * b - c;
         if (f < 0) {
-            return -1; // ray misses sphere
+            return null; // ray misses sphere
         }
 
         final double sqrtF = Math.sqrt(f);
@@ -45,10 +45,10 @@ public abstract class Sphere extends GLModel implements Selectable {
         // pick the smaller of the two results if both are positive
         final double t = t0 < 0.0f ? Math.max(t1, 0.0f) : (t1 < 0.0f ? t0 : Math.min(t0, t1));
         if (t == 0) {
-            return 0;//both intersections are behind the matrix
+            return null;//both intersections are behind the matrix
         }
 
-        //Vector intersectPos = eye.plus(forwardDir.times(t));
-        return t;
+        Vector intersectPosVec = cameraPosVec.plus(forwardDirVec.times(t));
+        return intersectPosVec.getData();
     }
 }

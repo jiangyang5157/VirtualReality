@@ -13,13 +13,16 @@ import java.nio.ByteOrder;
  */
 public class Point extends GLModel {
 
-    private final float pointSize;
+    private float pointSize;
 
     private final int[] buffers = new int[1];
 
-    public Point(Context context, int vertexShaderRawResource, int fragmentShaderRawResource, float pointSize, float[] color) {
+    public Point(Context context, int vertexShaderRawResource, int fragmentShaderRawResource, String hex) {
+        this(context, vertexShaderRawResource, fragmentShaderRawResource, hex2color(hex));
+    }
+
+    public Point(Context context, int vertexShaderRawResource, int fragmentShaderRawResource, float[] color) {
         super(context, vertexShaderRawResource, fragmentShaderRawResource);
-        this.pointSize = pointSize;
         this.color = color.clone();
     }
 
@@ -78,5 +81,9 @@ public class Point extends GLModel {
     public void destroy() {
         Log.d("Point", "destroy");
         GLES20.glDeleteBuffers(buffers.length, buffers, 0);
+    }
+
+    public void setPointSize(float pointSize) {
+        this.pointSize = pointSize;
     }
 }
