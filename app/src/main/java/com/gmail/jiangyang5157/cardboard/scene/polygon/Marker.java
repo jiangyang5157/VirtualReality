@@ -16,16 +16,14 @@ public class Marker extends Icosphere {
     protected static final int VERTEX_SHADER_RAW_RESOURCE = R.raw.color_vertex_shader;
     protected static final int FRAGMENT_SHADER_RAW_RESOURCE = R.raw.color_fragment_shader;
 
-    protected static final int DEFAULT_RECURSION_LEVEL = 0;
-
     private final Earth earth;
 
     public final String name;
 
     private final Coordinate coordinate;
 
-    public Marker(Context context, Earth earth, float radius, float[] color, String name, LatLng latlng, float altitude) {
-        this(context, earth, VERTEX_SHADER_RAW_RESOURCE, FRAGMENT_SHADER_RAW_RESOURCE, DEFAULT_RECURSION_LEVEL, radius, color, name, latlng, altitude);
+    public Marker(Context context, Earth earth, int recursionLevel, float radius, float[] color, String name, LatLng latlng, float altitude) {
+        this(context, earth, VERTEX_SHADER_RAW_RESOURCE, FRAGMENT_SHADER_RAW_RESOURCE, recursionLevel, radius, color, name, latlng, altitude);
     }
 
     private Marker(Context context, Earth earth, int vertexShaderRawResource, int fragmentShaderRawResource, int recursionLevel, float radius, float[] color, String name, LatLng latlng, float altitude) {
@@ -43,12 +41,7 @@ public class Marker extends Icosphere {
 
     @Override
     public void update(float[] view, float[] perspective) {
-        Matrix.rotateM(model, 0, 1, 0, 1, 1);
         super.update(view, perspective);
-    }
-
-    public Coordinate getCoordinate() {
-        return coordinate;
     }
 
     public void remove() {

@@ -6,6 +6,7 @@ import android.opengl.Matrix;
 import com.gmail.jiangyang5157.cardboard.kml.KmlPlacemark;
 import com.gmail.jiangyang5157.cardboard.scene.projection.TextureSphere;
 import com.gmail.jiangyang5157.cardboard.vr.R;
+import com.gmail.jiangyang5157.tookit.math.Vector;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -23,20 +24,18 @@ public class Earth extends TextureSphere {
 
     private static final int STACKS = 50;
     private static final int SLICES = 50;
+    public static final float RADIUS = 100f;
 
-    private static final float DEFAULT_RADIUS = 100f;
-    public static final float DEFAULT_LAYER_ALTITUDE_MARKER = -4f;
-    public static final float DEFAULT_LAYER_ALTITUDE_AIMPOINT = -9f;
+    public static final float LAYER_ALTITUDE_ACCESSABLE = -10f;
+    public static final float LAYER_ALTITUDE_MARKER = -5f;
+    public static final float LAYER_ALTITUDE_AIMPOINT = -10f;
 
     private ArrayList<Marker> markers = new ArrayList<>();
 
     public Earth(Context context) {
-        super(context, VERTEX_SHADER_RAW_RESOURCE, FRAGMENT_SHADER_RAW_RESOURCE, STACKS, SLICES, DEFAULT_RADIUS, TEXTURE_DRAWABLE_RESOURCE);
+        super(context, VERTEX_SHADER_RAW_RESOURCE, FRAGMENT_SHADER_RAW_RESOURCE, STACKS, SLICES, RADIUS, TEXTURE_DRAWABLE_RESOURCE);
 
         Matrix.setIdentityM(model, 0);
-//        Matrix.translateM(matrix, 0, 0, 0, 0);
-//        Matrix.rotateM(matrix, 0, 90, 1, 0, 0);
-//        Matrix.rotateM(matrix, 0, 180, 0, 0, 1);
     }
 
     @Override
@@ -76,15 +75,23 @@ public class Earth extends TextureSphere {
     }
 
     public Marker addMarker(KmlPlacemark kmlPlacemark, MarkerOptions markerUrlStyle) {
+        int recursionLevel = 2;
         float radius = 4f;
         float[] color = new float[]{0.8f, 0.0f, 0.0f, 1.0f};
         String name = kmlPlacemark.getProperty("name");
         LatLng latLng = markerUrlStyle.getPosition();
 
-        Marker marker = new Marker(context, this, radius, color, name, latLng, DEFAULT_LAYER_ALTITUDE_MARKER);
+        Marker marker = new Marker(context, this, recursionLevel, radius, color, name, latLng, LAYER_ALTITUDE_MARKER);
         marker.create();
         marker.setLighting(lighting);
         addMarker(marker);
         return marker;
+    }
+
+    public boolean contain(float[] point) {
+        float[] position = getPosition();
+        Vector positionVec = new Vector(position[0], position[1], position[2]);
+        Vector pointVec = new Vector(point[0], point[1], point[2]);
+        return pointVec.minus(positionVec).length() < getRadius() + LAYER_ALTITUDE_ACCESSABLE;
     }
 }

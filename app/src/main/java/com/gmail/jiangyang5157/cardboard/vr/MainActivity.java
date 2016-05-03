@@ -10,7 +10,6 @@ import com.gmail.jiangyang5157.cardboard.kml.KmlLayer;
 import com.gmail.jiangyang5157.cardboard.scene.Camera;
 import com.gmail.jiangyang5157.cardboard.scene.polygon.AimPoint;
 import com.gmail.jiangyang5157.cardboard.scene.polygon.Earth;
-import com.gmail.jiangyang5157.cardboard.scene.polygon.Marker;
 import com.gmail.jiangyang5157.cardboard.scene.projection.Light;
 import com.gmail.jiangyang5157.cardboard.scene.projection.Lighting;
 import com.gmail.jiangyang5157.cardboard.scene.projection.GLModel;
@@ -75,16 +74,16 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         headTransform.getHeadView(headView, 0);
         headTransform.getForwardVector(forwardDir, 0);
 
+        float[] point = camera.getPosition().clone();
+        Camera.forward(point, forwardDir, Camera.MOVE_UNIT);
+        if (earth.contain(point)) {
+            camera.move(forwardDir, Camera.MOVE_UNIT);
+        }
+
         float[] pos = camera.getPosition();
-        float distance = earth.getRadius() + Earth.DEFAULT_LAYER_ALTITUDE_AIMPOINT;
+        float distance = earth.getRadius() + Earth.LAYER_ALTITUDE_AIMPOINT;
         Camera.forward(pos, forwardDir, distance);
         aimPoint.setPosition(pos);
-
-        if (go) {
-            camera.move(forwardDir, 0.7f);
-        } else {
-            camera.move(forwardDir, -0.7f);
-        }
     }
 
     @Override
@@ -112,11 +111,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 //                }
 //            });
 //        }
-
-        go = !go;
     }
-
-    boolean go = false;
 
     @Override
     public void onDrawEye(Eye eye) {

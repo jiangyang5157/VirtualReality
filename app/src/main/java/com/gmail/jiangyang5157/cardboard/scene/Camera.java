@@ -11,6 +11,8 @@ public class Camera {
     public static final float Z_NEAR = 0.1f;
     public static final float Z_FAR = 1000.0f;
 
+    public static final float MOVE_UNIT = 0.5f;
+
     public float[] matrix;
     public float[] view;
 
@@ -35,7 +37,6 @@ public class Camera {
     public void move(float[] forwardDir, float distance) {
         forward(position, forwardDir, distance);
         forward(lookAtPos, forwardDir, distance);
-
         Matrix.setLookAtM(matrix, 0,
                 position[0], position[1], position[2],
                 lookAtPos[0], lookAtPos[1], lookAtPos[2],
