@@ -100,6 +100,8 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
             aimPoint.setColor(GLModel.COLOR_RED);
         }
 
+
+
         float[] pos = camera.getPosition();
         float distance = earth.getRadius() + Earth.LAYER_ALTITUDE_AIMPOINT;
         Camera.forward(pos, forwardDir, distance);
