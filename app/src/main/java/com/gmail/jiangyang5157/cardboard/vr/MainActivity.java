@@ -89,25 +89,21 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
             }
         }
 
-        ArrayList<AimIntersection> markIntersections = new ArrayList<AimIntersection>();
+        ArrayList<AimIntersection> markerIntersections = new ArrayList<AimIntersection>();
         float[] cameraPos = camera.getPosition();
         for (final Marker mark : earth.getMarkers()) {
             AimIntersection markIntersection = mark.intersect(cameraPos, forwardDir);
             if (markIntersection != null) {
-                markIntersections.add(markIntersection);
+                markerIntersections.add(markIntersection);
             }
         }
-        Collections.sort(markIntersections);
+        Collections.sort(markerIntersections);
         AimIntersection intersection = null;
-        if (markIntersections.size() > 0) {
-            intersection = markIntersections.get(0);
+        if (markerIntersections.size() > 0) {
+            intersection = markerIntersections.get(0);
         }
-
         if (intersection == null) {
             intersection = earth.intersect(cameraPos, forwardDir);
-            aimRay.setColor(GLModel.COLOR_RED);
-        } else {
-            aimRay.setColor(GLModel.COLOR_GREEN);
         }
         aimRay.intersectAt(intersection);
     }
