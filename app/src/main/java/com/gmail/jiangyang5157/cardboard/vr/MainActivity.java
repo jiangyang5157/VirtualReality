@@ -8,7 +8,8 @@ import android.widget.Toast;
 
 import com.gmail.jiangyang5157.cardboard.kml.KmlLayer;
 import com.gmail.jiangyang5157.cardboard.scene.Camera;
-import com.gmail.jiangyang5157.cardboard.scene.polygon.AimPoint;
+import com.gmail.jiangyang5157.cardboard.scene.polygon.AimIntersection;
+import com.gmail.jiangyang5157.cardboard.scene.polygon.AimRay;
 import com.gmail.jiangyang5157.cardboard.scene.polygon.Earth;
 import com.gmail.jiangyang5157.cardboard.scene.polygon.Marker;
 import com.gmail.jiangyang5157.cardboard.scene.projection.Light;
@@ -25,6 +26,8 @@ import com.google.vrtoolkit.cardboard.Viewport;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 
 import javax.microedition.khronos.egl.EGLConfig;
 
@@ -41,7 +44,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     private Light light;
 
     private Earth earth;
-    private AimPoint aimPoint;
+    private AimRay aimRay;
 
     private CardboardOverlayView overlayView;
 
@@ -67,7 +70,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     protected void onDestroy() {
         super.onDestroy();
         earth.destroy();
-        aimPoint.destroy();
+        aimRay.destroy();
     }
 
     @Override
@@ -86,26 +89,27 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
             }
         }
 
-        int intersectMark = 0;
+        ArrayList<AimIntersection> markIntersections = new ArrayList<AimIntersection>();
         float[] cameraPos = camera.getPosition();
         for (final Marker mark : earth.getMarkers()) {
-            double[] intersectPos = mark.intersect(cameraPos, forwardDir);
-            if (intersectPos != null) {
-                intersectMark++;
+            AimIntersection markIntersection = mark.intersect(cameraPos, forwardDir);
+            if (markIntersection != null) {
+                markIntersections.add(markIntersection);
             }
         }
-        if (intersectMark > 0) {
-            aimPoint.setColor(GLModel.COLOR_GREEN);
-        } else {
-            aimPoint.setColor(GLModel.COLOR_RED);
+        Collections.sort(markIntersections);
+        AimIntersection intersection = null;
+        if (markIntersections.size() > 0) {
+            intersection = markIntersections.get(0);
         }
 
-
-
-        float[] pos = camera.getPosition();
-        float distance = earth.getRadius() + Earth.LAYER_ALTITUDE_AIMPOINT;
-        Camera.forward(pos, forwardDir, distance);
-        aimPoint.setPosition(pos);
+        if (intersection == null) {
+            intersection = earth.intersect(cameraPos, forwardDir);
+            aimRay.setColor(GLModel.COLOR_RED);
+        } else {
+            aimRay.setColor(GLModel.COLOR_GREEN);
+        }
+        aimRay.intersectAt(intersection);
     }
 
     @Override
@@ -144,12 +148,12 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
     private void updateScene(float[] view, float[] perspective) {
         earth.update(view, perspective);
-        aimPoint.update(view, perspective);
+        aimRay.update(view, perspective);
     }
 
     private void drawScene() {
         earth.draw();
-        aimPoint.draw();
+        aimRay.draw();
     }
 
     private float[] getModelPositionInEyeSpace(float[] model, float[] modelView) {
@@ -182,8 +186,8 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
             e.printStackTrace();
         }
 
-        aimPoint = new AimPoint(this);
-        aimPoint.create();
+        aimRay = new AimRay(this, earth);
+        aimRay.create();
     }
 
     @Override

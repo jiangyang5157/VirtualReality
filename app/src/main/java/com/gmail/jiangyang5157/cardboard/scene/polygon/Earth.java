@@ -26,9 +26,10 @@ public class Earth extends TextureSphere {
     private static final int SLICES = 50;
     public static final float RADIUS = 100f;
 
-    public static final float LAYER_ALTITUDE_ACCESSABLE = -14f;
-    public static final float LAYER_ALTITUDE_MARKER = -6f;
-    public static final float LAYER_ALTITUDE_AIMPOINT = -14f;
+
+    public static final float MARKER_RADIUS = 4f;
+    public static final float MARKER_ALTITUDE = -MARKER_RADIUS;
+    public static final float CAMERA_ALTITUDE = 2 * MARKER_RADIUS * (MARKER_ALTITUDE > 0 ? 1 : -1);
 
     private ArrayList<Marker> markers = new ArrayList<>();
 
@@ -75,11 +76,10 @@ public class Earth extends TextureSphere {
     }
 
     public Marker addMarker(KmlPlacemark kmlPlacemark, MarkerOptions markerUrlStyle) {
-        float radius = 4f;
         String name = kmlPlacemark.getProperty("name");
         LatLng latLng = markerUrlStyle.getPosition();
 
-        Marker marker = new Marker(context, this, radius, name, latLng, LAYER_ALTITUDE_MARKER);
+        Marker marker = new Marker(context, this, MARKER_RADIUS, name, latLng, MARKER_ALTITUDE);
         marker.create();
         marker.setLighting(lighting);
         addMarker(marker);
@@ -90,6 +90,6 @@ public class Earth extends TextureSphere {
         float[] position = getPosition();
         Vector positionVec = new Vector(position[0], position[1], position[2]);
         Vector pointVec = new Vector(point[0], point[1], point[2]);
-        return pointVec.minus(positionVec).length() < getRadius() + LAYER_ALTITUDE_ACCESSABLE;
+        return pointVec.minus(positionVec).length() < getRadius() + CAMERA_ALTITUDE;
     }
 }

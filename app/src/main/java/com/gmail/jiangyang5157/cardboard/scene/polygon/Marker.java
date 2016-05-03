@@ -16,7 +16,7 @@ public class Marker extends Icosphere {
     protected static final int VERTEX_SHADER_RAW_RESOURCE = R.raw.color_vertex_shader;
     protected static final int FRAGMENT_SHADER_RAW_RESOURCE = R.raw.color_fragment_shader;
 
-    protected static final int DEFAULT_RECURSION_LEVEL = 2;
+    protected static final int DEFAULT_RECURSION_LEVEL = 3;
 
     private final Earth earth;
 
@@ -29,7 +29,7 @@ public class Marker extends Icosphere {
     }
 
     private Marker(Context context, Earth earth, int vertexShaderRawResource, int fragmentShaderRawResource, int recursionLevel, float radius, String name, LatLng latlng, float altitude) {
-        super(context, vertexShaderRawResource, fragmentShaderRawResource, recursionLevel, radius, COLOR_BLUE_GRAY);
+        super(context, vertexShaderRawResource, fragmentShaderRawResource, recursionLevel, radius, COLOR_DEEP_ORANGE);
         this.earth = earth;
         this.name = name;
         this.coordinate = new Coordinate(latlng.latitude, latlng.longitude, altitude, this.earth.getRadius());

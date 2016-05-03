@@ -2,6 +2,7 @@ package com.gmail.jiangyang5157.cardboard.scene.projection;
 
 import android.content.Context;
 
+import com.gmail.jiangyang5157.cardboard.scene.polygon.AimIntersection;
 import com.gmail.jiangyang5157.tookit.math.Vector;
 
 /**
@@ -21,7 +22,7 @@ public abstract class Sphere extends GLModel implements Selectable {
     }
 
     @Override
-    public double[] intersect(float[] cameraPos, float[] forwardDir) {
+    public AimIntersection intersect(float[] cameraPos, float[] forwardDir) {
         Vector cameraPosVec = new Vector(cameraPos[0], cameraPos[1], cameraPos[2]);
         Vector forwardDirVec = new Vector(forwardDir[0], forwardDir[1], forwardDir[2]);
         float[] position = getPosition();
@@ -48,7 +49,6 @@ public abstract class Sphere extends GLModel implements Selectable {
             return null;//both intersections are behind the matrix
         }
 
-        Vector intersectPosVec = cameraPosVec.plus(forwardDirVec.times(t));
-        return intersectPosVec.getData();
+        return new AimIntersection(this, cameraPosVec, cameraPosVec.plus(forwardDirVec.times(t)), t);
     }
 }
