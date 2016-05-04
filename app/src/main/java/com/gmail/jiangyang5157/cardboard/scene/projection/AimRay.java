@@ -1,10 +1,8 @@
-package com.gmail.jiangyang5157.cardboard.scene.polygon;
+package com.gmail.jiangyang5157.cardboard.scene.projection;
 
 import android.content.Context;
 import android.opengl.Matrix;
 
-import com.gmail.jiangyang5157.cardboard.scene.projection.GLModel;
-import com.gmail.jiangyang5157.cardboard.scene.projection.Point;
 import com.gmail.jiangyang5157.cardboard.vr.R;
 import com.gmail.jiangyang5157.tookit.math.Vector;
 

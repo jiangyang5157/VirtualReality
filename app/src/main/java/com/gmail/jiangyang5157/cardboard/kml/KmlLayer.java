@@ -2,7 +2,7 @@ package com.gmail.jiangyang5157.cardboard.kml;
 
 import android.content.Context;
 
-import com.gmail.jiangyang5157.cardboard.scene.polygon.Earth;
+import com.gmail.jiangyang5157.cardboard.scene.projection.Earth;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;

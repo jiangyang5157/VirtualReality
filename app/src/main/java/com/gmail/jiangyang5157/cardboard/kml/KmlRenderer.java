@@ -2,8 +2,8 @@ package com.gmail.jiangyang5157.cardboard.kml;
 
 import android.content.Context;
 
-import com.gmail.jiangyang5157.cardboard.scene.polygon.Earth;
-import com.gmail.jiangyang5157.cardboard.scene.polygon.Marker;
+import com.gmail.jiangyang5157.cardboard.scene.projection.Earth;
+import com.gmail.jiangyang5157.cardboard.scene.projection.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;

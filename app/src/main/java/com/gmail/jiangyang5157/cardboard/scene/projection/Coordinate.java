@@ -1,4 +1,4 @@
-package com.gmail.jiangyang5157.cardboard.scene.polygon;
+package com.gmail.jiangyang5157.cardboard.scene.projection;
 
 import com.google.vrtoolkit.cardboard.sensors.internal.Matrix3x3d;
 

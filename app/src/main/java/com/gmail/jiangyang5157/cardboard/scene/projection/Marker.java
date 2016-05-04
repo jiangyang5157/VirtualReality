@@ -1,9 +1,8 @@
-package com.gmail.jiangyang5157.cardboard.scene.polygon;
+package com.gmail.jiangyang5157.cardboard.scene.projection;
 
 import android.content.Context;
 import android.opengl.Matrix;
 
-import com.gmail.jiangyang5157.cardboard.scene.projection.Icosphere;
 import com.gmail.jiangyang5157.cardboard.vr.R;
 import com.google.android.gms.maps.model.LatLng;
 
