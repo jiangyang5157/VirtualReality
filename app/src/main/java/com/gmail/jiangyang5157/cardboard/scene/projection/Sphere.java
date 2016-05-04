@@ -9,7 +9,7 @@ import com.gmail.jiangyang5157.tookit.math.Vector;
  * @author Yang
  * @since 4/30/2016
  */
-public abstract class Sphere extends GLModel implements Selectable {
+public abstract class Sphere extends GLModel implements Intersectable {
 
     float radius;
 

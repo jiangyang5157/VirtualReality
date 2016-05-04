@@ -115,14 +115,18 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
     @Override
     public void onCardboardTrigger() {
-        debug_camer_movement = !debug_camer_movement;
-
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-//                overlayView.show3DToast("debug_camer_movement: " + debug_camer_movement);
-            }
-        });
+        final AimIntersection intersection = aimRay.getIntersection();
+        if (intersection.model instanceof Marker) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    overlayView.show3DToast(((Marker)intersection.model).toString());
+                }
+            });
+            debug_camer_movement = false;
+        } else {
+            debug_camer_movement = !debug_camer_movement;
+        }
     }
 
     @Override

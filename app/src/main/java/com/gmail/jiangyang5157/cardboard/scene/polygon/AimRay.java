@@ -17,15 +17,17 @@ public class AimRay extends Point {
     private static final int VERTEX_SHADER_RAW_RESOURCE = R.raw.point_vertex_shader;
     private static final int FRAGMENT_SHADER_RAW_RESOURCE = R.raw.point_fragment_shader;
 
-    public static final float FACTOR_POINT_SIZE = 0.1f;
-    public static final float SPACE = 1f;
+    public static final float FACTOR_POINT_SIZE = 0.08f;
+    public static final float SPACE = 8f;
 
     private final Earth earth;
+
+    private AimIntersection intersection;
 
     public AimRay(Context context, Earth earth) {
         super(context, VERTEX_SHADER_RAW_RESOURCE, FRAGMENT_SHADER_RAW_RESOURCE, COLOR_RED);
         this.earth = earth;
-        adjustPointSize(earth.getRadius());
+        adjustPointSize(this.earth.getRadius());
         Matrix.setIdentityM(model, 0);
     }
 
@@ -39,7 +41,9 @@ public class AimRay extends Point {
     }
 
     public void intersectAt(AimIntersection intersection) {
-        if (intersection.model instanceof Marker){
+        this.intersection = intersection;
+
+        if (intersection.model instanceof Marker) {
             setColor(GLModel.COLOR_GREEN);
         } else {
             setColor(GLModel.COLOR_RED);
@@ -53,5 +57,9 @@ public class AimRay extends Point {
 
         double distance = newIntersectPosVec.length();
         adjustPointSize(distance);
+    }
+
+    public AimIntersection getIntersection() {
+        return intersection;
     }
 }
