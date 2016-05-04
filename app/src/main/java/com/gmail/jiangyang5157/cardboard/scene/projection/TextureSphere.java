@@ -183,7 +183,7 @@ public class TextureSphere extends Sphere {
         GLES20.glUniformMatrix4fv(mvMatrixHandle, 1, false, modelView, 0);
         GLES20.glUniformMatrix4fv(mvpMatrixHandle, 1, false, modelViewProjection, 0);
         if(lighting != null) {
-            GLES20.glUniform3fv(lightPosHandle, 1, lighting.getLightPosInEyeSpace(), 0);
+            GLES20.glUniform3fv(lightPosHandle, 1, lighting.getLightPosInCameraSpace(), 0);
         }
 
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, verticesBuffHandle);

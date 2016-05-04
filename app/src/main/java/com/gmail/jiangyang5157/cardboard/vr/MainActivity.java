@@ -156,7 +156,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         aimRay.draw();
     }
 
-    private float[] getModelPositionInEyeSpace(float[] model, float[] modelView) {
+    private float[] getModelPositionInCameraSpace(float[] model, float[] modelView) {
         float[] init = {0, 0, 0, 1.0f};
         float[] objPosition = new float[4];
         // Convert object space to matrix space. Use the headView from onNewFrame.
@@ -174,7 +174,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         earth.create();
         earth.setLighting(new Lighting() {
             @Override
-            public float[] getLightPosInEyeSpace() {
+            public float[] getLightPosInCameraSpace() {
                 return light.lightPosInCameraSpace;
             }
         });
