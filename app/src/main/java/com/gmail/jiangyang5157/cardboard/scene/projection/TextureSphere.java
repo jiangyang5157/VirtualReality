@@ -24,10 +24,9 @@ public class TextureSphere extends Sphere {
     private final int[] texBuffers = new int[1];
 
     public TextureSphere(Context context, int vertexShaderRawResource, int fragmentShaderRawResource, int stacks, int slices, float radius, int textureDrawableResource) {
-        super(context, vertexShaderRawResource, fragmentShaderRawResource);
+        super(context, vertexShaderRawResource, fragmentShaderRawResource, radius);
         this.stacks = stacks;
         this.slices = slices;
-        this.radius = radius;
         this.textureDrawableResource = textureDrawableResource;
     }
 

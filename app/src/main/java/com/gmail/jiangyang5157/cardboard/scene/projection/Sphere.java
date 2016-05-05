@@ -13,8 +13,9 @@ public abstract class Sphere extends GLModel implements Intersectable {
 
     float radius;
 
-    public Sphere(Context context, int vertexShaderRawResource, int fragmentShaderRawResource) {
+    public Sphere(Context context, int vertexShaderRawResource, int fragmentShaderRawResource, float radius) {
         super(context, vertexShaderRawResource, fragmentShaderRawResource);
+        this.radius = radius;
     }
 
     public float getRadius() {

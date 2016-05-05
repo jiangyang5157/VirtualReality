@@ -22,11 +22,20 @@ public class Icosphere extends Sphere {
     }
 
     private Icosphere(Context context, int vertexShaderRawResource, int fragmentShaderRawResource, int recursionLevel, float radius, float[] color) {
-        super(context, vertexShaderRawResource, fragmentShaderRawResource);
+        super(context, vertexShaderRawResource, fragmentShaderRawResource, radius);
         this.recursionLevel = recursionLevel;
-        this.radius = radius;
         this.color = color.clone();
-        setVisible(true);
+    }
+
+    @Override
+    protected void initializeHandle() {
+        mvMatrixHandle = GLES20.glGetUniformLocation(program, MODEL_VIEW_HANDLE);
+        mvpMatrixHandle = GLES20.glGetUniformLocation(program, MODEL_VIEW_PROJECTION_HANDLE);
+        colorHandle = GLES20.glGetUniformLocation(program, COLOR_HANDLE);
+        lightPosHandle = GLES20.glGetUniformLocation(program, LIGHT_POSITION_HANDLE);
+
+        vertexHandle = GLES20.glGetAttribLocation(program, VERTEX_HANDLE);
+        normalHandle = GLES20.glGetAttribLocation(program, NORMAL_HANDLE);
     }
 
     @Override
@@ -71,17 +80,6 @@ public class Icosphere extends Sphere {
         GLES20.glBufferData(GLES20.GL_ELEMENT_ARRAY_BUFFER, indicesBuffer.capacity() * BYTES_PER_SHORT, indicesBuffer, GLES20.GL_STATIC_DRAW);
         indicesBuffer.limit(0);
         indicesBuffer = null;
-    }
-
-    @Override
-    protected void initializeHandle() {
-        mvMatrixHandle = GLES20.glGetUniformLocation(program, MODEL_VIEW_HANDLE);
-        mvpMatrixHandle = GLES20.glGetUniformLocation(program, MODEL_VIEW_PROJECTION_HANDLE);
-        colorHandle = GLES20.glGetUniformLocation(program, COLOR_HANDLE);
-        lightPosHandle = GLES20.glGetUniformLocation(program, LIGHT_POSITION_HANDLE);
-
-        vertexHandle = GLES20.glGetAttribLocation(program, VERTEX_HANDLE);
-        normalHandle = GLES20.glGetAttribLocation(program, NORMAL_HANDLE);
     }
 
     @Override

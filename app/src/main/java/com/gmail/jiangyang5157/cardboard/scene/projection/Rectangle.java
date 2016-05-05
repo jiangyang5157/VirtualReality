@@ -10,8 +10,13 @@ import com.gmail.jiangyang5157.cardboard.scene.AimIntersection;
  */
 public abstract class Rectangle extends GLModel implements Intersectable {
 
-    protected Rectangle(Context context, int vertexShaderRawResource, int fragmentShaderRawResource) {
+    float width;
+    float height;
+
+    protected Rectangle(Context context, int vertexShaderRawResource, int fragmentShaderRawResource, int width, float height) {
         super(context, vertexShaderRawResource, fragmentShaderRawResource);
+        this.width = width;
+        this.height = height;
     }
     
     @Override
