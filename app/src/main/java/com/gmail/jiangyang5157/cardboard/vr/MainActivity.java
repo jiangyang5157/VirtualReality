@@ -120,7 +120,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    overlayView.show3DToast(((Marker)intersection.model).toString());
+                    overlayView.show3DToast(((Marker)intersection.model).name);
                 }
             });
             debug_camer_movement = false;

@@ -23,8 +23,14 @@
                 <Data name="CampNumber">
                     <value>12</value>
                 </Data>
-                <Data name="ParkingSpaces">
-                    <value>4</value>
+                <Data name="aaa/sss">
+                    <displayName>
+                        <![CDATA[
+                        diaplayname is one of the UNSUPPORTED_REGEX
+                        asdasd1234!@#$%^&*()_+ <b><i>number of camps</i></b>
+                        ]]>
+                    </displayName>
+                    <value>12</value>
                 </Data>
             </ExtendedData>
             <Point>
@@ -32,21 +38,25 @@
             </Point>
         </Placemark>
         <Placemark>
+            <name>0/0</name>
             <Point>
                 <coordinates>0,0</coordinates>
             </Point>
         </Placemark>
         <Placemark>
+            <name>90/0</name>
             <Point>
                 <coordinates>90,0</coordinates>
             </Point>
         </Placemark>
         <Placemark>
+            <name>-90/0</name>
             <Point>
                 <coordinates>-90,0</coordinates>
             </Point>
         </Placemark>
         <Placemark>
+            <name>-180/0</name>
             <Point>
                 <coordinates>-180,0</coordinates>
             </Point>
