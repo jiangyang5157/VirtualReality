@@ -21,7 +21,7 @@ public class Icosphere extends Sphere {
         this(context, vertexShaderRawResource, fragmentShaderRawResource, recursionLevel, radius, hex2color(hex));
     }
 
-    public Icosphere(Context context, int vertexShaderRawResource, int fragmentShaderRawResource, int recursionLevel, float radius, float[] color) {
+    private Icosphere(Context context, int vertexShaderRawResource, int fragmentShaderRawResource, int recursionLevel, float radius, float[] color) {
         super(context, vertexShaderRawResource, fragmentShaderRawResource);
         this.recursionLevel = recursionLevel;
         this.radius = radius;

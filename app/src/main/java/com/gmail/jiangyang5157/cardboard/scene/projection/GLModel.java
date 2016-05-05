@@ -55,10 +55,10 @@ public abstract class GLModel extends Model {
     protected int indicesBuffHandle;
     protected int texturesBuffHandle;
 
-    public static final float[] COLOR_BLUE_GRAY = hex2color("#607D8B");
-    public static final float[] COLOR_DEEP_ORANGE = hex2color("#FF5722");
-    public static final float[] COLOR_GREEN = hex2color("#4CAF50");
-    public static final float[] COLOR_RED = hex2color("#F44336");
+    public static final String COLOR_BLUE_GRAY = "#607D8B";
+    public static final String COLOR_DEEP_ORANGE = "#FF5722";
+    public static final String COLOR_GREEN = "#4CAF50";
+    public static final String COLOR_RED = "#F44336";
     protected float[] color;
 
     protected int indicesBufferCapacity;
@@ -122,7 +122,11 @@ public abstract class GLModel extends Model {
 
     protected abstract void bindBuffers();
 
-    public void setColor(float[] color) {
+    public void setColor(String hex) {
+        setColor(hex2color(hex));
+    }
+
+    private void setColor(float[] color) {
         this.color = color;
     }
 
