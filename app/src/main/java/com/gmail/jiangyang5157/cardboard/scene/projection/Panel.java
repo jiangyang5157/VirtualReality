@@ -47,15 +47,15 @@ public class Panel extends Rectangle {
         final float HALF_HEIGHT = height / 2.0f;
 
         vertices = new float[]{
-                -1.0f * HALF_WIDTH, 1.0f * HALF_HEIGHT, 0.0f, // top left
-                1.0f * HALF_WIDTH, 1.0f * HALF_HEIGHT, 0.0f, // top right
-                -1.0f * HALF_WIDTH, -1.0f * HALF_HEIGHT, 0.0f, // bottom left
-                1.0f * HALF_WIDTH, -1.0f * HALF_HEIGHT, 0.0f, // bottom right
+                -1.0f * HALF_WIDTH, 1.0f * HALF_HEIGHT, 0.0f, // tl
+                -1.0f * HALF_WIDTH, -1.0f * HALF_HEIGHT, 0.0f, // bl
+                1.0f * HALF_WIDTH, 1.0f * HALF_HEIGHT, 0.0f, // tr
+                1.0f * HALF_WIDTH, -1.0f * HALF_HEIGHT, 0.0f, // br
         };
 
+        // GL_CCW
         indices = new short[]{
-                0, 1,
-                2, 3
+                0, 1, 2, 3
         };
     }
 

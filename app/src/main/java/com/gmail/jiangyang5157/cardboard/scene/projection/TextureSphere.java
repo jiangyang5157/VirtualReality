@@ -72,17 +72,18 @@ public class TextureSphere extends Sphere {
             }
         }
 
+        // GL_CCW
         for (int r = 0; r < stacks; r++) {
             for (int s = 0; s < slices; s++) {
                 int r_ = (r + 1 == stacks) ? 0 : r + 1;
                 int s_ = (s + 1 == slices) ? 0 : s + 1;
-                indices[indexIndex] = (short) (r * slices + s);
-                indices[indexIndex + 1] = (short) (r * slices + s_);
-                indices[indexIndex + 2] = (short) (r_ * slices + s_);
+                indices[indexIndex] = (short) (r * slices + s); //tl
+                indices[indexIndex + 1] = (short) (r_ * slices + s);//bl
+                indices[indexIndex + 2] = (short) (r * slices + s_);//tr
 
-                indices[indexIndex + 3] = (short) (r_ * slices + s);
-                indices[indexIndex + 4] = (short) (r_ * slices + s_);
-                indices[indexIndex + 5] = (short) (r * slices + s);
+                indices[indexIndex + 3] = (short) (r * slices + s_);//tr
+                indices[indexIndex + 4] = (short) (r_ * slices + s);//bl
+                indices[indexIndex + 5] = (short) (r_ * slices + s_);//br
 
                 indexIndex += 6;
             }
@@ -181,7 +182,7 @@ public class TextureSphere extends Sphere {
 
         GLES20.glUniformMatrix4fv(mvMatrixHandle, 1, false, modelView, 0);
         GLES20.glUniformMatrix4fv(mvpMatrixHandle, 1, false, modelViewProjection, 0);
-        if(lighting != null) {
+        if (lighting != null) {
             GLES20.glUniform3fv(lightPosHandle, 1, lighting.getLightPosInCameraSpace(), 0);
         }
 

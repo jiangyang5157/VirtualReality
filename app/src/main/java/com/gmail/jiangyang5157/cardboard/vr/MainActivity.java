@@ -80,6 +80,10 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     public void onNewFrame(HeadTransform headTransform) {
         GLES20.glEnable(GLES20.GL_DEPTH_TEST);
 
+        GLES20.glEnable(GLES20.GL_CULL_FACE);
+        GLES20.glFrontFace(GLES20.GL_CCW);
+        GLES20.glCullFace(GLES20.GL_BACK);
+
         GLES20.glClearColor(0.1f, 0.1f, 0.1f, 0.5f);
         headTransform.getHeadView(headView, 0);
         headTransform.getForwardVector(forwardDir, 0);

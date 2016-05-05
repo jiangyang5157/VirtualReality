@@ -49,6 +49,7 @@ public class IcosphereVertex implements Geometry {
         addVertex(-GOLDEN_RATIO, 0, -1, vIndex++);
         addVertex(-GOLDEN_RATIO, 0, 1, vIndex++);
 
+        // GL_CCW
         indices = new short[]{
                 0, 11, 5,
                 0, 5, 1,
