@@ -2,6 +2,7 @@ package com.gmail.jiangyang5157.cardboard.scene.projection;
 
 import android.content.Context;
 
+import com.gmail.jiangyang5157.cardboard.scene.AimIntersection;
 import com.gmail.jiangyang5157.tookit.math.Vector;
 
 /**

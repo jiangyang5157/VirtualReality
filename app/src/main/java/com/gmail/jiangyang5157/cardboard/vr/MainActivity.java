@@ -8,12 +8,12 @@ import android.widget.Toast;
 
 import com.gmail.jiangyang5157.cardboard.kml.KmlLayer;
 import com.gmail.jiangyang5157.cardboard.scene.Camera;
-import com.gmail.jiangyang5157.cardboard.scene.projection.AimIntersection;
+import com.gmail.jiangyang5157.cardboard.scene.AimIntersection;
 import com.gmail.jiangyang5157.cardboard.scene.projection.AimRay;
 import com.gmail.jiangyang5157.cardboard.scene.projection.Earth;
 import com.gmail.jiangyang5157.cardboard.scene.projection.Marker;
-import com.gmail.jiangyang5157.cardboard.scene.projection.Light;
-import com.gmail.jiangyang5157.cardboard.scene.projection.Lighting;
+import com.gmail.jiangyang5157.cardboard.scene.Light;
+import com.gmail.jiangyang5157.cardboard.scene.Lighting;
 import com.gmail.jiangyang5157.cardboard.scene.projection.GLModel;
 import com.gmail.jiangyang5157.cardboard.ui.CardboardOverlayView;
 import com.gmail.jiangyang5157.tookit.app.DeviceUtils;
