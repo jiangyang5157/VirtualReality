@@ -34,8 +34,6 @@ public class Earth extends TextureSphere {
 
     public Earth(Context context) {
         super(context, VERTEX_SHADER_RAW_RESOURCE, FRAGMENT_SHADER_RAW_RESOURCE, STACKS, SLICES, RADIUS, TEXTURE_DRAWABLE_RESOURCE);
-
-        Matrix.setIdentityM(model, 0);
     }
 
     @Override

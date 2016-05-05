@@ -7,5 +7,5 @@ import com.gmail.jiangyang5157.cardboard.scene.AimIntersection;
  * @since 5/2/2016
  */
 public interface Intersectable {
-    public AimIntersection intersect(float[] cameraPosition, float[] forwardDirection);
+    AimIntersection intersect(float[] cameraPosition, float[] forwardDirection);
 }

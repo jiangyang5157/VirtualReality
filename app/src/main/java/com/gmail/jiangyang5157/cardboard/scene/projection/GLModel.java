@@ -3,6 +3,7 @@ package com.gmail.jiangyang5157.cardboard.scene.projection;
 import android.content.Context;
 import android.graphics.Color;
 import android.opengl.GLES20;
+import android.opengl.Matrix;
 import android.util.Log;
 
 import com.gmail.jiangyang5157.cardboard.scene.Lighting;
@@ -71,6 +72,8 @@ public abstract class GLModel extends Model {
 
     protected GLModel(Context context, int vertexShaderRawResource, int fragmentShaderRawResource) {
         this.context = context;
+
+        Matrix.setIdentityM(model, 0);
         setVisible(true);
 
         program = GLES20.glCreateProgram();

@@ -22,6 +22,7 @@ public class AimIntersection implements Comparable {
         this.t = t;
     }
 
+
     @Override
     public int compareTo(Object another) {
         AimIntersection that = (AimIntersection)another;

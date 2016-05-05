@@ -26,8 +26,8 @@ public class AimRay extends Point {
     public AimRay(Context context, Earth earth) {
         super(context, VERTEX_SHADER_RAW_RESOURCE, FRAGMENT_SHADER_RAW_RESOURCE, COLOR_RED);
         this.earth = earth;
+
         adjustPointSize(this.earth.getRadius());
-        Matrix.setIdentityM(model, 0);
     }
 
     public void setPosition(float[] position) {

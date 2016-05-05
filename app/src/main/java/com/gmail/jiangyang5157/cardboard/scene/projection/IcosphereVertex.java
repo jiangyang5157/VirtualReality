@@ -167,7 +167,7 @@ public class IcosphereVertex implements Geometry {
             throw new RuntimeException("Array has not been initialized.");
         }
 
-        float[] ret = null;
+        float[] ret;
         if (factor == 1.0f) {
             ret = getArrayCopy(vertices);
         } else {

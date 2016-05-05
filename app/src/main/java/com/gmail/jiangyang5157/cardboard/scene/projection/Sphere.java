@@ -11,7 +11,7 @@ import com.gmail.jiangyang5157.tookit.math.Vector;
  */
 public abstract class Sphere extends GLModel implements Intersectable {
 
-    float radius;
+    protected float radius;
 
     public Sphere(Context context, int vertexShaderRawResource, int fragmentShaderRawResource, float radius) {
         super(context, vertexShaderRawResource, fragmentShaderRawResource);
@@ -26,6 +26,7 @@ public abstract class Sphere extends GLModel implements Intersectable {
     public AimIntersection intersect(float[] cameraPos, float[] forwardDir) {
         Vector cameraPosVec = new Vector(cameraPos[0], cameraPos[1], cameraPos[2]);
         Vector forwardDirVec = new Vector(forwardDir[0], forwardDir[1], forwardDir[2]);
+
         float[] position = getPosition();
         Vector positionVec = new Vector(position[0], position[1], position[2]);
         Vector posToCameraVec = cameraPosVec.minus(positionVec);

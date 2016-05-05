@@ -34,7 +34,6 @@ public class Marker extends Icosphere {
         this.name = name;
         this.coordinate = new Coordinate(latlng.latitude, latlng.longitude, altitude, this.earth.getRadius());
 
-        Matrix.setIdentityM(model, 0);
         Matrix.translateM(model, 0,
                 (float) coordinate.ecef[0],
                 (float) coordinate.ecef[1],

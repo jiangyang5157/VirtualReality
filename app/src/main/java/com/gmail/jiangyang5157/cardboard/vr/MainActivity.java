@@ -15,6 +15,7 @@ import com.gmail.jiangyang5157.cardboard.scene.projection.Marker;
 import com.gmail.jiangyang5157.cardboard.scene.Light;
 import com.gmail.jiangyang5157.cardboard.scene.Lighting;
 import com.gmail.jiangyang5157.cardboard.scene.projection.GLModel;
+import com.gmail.jiangyang5157.cardboard.scene.projection.Panel;
 import com.gmail.jiangyang5157.cardboard.ui.CardboardOverlayView;
 import com.gmail.jiangyang5157.tookit.app.DeviceUtils;
 import com.google.vrtoolkit.cardboard.CardboardActivity;
@@ -45,6 +46,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
     private Earth earth;
     private AimRay aimRay;
+    private Panel testPanel;
 
     private CardboardOverlayView overlayView;
 
@@ -71,6 +73,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         super.onDestroy();
         earth.destroy();
         aimRay.destroy();
+        testPanel.destroy();
     }
 
     @Override
@@ -149,11 +152,13 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     private void updateScene(float[] view, float[] perspective) {
         earth.update(view, perspective);
         aimRay.update(view, perspective);
+        testPanel.update(view, perspective);
     }
 
     private void drawScene() {
         earth.draw();
         aimRay.draw();
+        testPanel.draw();
     }
 
     private float[] getModelPositionInCameraSpace(float[] model, float[] modelView) {
@@ -188,6 +193,9 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
         aimRay = new AimRay(this, earth);
         aimRay.create();
+
+        testPanel = new Panel(this, 4, 2, GLModel.COLOR_BLUE_GRAY, new float[]{0, 0, -10}, null);
+        testPanel.create();
     }
 
     @Override
