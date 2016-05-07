@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
+import android.os.Build;
 import android.util.Log;
 
 import com.gmail.jiangyang5157.cardboard.scene.Lighting;
@@ -55,21 +56,6 @@ public abstract class GLModel extends Model {
     protected int normalsBuffHandle;
     protected int indicesBuffHandle;
     protected int texturesBuffHandle;
-
-    public static final int COLOR_RED = 0xF44336;
-    public static final int COLOR_BLACK = 0x000000;
-    public static final int COLOR_GRAY = 0x9E9E9E;
-    public static final int COLOR_BLUE_GRAY = 0x607D8B;
-
-    public static final int COLOR_AMBER= 0xFFC107;
-    public static final int COLOR_ORANGE = 0xFF9800;
-    public static final int COLOR_DEEP_ORANGE = 0xFF5722;
-
-    public static final int COLOR_GREEN = 0x4CAF50;
-    public static final int COLOR_LIGHT_GREEN = 0x8BC34A;
-
-    public static final int COLOR_BLUE = 0x2196F3;
-    public static final int COLOR_LIGHT_BLUE = 0x03A9F4;
 
     protected float[] color;
 

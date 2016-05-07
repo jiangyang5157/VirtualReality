@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.gmail.jiangyang5157.cardboard.scene.AimIntersection;
 import com.gmail.jiangyang5157.cardboard.vr.R;
+import com.gmail.jiangyang5157.tookit.app.AppUtils;
 import com.gmail.jiangyang5157.tookit.math.Vector;
 
 /**
@@ -25,7 +26,7 @@ public class AimRay extends Point {
     private AimIntersection intersection;
 
     public AimRay(Context context, Earth earth) {
-        super(context, VERTEX_SHADER_RAW_RESOURCE, FRAGMENT_SHADER_RAW_RESOURCE, COLOR_DEEP_ORANGE);
+        super(context, VERTEX_SHADER_RAW_RESOURCE, FRAGMENT_SHADER_RAW_RESOURCE, AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.DeepOrange));
         this.earth = earth;
 
         adjustPointSize(this.earth.getRadius());
@@ -44,9 +45,9 @@ public class AimRay extends Point {
         this.intersection = intersection;
 
         if (intersection.model instanceof Marker) {
-            setColor(GLModel.COLOR_BLACK);
+            setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.Black));
         } else {
-            setColor(GLModel.COLOR_DEEP_ORANGE);
+            setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.DeepOrange));
         }
 
         Vector intersectToCameraVec = intersection.cameraPosVec.minus(intersection.intersecttPosVec);

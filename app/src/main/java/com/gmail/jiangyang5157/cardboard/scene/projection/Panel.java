@@ -11,6 +11,7 @@ import android.opengl.Matrix;
 import android.util.Log;
 
 import com.gmail.jiangyang5157.cardboard.vr.R;
+import com.gmail.jiangyang5157.tookit.app.AppUtils;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -124,7 +125,7 @@ public class Panel extends Rectangle {
             Paint textPaint = new Paint();
             textPaint.setAntiAlias(true);
             textPaint.setTextSize(40);
-            textPaint.setColor(Color.WHITE);
+            textPaint.setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.White));
             canvas.drawText(text, 0, height, textPaint);
 
 //            final BitmapFactory.Options options = new BitmapFactory.Options();

@@ -5,6 +5,7 @@ import android.opengl.Matrix;
 
 import com.gmail.jiangyang5157.cardboard.scene.Coordinate;
 import com.gmail.jiangyang5157.cardboard.vr.R;
+import com.gmail.jiangyang5157.tookit.app.AppUtils;
 import com.google.android.gms.maps.model.LatLng;
 
 /**
@@ -29,7 +30,7 @@ public class Marker extends Icosphere {
     }
 
     private Marker(Context context, Earth earth, int vertexShaderRawResource, int fragmentShaderRawResource, int recursionLevel, float radius, String name, LatLng latlng, float altitude) {
-        super(context, vertexShaderRawResource, fragmentShaderRawResource, recursionLevel, radius, COLOR_BLUE);
+        super(context, vertexShaderRawResource, fragmentShaderRawResource, recursionLevel, radius, AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.Blue));
         this.earth = earth;
         this.name = name;
         this.coordinate = new Coordinate(latlng.latitude, latlng.longitude, altitude, this.earth.getRadius());

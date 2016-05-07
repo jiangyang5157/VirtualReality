@@ -17,6 +17,7 @@ import com.gmail.jiangyang5157.cardboard.scene.Lighting;
 import com.gmail.jiangyang5157.cardboard.scene.projection.GLModel;
 import com.gmail.jiangyang5157.cardboard.scene.projection.Panel;
 import com.gmail.jiangyang5157.cardboard.ui.CardboardOverlayView;
+import com.gmail.jiangyang5157.tookit.app.AppUtils;
 import com.gmail.jiangyang5157.tookit.app.DeviceUtils;
 import com.google.vrtoolkit.cardboard.CardboardActivity;
 import com.google.vrtoolkit.cardboard.CardboardView;
@@ -198,7 +199,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         aimRay = new AimRay(this, earth);
         aimRay.create();
 
-        testPanel = new Panel(this, 100, 40, new float[]{0, 0, -50}, null, GLModel.COLOR_GREEN);
+        testPanel = new Panel(this, 100, 40, new float[]{0, 0, -50}, null, AppUtils.getColor(this, com.gmail.jiangyang5157.tookit.R.color.Green));
         testPanel.create();
     }
 
