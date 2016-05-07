@@ -16,8 +16,8 @@ public class AimRay extends Point {
     private static final int VERTEX_SHADER_RAW_RESOURCE = R.raw.point_vertex_shader;
     private static final int FRAGMENT_SHADER_RAW_RESOURCE = R.raw.point_fragment_shader;
 
-    public static final float FACTOR_POINT_SIZE = 0.08f;
-    public static final float SPACE = 8f;
+    public static final float FACTOR_POINT_SIZE = 0.05f;
+    public static final float SPACE = Earth.MARKER_RADIUS;
 
     private final Earth earth;
 

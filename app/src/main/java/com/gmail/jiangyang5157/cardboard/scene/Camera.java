@@ -11,7 +11,7 @@ public class Camera {
     public static final float Z_NEAR = 0.1f;
     public static final float Z_FAR = 1000.0f;
 
-    public static final float MOVE_UNIT = 0.2f;
+    public static final float MOVE_UNIT = 1f;
 
     public float[] matrix;
     public float[] view;

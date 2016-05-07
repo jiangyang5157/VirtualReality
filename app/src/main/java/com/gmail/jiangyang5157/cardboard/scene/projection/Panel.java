@@ -2,7 +2,9 @@ package com.gmail.jiangyang5157.cardboard.scene.projection;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
 import android.opengl.Matrix;
@@ -106,22 +108,35 @@ public class Panel extends Rectangle {
         texturesBuffer.limit(0);
         texturesBuffer = null;
 
-        texBuffers[0] = createTexture(context, "asd");
+        texBuffers[0] = createTexture();
     }
 
-    private int createTexture(Context context, String asd) {
+    private int createTexture() {
+        String text = "asd";
+
         final int[] textureHandle = new int[1];
         GLES20.glGenTextures(1, textureHandle, 0);
 
         if (textureHandle[0] == 0) {
             throw new RuntimeException("Error loading texture.");
         } else {
-            final BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inScaled = false;
-            final Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher, options);
+            Bitmap bitmap = Bitmap.createBitmap((int)width, (int)height, Bitmap.Config.RGB_565);
+            Canvas canvas = new Canvas(bitmap);
+            bitmap.eraseColor(Color.TRANSPARENT);
+
+            Paint textPaint = new Paint();
+            textPaint.setAntiAlias(true);
+            textPaint.setTextSize(40);
+            textPaint.setColor(Color.WHITE);
+            canvas.drawText(text, 0, height, textPaint);
+
+//            final BitmapFactory.Options options = new BitmapFactory.Options();
+//            options.inScaled = false;
+//            final Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher, options);
             GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureHandle[0]);
-            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
-            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_NEAREST);
+            GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR);
+            GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
+
             // Load the bitmap into the bound texture.
             GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
             // Recycle the bitmap, since its data has been loaded into OpenGL.
