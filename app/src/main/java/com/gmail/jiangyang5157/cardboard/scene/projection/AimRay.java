@@ -2,6 +2,7 @@ package com.gmail.jiangyang5157.cardboard.scene.projection;
 
 import android.content.Context;
 import android.opengl.Matrix;
+import android.util.Log;
 
 import com.gmail.jiangyang5157.cardboard.scene.AimIntersection;
 import com.gmail.jiangyang5157.cardboard.vr.R;
@@ -24,7 +25,7 @@ public class AimRay extends Point {
     private AimIntersection intersection;
 
     public AimRay(Context context, Earth earth) {
-        super(context, VERTEX_SHADER_RAW_RESOURCE, FRAGMENT_SHADER_RAW_RESOURCE, COLOR_RED);
+        super(context, VERTEX_SHADER_RAW_RESOURCE, FRAGMENT_SHADER_RAW_RESOURCE, COLOR_DEEP_ORANGE);
         this.earth = earth;
 
         adjustPointSize(this.earth.getRadius());
@@ -43,9 +44,9 @@ public class AimRay extends Point {
         this.intersection = intersection;
 
         if (intersection.model instanceof Marker) {
-            setColor(GLModel.COLOR_BLUE);
+            setColor(GLModel.COLOR_BLACK);
         } else {
-            setColor(GLModel.COLOR_RED);
+            setColor(GLModel.COLOR_DEEP_ORANGE);
         }
 
         Vector intersectToCameraVec = intersection.cameraPosVec.minus(intersection.intersecttPosVec);

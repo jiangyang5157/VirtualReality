@@ -11,17 +11,11 @@ public abstract class Model {
     protected static final int BYTES_PER_FLOAT = 4;
     protected static final int BYTES_PER_SHORT = 2;
 
-    public float[] model;
-    public float[] modelView;
-    public float[] modelViewProjection;
+    public float[] model = new float[16];
+    public float[] modelView = new float[16];
+    public float[] modelViewProjection = new float[16];
 
     protected boolean isVisible;
-
-    public Model() {
-        model = new float[16];
-        modelView = new float[16];
-        modelViewProjection = new float[16];
-    }
 
     public void draw() {
         if (isVisible == false) {

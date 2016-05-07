@@ -29,7 +29,7 @@ public class Marker extends Icosphere {
     }
 
     private Marker(Context context, Earth earth, int vertexShaderRawResource, int fragmentShaderRawResource, int recursionLevel, float radius, String name, LatLng latlng, float altitude) {
-        super(context, vertexShaderRawResource, fragmentShaderRawResource, recursionLevel, radius, COLOR_DEEP_ORANGE);
+        super(context, vertexShaderRawResource, fragmentShaderRawResource, recursionLevel, radius, COLOR_BLUE);
         this.earth = earth;
         this.name = name;
         this.coordinate = new Coordinate(latlng.latitude, latlng.longitude, altitude, this.earth.getRadius());

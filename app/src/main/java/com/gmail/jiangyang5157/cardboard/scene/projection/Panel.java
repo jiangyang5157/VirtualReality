@@ -27,13 +27,9 @@ public class Panel extends Rectangle {
     private final int[] buffers = new int[3];
     private final int[] texBuffers = new int[1];
 
-    public Panel(Context context, int width, float height, float[] position, float[] normal, String hex) {
-        this(context, width, height, position, normal, hex2color(hex));
-    }
-
-    private Panel(Context context, int width, float height, float[] position, float[] normal, float[] color) {
+    public Panel(Context context, int width, float height, float[] position, float[] normal, int colorInt) {
         super(context, VERTEX_SHADER_RAW_RESOURCE, FRAGMENT_SHADER_RAW_RESOURCE, width, height);
-        this.color = color.clone();
+        setColor(colorInt);
 
         // TODO: 5/6/2016
         Matrix.translateM(model, 0, position[0], position[1], position[2]);
@@ -123,7 +119,7 @@ public class Panel extends Rectangle {
             Bitmap bitmap = Bitmap.createBitmap((int)width, (int)height, Bitmap.Config.RGB_565);
             Canvas canvas = new Canvas(bitmap);
 
-            bitmap.eraseColor(Color.HSVToColor(color));
+            bitmap.eraseColor(getColorInt());
 
             Paint textPaint = new Paint();
             textPaint.setAntiAlias(true);

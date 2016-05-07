@@ -56,13 +56,21 @@ public abstract class GLModel extends Model {
     protected int indicesBuffHandle;
     protected int texturesBuffHandle;
 
-    public static final String COLOR_RED = "#F44336";
-    public static final String COLOR_DEEP_ORANGE = "#FF5722";
-    public static final String COLOR_GREEN = "#4CAF50";
-    public static final String COLOR_TEAL = "#009688";
-    public static final String COLOR_INDIGO = "#3F51B5";
-    public static final String COLOR_BLUE = "#2196F3";
-    public static final String COLOR_LIGHT_BLUE = "#03A9F4";
+    public static final int COLOR_RED = 0xF44336;
+    public static final int COLOR_BLACK = 0x000000;
+    public static final int COLOR_GRAY = 0x9E9E9E;
+    public static final int COLOR_BLUE_GRAY = 0x607D8B;
+
+    public static final int COLOR_AMBER= 0xFFC107;
+    public static final int COLOR_ORANGE = 0xFF9800;
+    public static final int COLOR_DEEP_ORANGE = 0xFF5722;
+
+    public static final int COLOR_GREEN = 0x4CAF50;
+    public static final int COLOR_LIGHT_GREEN = 0x8BC34A;
+
+    public static final int COLOR_BLUE = 0x2196F3;
+    public static final int COLOR_LIGHT_BLUE = 0x03A9F4;
+
     protected float[] color;
 
     protected int indicesBufferCapacity;
@@ -129,37 +137,17 @@ public abstract class GLModel extends Model {
 
     protected abstract void bindBuffers();
 
-    public void setColor(String hex) {
-        setColor(hex2color(hex));
+    public void setColor(int hex) {
+        int r = (hex >> 16) & 0xFF;
+        int g = (hex >> 8) & 0xFF;
+        int b = hex & 0xFF;
+        color = new float[]{r / 255f, g / 255f, b / 255f};
     }
 
-    private void setColor(float[] color) {
-        this.color = color;
-    }
-
-    /**
-     * not handle alpha
-     */
-    public static float[] hex2color(String hex) {
-        return hsv2color(rgb2hsv(hex2rgb(hex)));
-    }
-
-    private static int[] hex2rgb(String hex) {
-        int iHex = Color.parseColor(hex);
-        int r = (iHex & 0xFF0000) >> 16;
-        int g = (iHex & 0xFF00) >> 8;
-        int b = (iHex & 0xFF);
-        return new int[]{r, g, b};
-    }
-
-    private static float[] rgb2hsv(int[] rgb) {
-        float h = rgb[0] / 255f;
-        float s = rgb[1] / 255f;
-        float v = rgb[2] / 255f;
-        return new float[]{h, s, v};
-    }
-
-    private static float[] hsv2color(float[] hsv) {
-        return new float[]{hsv[0], hsv[1], hsv[2]};
+    public int getColorInt() {
+        int r = (int) (color[0] * 255);
+        int g = (int) (color[1] * 255);
+        int b = (int) (color[2] * 255);
+        return Color.rgb(r, g, b);
     }
 }
