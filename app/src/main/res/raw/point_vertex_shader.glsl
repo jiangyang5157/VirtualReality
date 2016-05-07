@@ -1,10 +1,10 @@
 uniform mat4 u_MVPMatrix;
-uniform vec4 u_Color;
+uniform vec3 u_Color;
 uniform float u_PointSize;
 
 attribute vec4 a_Position;
 
-varying vec4 v_Color;
+varying vec3 v_Color;
 
 void main()
 {

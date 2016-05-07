@@ -160,6 +160,6 @@ public abstract class GLModel extends Model {
     }
 
     private static float[] hsv2color(float[] hsv) {
-        return new float[]{hsv[0], hsv[1], hsv[2], 1.0f};
+        return new float[]{hsv[0], hsv[1], hsv[2]};
     }
 }

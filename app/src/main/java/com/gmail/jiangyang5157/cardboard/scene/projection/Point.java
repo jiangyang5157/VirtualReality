@@ -63,7 +63,7 @@ public class Point extends GLModel {
         GLES20.glEnableVertexAttribArray(vertexHandle);
 
         GLES20.glUniformMatrix4fv(mvpMatrixHandle, 1, false, modelViewProjection, 0);
-        GLES20.glUniform4fv(colorHandle, 1, color, 0);
+        GLES20.glUniform3fv(colorHandle, 1, color, 0);
         GLES20.glUniform1f(pointSizeHandle, pointSize);
 
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, verticesBuffHandle);
