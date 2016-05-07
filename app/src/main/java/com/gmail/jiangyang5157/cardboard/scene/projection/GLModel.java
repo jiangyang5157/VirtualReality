@@ -56,10 +56,13 @@ public abstract class GLModel extends Model {
     protected int indicesBuffHandle;
     protected int texturesBuffHandle;
 
-    public static final String COLOR_BLUE_GRAY = "#607D8B";
+    public static final String COLOR_RED = "#F44336";
     public static final String COLOR_DEEP_ORANGE = "#FF5722";
     public static final String COLOR_GREEN = "#4CAF50";
-    public static final String COLOR_RED = "#F44336";
+    public static final String COLOR_TEAL = "#009688";
+    public static final String COLOR_INDIGO = "#3F51B5";
+    public static final String COLOR_BLUE = "#2196F3";
+    public static final String COLOR_LIGHT_BLUE = "#03A9F4";
     protected float[] color;
 
     protected int indicesBufferCapacity;

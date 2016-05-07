@@ -43,7 +43,7 @@ public class AimRay extends Point {
         this.intersection = intersection;
 
         if (intersection.model instanceof Marker) {
-            setColor(GLModel.COLOR_GREEN);
+            setColor(GLModel.COLOR_BLUE);
         } else {
             setColor(GLModel.COLOR_RED);
         }

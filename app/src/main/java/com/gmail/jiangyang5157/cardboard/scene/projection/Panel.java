@@ -122,7 +122,8 @@ public class Panel extends Rectangle {
         } else {
             Bitmap bitmap = Bitmap.createBitmap((int)width, (int)height, Bitmap.Config.RGB_565);
             Canvas canvas = new Canvas(bitmap);
-            bitmap.eraseColor(Color.TRANSPARENT);
+
+            bitmap.eraseColor(Color.HSVToColor(color));
 
             Paint textPaint = new Paint();
             textPaint.setAntiAlias(true);
