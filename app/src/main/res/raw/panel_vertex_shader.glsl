@@ -1,13 +1,13 @@
 uniform mat4 u_MVPMatrix;
-uniform vec4 u_Color;
 
 attribute vec4 a_Position;
+attribute vec2 a_TexCoord;
 
-varying vec4 v_Color;
+varying vec2 v_texCoord;
 
 void main()
 {
-    v_Color = u_Color;
+    v_texCoord = a_TexCoord;
 
     gl_Position = u_MVPMatrix * a_Position;
 }
