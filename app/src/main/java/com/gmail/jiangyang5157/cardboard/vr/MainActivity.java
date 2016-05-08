@@ -16,6 +16,7 @@ import com.gmail.jiangyang5157.cardboard.scene.Light;
 import com.gmail.jiangyang5157.cardboard.scene.Lighting;
 import com.gmail.jiangyang5157.cardboard.scene.projection.GLModel;
 import com.gmail.jiangyang5157.cardboard.scene.projection.Panel;
+import com.gmail.jiangyang5157.cardboard.scene.projection.TextField;
 import com.gmail.jiangyang5157.cardboard.ui.CardboardOverlayView;
 import com.gmail.jiangyang5157.tookit.app.AppUtils;
 import com.gmail.jiangyang5157.tookit.app.DeviceUtils;
@@ -47,7 +48,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
     private Earth earth;
     private AimRay aimRay;
-    private Panel testPanel;
+    private TextField textField;
 
     private CardboardOverlayView overlayView;
 
@@ -74,7 +75,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         super.onDestroy();
         earth.destroy();
         aimRay.destroy();
-        testPanel.destroy();
+        textField.destroy();
     }
 
     @Override
@@ -157,13 +158,13 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     private void updateScene(float[] view, float[] perspective) {
         earth.update(view, perspective);
         aimRay.update(view, perspective);
-        testPanel.update(view, perspective);
+        textField.update(view, perspective);
     }
 
     private void drawScene() {
         earth.draw();
         aimRay.draw();
-        testPanel.draw();
+        textField.draw();
     }
 
     private float[] getModelPositionInCameraSpace(float[] model, float[] modelView) {
@@ -199,8 +200,8 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         aimRay = new AimRay(this, earth);
         aimRay.create();
 
-        testPanel = new Panel(this, 100, 40, new float[]{0, 0, -50}, AppUtils.getColor(this, com.gmail.jiangyang5157.tookit.R.color.Green));
-        testPanel.create();
+        textField = new TextField(this, 100, 40, new float[]{0, 0, -50}, AppUtils.getColor(this, com.gmail.jiangyang5157.tookit.R.color.Green), "12345678901234567890\n\n1234567890");
+        textField.create();
     }
 
     @Override

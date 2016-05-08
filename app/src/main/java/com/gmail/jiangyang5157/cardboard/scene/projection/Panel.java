@@ -20,7 +20,7 @@ import java.nio.ByteOrder;
  * @author Yang
  * @since 5/5/2016
  */
-public class Panel extends Rectangle {
+public abstract class Panel extends Rectangle {
 
     protected static final int VERTEX_SHADER_RAW_RESOURCE = R.raw.panel_vertex_shader;
     protected static final int FRAGMENT_SHADER_RAW_RESOURCE = R.raw.panel_fragment_shader;
@@ -28,9 +28,8 @@ public class Panel extends Rectangle {
     private final int[] buffers = new int[3];
     private final int[] texBuffers = new int[1];
 
-    public Panel(Context context, int width, float height, float[] position, int color) {
+    public Panel(Context context, int width, float height, float[] position) {
         super(context, VERTEX_SHADER_RAW_RESOURCE, FRAGMENT_SHADER_RAW_RESOURCE, width, height);
-        setColor(color);
 
         // TODO: 5/6/2016
         Matrix.translateM(model, 0, position[0], position[1], position[2]);
@@ -108,40 +107,7 @@ public class Panel extends Rectangle {
         texBuffers[0] = createTexture();
     }
 
-    private int createTexture() {
-        String text = "asd";
-
-        final int[] textureHandle = new int[1];
-        GLES20.glGenTextures(1, textureHandle, 0);
-
-        if (textureHandle[0] == 0) {
-            throw new RuntimeException("Error loading texture.");
-        } else {
-            Bitmap bitmap = Bitmap.createBitmap((int)width, (int)height, Bitmap.Config.RGB_565);
-            Canvas canvas = new Canvas(bitmap);
-
-            bitmap.eraseColor(getColorInt());
-
-            Paint textPaint = new Paint();
-            textPaint.setAntiAlias(true);
-            textPaint.setTextSize(40);
-            textPaint.setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.White));
-            canvas.drawText(text, 0, height, textPaint);
-
-//            final BitmapFactory.Options options = new BitmapFactory.Options();
-//            options.inScaled = false;
-//            final Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher, options);
-            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureHandle[0]);
-            GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR);
-            GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
-
-            // Load the bitmap into the bound texture.
-            GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
-            // Recycle the bitmap, since its data has been loaded into OpenGL.
-            bitmap.recycle();
-        }
-        return textureHandle[0];
-    }
+    protected abstract int createTexture();
 
     @Override
     public void draw() {
@@ -152,6 +118,9 @@ public class Panel extends Rectangle {
         GLES20.glEnableVertexAttribArray(texCoordHandle);
 
         GLES20.glUniformMatrix4fv(mvpMatrixHandle, 1, false, modelViewProjection, 0);
+        if (lighting != null) {
+            GLES20.glUniform3fv(lightPosHandle, 1, lighting.getLightPosInCameraSpace(), 0);
+        }
 
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, verticesBuffHandle);
         GLES20.glVertexAttribPointer(vertexHandle, 3, GLES20.GL_FLOAT, false, 0, 0);
