@@ -1,17 +1,11 @@
 package com.gmail.jiangyang5157.cardboard.scene.projection;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.opengl.GLES20;
-import android.opengl.GLUtils;
 import android.opengl.Matrix;
 import android.util.Log;
 
 import com.gmail.jiangyang5157.cardboard.vr.R;
-import com.gmail.jiangyang5157.tookit.app.AppUtils;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
