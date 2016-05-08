@@ -17,10 +17,10 @@ public class Icosphere extends Sphere {
 
     private final int[] buffers = new int[3];
 
-    public Icosphere(Context context, int vertexShaderRawResource, int fragmentShaderRawResource, int recursionLevel, float radius, int colorInt) {
+    public Icosphere(Context context, int vertexShaderRawResource, int fragmentShaderRawResource, int recursionLevel, float radius, int color) {
         super(context, vertexShaderRawResource, fragmentShaderRawResource, radius);
         this.recursionLevel = recursionLevel;
-        setColor(colorInt);
+        setColor(color);
     }
 
     @Override

@@ -28,9 +28,9 @@ public class Panel extends Rectangle {
     private final int[] buffers = new int[3];
     private final int[] texBuffers = new int[1];
 
-    public Panel(Context context, int width, float height, float[] position, float[] normal, int colorInt) {
+    public Panel(Context context, int width, float height, float[] position, int color) {
         super(context, VERTEX_SHADER_RAW_RESOURCE, FRAGMENT_SHADER_RAW_RESOURCE, width, height);
-        setColor(colorInt);
+        setColor(color);
 
         // TODO: 5/6/2016
         Matrix.translateM(model, 0, position[0], position[1], position[2]);

@@ -199,7 +199,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         aimRay = new AimRay(this, earth);
         aimRay.create();
 
-        testPanel = new Panel(this, 100, 40, new float[]{0, 0, -50}, null, AppUtils.getColor(this, com.gmail.jiangyang5157.tookit.R.color.Green));
+        testPanel = new Panel(this, 100, 40, new float[]{0, 0, -50}, AppUtils.getColor(this, com.gmail.jiangyang5157.tookit.R.color.Green));
         testPanel.create();
     }
 
