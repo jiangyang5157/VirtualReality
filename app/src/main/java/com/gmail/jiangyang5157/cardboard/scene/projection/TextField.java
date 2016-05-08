@@ -6,6 +6,8 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
+import android.text.TextPaint;
+import android.util.Log;
 
 import com.gmail.jiangyang5157.tookit.app.AppUtils;
 
@@ -23,6 +25,11 @@ public class TextField extends Panel {
         this.text = text;
     }
 
+    @Override
+    protected int createTexture() {
+        return createTextTexture();
+    }
+
     private int createTextTexture(){
         final int[] textureHandle = new int[1];
         GLES20.glGenTextures(1, textureHandle, 0);
@@ -34,11 +41,29 @@ public class TextField extends Panel {
             Canvas canvas = new Canvas(bitmap);
             bitmap.eraseColor(getColorInt());
 
-            Paint textPaint = new Paint();
+            // The gesture threshold expressed in dp
+            final float GESTURE_THRESHOLD_DP = 16.0f;
+            // Get the screen's density scale
+            final float scale = context.getResources().getDisplayMetrics().density;
+            // Convert the dps to pixels, based on density scale
+            int mGestureThreshold = (int) (GESTURE_THRESHOLD_DP * scale + 0.5f); //56
+            Log.i("####", "mGestureThreshold = " + mGestureThreshold);
+
+            TextPaint textPaint = new TextPaint();
             textPaint.setAntiAlias(true);
-            textPaint.setTextSize(10);
+            textPaint.setStrokeWidth(1);
+            textPaint.setTextSize(mGestureThreshold);
             textPaint.setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.White));
-            canvas.drawText(text, 0, height, textPaint);
+
+            Paint.FontMetrics fontMetrics = textPaint.getFontMetrics();
+//            canvas.drawText(text, 0, Math.abs(fontMetrics.top), textPaint);
+
+//            int baseX = (int) (canvas.getWidth() / 2 - textPaint.measureText(text) / 2);
+            int baseY = (int) ((canvas.getHeight() / 2) - ((textPaint.descent() + textPaint.ascent()) / 2));
+//            canvas.drawText(text, baseX, baseY, textPaint);
+//            canvas.drawLine(0, canvas.getHeight() / 2, canvas.getWidth(), canvas.getHeight() / 2, textPaint);
+            textPaint.setTextAlign(Paint.Align.CENTER);
+            canvas.drawText(text, canvas.getWidth() / 2, baseY, textPaint);
 
             GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureHandle[0]);
             GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
@@ -47,10 +72,5 @@ public class TextField extends Panel {
             bitmap.recycle();
         }
         return textureHandle[0];
-    }
-
-    @Override
-    protected int createTexture() {
-        return createTextTexture();
     }
 }
