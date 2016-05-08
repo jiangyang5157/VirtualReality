@@ -41,29 +41,12 @@ public class TextField extends Panel {
             Canvas canvas = new Canvas(bitmap);
             bitmap.eraseColor(getColorInt());
 
-            // The gesture threshold expressed in dp
-            final float GESTURE_THRESHOLD_DP = 16.0f;
-            // Get the screen's density scale
-            final float scale = context.getResources().getDisplayMetrics().density;
-            // Convert the dps to pixels, based on density scale
-            int mGestureThreshold = (int) (GESTURE_THRESHOLD_DP * scale + 0.5f); //56
-            Log.i("####", "mGestureThreshold = " + mGestureThreshold);
-
             TextPaint textPaint = new TextPaint();
             textPaint.setAntiAlias(true);
-            textPaint.setStrokeWidth(1);
-            textPaint.setTextSize(mGestureThreshold);
+            textPaint.setTextSize(10); // it could be blur due to the pixels size
             textPaint.setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.White));
-
-            Paint.FontMetrics fontMetrics = textPaint.getFontMetrics();
-//            canvas.drawText(text, 0, Math.abs(fontMetrics.top), textPaint);
-
-//            int baseX = (int) (canvas.getWidth() / 2 - textPaint.measureText(text) / 2);
             int baseY = (int) ((canvas.getHeight() / 2) - ((textPaint.descent() + textPaint.ascent()) / 2));
-//            canvas.drawText(text, baseX, baseY, textPaint);
-//            canvas.drawLine(0, canvas.getHeight() / 2, canvas.getWidth(), canvas.getHeight() / 2, textPaint);
-            textPaint.setTextAlign(Paint.Align.CENTER);
-            canvas.drawText(text, canvas.getWidth() / 2, baseY, textPaint);
+            canvas.drawText(text, 0, baseY, textPaint);
 
             GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureHandle[0]);
             GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);

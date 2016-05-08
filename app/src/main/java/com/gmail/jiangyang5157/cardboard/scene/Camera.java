@@ -2,6 +2,8 @@ package com.gmail.jiangyang5157.cardboard.scene;
 
 import android.opengl.Matrix;
 
+import com.gmail.jiangyang5157.cardboard.scene.projection.Earth;
+
 /**
  * @author Yang
  * @since 5/2/2016
@@ -11,7 +13,7 @@ public class Camera {
     public static final float Z_NEAR = 0.1f;
     public static final float Z_FAR = 1000.0f;
 
-    public static final float MOVE_UNIT = 1f;
+    public static final float MOVE_UNIT = Earth.RADIUS / 100;
 
     public float[] matrix;
     public float[] view;

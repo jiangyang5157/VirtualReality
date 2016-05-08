@@ -21,14 +21,13 @@ public class Earth extends TextureSphere {
     private static final int VERTEX_SHADER_RAW_RESOURCE = R.raw.texture_vertex_shader;
     private static final int FRAGMENT_SHADER_RAW_RESOURCE = R.raw.texture_fragment_shader;
 
-    private static final int STACKS = 50;
-    private static final int SLICES = 50;
+    private static final int STACKS = 100;
+    private static final int SLICES = 100;
     public static final float RADIUS = 200f;
 
-
-    public static final float MARKER_RADIUS = RADIUS / 25;
-    public static final float MARKER_ALTITUDE = -1 * (2 * MARKER_RADIUS);
-    public static final float CAMERA_ALTITUDE = (4 * MARKER_RADIUS + AimRay.SPACE) * (MARKER_ALTITUDE > 0 ? 1 : -1);
+    public static final float MARKER_RADIUS = RADIUS / 50;
+    public static final float MARKER_ALTITUDE = -1 * (4 * MARKER_RADIUS);
+    public static final float CAMERA_ALTITUDE = (6 * MARKER_RADIUS + AimRay.SPACE) * (MARKER_ALTITUDE > 0 ? 1 : -1);
 
     private ArrayList<Marker> markers = new ArrayList<>();
 

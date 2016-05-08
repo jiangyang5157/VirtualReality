@@ -125,7 +125,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     @Override
     public void onCardboardTrigger() {
         final AimIntersection intersection = aimRay.getIntersection();
-        if (intersection.model instanceof Marker) {
+        if (intersection != null && intersection.model instanceof Marker) {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -200,7 +200,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         aimRay = new AimRay(this, earth);
         aimRay.create();
 
-        textField = new TextField(this, 200, 100, new float[]{0, 0, -100}, AppUtils.getColor(this, com.gmail.jiangyang5157.tookit.R.color.Green), "1234567890\n\n1234567890");
+        textField = new TextField(this, 120, 40, new float[]{0, 0, -120}, AppUtils.getColor(this, com.gmail.jiangyang5157.tookit.R.color.Green), "12345678901234567890");
         textField.create();
     }
 
