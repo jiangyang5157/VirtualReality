@@ -72,9 +72,9 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        earth.destroy();
         aimRay.destroy();
         textField.destroy();
-        earth.destroy();
     }
 
     @Override
@@ -155,15 +155,15 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     }
 
     private void updateScene(float[] view, float[] perspective) {
+        earth.update(view, perspective);
         aimRay.update(view, perspective);
         textField.update(view, perspective);
-        earth.update(view, perspective);
     }
 
     private void drawScene() {
         aimRay.draw();
-        textField.draw();
         earth.draw();
+        textField.draw();
     }
 
     private float[] getModelPositionInCameraSpace(float[] model, float[] modelView) {

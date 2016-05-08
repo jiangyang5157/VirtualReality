@@ -3,6 +3,7 @@ package com.gmail.jiangyang5157.cardboard.scene.projection;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
 import android.text.TextPaint;
@@ -20,7 +21,8 @@ public class TextField extends Panel {
     public static final int DEFAULT_WIDTH = 400;
     public static final int DEFAULT_HEIGHT = 100;
 
-    public static final int COLOR_BACKGROUND_RES_ID = com.gmail.jiangyang5157.tookit.R.color.Green;
+    public static final float ALPHA_BACKGROUND = 0.4f;
+    public static final int COLOR_BACKGROUND_RES_ID = com.gmail.jiangyang5157.tookit.R.color.BlueGrey;
     public static final int COLOR_TEXT_RES_ID = com.gmail.jiangyang5157.tookit.R.color.White;
 
     private final Earth earth;
@@ -44,9 +46,9 @@ public class TextField extends Panel {
         if (textureHandle[0] == 0) {
             throw new RuntimeException("Error loading texture.");
         } else {
-            Bitmap bitmap = Bitmap.createBitmap((int)width, (int)height, Bitmap.Config.RGB_565);
+            Bitmap bitmap = Bitmap.createBitmap((int)width, (int)height, Bitmap.Config.ARGB_8888);
             Canvas canvas = new Canvas(bitmap);
-            bitmap.eraseColor(getColorInt());
+            bitmap.eraseColor(getColorWithAlpha(ALPHA_BACKGROUND));
 
             final float GESTURE_THRESHOLD_DP = 16.0f; // The gesture threshold expressed in dp
             final float scale = context.getResources().getDisplayMetrics().density;
@@ -66,5 +68,13 @@ public class TextField extends Panel {
             bitmap.recycle();
         }
         return textureHandle[0];
+    }
+
+    @Override
+    public void draw() {
+        GLES20.glEnable(GLES20.GL_BLEND);
+        GLES20.glBlendFunc(GLES20.GL_ONE, GLES20.GL_ONE);
+        super.draw();
+        GLES20.glDisable(GLES20.GL_BLEND);
     }
 }

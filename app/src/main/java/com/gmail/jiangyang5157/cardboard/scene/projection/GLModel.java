@@ -131,10 +131,18 @@ public abstract class GLModel extends Model {
         color = new float[]{r / 255f, g / 255f, b / 255f};
     }
 
-    public int getColorInt() {
+    public int getColor() {
         int r = (int) (color[0] * 255);
         int g = (int) (color[1] * 255);
         int b = (int) (color[2] * 255);
         return Color.rgb(r, g, b);
+    }
+
+    public int getColorWithAlpha(float alpha) {
+        int a = (int) (alpha * 255);
+        int r = (int) (color[0] * 255);
+        int g = (int) (color[1] * 255);
+        int b = (int) (color[2] * 255);
+        return Color.argb(a, r, g, b);
     }
 }
