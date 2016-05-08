@@ -19,6 +19,8 @@ public class Marker extends Icosphere {
 
     protected static final int DEFAULT_RECURSION_LEVEL = 3;
 
+    public static final int COLOR_NORMAL_RES_ID = com.gmail.jiangyang5157.tookit.R.color.Blue;
+
     private final Earth earth;
 
     public final String name;
@@ -30,7 +32,7 @@ public class Marker extends Icosphere {
     }
 
     private Marker(Context context, Earth earth, int vertexShaderRawResource, int fragmentShaderRawResource, int recursionLevel, float radius, String name, LatLng latlng, float altitude) {
-        super(context, vertexShaderRawResource, fragmentShaderRawResource, recursionLevel, radius, AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.Blue));
+        super(context, vertexShaderRawResource, fragmentShaderRawResource, recursionLevel, radius, AppUtils.getColor(context, COLOR_NORMAL_RES_ID));
         this.earth = earth;
         this.name = name;
         this.coordinate = new Coordinate(latlng.latitude, latlng.longitude, altitude, this.earth.getRadius());

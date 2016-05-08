@@ -2,7 +2,6 @@ package com.gmail.jiangyang5157.cardboard.scene.projection;
 
 import android.content.Context;
 import android.opengl.Matrix;
-import android.util.Log;
 
 import com.gmail.jiangyang5157.cardboard.scene.AimIntersection;
 import com.gmail.jiangyang5157.cardboard.vr.R;
@@ -18,15 +17,19 @@ public class AimRay extends Point {
     private static final int VERTEX_SHADER_RAW_RESOURCE = R.raw.point_vertex_shader;
     private static final int FRAGMENT_SHADER_RAW_RESOURCE = R.raw.point_fragment_shader;
 
-    public static final float FACTOR_POINT_SIZE = 0.03f;
-    public static final float SPACE = 6 * Earth.MARKER_RADIUS;
+    public static final float FACTOR_POINT_SIZE = 0.01f;
+    public static final float SPACE = Math.abs(Earth.MARKER_ALTITUDE) + Earth.MARKER_RADIUS;
+
+
+    public static final int COLOR_NOTMAL_RES_ID = com.gmail.jiangyang5157.tookit.R.color.DeepOrange;
+    public static final int COLOR_FOCUCED_RES_ID = com.gmail.jiangyang5157.tookit.R.color.Teal;
 
     private final Earth earth;
 
     private AimIntersection intersection;
 
     public AimRay(Context context, Earth earth) {
-        super(context, VERTEX_SHADER_RAW_RESOURCE, FRAGMENT_SHADER_RAW_RESOURCE, AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.DeepOrange));
+        super(context, VERTEX_SHADER_RAW_RESOURCE, FRAGMENT_SHADER_RAW_RESOURCE, AppUtils.getColor(context, COLOR_NOTMAL_RES_ID));
         this.earth = earth;
 
         adjustPointSize(this.earth.getRadius());
@@ -45,9 +48,9 @@ public class AimRay extends Point {
         this.intersection = intersection;
 
         if (intersection.model instanceof Marker) {
-            setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.Black));
+            setColor(AppUtils.getColor(context, COLOR_FOCUCED_RES_ID));
         } else {
-            setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.DeepOrange));
+            setColor(AppUtils.getColor(context, COLOR_NOTMAL_RES_ID));
         }
 
         Vector intersectToCameraVec = intersection.cameraPosVec.minus(intersection.intersecttPosVec);

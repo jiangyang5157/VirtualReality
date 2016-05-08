@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
-import android.os.Build;
 import android.util.Log;
 
 import com.gmail.jiangyang5157.cardboard.scene.Lighting;

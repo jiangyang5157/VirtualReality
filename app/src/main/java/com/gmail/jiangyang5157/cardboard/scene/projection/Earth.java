@@ -21,13 +21,13 @@ public class Earth extends TextureSphere {
     private static final int VERTEX_SHADER_RAW_RESOURCE = R.raw.texture_vertex_shader;
     private static final int FRAGMENT_SHADER_RAW_RESOURCE = R.raw.texture_fragment_shader;
 
-    private static final int STACKS = 100;
-    private static final int SLICES = 100;
-    public static final float RADIUS = 200f;
+    private static final int STACKS = 25;
+    private static final int SLICES = 25;
+    public static final float RADIUS = 1000f;
 
     public static final float MARKER_RADIUS = RADIUS / 50;
-    public static final float MARKER_ALTITUDE = -1 * (4 * MARKER_RADIUS);
-    public static final float CAMERA_ALTITUDE = (6 * MARKER_RADIUS + AimRay.SPACE) * (MARKER_ALTITUDE > 0 ? 1 : -1);
+    public static final float MARKER_ALTITUDE = -1 * MARKER_RADIUS;
+    public static final float CAMERA_ALTITUDE = (2 * AimRay.SPACE) * (MARKER_ALTITUDE > 0 ? 1 : -1);
 
     private ArrayList<Marker> markers = new ArrayList<>();
 
@@ -37,29 +37,26 @@ public class Earth extends TextureSphere {
 
     @Override
     public void update(float[] view, float[] perspective) {
-        super.update(view, perspective);
-
         for (Marker marker : markers) {
             marker.update(view, perspective);
         }
+        super.update(view, perspective);
     }
 
     @Override
     public void draw() {
-        super.draw();
-
         for (Marker marker : markers) {
             marker.draw();
         }
+        super.draw();
     }
 
     @Override
     public void destroy() {
-        super.destroy();
-
         for (Marker marker : markers) {
             marker.destroy();
         }
+        super.destroy();
     }
 
     public ArrayList<Marker> getMarkers() {
