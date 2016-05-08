@@ -32,6 +32,7 @@ public class TextureSphere extends Sphere {
 
     @Override
     protected void buildArrays() {
+        vertices = new float[stacks * slices * 3];
         normals = new float[stacks * slices * 3];
         indices = new short[stacks * slices * 6];
         textures = new float[stacks * slices * 2];
@@ -59,6 +60,10 @@ public class TextureSphere extends Sphere {
                 normals[vertexIndex] = x;
                 normals[vertexIndex + 1] = y;
                 normals[vertexIndex + 2] = z;
+
+                vertices[vertexIndex] = x * radius;
+                vertices[vertexIndex + 1] = y * radius;
+                vertices[vertexIndex + 2] = z * radius;
                 vertexIndex += 3;
 
                 textures[textureIndex] = u;
@@ -73,12 +78,12 @@ public class TextureSphere extends Sphere {
                 int r_ = (r + 1 == stacks) ? 0 : r + 1;
                 int s_ = (s + 1 == slices) ? 0 : s + 1;
                 indices[indexIndex] = (short) (r * slices + s); //tl
-                indices[indexIndex + 1] = (short) (r_ * slices + s);//bl
-                indices[indexIndex + 2] = (short) (r * slices + s_);//tr
+                indices[indexIndex + 1] = (short) (r_ * slices + s); //bl
+                indices[indexIndex + 2] = (short) (r * slices + s_); //tr
 
-                indices[indexIndex + 3] = (short) (r * slices + s_);//tr
-                indices[indexIndex + 4] = (short) (r_ * slices + s);//bl
-                indices[indexIndex + 5] = (short) (r_ * slices + s_);//br
+                indices[indexIndex + 3] = (short) (r * slices + s_); //tr
+                indices[indexIndex + 4] = (short) (r_ * slices + s); //bl
+                indices[indexIndex + 5] = (short) (r_ * slices + s_); //br
 
                 indexIndex += 6;
             }
@@ -87,6 +92,10 @@ public class TextureSphere extends Sphere {
 
     @Override
     protected void bindBuffers() {
+        verticesBuffer = ByteBuffer.allocateDirect(vertices.length * BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
+        verticesBuffer.put(vertices).position(0);
+        vertices = null;
+
         normalsBuffer = ByteBuffer.allocateDirect(normals.length * BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
         normalsBuffer.put(normals).position(0);
         normals = null;
@@ -101,9 +110,15 @@ public class TextureSphere extends Sphere {
         textures = null;
 
         GLES20.glGenBuffers(buffers.length, buffers, 0);
-        normalsBuffHandle = buffers[0];
-        indicesBuffHandle = buffers[1];
-        texturesBuffHandle = buffers[2];
+        verticesBuffHandle = buffers[0];
+        normalsBuffHandle = buffers[1];
+        indicesBuffHandle = buffers[2];
+        texturesBuffHandle = buffers[3];
+
+        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, verticesBuffHandle);
+        GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, verticesBuffer.capacity() * BYTES_PER_FLOAT, verticesBuffer, GLES20.GL_STATIC_DRAW);
+        verticesBuffer.limit(0);
+        verticesBuffer = null;
 
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, normalsBuffHandle);
         GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, normalsBuffer.capacity() * BYTES_PER_FLOAT, normalsBuffer, GLES20.GL_STATIC_DRAW);
@@ -149,9 +164,9 @@ public class TextureSphere extends Sphere {
         mvMatrixHandle = GLES20.glGetUniformLocation(program, MODEL_VIEW_HANDLE);
         mvpMatrixHandle = GLES20.glGetUniformLocation(program, MODEL_VIEW_PROJECTION_HANDLE);
         texIdHandle = GLES20.glGetUniformLocation(program, TEXTURE_ID_HANDLE);
-        radiusHandle = GLES20.glGetUniformLocation(program, RADIUS_HANDLE);
         lightPosHandle = GLES20.glGetUniformLocation(program, LIGHT_POSITION_HANDLE);
 
+        vertexHandle = GLES20.glGetAttribLocation(program, VERTEX_HANDLE);
         normalHandle = GLES20.glGetAttribLocation(program, NORMAL_HANDLE);
         texCoordHandle = GLES20.glGetAttribLocation(program, TEXTURE_COORDS_HANDLE);
     }
@@ -161,15 +176,18 @@ public class TextureSphere extends Sphere {
         super.draw();
 
         GLES20.glUseProgram(program);
+        GLES20.glEnableVertexAttribArray(vertexHandle);
         GLES20.glEnableVertexAttribArray(normalHandle);
         GLES20.glEnableVertexAttribArray(texCoordHandle);
 
         GLES20.glUniformMatrix4fv(mvMatrixHandle, 1, false, modelView, 0);
         GLES20.glUniformMatrix4fv(mvpMatrixHandle, 1, false, modelViewProjection, 0);
-        GLES20.glUniform1f(radiusHandle, radius);
         if (lighting != null) {
             GLES20.glUniform3fv(lightPosHandle, 1, lighting.getLightPosInCameraSpace(), 0);
         }
+
+        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, verticesBuffHandle);
+        GLES20.glVertexAttribPointer(vertexHandle, 3, GLES20.GL_FLOAT, false, 0, 0);
 
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, normalsBuffHandle);
         GLES20.glVertexAttribPointer(normalHandle, 3, GLES20.GL_FLOAT, false, 0, 0);
