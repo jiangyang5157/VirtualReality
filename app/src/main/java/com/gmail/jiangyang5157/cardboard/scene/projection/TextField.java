@@ -39,14 +39,14 @@ public class TextField extends Panel {
         return createTextTexture();
     }
 
-    private int createTextTexture(){
+    private int createTextTexture() {
         final int[] textureHandle = new int[1];
         GLES20.glGenTextures(1, textureHandle, 0);
 
         if (textureHandle[0] == 0) {
             throw new RuntimeException("Error loading texture.");
         } else {
-            Bitmap bitmap = Bitmap.createBitmap((int)width, (int)height, Bitmap.Config.ARGB_8888);
+            Bitmap bitmap = Bitmap.createBitmap((int) width, (int) height, Bitmap.Config.ARGB_8888);
             Canvas canvas = new Canvas(bitmap);
             bitmap.eraseColor(getColorWithAlpha(ALPHA_BACKGROUND));
 
@@ -72,6 +72,7 @@ public class TextField extends Panel {
 
     @Override
     public void draw() {
+        // blend for rendering alpha
         GLES20.glEnable(GLES20.GL_BLEND);
         GLES20.glBlendFunc(GLES20.GL_ONE, GLES20.GL_ONE);
         super.draw();

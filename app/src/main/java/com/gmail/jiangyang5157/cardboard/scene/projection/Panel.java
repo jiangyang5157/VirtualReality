@@ -51,6 +51,7 @@ public abstract class Panel extends Rectangle {
         };
 
         // GL_CCW
+        // more details: face culling
         indices = new short[]{
                 0, 1, 2, 3
         };
