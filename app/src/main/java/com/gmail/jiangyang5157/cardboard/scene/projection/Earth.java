@@ -1,7 +1,6 @@
 package com.gmail.jiangyang5157.cardboard.scene.projection;
 
 import android.content.Context;
-import android.opengl.Matrix;
 
 import com.gmail.jiangyang5157.cardboard.kml.KmlPlacemark;
 import com.gmail.jiangyang5157.cardboard.vr.R;
@@ -18,8 +17,8 @@ import java.util.ArrayList;
 public class Earth extends TextureSphere {
 
     private static final int TEXTURE_DRAWABLE_RESOURCE = R.drawable.no_clouds_2k;
-    private static final int VERTEX_SHADER_RAW_RESOURCE = R.raw.texture_vertex_shader;
-    private static final int FRAGMENT_SHADER_RAW_RESOURCE = R.raw.texture_fragment_shader;
+    private static final int VERTEX_SHADER_RAW_RESOURCE = R.raw.texture_earth_vertex_shader;
+    private static final int FRAGMENT_SHADER_RAW_RESOURCE = R.raw.texture_earth_fragment_shader;
 
     private static final int STACKS = 25;
     private static final int SLICES = 25;

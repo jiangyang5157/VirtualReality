@@ -14,8 +14,8 @@ import com.google.android.gms.maps.model.LatLng;
  */
 public class Marker extends Icosphere {
 
-    protected static final int VERTEX_SHADER_RAW_RESOURCE = R.raw.color_vertex_shader;
-    protected static final int FRAGMENT_SHADER_RAW_RESOURCE = R.raw.color_fragment_shader;
+    protected static final int VERTEX_SHADER_RAW_RESOURCE = R.raw.color_sphere_vertex_shader;
+    protected static final int FRAGMENT_SHADER_RAW_RESOURCE = R.raw.color_sphere_fragment_shader;
 
     protected static final int DEFAULT_RECURSION_LEVEL = 3;
 
