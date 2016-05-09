@@ -25,11 +25,8 @@ public class TextField extends Panel {
     public static final int COLOR_BACKGROUND_RES_ID = com.gmail.jiangyang5157.tookit.R.color.BlueGrey;
     public static final int COLOR_TEXT_RES_ID = com.gmail.jiangyang5157.tookit.R.color.White;
 
-    private final Earth earth;
-
-    public TextField(Context context, Earth earth, float[] position, String text) {
+    public TextField(Context context, float[] position, String text) {
         super(context, DEFAULT_WIDTH, DEFAULT_HEIGHT, position);
-        this.earth = earth;
         setColor(AppUtils.getColor(context, COLOR_BACKGROUND_RES_ID));
         this.text = text;
     }

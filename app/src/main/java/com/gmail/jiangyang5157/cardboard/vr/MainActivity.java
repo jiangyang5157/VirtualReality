@@ -199,7 +199,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         aimRay = new AimRay(this, earth);
         aimRay.create();
 
-        textField = new TextField(this, earth, new float[]{0, 0, -400}, "12345678901234567890123456789012345678901234567890");
+        textField = new TextField(this, new float[]{0, 0, -400}, "12345678901234567890123456789012345678901234567890");
         textField.create();
     }
 
