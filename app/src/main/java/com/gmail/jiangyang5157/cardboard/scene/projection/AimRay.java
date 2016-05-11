@@ -29,13 +29,16 @@ public class AimRay extends Point {
     private AimIntersection intersection;
 
     public AimRay(Context context, Earth earth) {
-        super(context, VERTEX_SHADER_RAW_RESOURCE, FRAGMENT_SHADER_RAW_RESOURCE, AppUtils.getColor(context, COLOR_NOTMAL_RES_ID));
+        super(context, VERTEX_SHADER_RAW_RESOURCE, FRAGMENT_SHADER_RAW_RESOURCE);
         this.earth = earth;
-
         adjustPointSize(this.earth.getRadius());
     }
 
-    public void setPosition(float[] position) {
+    public void create() {
+        create(AppUtils.getColor(context, COLOR_NOTMAL_RES_ID));
+    }
+
+    public void translateToPos(float[] position) {
         Matrix.setIdentityM(model, 0);
         Matrix.translateM(model, 0, position[0], position[1], position[2]);
     }
@@ -57,7 +60,8 @@ public class AimRay extends Point {
 
         Vector newIntersectPosVec = intersection.intersecttPosVec.plus(intersectToCameraVec.direction().times(SPACE));
         double[] newPosition = newIntersectPosVec.getData();
-        setPosition(new float[]{(float) newPosition[0], (float) newPosition[1], (float) newPosition[2]});
+        Matrix.setIdentityM(model, 0);
+        translateToPos(new float[]{(float) newPosition[0], (float) newPosition[1], (float) newPosition[2]});
 
         double distance = newIntersectPosVec.length();
         adjustPointSize(distance);

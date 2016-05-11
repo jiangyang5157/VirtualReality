@@ -23,11 +23,16 @@ public class TextureSphere extends Sphere {
     private final int[] buffers = new int[4];
     private final int[] texBuffers = new int[1];
 
-    public TextureSphere(Context context, int vertexShaderRawResource, int fragmentShaderRawResource, int stacks, int slices, float radius, int textureDrawableResource) {
-        super(context, vertexShaderRawResource, fragmentShaderRawResource, radius);
+    public TextureSphere(Context context, int vertexShaderRawResource, int fragmentShaderRawResource) {
+        super(context, vertexShaderRawResource, fragmentShaderRawResource);
+    }
+
+    protected void create(float radius, int textureDrawableResource, int stacks, int slices) {
+        this.textureDrawableResource = textureDrawableResource;
         this.stacks = stacks;
         this.slices = slices;
-        this.textureDrawableResource = textureDrawableResource;
+
+        create(radius);
     }
 
     @Override

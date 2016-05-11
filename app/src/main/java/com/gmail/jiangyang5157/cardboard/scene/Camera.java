@@ -35,6 +35,9 @@ public class Camera {
     public float[] getPosition() {
         return position.clone();
     }
+    public float[] getLookAtPos() {
+        return lookAtPos.clone();
+    }
 
     public void move(float[] forwardDir, float distance) {
         forward(position, forwardDir, distance);

@@ -22,11 +22,17 @@ public abstract class Panel extends Rectangle {
     private final int[] buffers = new int[3];
     private final int[] texBuffers = new int[1];
 
-    public Panel(Context context, int width, float height, float[] position) {
-        super(context, VERTEX_SHADER_RAW_RESOURCE, FRAGMENT_SHADER_RAW_RESOURCE, width, height);
+    public Panel(Context context) {
+        super(context, VERTEX_SHADER_RAW_RESOURCE, FRAGMENT_SHADER_RAW_RESOURCE);
+    }
 
-        // TODO: 5/6/2016
-        Matrix.translateM(model, 0, position[0], position[1], position[2]);
+    protected void create(float width, float height, int color) {
+        this.width = width;
+        this.height = height;
+        setColor(color);
+
+        buildArrays();
+        bindBuffers();
     }
 
     @Override

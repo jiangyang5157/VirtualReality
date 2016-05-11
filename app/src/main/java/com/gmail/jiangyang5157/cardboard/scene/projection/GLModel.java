@@ -111,11 +111,6 @@ public abstract class GLModel extends Model {
 
     protected abstract void initializeHandle();
 
-    public void create() {
-        buildArrays();
-        bindBuffers();
-    }
-
     public void setLighting(Lighting lighting) {
         this.lighting = lighting;
     }

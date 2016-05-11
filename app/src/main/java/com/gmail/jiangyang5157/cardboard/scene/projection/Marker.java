@@ -23,20 +23,29 @@ public class Marker extends Icosphere {
 
     private final Earth earth;
 
-    public final String name;
+    public String name;
 
-    private final Coordinate coordinate;
+    private Coordinate coordinate;
 
-    public Marker(Context context, Earth earth, float radius, String name, LatLng latlng, float altitude) {
-        this(context, earth, VERTEX_SHADER_RAW_RESOURCE, FRAGMENT_SHADER_RAW_RESOURCE, DEFAULT_RECURSION_LEVEL, radius, name, latlng, altitude);
+    public Marker(Context context, Earth earth) {
+        this(context, earth, VERTEX_SHADER_RAW_RESOURCE, FRAGMENT_SHADER_RAW_RESOURCE);
     }
 
-    private Marker(Context context, Earth earth, int vertexShaderRawResource, int fragmentShaderRawResource, int recursionLevel, float radius, String name, LatLng latlng, float altitude) {
-        super(context, vertexShaderRawResource, fragmentShaderRawResource, recursionLevel, radius, AppUtils.getColor(context, COLOR_NORMAL_RES_ID));
+    private Marker(Context context, Earth earth, int vertexShaderRawResource, int fragmentShaderRawResource) {
+        super(context, vertexShaderRawResource, fragmentShaderRawResource);
         this.earth = earth;
-        this.name = name;
-        this.coordinate = new Coordinate(latlng.latitude, latlng.longitude, altitude, this.earth.getRadius());
+    }
 
+    public void create(float radius, String name, LatLng latlng, float altitude) {
+        create(radius, AppUtils.getColor(context, COLOR_NORMAL_RES_ID), DEFAULT_RECURSION_LEVEL);
+
+        this.name = name;
+        setLocation(latlng, altitude);
+    }
+
+    public void setLocation(LatLng latlng, float altitude) {
+        Matrix.setIdentityM(model, 0);
+        this.coordinate = new Coordinate(latlng.latitude, latlng.longitude, altitude, this.earth.getRadius());
         Matrix.translateM(model, 0,
                 (float) coordinate.ecef[0],
                 (float) coordinate.ecef[1],

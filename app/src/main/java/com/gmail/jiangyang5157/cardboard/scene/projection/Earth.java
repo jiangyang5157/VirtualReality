@@ -1,6 +1,7 @@
 package com.gmail.jiangyang5157.cardboard.scene.projection;
 
 import android.content.Context;
+import android.opengl.Matrix;
 
 import com.gmail.jiangyang5157.cardboard.kml.KmlPlacemark;
 import com.gmail.jiangyang5157.cardboard.vr.R;
@@ -31,7 +32,11 @@ public class Earth extends TextureSphere {
     private ArrayList<Marker> markers = new ArrayList<>();
 
     public Earth(Context context) {
-        super(context, VERTEX_SHADER_RAW_RESOURCE, FRAGMENT_SHADER_RAW_RESOURCE, STACKS, SLICES, RADIUS, TEXTURE_DRAWABLE_RESOURCE);
+        super(context, VERTEX_SHADER_RAW_RESOURCE, FRAGMENT_SHADER_RAW_RESOURCE);
+    }
+
+    public void create() {
+        create(RADIUS, TEXTURE_DRAWABLE_RESOURCE, STACKS, SLICES);
     }
 
     @Override
@@ -71,8 +76,8 @@ public class Earth extends TextureSphere {
         String name = kmlPlacemark.getProperty("name");
         LatLng latLng = markerUrlStyle.getPosition();
 
-        Marker marker = new Marker(context, this, MARKER_RADIUS, name, latLng, MARKER_ALTITUDE);
-        marker.create();
+        Marker marker = new Marker(context, this);
+        marker.create(MARKER_RADIUS, name, latLng, MARKER_ALTITUDE);
         marker.setLighting(lighting);
         addMarker(marker);
         return marker;

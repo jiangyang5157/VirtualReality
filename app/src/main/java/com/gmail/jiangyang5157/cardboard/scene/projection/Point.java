@@ -17,9 +17,15 @@ public class Point extends GLModel {
 
     private final int[] buffers = new int[1];
 
-    public Point(Context context, int vertexShaderRawResource, int fragmentShaderRawResource, int color) {
+    public Point(Context context, int vertexShaderRawResource, int fragmentShaderRawResource) {
         super(context, vertexShaderRawResource, fragmentShaderRawResource);
+    }
+
+    protected void create(int color) {
         setColor(color);
+
+        buildArrays();
+        bindBuffers();
     }
 
     @Override

@@ -3,12 +3,15 @@ package com.gmail.jiangyang5157.cardboard.scene.projection;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
+import android.opengl.Matrix;
 import android.text.TextPaint;
 
+import com.gmail.jiangyang5157.cardboard.scene.Coordinate;
 import com.gmail.jiangyang5157.tookit.app.AppUtils;
+import com.gmail.jiangyang5157.tookit.math.Vector;
+import com.google.android.gms.maps.model.LatLng;
 
 /**
  * @author Yang
@@ -16,19 +19,37 @@ import com.gmail.jiangyang5157.tookit.app.AppUtils;
  */
 public class TextField extends Panel {
 
-    private final String text;
+    private String text;
 
     public static final int DEFAULT_WIDTH = 400;
     public static final int DEFAULT_HEIGHT = 100;
+
+    public static final float DEFAULT_DISTANCE = 400;
 
     public static final float ALPHA_BACKGROUND = 0.4f;
     public static final int COLOR_BACKGROUND_RES_ID = com.gmail.jiangyang5157.tookit.R.color.BlueGrey;
     public static final int COLOR_TEXT_RES_ID = com.gmail.jiangyang5157.tookit.R.color.White;
 
-    public TextField(Context context, float[] position, String text) {
-        super(context, DEFAULT_WIDTH, DEFAULT_HEIGHT, position);
-        setColor(AppUtils.getColor(context, COLOR_BACKGROUND_RES_ID));
+    public TextField(Context context) {
+        super(context);
+    }
+
+    public void create(String text) {
+        create(DEFAULT_WIDTH, DEFAULT_HEIGHT, AppUtils.getColor(context, COLOR_BACKGROUND_RES_ID), text);
+    }
+
+    protected void create(float width, float height, int color, String text) {
         this.text = text;
+        create(width, height, color);
+    }
+
+    public void translateToFront(float[] cameraPos, float[] forwardDir) {
+        Matrix.setIdentityM(model, 0);
+        Vector cameraPosVec = new Vector(cameraPos[0], cameraPos[1], cameraPos[2]);
+        Vector forwardDirVec = new Vector(forwardDir[0], forwardDir[1], forwardDir[2]);
+        double[] position = cameraPosVec.plus(forwardDirVec).direction().times(DEFAULT_DISTANCE).getData();
+
+        Matrix.translateM(model, 0, (float) position[0], (float) position[1], (float) position[2]);
     }
 
     @Override

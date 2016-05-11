@@ -13,10 +13,8 @@ public abstract class Rectangle extends GLModel implements Intersectable {
     protected float width;
     protected float height;
 
-    protected Rectangle(Context context, int vertexShaderRawResource, int fragmentShaderRawResource, int width, float height) {
+    protected Rectangle(Context context, int vertexShaderRawResource, int fragmentShaderRawResource) {
         super(context, vertexShaderRawResource, fragmentShaderRawResource);
-        this.width = width;
-        this.height = height;
     }
     
     @Override

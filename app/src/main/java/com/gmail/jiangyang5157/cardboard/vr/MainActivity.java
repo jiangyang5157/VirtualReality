@@ -17,8 +17,9 @@ import com.gmail.jiangyang5157.cardboard.scene.Lighting;
 import com.gmail.jiangyang5157.cardboard.scene.projection.GLModel;
 import com.gmail.jiangyang5157.cardboard.scene.projection.TextField;
 import com.gmail.jiangyang5157.cardboard.ui.CardboardOverlayView;
-import com.gmail.jiangyang5157.tookit.app.AppUtils;
 import com.gmail.jiangyang5157.tookit.app.DeviceUtils;
+import com.gmail.jiangyang5157.tookit.math.Vector;
+import com.gmail.jiangyang5157.tookit.math.Vector3d;
 import com.google.vrtoolkit.cardboard.CardboardActivity;
 import com.google.vrtoolkit.cardboard.CardboardView;
 import com.google.vrtoolkit.cardboard.Eye;
@@ -41,6 +42,11 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
     private float[] headView = new float[16];
     private float[] forwardDir = new float[3];
+    private float[] eulerAngles = new float[3];
+    private float[] quaternion = new float[4];
+    private float[] translation = new float[3];
+    private float[] rightDir = new float[3];
+    private float[] upDir = new float[3];
 
     private Camera camera;
     private Light light;
@@ -74,7 +80,9 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         super.onDestroy();
         earth.destroy();
         aimRay.destroy();
-        textField.destroy();
+        if (textField != null) {
+            textField.destroy();
+        }
     }
 
     @Override
@@ -88,6 +96,9 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         GLES20.glClearColor(0.1f, 0.1f, 0.1f, 0.5f);
         headTransform.getHeadView(headView, 0);
         headTransform.getForwardVector(forwardDir, 0);
+        headTransform.getEulerAngles(eulerAngles, 0);
+        headTransform.getUpVector(upDir, 0);
+        headTransform.getRightVector(rightDir, 0);
 
         if (debug_camer_movement) {
             float[] point = camera.getPosition().clone();
@@ -115,7 +126,6 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         }
         aimRay.intersectAt(intersection);
     }
-
     @Override
     public void onFinishFrame(Viewport viewport) {
         GLES20.glDisable(GLES20.GL_DEPTH_TEST);
@@ -123,18 +133,28 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
     @Override
     public void onCardboardTrigger() {
-        final AimIntersection intersection = aimRay.getIntersection();
-        if (intersection != null && intersection.model instanceof Marker) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    overlayView.show3DToast(((Marker)intersection.model).name);
-                }
-            });
-            debug_camer_movement = false;
-        } else {
-            debug_camer_movement = !debug_camer_movement;
-        }
+//        final AimIntersection intersection = aimRay.getIntersection();
+//        if (intersection != null && intersection.model instanceof Marker) {
+//            runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    overlayView.show3DToast(((Marker)intersection.model).name);
+//                }
+//            });
+//            debug_camer_movement = false;
+//        } else {
+//            debug_camer_movement = !debug_camer_movement;
+//        }
+
+
+        Log.i("####", "eulerDegrees: " + (float) Math.toDegrees(eulerAngles[0]) + "," + (float) Math.toDegrees(eulerAngles[1]) + "," + (float) Math.toDegrees(eulerAngles[2]));
+        Log.i("####", "up: " +  upDir[0] + "," + upDir[1] + "," + upDir[2]);
+        Log.i("####", "right: " +  rightDir[0] + "," + rightDir[1] + "," + rightDir[2]);
+        textField.translateToFront(camera.getPosition(), forwardDir);
+
+//        Matrix.rotateM(textField.model, 0, (float) Math.toDegrees(eulerAngles[0]), 1f, 0, 0);
+//        Matrix.rotateM(textField.model, 0, (float) Math.toDegrees(eulerAngles[1]), 0, 1f, 0);
+//        Matrix.rotateM(textField.model, 0, (float) Math.toDegrees(eulerAngles[2]), 0, 0f, 1f);
     }
 
     @Override
@@ -157,13 +177,17 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     private void updateScene(float[] view, float[] perspective) {
         earth.update(view, perspective);
         aimRay.update(view, perspective);
-        textField.update(view, perspective);
+        if (textField != null) {
+            textField.update(view, perspective);
+        }
     }
 
     private void drawScene() {
         aimRay.draw();
         earth.draw();
-        textField.draw();
+        if (textField != null) {
+            textField.draw();
+        }
     }
 
     private float[] getModelPositionInCameraSpace(float[] model, float[] modelView) {
@@ -181,13 +205,13 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         light = new Light();
 
         earth = new Earth(this);
-        earth.create();
         earth.setLighting(new Lighting() {
             @Override
             public float[] getLightPosInCameraSpace() {
                 return light.lightPosInCameraSpace;
             }
         });
+        earth.create();
 
         try {
             KmlLayer kmlLayer = new KmlLayer(earth, R.raw.example, getApplicationContext());
@@ -199,8 +223,8 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         aimRay = new AimRay(this, earth);
         aimRay.create();
 
-        textField = new TextField(this, new float[]{0, 0, -400}, "12345678901234567890123456789012345678901234567890");
-        textField.create();
+        textField = new TextField(this);
+        textField.create("asdasdsdas123123232");
     }
 
     @Override
