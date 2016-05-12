@@ -19,7 +19,7 @@ public class Marker extends Icosphere {
 
     protected static final int DEFAULT_RECURSION_LEVEL = 3;
 
-    public static final int COLOR_NORMAL_RES_ID = com.gmail.jiangyang5157.tookit.R.color.Blue;
+    public static final int COLOR_NORMAL_RES_ID = com.gmail.jiangyang5157.tookit.R.color.DeepOrange;
 
     private final Earth earth;
 
