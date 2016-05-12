@@ -7,6 +7,7 @@ import android.opengl.GLES20;
 import android.opengl.GLUtils;
 import android.opengl.Matrix;
 import android.text.TextPaint;
+import android.util.Log;
 
 import com.gmail.jiangyang5157.cardboard.scene.Coordinate;
 import com.gmail.jiangyang5157.tookit.app.AppUtils;
@@ -46,8 +47,9 @@ public class TextField extends Panel {
     public void translateToFront(float[] cameraPos, float[] forwardDir) {
         Matrix.setIdentityM(model, 0);
         Vector cameraPosVec = new Vector(cameraPos[0], cameraPos[1], cameraPos[2]);
-        Vector forwardDirVec = new Vector(forwardDir[0], forwardDir[1], forwardDir[2]);
-        double[] position = cameraPosVec.plus(forwardDirVec).direction().times(DEFAULT_DISTANCE).getData();
+        Vector forwardVec = new Vector(forwardDir[0], forwardDir[1], forwardDir[2]).times(DEFAULT_DISTANCE);
+        Vector positionVec = cameraPosVec.plus(forwardVec);
+        double[] position = positionVec.getData();
 
         Matrix.translateM(model, 0, (float) position[0], (float) position[1], (float) position[2]);
     }

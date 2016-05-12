@@ -96,8 +96,6 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         headTransform.getHeadView(headView, 0);
         headTransform.getForwardVector(forwardDir, 0);
         headTransform.getEulerAngles(eulerAngles, 0);
-        headTransform.getUpVector(upDir, 0);
-        headTransform.getRightVector(rightDir, 0);
 
         if (debug_camer_movement) {
             float[] point = camera.getPosition().clone();
@@ -166,10 +164,10 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
             debug_camer_movement = !debug_camer_movement;
         }
 
-//        textField.translateToFront(camera.getPosition(), forwardDir);
-//        Matrix.rotateM(textField.model, 0, (float) Math.toDegrees(eulerAngles[1]), 0, 1f, 0);
-//        Matrix.rotateM(textField.model, 0, (float) Math.toDegrees(eulerAngles[0]), 1f, 0, 0);
-//        Matrix.rotateM(textField.model, 0, (float) Math.toDegrees(eulerAngles[2]), 0, 0f, 1f);
+        textField.translateToFront(camera.getPosition(), forwardDir);
+        Matrix.rotateM(textField.model, 0, (float) Math.toDegrees(eulerAngles[1]), 0, 1f, 0);
+        Matrix.rotateM(textField.model, 0, (float) Math.toDegrees(eulerAngles[0]), 1f, 0, 0);
+        Matrix.rotateM(textField.model, 0, (float) Math.toDegrees(eulerAngles[2]), 0, 0f, 1f);
     }
 
     @Override
