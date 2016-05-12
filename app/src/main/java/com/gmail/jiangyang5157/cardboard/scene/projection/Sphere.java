@@ -3,6 +3,7 @@ package com.gmail.jiangyang5157.cardboard.scene.projection;
 import android.content.Context;
 
 import com.gmail.jiangyang5157.cardboard.scene.AimIntersection;
+import com.gmail.jiangyang5157.cardboard.scene.Head;
 import com.gmail.jiangyang5157.tookit.math.Vector;
 
 /**
@@ -29,16 +30,16 @@ public abstract class Sphere extends GLModel implements Intersectable {
     }
 
     @Override
-    public AimIntersection intersect(float[] cameraPos, float[] forwardDir) {
+    public AimIntersection intersect(Head head) {
         if (!isVisible){
             return null;
         }
 
-        Vector cameraPosVec = new Vector(cameraPos[0], cameraPos[1], cameraPos[2]);
-        Vector forwardDirVec = new Vector(forwardDir[0], forwardDir[1], forwardDir[2]);
-
         float[] position = getPosition();
+        float[] cameraPos = head.getCamera().getPosition();
         Vector positionVec = new Vector(position[0], position[1], position[2]);
+        Vector cameraPosVec = new Vector(cameraPos[0], cameraPos[1], cameraPos[2]);
+        Vector forwardDirVec = new Vector(head.forward[0], head.forward[1], head.forward[2]);
         Vector posToCameraVec = cameraPosVec.minus(positionVec);
 
         final double b = forwardDirVec.dot(posToCameraVec);

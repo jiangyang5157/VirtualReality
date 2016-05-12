@@ -19,8 +19,8 @@ public class Camera {
     public float[] view;
 
     private float[] position = new float[]{0.0f, 0.0f, 0.0f};
-    private float[] lookAtPos = new float[]{0.0f, 0.0f, -1.0f};
-    private float[] upDir = new float[]{0.0f, 1.0f, 0.0f};
+    private float[] lookAt = new float[]{0.0f, 0.0f, -1.0f};
+    private float[] up = new float[]{0.0f, 1.0f, 0.0f};
 
     public Camera() {
         matrix = new float[16];
@@ -28,24 +28,21 @@ public class Camera {
 
         Matrix.setLookAtM(matrix, 0,
                 position[0], position[1], position[2],
-                lookAtPos[0], lookAtPos[1], lookAtPos[2],
-                upDir[0], upDir[1], upDir[2]);
+                lookAt[0], lookAt[1], lookAt[2],
+                up[0], up[1], up[2]);
     }
 
     public float[] getPosition() {
         return position.clone();
     }
-    public float[] getLookAtPos() {
-        return lookAtPos.clone();
-    }
 
     public void move(float[] forwardDir, float distance) {
         forward(position, forwardDir, distance);
-        forward(lookAtPos, forwardDir, distance);
+        forward(lookAt, forwardDir, distance);
         Matrix.setLookAtM(matrix, 0,
                 position[0], position[1], position[2],
-                lookAtPos[0], lookAtPos[1], lookAtPos[2],
-                upDir[0], upDir[1], upDir[2]);
+                lookAt[0], lookAt[1], lookAt[2],
+                up[0], up[1], up[2]);
     }
 
     public static void forward(float[] src, float[] dir, float dis) {

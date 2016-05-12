@@ -4,7 +4,11 @@ import android.content.Context;
 import android.opengl.GLES20;
 import android.util.Log;
 
+import com.gmail.jiangyang5157.cardboard.scene.AimIntersection;
+import com.gmail.jiangyang5157.cardboard.scene.Head;
 import com.gmail.jiangyang5157.cardboard.vr.R;
+import com.gmail.jiangyang5157.tookit.math.Vector;
+import com.gmail.jiangyang5157.tookit.math.Vector3d;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -32,6 +36,37 @@ public abstract class Panel extends Rectangle {
 
         buildArrays();
         bindBuffers();
+    }
+
+    @Override
+    public AimIntersection intersect(Head head) {
+        if (!isVisible){
+            return null;
+        }
+
+        float[] position = getPosition();
+        float[] cameraPos = head.getCamera().getPosition();
+        Vector positionVec = new Vector(position[0], position[1], position[2]);
+        Vector cameraPosVec = new Vector(cameraPos[0], cameraPos[1], cameraPos[2]);
+        Vector forwardVec = new Vector(head.forward[0], head.forward[1], head.forward[2]);
+        Vector rightVec = new Vector(head.right[0], head.right[1], head.right[2]);
+        Vector upVec = new Vector(head.up[0], head.up[1], head.up[2]);
+        Vector posToCameraVec = cameraPosVec.minus(positionVec);
+        Vector posToCameraDirVec = posToCameraVec.direction();
+        Vector cameraToPosVec = positionVec.minus(cameraPosVec);
+        Vector cameraToPosDirVec = cameraToPosVec.direction();
+
+        //assume Panel always face camera
+        double rightDis = cameraToPosVec.dot(rightVec);
+        double upDis = cameraToPosVec.dot(upVec);
+        double radian = (new Vector3d(forwardVec)).radian(new Vector3d(cameraToPosDirVec));
+        Log.i("####", "rightDis: " + rightDis);
+        Log.i("####", "upDis: " + upDis);
+        Log.i("####", "radian: " + radian);
+
+        // TODO: 5/7/2016
+
+        return null;
     }
 
     @Override

@@ -9,6 +9,7 @@ import android.widget.Toast;
 import com.gmail.jiangyang5157.cardboard.kml.KmlLayer;
 import com.gmail.jiangyang5157.cardboard.scene.Camera;
 import com.gmail.jiangyang5157.cardboard.scene.AimIntersection;
+import com.gmail.jiangyang5157.cardboard.scene.Head;
 import com.gmail.jiangyang5157.cardboard.scene.projection.AimRay;
 import com.gmail.jiangyang5157.cardboard.scene.projection.Earth;
 import com.gmail.jiangyang5157.cardboard.scene.projection.Marker;
@@ -39,15 +40,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
     private static final String TAG = "MainActivity ####";
 
-    private float[] headView = new float[16];
-    private float[] forwardDir = new float[3];
-    private float[] eulerAngles = new float[3];
-    private float[] quaternion = new float[4];
-    private float[] translation = new float[3];
-    private float[] rightDir = new float[3];
-    private float[] upDir = new float[3];
-
-    private Camera camera;
+    private Head head;
     private Light light;
 
     private Earth earth;
@@ -91,31 +84,33 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         GLES20.glCullFace(GLES20.GL_BACK);
 
         GLES20.glClearColor(0.1f, 0.1f, 0.1f, 0.5f);
-        headTransform.getHeadView(headView, 0);
-        headTransform.getForwardVector(forwardDir, 0);
-        headTransform.getEulerAngles(eulerAngles, 0);
+        headTransform.getHeadView(head.headView, 0);
+        headTransform.getForwardVector(head.forward, 0);
+        headTransform.getEulerAngles(head.eulerAngles, 0);
+        headTransform.getRightVector(head.right, 0);
+        headTransform.getUpVector(head.up, 0);
 
         if (debug_camer_movement) {
-            float[] point = camera.getPosition().clone();
-            Camera.forward(point, forwardDir, Camera.MOVE_UNIT);
+            float[] point = head.getCamera().getPosition().clone();
+            Camera.forward(point, head.forward, Camera.MOVE_UNIT);
             if (earth.contain(point)) {
-                camera.move(forwardDir, Camera.MOVE_UNIT);
+                head.getCamera().move(head.forward, Camera.MOVE_UNIT);
             }
         }
 
         AimIntersection intersection = null;
-        float[] cameraPos = camera.getPosition();
+        float[] cameraPos = head.getCamera().getPosition();
 
         //
         if (intersection == null) {
-            intersection = textField.intersect(cameraPos, forwardDir);
+            intersection = textField.intersect(head);
         }
 
         //
         if (intersection == null) {
             ArrayList<AimIntersection> markerIntersections = new ArrayList<AimIntersection>();
             for (final Marker mark : earth.getMarkers()) {
-                AimIntersection markIntersection = mark.intersect(cameraPos, forwardDir);
+                AimIntersection markIntersection = mark.intersect(head);
                 if (markIntersection != null) {
                     markerIntersections.add(markIntersection);
                 }
@@ -128,7 +123,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
         //
         if (intersection == null) {
-            intersection = earth.intersect(cameraPos, forwardDir);
+            intersection = earth.intersect(head);
         }
 
         aimRay.intersectAt(intersection);
@@ -151,10 +146,10 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
                 });
                 //test textfield movement
                 textField.setVisible(true);
-                textField.translateToFront(camera.getPosition(), forwardDir);
-                Matrix.rotateM(textField.model, 0, (float) Math.toDegrees(eulerAngles[1]), 0, 1f, 0);
-                Matrix.rotateM(textField.model, 0, (float) Math.toDegrees(eulerAngles[0]), 1f, 0, 0);
-                Matrix.rotateM(textField.model, 0, (float) Math.toDegrees(eulerAngles[2]), 0, 0f, 1f);
+                textField.translateToFront(head.getCamera().getPosition(), head.forward);
+                Matrix.rotateM(textField.model, 0, (float) Math.toDegrees(head.eulerAngles[1]), 0, 1f, 0);
+                Matrix.rotateM(textField.model, 0, (float) Math.toDegrees(head.eulerAngles[0]), 1f, 0, 0);
+                Matrix.rotateM(textField.model, 0, (float) Math.toDegrees(head.eulerAngles[2]), 0, 0f, 1f);
 
                 debug_camer_movement = false;
             } else if (intersection.model instanceof Panel) {
@@ -174,15 +169,15 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 
         // Apply the eye transformation to the matrix.
-        Matrix.multiplyMM(camera.view, 0, eye.getEyeView(), 0, camera.matrix, 0);
+        Matrix.multiplyMM(head.getCamera().view, 0, eye.getEyeView(), 0, head.getCamera().matrix, 0);
 
         // Set the position of the light
-        Matrix.multiplyMV(light.lightPosInCameraSpace, 0, camera.view, 0, Light.LIGHT_POS_IN_WORLD_SPACE, 0);
+        Matrix.multiplyMV(light.lightPosInCameraSpace, 0, head.getCamera().view, 0, Light.LIGHT_POS_IN_WORLD_SPACE, 0);
 
         // Build the ModelView and ModelViewProjection matrices for calculating different object's position
         float[] perspective = eye.getPerspective(Camera.Z_NEAR, Camera.Z_FAR);
 
-        updateScene(camera.view, perspective);
+        updateScene(head.getCamera().view, perspective);
         drawScene();
     }
 
@@ -202,14 +197,14 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         float[] init = {0, 0, 0, 1.0f};
         float[] objPosition = new float[4];
         // Convert object space to matrix space. Use the headView from onNewFrame.
-        Matrix.multiplyMM(modelView, 0, headView, 0, model, 0);
+        Matrix.multiplyMM(modelView, 0, head.headView, 0, model, 0);
         Matrix.multiplyMV(objPosition, 0, modelView, 0, init, 0);
         return objPosition;
     }
 
     @Override
     public void onSurfaceCreated(EGLConfig eglConfig) {
-        camera = new Camera();
+        head = new Head();
         light = new Light();
 
         earth = new Earth(this);
