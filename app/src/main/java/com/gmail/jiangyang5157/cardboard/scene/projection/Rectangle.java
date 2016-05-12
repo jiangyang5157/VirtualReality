@@ -19,6 +19,10 @@ public abstract class Rectangle extends GLModel implements Intersectable {
     
     @Override
     public AimIntersection intersect(float[] cameraPos, float[] forwardDir) {
+        if (!isVisible){
+            return null;
+        }
+
         // TODO: 5/7/2016
 
         return null;

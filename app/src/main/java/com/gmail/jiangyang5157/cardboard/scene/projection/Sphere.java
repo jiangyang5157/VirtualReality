@@ -30,6 +30,10 @@ public abstract class Sphere extends GLModel implements Intersectable {
 
     @Override
     public AimIntersection intersect(float[] cameraPos, float[] forwardDir) {
+        if (!isVisible){
+            return null;
+        }
+
         Vector cameraPosVec = new Vector(cameraPos[0], cameraPos[1], cameraPos[2]);
         Vector forwardDirVec = new Vector(forwardDir[0], forwardDir[1], forwardDir[2]);
 
