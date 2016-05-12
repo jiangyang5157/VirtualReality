@@ -151,6 +151,12 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
                         overlayView.show3DToast(((Marker) intersection.model).name);
                     }
                 });
+                //test textfield movement
+                textField.setVisible(true);
+                textField.translateToFront(camera.getPosition(), forwardDir);
+                Matrix.rotateM(textField.model, 0, (float) Math.toDegrees(eulerAngles[1]), 0, 1f, 0);
+                Matrix.rotateM(textField.model, 0, (float) Math.toDegrees(eulerAngles[0]), 1f, 0, 0);
+                Matrix.rotateM(textField.model, 0, (float) Math.toDegrees(eulerAngles[2]), 0, 0f, 1f);
 
                 debug_camer_movement = false;
             } else if (intersection.model instanceof Panel) {
@@ -163,12 +169,6 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         } else {
             debug_camer_movement = !debug_camer_movement;
         }
-
-        //test textfield movement
-        textField.translateToFront(camera.getPosition(), forwardDir);
-        Matrix.rotateM(textField.model, 0, (float) Math.toDegrees(eulerAngles[1]), 0, 1f, 0);
-        Matrix.rotateM(textField.model, 0, (float) Math.toDegrees(eulerAngles[0]), 1f, 0, 0);
-        Matrix.rotateM(textField.model, 0, (float) Math.toDegrees(eulerAngles[2]), 0, 0f, 1f);
     }
 
     @Override
@@ -235,7 +235,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
         textField = new TextField(this);
         textField.create("asdasdsdas123123232");
-        textField.translateToFront(camera.getPosition(), camera.getLookAtPos());
+        textField.setVisible(false);
     }
 
     @Override
