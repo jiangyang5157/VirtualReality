@@ -7,12 +7,8 @@ import android.opengl.GLES20;
 import android.opengl.GLUtils;
 import android.opengl.Matrix;
 import android.text.TextPaint;
-import android.util.Log;
-
-import com.gmail.jiangyang5157.cardboard.scene.Coordinate;
 import com.gmail.jiangyang5157.tookit.app.AppUtils;
 import com.gmail.jiangyang5157.tookit.math.Vector;
-import com.google.android.gms.maps.model.LatLng;
 
 /**
  * @author Yang
