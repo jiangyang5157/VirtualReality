@@ -5,6 +5,7 @@ import android.content.Context;
 import com.gmail.jiangyang5157.cardboard.scene.AimIntersection;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
 import com.gmail.jiangyang5157.tookit.math.Vector;
+import com.gmail.jiangyang5157.tookit.math.Vector3d;
 
 /**
  * @author Yang
@@ -37,12 +38,12 @@ public abstract class Sphere extends GLModel implements Intersectable {
 
         float[] position = getPosition();
         float[] cameraPos = head.getCamera().getPosition();
-        Vector positionVec = new Vector(position[0], position[1], position[2]);
-        Vector cameraPosVec = new Vector(cameraPos[0], cameraPos[1], cameraPos[2]);
-        Vector forwardDirVec = new Vector(head.forward[0], head.forward[1], head.forward[2]);
+        Vector positionVec = new Vector3d(position[0], position[1], position[2]);
+        Vector cameraPosVec = new Vector3d(cameraPos[0], cameraPos[1], cameraPos[2]);
+        Vector forwardVec = new Vector3d(head.forward[0], head.forward[1], head.forward[2]);
         Vector posToCameraVec = cameraPosVec.minus(positionVec);
 
-        final double b = forwardDirVec.dot(posToCameraVec);
+        final double b = forwardVec.dot(posToCameraVec);
         final double c = posToCameraVec.dot(posToCameraVec) - (radius * radius);
 
         // solve the quadratic equation
@@ -62,6 +63,6 @@ public abstract class Sphere extends GLModel implements Intersectable {
             return null;//both intersections are behind the matrix
         }
 
-        return new AimIntersection(this, cameraPosVec, cameraPosVec.plus(forwardDirVec.times(t)), t);
+        return new AimIntersection(this, cameraPosVec, cameraPosVec.plus(forwardVec.times(t)), t);
     }
 }

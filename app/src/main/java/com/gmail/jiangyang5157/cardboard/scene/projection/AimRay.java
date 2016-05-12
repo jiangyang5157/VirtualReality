@@ -38,7 +38,7 @@ public class AimRay extends Point {
         create(AppUtils.getColor(context, COLOR_NOTMAL_RES_ID));
     }
 
-    public void translateToPos(float[] position) {
+    public void setPosition(float[] position) {
         Matrix.setIdentityM(model, 0);
         Matrix.translateM(model, 0, position[0], position[1], position[2]);
     }
@@ -59,9 +59,8 @@ public class AimRay extends Point {
         Vector intersectToCameraVec = intersection.cameraPosVec.minus(intersection.intersecttPosVec);
 
         Vector newIntersectPosVec = intersection.intersecttPosVec.plus(intersectToCameraVec.direction().times(SPACE));
-        double[] newPosition = newIntersectPosVec.getData();
         Matrix.setIdentityM(model, 0);
-        translateToPos(new float[]{(float) newPosition[0], (float) newPosition[1], (float) newPosition[2]});
+        setPosition(new float[]{(float) newIntersectPosVec.getData()[0], (float) newIntersectPosVec.getData()[1], (float) newIntersectPosVec.getData()[2]});
 
         double distance = newIntersectPosVec.length();
         adjustPointSize(distance);

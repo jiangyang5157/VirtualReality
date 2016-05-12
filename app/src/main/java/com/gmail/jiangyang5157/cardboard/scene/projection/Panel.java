@@ -25,13 +25,17 @@ public abstract class Panel extends Rectangle {
     private final int[] buffers = new int[3];
     private final int[] texBuffers = new int[1];
 
+    protected Vector tl;
+    protected Vector bl;
+    protected Vector tr;
+    protected Vector br;
+
     public Panel(Context context) {
         super(context, VERTEX_SHADER_RAW_RESOURCE, FRAGMENT_SHADER_RAW_RESOURCE);
     }
 
     protected void create(float width, float height, int color) {
-        this.width = width;
-        this.height = height;
+        buildCorners(width, height);
         setColor(color);
 
         buildArrays();
@@ -46,23 +50,23 @@ public abstract class Panel extends Rectangle {
 
         float[] position = getPosition();
         float[] cameraPos = head.getCamera().getPosition();
-        Vector positionVec = new Vector(position[0], position[1], position[2]);
-        Vector cameraPosVec = new Vector(cameraPos[0], cameraPos[1], cameraPos[2]);
-        Vector forwardVec = new Vector(head.forward[0], head.forward[1], head.forward[2]);
-        Vector rightVec = new Vector(head.right[0], head.right[1], head.right[2]);
-        Vector upVec = new Vector(head.up[0], head.up[1], head.up[2]);
+        Vector positionVec = new Vector3d(position[0], position[1], position[2]);
+        Vector cameraPosVec = new Vector3d(cameraPos[0], cameraPos[1], cameraPos[2]);
+        Vector forwardVec = new Vector3d(head.forward[0], head.forward[1], head.forward[2]);
+        Vector rightVec = new Vector3d(head.right[0], head.right[1], head.right[2]);
+        Vector upVec = new Vector3d(head.up[0], head.up[1], head.up[2]);
         Vector posToCameraVec = cameraPosVec.minus(positionVec);
         Vector posToCameraDirVec = posToCameraVec.direction();
         Vector cameraToPosVec = positionVec.minus(cameraPosVec);
-        Vector cameraToPosDirVec = cameraToPosVec.direction();
+        Vector cameraToPosDirVec = new Vector3d(cameraToPosVec.direction());
 
         //assume Panel always face camera
         double rightDis = cameraToPosVec.dot(rightVec);
         double upDis = cameraToPosVec.dot(upVec);
-        double radian = (new Vector3d(forwardVec)).radian(new Vector3d(cameraToPosDirVec));
-        Log.i("####", "rightDis: " + rightDis);
-        Log.i("####", "upDis: " + upDis);
-        Log.i("####", "radian: " + radian);
+        double radian = ((Vector3d)forwardVec).radian((Vector3d)cameraToPosDirVec);
+//        Log.i("####", "rightDis: " + rightDis);
+//        Log.i("####", "upDis: " + upDis);
+//        Log.i("####", "radian: " + radian);
 
         // TODO: 5/7/2016
 
@@ -78,16 +82,30 @@ public abstract class Panel extends Rectangle {
         texCoordHandle = GLES20.glGetAttribLocation(program, TEXTURE_COORDS_HANDLE);
     }
 
-    @Override
-    protected void buildArrays() {
+    protected void buildCorners(){
+        buildCorners(width, height);
+    }
+
+    protected void buildCorners(float width, float height){
+        this.width = width;
+        this.height = height;
+
         final float HALF_WIDTH = width / 2.0f;
         final float HALF_HEIGHT = height / 2.0f;
 
+        tl = new Vector3d(-1.0f * HALF_WIDTH, 1.0f * HALF_HEIGHT, 0.0f);
+        bl = new Vector3d(-1.0f * HALF_WIDTH, -1.0f * HALF_HEIGHT, 0.0f);
+        tr = new Vector3d(1.0f * HALF_WIDTH, 1.0f * HALF_HEIGHT, 0.0f);
+        br = new Vector3d(1.0f * HALF_WIDTH, -1.0f * HALF_HEIGHT, 0.0f);
+    }
+
+    @Override
+    protected void buildArrays() {
         vertices = new float[]{
-                -1.0f * HALF_WIDTH, 1.0f * HALF_HEIGHT, 0.0f, // tl
-                -1.0f * HALF_WIDTH, -1.0f * HALF_HEIGHT, 0.0f, // bl
-                1.0f * HALF_WIDTH, 1.0f * HALF_HEIGHT, 0.0f, // tr
-                1.0f * HALF_WIDTH, -1.0f * HALF_HEIGHT, 0.0f, // br
+                (float) tl.getData()[0], (float) tl.getData()[1], (float) tl.getData()[2], // tl
+                (float) bl.getData()[0], (float) bl.getData()[1], (float) bl.getData()[2], // bl
+                (float) tr.getData()[0], (float) tl.getData()[1], (float) tr.getData()[2], // tr
+                (float) br.getData()[0], (float) br.getData()[1], (float) br.getData()[2], // br
         };
 
         // GL_CCW

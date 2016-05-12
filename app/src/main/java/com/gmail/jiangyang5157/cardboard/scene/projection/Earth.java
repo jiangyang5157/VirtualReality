@@ -6,6 +6,7 @@ import android.opengl.Matrix;
 import com.gmail.jiangyang5157.cardboard.kml.KmlPlacemark;
 import com.gmail.jiangyang5157.cardboard.vr.R;
 import com.gmail.jiangyang5157.tookit.math.Vector;
+import com.gmail.jiangyang5157.tookit.math.Vector3d;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -85,8 +86,8 @@ public class Earth extends TextureSphere {
 
     public boolean contain(float[] point) {
         float[] position = getPosition();
-        Vector positionVec = new Vector(position[0], position[1], position[2]);
-        Vector pointVec = new Vector(point[0], point[1], point[2]);
+        Vector positionVec = new Vector3d(position[0], position[1], position[2]);
+        Vector pointVec = new Vector3d(point[0], point[1], point[2]);
         return pointVec.minus(positionVec).length() < getRadius() + CAMERA_ALTITUDE;
     }
 }

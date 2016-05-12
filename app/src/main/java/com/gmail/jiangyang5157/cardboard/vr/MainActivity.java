@@ -146,11 +146,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
                 });
                 //test textfield movement
                 textField.setVisible(true);
-                textField.translateToFront(head.getCamera().getPosition(), head.forward);
-                Matrix.rotateM(textField.model, 0, (float) Math.toDegrees(head.eulerAngles[1]), 0, 1f, 0);
-                Matrix.rotateM(textField.model, 0, (float) Math.toDegrees(head.eulerAngles[0]), 1f, 0, 0);
-                Matrix.rotateM(textField.model, 0, (float) Math.toDegrees(head.eulerAngles[2]), 0, 0f, 1f);
-
+                textField.setPosition(head);
                 debug_camer_movement = false;
             } else if (intersection.model instanceof Panel) {
 
