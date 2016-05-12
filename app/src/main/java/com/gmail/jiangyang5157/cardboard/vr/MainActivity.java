@@ -164,6 +164,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
             debug_camer_movement = !debug_camer_movement;
         }
 
+        //test textfield movement
         textField.translateToFront(camera.getPosition(), forwardDir);
         Matrix.rotateM(textField.model, 0, (float) Math.toDegrees(eulerAngles[1]), 0, 1f, 0);
         Matrix.rotateM(textField.model, 0, (float) Math.toDegrees(eulerAngles[0]), 1f, 0, 0);
