@@ -15,6 +15,7 @@ import com.gmail.jiangyang5157.cardboard.scene.projection.Marker;
 import com.gmail.jiangyang5157.cardboard.scene.Light;
 import com.gmail.jiangyang5157.cardboard.scene.Lighting;
 import com.gmail.jiangyang5157.cardboard.scene.projection.GLModel;
+import com.gmail.jiangyang5157.cardboard.scene.projection.Panel;
 import com.gmail.jiangyang5157.cardboard.scene.projection.TextField;
 import com.gmail.jiangyang5157.cardboard.ui.CardboardOverlayView;
 import com.gmail.jiangyang5157.tookit.app.DeviceUtils;
@@ -80,9 +81,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         super.onDestroy();
         earth.destroy();
         aimRay.destroy();
-        if (textField != null) {
-            textField.destroy();
-        }
+        textField.destroy();
     }
 
     @Override
@@ -108,22 +107,34 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
             }
         }
 
-        ArrayList<AimIntersection> markerIntersections = new ArrayList<AimIntersection>();
+        AimIntersection intersection = null;
         float[] cameraPos = camera.getPosition();
-        for (final Marker mark : earth.getMarkers()) {
-            AimIntersection markIntersection = mark.intersect(cameraPos, forwardDir);
-            if (markIntersection != null) {
-                markerIntersections.add(markIntersection);
+
+        //
+        if (intersection == null) {
+            intersection = textField.intersect(cameraPos, forwardDir);
+        }
+
+        //
+        if (intersection == null) {
+            ArrayList<AimIntersection> markerIntersections = new ArrayList<AimIntersection>();
+            for (final Marker mark : earth.getMarkers()) {
+                AimIntersection markIntersection = mark.intersect(cameraPos, forwardDir);
+                if (markIntersection != null) {
+                    markerIntersections.add(markIntersection);
+                }
+            }
+            Collections.sort(markerIntersections);
+            if (markerIntersections.size() > 0) {
+                intersection = markerIntersections.get(0);
             }
         }
-        Collections.sort(markerIntersections);
-        AimIntersection intersection = null;
-        if (markerIntersections.size() > 0) {
-            intersection = markerIntersections.get(0);
-        }
+
+        //
         if (intersection == null) {
             intersection = earth.intersect(cameraPos, forwardDir);
         }
+
         aimRay.intersectAt(intersection);
     }
     @Override
@@ -133,27 +144,31 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
     @Override
     public void onCardboardTrigger() {
-//        final AimIntersection intersection = aimRay.getIntersection();
-//        if (intersection != null && intersection.model instanceof Marker) {
-//            runOnUiThread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    overlayView.show3DToast(((Marker)intersection.model).name);
-//                }
-//            });
-//            debug_camer_movement = false;
-//        } else {
-//            debug_camer_movement = !debug_camer_movement;
-//        }
+        final AimIntersection intersection = aimRay.getIntersection();
+        if (intersection != null) {
+            if (intersection.model instanceof Marker) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        overlayView.show3DToast(((Marker) intersection.model).name);
+                    }
+                });
+
+                debug_camer_movement = false;
+            } else if (intersection.model instanceof Panel) {
 
 
-        Log.i("####", "eulerDegrees: " + (float) Math.toDegrees(eulerAngles[0]) + "," + (float) Math.toDegrees(eulerAngles[1]) + "," + (float) Math.toDegrees(eulerAngles[2]));
-        Log.i("####", "up: " +  upDir[0] + "," + upDir[1] + "," + upDir[2]);
-        Log.i("####", "right: " +  rightDir[0] + "," + rightDir[1] + "," + rightDir[2]);
-        textField.translateToFront(camera.getPosition(), forwardDir);
+                debug_camer_movement = false;
+            } else {
+                debug_camer_movement = !debug_camer_movement;
+            }
+        } else {
+            debug_camer_movement = !debug_camer_movement;
+        }
 
-//        Matrix.rotateM(textField.model, 0, (float) Math.toDegrees(eulerAngles[0]), 1f, 0, 0);
+//        textField.translateToFront(camera.getPosition(), forwardDir);
 //        Matrix.rotateM(textField.model, 0, (float) Math.toDegrees(eulerAngles[1]), 0, 1f, 0);
+//        Matrix.rotateM(textField.model, 0, (float) Math.toDegrees(eulerAngles[0]), 1f, 0, 0);
 //        Matrix.rotateM(textField.model, 0, (float) Math.toDegrees(eulerAngles[2]), 0, 0f, 1f);
     }
 
@@ -177,17 +192,13 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     private void updateScene(float[] view, float[] perspective) {
         earth.update(view, perspective);
         aimRay.update(view, perspective);
-        if (textField != null) {
-            textField.update(view, perspective);
-        }
+        textField.update(view, perspective);
     }
 
     private void drawScene() {
         aimRay.draw();
         earth.draw();
-        if (textField != null) {
-            textField.draw();
-        }
+        textField.draw();
     }
 
     private float[] getModelPositionInCameraSpace(float[] model, float[] modelView) {
@@ -225,6 +236,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
         textField = new TextField(this);
         textField.create("asdasdsdas123123232");
+        textField.translateToFront(camera.getPosition(), camera.getLookAtPos());
     }
 
     @Override
