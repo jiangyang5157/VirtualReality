@@ -32,7 +32,7 @@ public abstract class Sphere extends GLModel implements Intersectable {
 
     @Override
     public AimIntersection intersect(Head head) {
-        if (!isVisible){
+        if (!isVisible) {
             return null;
         }
 

@@ -108,7 +108,7 @@ public class CardboardOverlayView extends LinearLayout {
     /**
      * A simple view group containing some horizontally centered text underneath a horizontally
      * centered image.
-     * <p>
+     * <p/>
      * <p>This is a helper class for CardboardOverlayView.
      */
     private class CardboardOverlayEyeView extends ViewGroup {

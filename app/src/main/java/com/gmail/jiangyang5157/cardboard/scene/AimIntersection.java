@@ -15,7 +15,7 @@ public class AimIntersection implements Comparable {
 
     private final double t;
 
-    public AimIntersection(Model model, Vector cameraPosVec, Vector intersecttPosVec, double t){
+    public AimIntersection(Model model, Vector cameraPosVec, Vector intersecttPosVec, double t) {
         this.model = model;
         this.cameraPosVec = cameraPosVec;
         this.intersecttPosVec = intersecttPosVec;
@@ -25,12 +25,12 @@ public class AimIntersection implements Comparable {
 
     @Override
     public int compareTo(Object another) {
-        AimIntersection that = (AimIntersection)another;
+        AimIntersection that = (AimIntersection) another;
 
         double ret = this.t - that.t;
-        if (ret < 0){
+        if (ret < 0) {
             return -1;
-        } else if (ret > 0){
+        } else if (ret > 0) {
             return 1;
         } else {
             return 0;

@@ -108,10 +108,14 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
         //
         if (intersection == null) {
-            intersection = textField.intersect(head);
+            if (textField == null) {
+                intersection = textField.intersect(head);
+            }
         }
         if (intersection == null) {
-            textField.setVisible(false);
+            if (textField == null) {
+                textField.setVisible(false);
+            }
         }
 
         //
@@ -153,16 +157,25 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 //                        overlayView.show3DToast(((Marker) intersection.model).name);
 //                    }
 //                });
-                //test textfield movement
-                textField.setVisible(true);
-                textField.setPosition(head);
-                debug_camer_movement = false;
+
+                if (textField == null) {
+                    //test textfield movement
+                    textField.setVisible(true);
+                    textField.setPosition(head);
+                    debug_camer_movement = false;
+                }
             } else if (intersection.model instanceof Panel) {
             } else {
                 debug_camer_movement = !debug_camer_movement;
             }
         } else {
             debug_camer_movement = !debug_camer_movement;
+        }
+
+        if (textField == null) {
+            textField = new TextField(this);
+            textField.create("asdasdsdas123123232");
+            textField.setVisible(false);
         }
     }
 
@@ -186,13 +199,17 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     private void updateScene(float[] view, float[] perspective) {
         earth.update(view, perspective);
         aimRay.update(view, perspective);
-        textField.update(view, perspective);
+        if (textField == null) {
+            textField.update(view, perspective);
+        }
     }
 
     private void drawScene() {
         aimRay.draw();
         earth.draw();
-        textField.draw();
+        if (textField == null) {
+            textField.draw();
+        }
     }
 
     private float[] getModelPositionInCameraSpace(float[] model, float[] modelView) {
@@ -228,9 +245,9 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         aimRay = new AimRay(this);
         aimRay.create();
 
-        textField = new TextField(this);
-        textField.create("asdasdsdas123123232");
-        textField.setVisible(false);
+//        textField = new TextField(this);
+//        textField.create("asdasdsdas123123232");
+//        textField.setVisible(false);
     }
 
     @Override

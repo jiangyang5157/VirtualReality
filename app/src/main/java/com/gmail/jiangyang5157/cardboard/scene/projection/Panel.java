@@ -44,7 +44,7 @@ public abstract class Panel extends Rectangle {
 
     @Override
     public AimIntersection intersect(Head head) {
-        if (!isVisible){
+        if (!isVisible) {
             return null;
         }
 
@@ -54,7 +54,7 @@ public abstract class Panel extends Rectangle {
 
         Vector tl_tr = new Vector3d(trVec.minus(tlVec));
         Vector tl_bl = new Vector3d(blVec.minus(tlVec));
-        Vector n = ((Vector3d)tl_tr).cross((Vector3d)tl_bl).direction();
+        Vector n = ((Vector3d) tl_tr).cross((Vector3d) tl_bl).direction();
         Vector ray = (cameraPosVec.plus(forwardVec)).minus(cameraPosVec).direction();
         double ndotdRay = n.dot(ray);
         if (Math.abs(ndotdRay) < Vector.EPSILON) {
@@ -62,7 +62,7 @@ public abstract class Panel extends Rectangle {
             return null;
         }
         double t = n.dot(tlVec.minus(cameraPosVec)) / ndotdRay;
-        if (t < 0){
+        if (t < 0) {
             // eliminate squares behind the ray
             return null;
         }
@@ -73,7 +73,7 @@ public abstract class Panel extends Rectangle {
         double v = tl_iPlane.dot(tl_bl);
 
         boolean intersecting = u >= 0 && u <= tl_tr.dot(tl_tr) && v >= 0 && v <= tl_bl.dot(tl_bl);
-        if (!intersecting){
+        if (!intersecting) {
             // intersection is out of boundary
             return null;
         }
@@ -90,11 +90,11 @@ public abstract class Panel extends Rectangle {
         texCoordHandle = GLES20.glGetAttribLocation(program, TEXTURE_COORDS_HANDLE);
     }
 
-    protected void buildCorners(){
+    protected void buildCorners() {
         buildCorners(width, height);
     }
 
-    protected void buildCorners(float width, float height){
+    protected void buildCorners(float width, float height) {
         this.width = width;
         this.height = height;
 
