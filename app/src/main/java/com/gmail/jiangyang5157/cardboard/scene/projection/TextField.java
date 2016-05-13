@@ -60,26 +60,33 @@ public class TextField extends Panel {
         Matrix.rotateM(model, 0, eulerAnglesDegree0, 1f, 0, 0);
         Matrix.rotateM(model, 0, eulerAnglesDegree2, 0, 0f, 1f);
 
+        // TODO: 5/13/2016  
         buildCorners();
         ((Vector3d) tl).rotateYaxis(head.eulerAngles[1]);
         ((Vector3d) tl).rotateXaxis(head.eulerAngles[0]);
         ((Vector3d) tl).rotateZaxis(head.eulerAngles[2]);
+
         ((Vector3d) bl).rotateYaxis(head.eulerAngles[1]);
         ((Vector3d) bl).rotateXaxis(head.eulerAngles[0]);
         ((Vector3d) bl).rotateZaxis(head.eulerAngles[2]);
+
         ((Vector3d) tr).rotateYaxis(head.eulerAngles[1]);
         ((Vector3d) tr).rotateXaxis(head.eulerAngles[0]);
         ((Vector3d) tr).rotateZaxis(head.eulerAngles[2]);
+
         ((Vector3d) br).rotateYaxis(head.eulerAngles[1]);
         ((Vector3d) br).rotateXaxis(head.eulerAngles[0]);
         ((Vector3d) br).rotateZaxis(head.eulerAngles[2]);
+
         tl = new Vector3d(tl.plus(positionVec));
         bl = new Vector3d(bl.plus(positionVec));
         tr = new Vector3d(tr.plus(positionVec));
         br = new Vector3d(br.plus(positionVec));
 
-        Log.i("####", "positionVec: " + positionVec.toString());
+        Log.i("####", "pos: " + positionVec.toString());
         Log.i("####", "tl: " + tl.toString());
+        Log.i("####", "tr: " + tr.toString());
+        Log.i("####", "bl: " + bl.toString());
         Log.i("####", "br: " + br.toString());
     }
 

@@ -147,7 +147,8 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
                 textField.setVisible(true);
                 textField.setPosition(head);
                 debug_camer_movement = false;
-            } else {
+            } else if (intersection.model instanceof Panel) {
+            } else{
                 debug_camer_movement = !debug_camer_movement;
             }
         } else {
