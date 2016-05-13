@@ -24,11 +24,11 @@ public class Earth extends TextureSphere {
 
     private static final int STACKS = 25;
     private static final int SLICES = 25;
-    public static final float RADIUS = 1000f;
+    public static final float RADIUS = 2000f;
 
     public static final float MARKER_RADIUS = RADIUS / 50;
     public static final float MARKER_ALTITUDE = -1 * MARKER_RADIUS;
-    public static final float CAMERA_ALTITUDE = (2 * AimRay.SPACE) * (MARKER_ALTITUDE > 0 ? 1 : -1);
+    public static final float CAMERA_ALTITUDE = TextField.DEFAULT_DISTANCE * (MARKER_ALTITUDE > 0 ? 1 : -1);
 
     private ArrayList<Marker> markers = new ArrayList<>();
 
