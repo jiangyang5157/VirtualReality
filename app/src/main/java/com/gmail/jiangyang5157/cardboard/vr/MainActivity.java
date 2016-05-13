@@ -137,19 +137,15 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         final AimIntersection intersection = aimRay.getIntersection();
         if (intersection != null) {
             if (intersection.model instanceof Marker) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        overlayView.show3DToast(((Marker) intersection.model).name);
-                    }
-                });
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        overlayView.show3DToast(((Marker) intersection.model).name);
+//                    }
+//                });
                 //test textfield movement
                 textField.setVisible(true);
                 textField.setPosition(head);
-                debug_camer_movement = false;
-            } else if (intersection.model instanceof Panel) {
-
-
                 debug_camer_movement = false;
             } else {
                 debug_camer_movement = !debug_camer_movement;

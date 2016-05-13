@@ -50,7 +50,9 @@ public class AimRay extends Point {
     public void intersectAt(AimIntersection intersection) {
         this.intersection = intersection;
 
-        if (intersection.model instanceof Marker) {
+        if (intersection.model instanceof Panel) {
+            setColor(AppUtils.getColor(context, COLOR_FOCUCED_RES_ID));
+        } else if (intersection.model instanceof Marker) {
             setColor(AppUtils.getColor(context, COLOR_FOCUCED_RES_ID));
         } else {
             setColor(AppUtils.getColor(context, COLOR_NOTMAL_RES_ID));
