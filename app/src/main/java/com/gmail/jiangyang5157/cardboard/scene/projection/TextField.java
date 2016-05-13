@@ -29,7 +29,7 @@ public class TextField extends Panel {
         super(context);
     }
 
-    public void create(float[] up, float[] right, String text) {
+    public void create(String text) {
         this.text = text;
 
         final float GESTURE_THRESHOLD_DP = 16.0f; // The gesture threshold expressed in dp
@@ -44,7 +44,7 @@ public class TextField extends Panel {
         width = textPaint.measureText(text);
         height = textSizePixels * (1 + lineCount);
 
-        create(up, right, width, height, AppUtils.getColor(context, COLOR_BACKGROUND_RES_ID));
+        create(width, height, AppUtils.getColor(context, COLOR_BACKGROUND_RES_ID));
     }
 
     @Override

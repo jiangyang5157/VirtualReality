@@ -6,6 +6,7 @@ import android.opengl.Matrix;
 import android.util.Log;
 
 import com.gmail.jiangyang5157.cardboard.scene.AimIntersection;
+import com.gmail.jiangyang5157.cardboard.scene.Camera;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
 import com.gmail.jiangyang5157.cardboard.vr.R;
 import com.gmail.jiangyang5157.tookit.math.Vector;
@@ -37,11 +38,11 @@ public abstract class Panel extends Rectangle {
         super(context, VERTEX_SHADER_RAW_RESOURCE, FRAGMENT_SHADER_RAW_RESOURCE);
     }
 
-    protected void create(float[] up, float[] right, float width, float height, int color) {
+    protected void create(float width, float height, int color) {
         this.width = width;
         this.height = height;
         setColor(color);
-        buildCorners(up, right);
+        buildCorners(Camera.UP, Camera.RIGHT);
 
         buildArrays();
         bindBuffers();

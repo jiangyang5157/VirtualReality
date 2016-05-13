@@ -229,8 +229,8 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         aimRay.create();
 
         textField = new TextField(this);
-        textField.create(Camera.UP, Camera.RIGHT, "asdasdsdas123123232");
         textField.setVisible(false);
+        textField.create("asdasdsdas123123232");
     }
 
     @Override
