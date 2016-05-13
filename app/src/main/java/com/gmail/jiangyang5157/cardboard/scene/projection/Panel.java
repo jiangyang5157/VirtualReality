@@ -72,12 +72,13 @@ public abstract class Panel extends Rectangle {
         double u = tl_iPlane.dot(tl_tr);
         double v = tl_iPlane.dot(tl_bl);
 
-        if (u >= 0 && u <= tl_tr.dot(tl_tr) && v >= 0 && v <= tl_bl.dot(tl_bl)){
-            return new AimIntersection(this, cameraPosVec, cameraPosVec.plus(forwardVec.times(t)), t);
-        } else {
+        boolean intersecting = u >= 0 && u <= tl_tr.dot(tl_tr) && v >= 0 && v <= tl_bl.dot(tl_bl);
+        if (!intersecting){
             // intersection is out of boundary
             return null;
         }
+
+        return new AimIntersection(this, cameraPosVec, cameraPosVec.plus(forwardVec.times(t)), t);
     }
 
     @Override

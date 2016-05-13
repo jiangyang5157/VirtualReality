@@ -99,7 +99,6 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         }
 
         AimIntersection intersection = null;
-        float[] cameraPos = head.getCamera().getPosition();
 
         //
         if (intersection == null) {
