@@ -60,7 +60,7 @@ public class TextField extends Panel {
         Matrix.rotateM(model, 0, eulerAnglesDegree0, 1f, 0, 0);
         Matrix.rotateM(model, 0, eulerAnglesDegree2, 0, 0f, 1f);
 
-        // TODO: 5/13/2016  
+        // TODO: 5/13/2016
         buildCorners();
         ((Vector3d) tl).rotateYaxis(head.eulerAngles[1]);
         ((Vector3d) tl).rotateXaxis(head.eulerAngles[0]);

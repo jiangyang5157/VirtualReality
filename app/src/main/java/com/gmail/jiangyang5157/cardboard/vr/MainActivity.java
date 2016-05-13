@@ -104,6 +104,9 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         if (intersection == null) {
             intersection = textField.intersect(head);
         }
+        if (intersection == null) {
+            textField.setVisible(false);
+        }
 
         //
         if (intersection == null) {
