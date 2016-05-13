@@ -108,12 +108,12 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
         //
         if (intersection == null) {
-            if (textField == null) {
+            if (textField != null) {
                 intersection = textField.intersect(head);
             }
         }
         if (intersection == null) {
-            if (textField == null) {
+            if (textField != null) {
                 textField.setVisible(false);
             }
         }
@@ -158,12 +158,11 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 //                    }
 //                });
 
-                if (textField == null) {
-                    //test textfield movement
+                if (textField != null) {
                     textField.setVisible(true);
                     textField.setPosition(head);
-                    debug_camer_movement = false;
                 }
+                debug_camer_movement = false;
             } else if (intersection.model instanceof Panel) {
             } else {
                 debug_camer_movement = !debug_camer_movement;
@@ -199,7 +198,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     private void updateScene(float[] view, float[] perspective) {
         earth.update(view, perspective);
         aimRay.update(view, perspective);
-        if (textField == null) {
+        if (textField != null) {
             textField.update(view, perspective);
         }
     }
@@ -207,7 +206,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     private void drawScene() {
         aimRay.draw();
         earth.draw();
-        if (textField == null) {
+        if (textField != null) {
             textField.draw();
         }
     }
