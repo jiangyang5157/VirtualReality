@@ -41,10 +41,10 @@ public abstract class Sphere extends GLModel implements Intersectable {
         Vector positionVec = new Vector3d(position[0], position[1], position[2]);
         Vector cameraPosVec = new Vector3d(cameraPos[0], cameraPos[1], cameraPos[2]);
         Vector forwardVec = new Vector3d(head.forward[0], head.forward[1], head.forward[2]);
-        Vector posToCameraVec = cameraPosVec.minus(positionVec);
+        Vector pos_camera = cameraPosVec.minus(positionVec);
 
-        final double b = forwardVec.dot(posToCameraVec);
-        final double c = posToCameraVec.dot(posToCameraVec) - (radius * radius);
+        final double b = forwardVec.dot(pos_camera);
+        final double c = pos_camera.dot(pos_camera) - (radius * radius);
 
         // solve the quadratic equation
         final double f = b * b - c;

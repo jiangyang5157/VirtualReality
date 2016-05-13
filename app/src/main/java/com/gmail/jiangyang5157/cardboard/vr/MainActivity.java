@@ -70,9 +70,15 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        earth.destroy();
-        aimRay.destroy();
-        textField.destroy();
+        if (earth != null) {
+            earth.destroy();
+        }
+        if (earth != null) {
+            aimRay.destroy();
+        }
+        if (earth != null) {
+            textField.destroy();
+        }
     }
 
     @Override
@@ -130,6 +136,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
         aimRay.intersectAt(intersection);
     }
+
     @Override
     public void onFinishFrame(Viewport viewport) {
         GLES20.glDisable(GLES20.GL_DEPTH_TEST);
@@ -151,7 +158,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
                 textField.setPosition(head);
                 debug_camer_movement = false;
             } else if (intersection.model instanceof Panel) {
-            } else{
+            } else {
                 debug_camer_movement = !debug_camer_movement;
             }
         } else {

@@ -82,13 +82,13 @@ public class TextureSphere extends Sphere {
             for (int s = 0; s < slices; s++) {
                 int r_ = (r + 1 == stacks) ? 0 : r + 1;
                 int s_ = (s + 1 == slices) ? 0 : s + 1;
-                indices[indexIndex] = (short) (r * slices + s); //tl
-                indices[indexIndex + 1] = (short) (r_ * slices + s); //bl
-                indices[indexIndex + 2] = (short) (r * slices + s_); //tr
+                indices[indexIndex] = (short) (r * slices + s); //tlVec
+                indices[indexIndex + 1] = (short) (r_ * slices + s); //blVec
+                indices[indexIndex + 2] = (short) (r * slices + s_); //trVec
 
-                indices[indexIndex + 3] = (short) (r * slices + s_); //tr
-                indices[indexIndex + 4] = (short) (r_ * slices + s); //bl
-                indices[indexIndex + 5] = (short) (r_ * slices + s_); //br
+                indices[indexIndex + 3] = (short) (r * slices + s_); //trVec
+                indices[indexIndex + 4] = (short) (r_ * slices + s); //blVec
+                indices[indexIndex + 5] = (short) (r_ * slices + s_); //brVec
 
                 indexIndex += 6;
             }

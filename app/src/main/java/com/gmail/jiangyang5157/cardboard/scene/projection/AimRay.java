@@ -51,8 +51,8 @@ public class AimRay extends Point {
         }
 
         Matrix.setIdentityM(model, 0);
-        Vector intersectToCameraVec = intersection.cameraPosVec.minus(intersection.intersecttPosVec);
-        Vector newIntersectPosVec = intersection.intersecttPosVec.plus(intersectToCameraVec.direction().times(SPACE));
+        Vector i_camera = intersection.cameraPosVec.minus(intersection.intersecttPosVec);
+        Vector newIntersectPosVec = intersection.intersecttPosVec.plus(i_camera.direction().times(SPACE));
         setPosition(new float[]{(float) newIntersectPosVec.getData()[0], (float) newIntersectPosVec.getData()[1], (float) newIntersectPosVec.getData()[2]});
     }
 

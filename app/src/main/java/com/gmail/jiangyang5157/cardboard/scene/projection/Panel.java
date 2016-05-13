@@ -25,10 +25,10 @@ public abstract class Panel extends Rectangle {
     private final int[] buffers = new int[3];
     private final int[] texBuffers = new int[1];
 
-    protected Vector tl;
-    protected Vector bl;
-    protected Vector tr;
-    protected Vector br;
+    protected Vector tlVec;
+    protected Vector blVec;
+    protected Vector trVec;
+    protected Vector brVec;
 
     public Panel(Context context) {
         super(context, VERTEX_SHADER_RAW_RESOURCE, FRAGMENT_SHADER_RAW_RESOURCE);
@@ -52,8 +52,8 @@ public abstract class Panel extends Rectangle {
         Vector cameraPosVec = new Vector(cameraPos[0], cameraPos[1], cameraPos[2]);
         Vector forwardVec = new Vector(head.forward[0], head.forward[1], head.forward[2]);
 
-        Vector tl_tr = new Vector3d(tr.minus(tl));
-        Vector tl_bl = new Vector3d(bl.minus(tl));
+        Vector tl_tr = new Vector3d(trVec.minus(tlVec));
+        Vector tl_bl = new Vector3d(blVec.minus(tlVec));
         Vector n = ((Vector3d)tl_tr).cross((Vector3d)tl_bl).direction();
         Vector ray = (cameraPosVec.plus(forwardVec)).minus(cameraPosVec).direction();
         double ndotdRay = n.dot(ray);
@@ -61,14 +61,14 @@ public abstract class Panel extends Rectangle {
             // perpendicular
             return null;
         }
-        double t = n.dot(tl.minus(cameraPosVec)) / ndotdRay;
+        double t = n.dot(tlVec.minus(cameraPosVec)) / ndotdRay;
         if (t < 0){
             // eliminate squares behind the ray
             return null;
         }
 
         Vector iPlane = cameraPosVec.plus(ray.times(t));
-        Vector tl_iPlane = iPlane.minus(tl);
+        Vector tl_iPlane = iPlane.minus(tlVec);
         double u = tl_iPlane.dot(tl_tr);
         double v = tl_iPlane.dot(tl_bl);
 
@@ -101,19 +101,24 @@ public abstract class Panel extends Rectangle {
         final float HALF_WIDTH = width / 2.0f;
         final float HALF_HEIGHT = height / 2.0f;
 
-        tl = new Vector3d(-1.0f * HALF_WIDTH, 1.0f * HALF_HEIGHT, 0.0f);
-        bl = new Vector3d(-1.0f * HALF_WIDTH, -1.0f * HALF_HEIGHT, 0.0f);
-        tr = new Vector3d(1.0f * HALF_WIDTH, 1.0f * HALF_HEIGHT, 0.0f);
-        br = new Vector3d(1.0f * HALF_WIDTH, -1.0f * HALF_HEIGHT, 0.0f);
+        tlVec = new Vector3d(-1.0f * HALF_WIDTH, 1.0f * HALF_HEIGHT, 0.0f);
+        blVec = new Vector3d(-1.0f * HALF_WIDTH, -1.0f * HALF_HEIGHT, 0.0f);
+        trVec = new Vector3d(1.0f * HALF_WIDTH, 1.0f * HALF_HEIGHT, 0.0f);
+        brVec = new Vector3d(1.0f * HALF_WIDTH, -1.0f * HALF_HEIGHT, 0.0f);
     }
 
     @Override
     protected void buildArrays() {
+        double[] tl = tlVec.getData();
+        double[] bl = blVec.getData();
+        double[] tr = trVec.getData();
+        double[] br = brVec.getData();
+
         vertices = new float[]{
-                (float) tl.getData()[0], (float) tl.getData()[1], (float) tl.getData()[2], // tl
-                (float) bl.getData()[0], (float) bl.getData()[1], (float) bl.getData()[2], // bl
-                (float) tr.getData()[0], (float) tl.getData()[1], (float) tr.getData()[2], // tr
-                (float) br.getData()[0], (float) br.getData()[1], (float) br.getData()[2], // br
+                (float) tl[0], (float) tl[1], (float) tl[2],
+                (float) bl[0], (float) bl[1], (float) bl[2],
+                (float) tr[0], (float) tr[1], (float) tr[2],
+                (float) br[0], (float) br[1], (float) br[2]
         };
 
         // GL_CCW
@@ -123,10 +128,10 @@ public abstract class Panel extends Rectangle {
         };
 
         textures = new float[]{
-                0.0f, 0.0f, // tl
-                0.0f, 1.0f, // bl
-                1.0f, 0.0f, // tr
-                1.0f, 1.0f // br
+                0.0f, 0.0f, // tlVec
+                0.0f, 1.0f, // blVec
+                1.0f, 0.0f, // trVec
+                1.0f, 1.0f // brVec
         };
     }
 
