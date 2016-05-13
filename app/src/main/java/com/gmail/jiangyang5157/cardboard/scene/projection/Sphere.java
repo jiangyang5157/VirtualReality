@@ -48,8 +48,9 @@ public abstract class Sphere extends GLModel implements Intersectable {
 
         // solve the quadratic equation
         final double f = b * b - c;
-        if (f < 0) {
-            return null; // ray misses sphere
+        if (f <= Vector.EPSILON) {
+            // ray misses sphere
+            return null;
         }
 
         final double sqrtF = Math.sqrt(f);
@@ -59,8 +60,9 @@ public abstract class Sphere extends GLModel implements Intersectable {
         // t is the distance along the ray to the closest intersection with the sphere
         // pick the smaller of the two results if both are positive
         final double t = t0 < 0.0f ? Math.max(t1, 0.0f) : (t1 < 0.0f ? t0 : Math.min(t0, t1));
-        if (t == 0) {
-            return null;//both intersections are behind the matrix
+        if (t < 0) {
+            // both intersections are behind the matrix
+            return null;
         }
 
         return new AimIntersection(this, cameraPosVec, cameraPosVec.plus(forwardVec.times(t)), t);

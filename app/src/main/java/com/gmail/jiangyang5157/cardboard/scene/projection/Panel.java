@@ -48,29 +48,36 @@ public abstract class Panel extends Rectangle {
             return null;
         }
 
-        float[] position = getPosition();
         float[] cameraPos = head.getCamera().getPosition();
-        Vector positionVec = new Vector3d(position[0], position[1], position[2]);
-        Vector cameraPosVec = new Vector3d(cameraPos[0], cameraPos[1], cameraPos[2]);
-        Vector forwardVec = new Vector3d(head.forward[0], head.forward[1], head.forward[2]);
-        Vector rightVec = new Vector3d(head.right[0], head.right[1], head.right[2]);
-        Vector upVec = new Vector3d(head.up[0], head.up[1], head.up[2]);
-        Vector posToCameraVec = cameraPosVec.minus(positionVec);
-        Vector posToCameraDirVec = posToCameraVec.direction();
-        Vector cameraToPosVec = positionVec.minus(cameraPosVec);
-        Vector cameraToPosDirVec = new Vector3d(cameraToPosVec.direction());
+        Vector cameraPosVec = new Vector(cameraPos[0], cameraPos[1], cameraPos[2]);
+        Vector forwardVec = new Vector(head.forward[0], head.forward[1], head.forward[2]);
 
-        //assume Panel always face camera
-        double rightDis = cameraToPosVec.dot(rightVec);
-        double upDis = cameraToPosVec.dot(upVec);
-        double radian = ((Vector3d)forwardVec).radian((Vector3d)cameraToPosDirVec);
-//        Log.i("####", "rightDis: " + rightDis);
-//        Log.i("####", "upDis: " + upDis);
-//        Log.i("####", "radian: " + radian);
+        Vector tl_tr = new Vector3d(tr.minus(tl));
+        Vector tl_bl = new Vector3d(bl.minus(tl));
+        Vector n = ((Vector3d)tl_tr).cross((Vector3d)tl_bl).direction();
+        Vector ray = (cameraPosVec.plus(forwardVec)).minus(cameraPosVec).direction();
+        double ndotdRay = n.dot(ray);
+        if (Math.abs(ndotdRay) < Vector.EPSILON) {
+            // perpendicular
+            return null;
+        }
+        double t = n.dot(tl.minus(cameraPosVec)) / ndotdRay;
+        if (t < 0){
+            // eliminate squares behind the ray
+            return null;
+        }
 
-        // TODO: 5/7/2016
+        Vector iPlane = cameraPosVec.plus(ray.times(t));
+        Vector tl_iPlane = iPlane.minus(tl);
+        double u = tl_iPlane.dot(tl_tr);
+        double v = tl_iPlane.dot(tl_bl);
 
-        return null;
+        if (u >= 0 && u <= tl_tr.dot(tl_tr) && v >= 0 && v <= tl_bl.dot(tl_bl)){
+            return new AimIntersection(this, cameraPosVec, cameraPosVec.plus(forwardVec.times(t)), t);
+        } else {
+            // intersection is out of boundary
+            return null;
+        }
     }
 
     @Override
