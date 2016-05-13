@@ -154,7 +154,6 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 //                        overlayView.show3DToast(((Marker) intersection.model).name);
                     }
                 });
-
                 textField.setVisible(true);
                 textField.setPosition(head);
                 debug_camer_movement = false;
@@ -230,7 +229,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         aimRay.create();
 
         textField = new TextField(this);
-        textField.create("asdasdsdas123123232");
+        textField.create(Camera.UP, Camera.RIGHT, "asdasdsdas123123232");
         textField.setVisible(false);
     }
 

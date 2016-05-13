@@ -5,13 +5,10 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
-import android.opengl.Matrix;
 import android.text.TextPaint;
 
 import com.gmail.jiangyang5157.cardboard.scene.Head;
 import com.gmail.jiangyang5157.tookit.app.AppUtils;
-import com.gmail.jiangyang5157.tookit.math.Vector;
-import com.gmail.jiangyang5157.tookit.math.Vector3d;
 
 /**
  * @author Yang
@@ -21,48 +18,33 @@ public class TextField extends Panel {
 
     private String text;
 
-    public static final int DEFAULT_WIDTH = 400;
-    public static final int DEFAULT_HEIGHT = 100;
-
-    public static final float DISTANCE = 400;
-
     public static final float ALPHA_BACKGROUND = 0.4f;
     public static final int COLOR_BACKGROUND_RES_ID = com.gmail.jiangyang5157.tookit.R.color.BlueGrey;
     public static final int COLOR_TEXT_RES_ID = com.gmail.jiangyang5157.tookit.R.color.White;
+
+    protected TextPaint textPaint;
+    protected float textSizePixels;
 
     public TextField(Context context) {
         super(context);
     }
 
-    public void create(String text) {
-        create(DEFAULT_WIDTH, DEFAULT_HEIGHT, AppUtils.getColor(context, COLOR_BACKGROUND_RES_ID), text);
-    }
-
-    protected void create(float width, float height, int color, String text) {
+    public void create(float[] up, float[] right, String text) {
         this.text = text;
-        create(width, height, new float[]{0, 1, 0}, new float[] {1, 0, 0}, color);
-    }
 
-    public void setPosition(Head head) {
-        float[] cameraPos = head.getCamera().getPosition();
-        Vector cameraPosVec = new Vector3d(cameraPos[0], cameraPos[1], cameraPos[2]);
-        Vector forwardVec = new Vector3d(head.forward[0], head.forward[1], head.forward[2]).times(DISTANCE);
-        Vector positionVec = cameraPosVec.plus(forwardVec);
+        final float GESTURE_THRESHOLD_DP = 16.0f; // The gesture threshold expressed in dp
+        final float scale = context.getResources().getDisplayMetrics().density;
+        textSizePixels = (GESTURE_THRESHOLD_DP * scale + 0.5f); // Convert the dps to pixels, based on density scale
 
-        Matrix.setIdentityM(model, 0);
-        Matrix.translateM(model, 0, (float) positionVec.getData()[0], (float) positionVec.getData()[1], (float) positionVec.getData()[2]);
-        buildCorners(width, height, head.up, head.right);
-        tlVec = new Vector3d(tlVec.plus(positionVec));
-        blVec = new Vector3d(blVec.plus(positionVec));
-        trVec = new Vector3d(trVec.plus(positionVec));
-        brVec = new Vector3d(brVec.plus(positionVec));
+        textPaint = new TextPaint();
+        textPaint.setTextSize(textSizePixels);
 
-        float eulerAnglesDegree0 = (float) Math.toDegrees(head.eulerAngles[0]);
-        float eulerAnglesDegree1 = (float) Math.toDegrees(head.eulerAngles[1]);
-        float eulerAnglesDegree2 = (float) Math.toDegrees(head.eulerAngles[2]);
-        Matrix.rotateM(model, 0, eulerAnglesDegree1, 0, 1f, 0);
-        Matrix.rotateM(model, 0, eulerAnglesDegree0, 1f, 0, 0);
-        Matrix.rotateM(model, 0, eulerAnglesDegree2, 0, 0f, 1f);
+        // TODO: 5/13/2016
+        int lineCount = 1;
+        width = textPaint.measureText(text);
+        height = textSizePixels * (1 + lineCount);
+
+        create(up, right, width, height, AppUtils.getColor(context, COLOR_BACKGROUND_RES_ID));
     }
 
     @Override
@@ -81,13 +63,7 @@ public class TextField extends Panel {
             Canvas canvas = new Canvas(bitmap);
             bitmap.eraseColor(getColorWithAlpha(ALPHA_BACKGROUND));
 
-            final float GESTURE_THRESHOLD_DP = 16.0f; // The gesture threshold expressed in dp
-            final float scale = context.getResources().getDisplayMetrics().density;
-            float pixels = (GESTURE_THRESHOLD_DP * scale + 0.5f); // Convert the dps to pixels, based on density scale
-
-            TextPaint textPaint = new TextPaint();
             textPaint.setAntiAlias(true);
-            textPaint.setTextSize(pixels);
             textPaint.setColor(AppUtils.getColor(context, COLOR_TEXT_RES_ID));
             int baseY = (int) ((canvas.getHeight() / 2) - ((textPaint.descent() + textPaint.ascent()) / 2));
             canvas.drawText(text, 0, baseY, textPaint);

@@ -2,6 +2,7 @@ package com.gmail.jiangyang5157.cardboard.scene.projection;
 
 import android.content.Context;
 import android.opengl.GLES20;
+import android.opengl.Matrix;
 import android.util.Log;
 
 import com.gmail.jiangyang5157.cardboard.scene.AimIntersection;
@@ -30,16 +31,42 @@ public abstract class Panel extends Rectangle {
     protected Vector trVec;
     protected Vector brVec;
 
+    public static final float DISTANCE = 400;
+
     public Panel(Context context) {
         super(context, VERTEX_SHADER_RAW_RESOURCE, FRAGMENT_SHADER_RAW_RESOURCE);
     }
 
-    protected void create(float width, float height, float[] up, float[] right, int color) {
-        buildCorners(width, height, up, right);
+    protected void create(float[] up, float[] right, float width, float height, int color) {
+        this.width = width;
+        this.height = height;
         setColor(color);
+        buildCorners(up, right);
 
         buildArrays();
         bindBuffers();
+    }
+
+    public void setPosition(Head head) {
+        float[] cameraPos = head.getCamera().getPosition();
+        Vector cameraPosVec = new Vector3d(cameraPos[0], cameraPos[1], cameraPos[2]);
+        Vector forwardVec = new Vector3d(head.forward[0], head.forward[1], head.forward[2]).times(DISTANCE);
+        Vector positionVec = cameraPosVec.plus(forwardVec);
+
+        buildCorners(head.up, head.right);
+        tlVec = new Vector3d(tlVec.plus(positionVec));
+        blVec = new Vector3d(blVec.plus(positionVec));
+        trVec = new Vector3d(trVec.plus(positionVec));
+        brVec = new Vector3d(brVec.plus(positionVec));
+
+        Matrix.setIdentityM(model, 0);
+        Matrix.translateM(model, 0, (float) positionVec.getData()[0], (float) positionVec.getData()[1], (float) positionVec.getData()[2]);
+        float eulerAnglesDegree0 = (float) Math.toDegrees(head.eulerAngles[0]);
+        float eulerAnglesDegree1 = (float) Math.toDegrees(head.eulerAngles[1]);
+        float eulerAnglesDegree2 = (float) Math.toDegrees(head.eulerAngles[2]);
+        Matrix.rotateM(model, 0, eulerAnglesDegree1, 0, 1f, 0);
+        Matrix.rotateM(model, 0, eulerAnglesDegree0, 1f, 0, 0);
+        Matrix.rotateM(model, 0, eulerAnglesDegree2, 0, 0f, 1f);
     }
 
     @Override
@@ -90,10 +117,7 @@ public abstract class Panel extends Rectangle {
         texCoordHandle = GLES20.glGetAttribLocation(program, TEXTURE_COORDS_HANDLE);
     }
 
-    public void buildCorners(float width, float height, float[] up, float[] right) {
-        this.width = width;
-        this.height = height;
-
+    protected void buildCorners(float[] up, float[] right) {
         final float HALF_WIDTH = width / 2.0f;
         final float HALF_HEIGHT = height / 2.0f;
 
