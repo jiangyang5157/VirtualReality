@@ -24,7 +24,7 @@ public class TextField extends Panel {
     public static final int DEFAULT_WIDTH = 400;
     public static final int DEFAULT_HEIGHT = 100;
 
-    public static final float DEFAULT_DISTANCE = 400;
+    public static final float DISTANCE = 400;
 
     public static final float ALPHA_BACKGROUND = 0.4f;
     public static final int COLOR_BACKGROUND_RES_ID = com.gmail.jiangyang5157.tookit.R.color.BlueGrey;
@@ -46,7 +46,7 @@ public class TextField extends Panel {
     public void setPosition(Head head) {
         float[] cameraPos = head.getCamera().getPosition();
         Vector cameraPosVec = new Vector3d(cameraPos[0], cameraPos[1], cameraPos[2]);
-        Vector forwardVec = new Vector3d(head.forward[0], head.forward[1], head.forward[2]).times(DEFAULT_DISTANCE);
+        Vector forwardVec = new Vector3d(head.forward[0], head.forward[1], head.forward[2]).times(DISTANCE);
         Vector positionVec = cameraPosVec.plus(forwardVec);
 
         Matrix.setIdentityM(model, 0);
