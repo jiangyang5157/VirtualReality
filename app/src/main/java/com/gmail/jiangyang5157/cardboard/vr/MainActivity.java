@@ -218,7 +218,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
             e.printStackTrace();
         }
 
-        aimRay = new AimRay(this, earth);
+        aimRay = new AimRay(this);
         aimRay.create();
 
         textField = new TextField(this);
