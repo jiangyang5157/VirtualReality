@@ -40,7 +40,7 @@ public class TextField extends Panel {
 
     protected void create(float width, float height, int color, String text) {
         this.text = text;
-        create(width, height, color);
+        create(width, height, new float[]{0, 1, 0}, new float[] {1, 0, 0}, color);
     }
 
     public void setPosition(Head head) {
@@ -51,7 +51,7 @@ public class TextField extends Panel {
 
         Matrix.setIdentityM(model, 0);
         Matrix.translateM(model, 0, (float) positionVec.getData()[0], (float) positionVec.getData()[1], (float) positionVec.getData()[2]);
-        buildCorners(head.up, head.right);
+        buildCorners(width, height, head.up, head.right);
         tlVec = new Vector3d(tlVec.plus(positionVec));
         blVec = new Vector3d(blVec.plus(positionVec));
         trVec = new Vector3d(trVec.plus(positionVec));

@@ -34,8 +34,8 @@ public abstract class Panel extends Rectangle {
         super(context, VERTEX_SHADER_RAW_RESOURCE, FRAGMENT_SHADER_RAW_RESOURCE);
     }
 
-    protected void create(float width, float height, int color) {
-        buildCorners(width, height, new float[]{0, 1, 0}, new float[] {1, 0, 0});
+    protected void create(float width, float height, float[] up, float[] right, int color) {
+        buildCorners(width, height, up, right);
         setColor(color);
 
         buildArrays();
@@ -88,10 +88,6 @@ public abstract class Panel extends Rectangle {
 
         vertexHandle = GLES20.glGetAttribLocation(program, VERTEX_HANDLE);
         texCoordHandle = GLES20.glGetAttribLocation(program, TEXTURE_COORDS_HANDLE);
-    }
-
-    public void buildCorners(float[] up, float[] right){
-        buildCorners(width, height, up, right);
     }
 
     public void buildCorners(float width, float height, float[] up, float[] right) {
