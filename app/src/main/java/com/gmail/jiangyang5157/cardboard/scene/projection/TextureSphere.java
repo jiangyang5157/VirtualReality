@@ -178,7 +178,9 @@ public class TextureSphere extends Sphere {
 
     @Override
     public void draw() {
-        super.draw();
+        if (!isVisible) {
+            return;
+        }
 
         GLES20.glUseProgram(program);
         GLES20.glEnableVertexAttribArray(vertexHandle);

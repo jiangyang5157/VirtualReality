@@ -17,11 +17,7 @@ public abstract class Model {
 
     protected boolean isVisible;
 
-    public void draw() {
-        if (isVisible == false) {
-            return;
-        }
-    }
+    public abstract void draw();
 
     public void update(float[] view, float[] perspective) {
         Matrix.multiplyMM(modelView, 0, view, 0, model, 0);
