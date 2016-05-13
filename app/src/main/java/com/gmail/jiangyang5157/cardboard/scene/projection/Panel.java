@@ -46,6 +46,8 @@ public abstract class Panel extends Rectangle {
 
         buildArrays();
         bindBuffers();
+
+        setVisible(true);
     }
 
     public void setPosition(Head head) {

@@ -72,7 +72,6 @@ public abstract class GLModel extends Model {
         this.context = context;
 
         Matrix.setIdentityM(model, 0);
-        setVisible(true);
 
         program = GLES20.glCreateProgram();
         GLES20.glAttachShader(program, compileShader(GLES20.GL_VERTEX_SHADER, vertexShaderRawResource));

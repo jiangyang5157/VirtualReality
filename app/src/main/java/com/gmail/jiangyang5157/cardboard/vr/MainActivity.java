@@ -11,13 +11,13 @@ import com.gmail.jiangyang5157.cardboard.scene.Camera;
 import com.gmail.jiangyang5157.cardboard.scene.AimIntersection;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
 import com.gmail.jiangyang5157.cardboard.scene.projection.AimRay;
+import com.gmail.jiangyang5157.cardboard.scene.projection.Dialog;
 import com.gmail.jiangyang5157.cardboard.scene.projection.Earth;
 import com.gmail.jiangyang5157.cardboard.scene.projection.Marker;
 import com.gmail.jiangyang5157.cardboard.scene.Light;
 import com.gmail.jiangyang5157.cardboard.scene.Lighting;
 import com.gmail.jiangyang5157.cardboard.scene.projection.GLModel;
 import com.gmail.jiangyang5157.cardboard.scene.projection.Panel;
-import com.gmail.jiangyang5157.cardboard.scene.projection.TextField;
 import com.gmail.jiangyang5157.cardboard.ui.CardboardOverlayView;
 import com.gmail.jiangyang5157.tookit.app.DeviceUtils;
 import com.google.vrtoolkit.cardboard.CardboardActivity;
@@ -29,8 +29,6 @@ import com.google.vrtoolkit.cardboard.Viewport;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
 
 import javax.microedition.khronos.egl.EGLConfig;
 
@@ -45,7 +43,9 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
     private Earth earth;
     private AimRay aimRay;
-    private TextField textField;
+    private Dialog dialog;
+
+    private AimIntersection aimIntersection;
 
     private CardboardOverlayView overlayView;
 
@@ -73,11 +73,11 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         if (earth != null) {
             earth.destroy();
         }
-        if (earth != null) {
+        if (aimRay != null) {
             aimRay.destroy();
         }
-        if (earth != null) {
-            textField.destroy();
+        if (dialog != null) {
+            dialog.destroy();
         }
     }
 
@@ -104,38 +104,23 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
             }
         }
 
-        aimRay.intersectAt(getIntersection());
+        checkAimIntersection();
     }
 
-    private AimIntersection getIntersection() {
-        AimIntersection ret = null;
-
-        if (ret == null) {
-            ret = textField.intersect(head);
-        }
-        if (ret == null) {
-            textField.setVisible(false);
-        }
-
-        if (ret == null) {
-            ArrayList<AimIntersection> markerIntersections = new ArrayList<AimIntersection>();
-            for (final Marker mark : earth.getMarkers()) {
-                AimIntersection markIntersection = mark.intersect(head);
-                if (markIntersection != null) {
-                    markerIntersections.add(markIntersection);
-                }
-            }
-            Collections.sort(markerIntersections);
-            if (markerIntersections.size() > 0) {
-                ret = markerIntersections.get(0);
+    private void checkAimIntersection() {
+        AimIntersection intersection = null;
+        if (intersection == null) {
+            if (dialog != null) {
+                intersection = dialog.intersect(head);
             }
         }
-
-        if (ret == null) {
-            ret = earth.intersect(head);
+        if (intersection == null) {
+            if (earth != null) {
+                intersection = earth.intersect(head);
+            }
         }
-
-        return ret;
+        aimIntersection = intersection;
+        aimRay.intersectAt(aimIntersection);
     }
 
     @Override
@@ -154,8 +139,6 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 //                        overlayView.show3DToast(((Marker) intersection.model).name);
                     }
                 });
-                textField.setVisible(true);
-                textField.setPosition(head);
                 debug_camer_movement = false;
             } else if (intersection.model instanceof Panel) {
             } else {
@@ -184,15 +167,27 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     }
 
     private void updateScene(float[] view, float[] perspective) {
-        earth.update(view, perspective);
-        aimRay.update(view, perspective);
-        textField.update(view, perspective);
+        if (aimRay != null) {
+            aimRay.update(view, perspective);
+        }
+        if (earth != null) {
+            earth.update(view, perspective);
+        }
+        if (dialog != null) {
+            dialog.update(view, perspective);
+        }
     }
 
     private void drawScene() {
-        aimRay.draw();
-        earth.draw();
-        textField.draw();
+        if (aimRay != null) {
+            aimRay.draw();
+        }
+        if (earth != null) {
+            earth.draw();
+        }
+        if (dialog != null) {
+            dialog.draw();
+        }
     }
 
     private float[] getModelPositionInCameraSpace(float[] model, float[] modelView) {
@@ -209,6 +204,9 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         head = new Head();
         light = new Light();
 
+        aimRay = new AimRay(this);
+        aimRay.create();
+
         earth = new Earth(this);
         earth.setLighting(new Lighting() {
             @Override
@@ -217,20 +215,12 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
             }
         });
         earth.create();
-
         try {
             KmlLayer kmlLayer = new KmlLayer(earth, R.raw.example, getApplicationContext());
             kmlLayer.addLayerToMap();
         } catch (XmlPullParserException | IOException e) {
             e.printStackTrace();
         }
-
-        aimRay = new AimRay(this);
-        aimRay.create();
-
-        textField = new TextField(this);
-        textField.setVisible(false);
-        textField.create("asdasdsdas123123232");
     }
 
     @Override

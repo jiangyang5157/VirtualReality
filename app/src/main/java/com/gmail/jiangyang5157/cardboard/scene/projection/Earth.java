@@ -3,6 +3,8 @@ package com.gmail.jiangyang5157.cardboard.scene.projection;
 import android.content.Context;
 
 import com.gmail.jiangyang5157.cardboard.kml.KmlPlacemark;
+import com.gmail.jiangyang5157.cardboard.scene.AimIntersection;
+import com.gmail.jiangyang5157.cardboard.scene.Head;
 import com.gmail.jiangyang5157.cardboard.vr.R;
 import com.gmail.jiangyang5157.tookit.math.Vector;
 import com.gmail.jiangyang5157.tookit.math.Vector3d;
@@ -10,6 +12,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * @author Yang
@@ -21,9 +24,9 @@ public class Earth extends TextureSphere {
     private static final int VERTEX_SHADER_RAW_RESOURCE = R.raw.texture_earth_vertex_shader;
     private static final int FRAGMENT_SHADER_RAW_RESOURCE = R.raw.texture_earth_fragment_shader;
 
-    private static final int STACKS = 25;
-    private static final int SLICES = 25;
     public static final float RADIUS = 4000f;
+    private static final int STACKS = 32;
+    private static final int SLICES = 32;
 
     public static final float MARKER_RADIUS = RADIUS / 50;
     public static final float MARKER_ALTITUDE = -1 * MARKER_RADIUS;
@@ -88,5 +91,29 @@ public class Earth extends TextureSphere {
         Vector positionVec = new Vector3d(position[0], position[1], position[2]);
         Vector pointVec = new Vector3d(point[0], point[1], point[2]);
         return pointVec.minus(positionVec).length() < getRadius() + CAMERA_ALTITUDE;
+    }
+
+    @Override
+    public AimIntersection intersect(Head head) {
+        if (!isVisible) {
+            return null;
+        }
+        AimIntersection ret;
+
+        ArrayList<AimIntersection> intersections = new ArrayList<AimIntersection>();
+        for (final Marker mark : markers) {
+            AimIntersection intersection = mark.intersect(head);
+            if (intersection != null) {
+                intersections.add(intersection);
+            }
+        }
+        Collections.sort(intersections);
+        if (intersections.size() > 0) {
+            ret = intersections.get(0);
+        } else {
+            ret = super.intersect(head);
+        }
+
+        return ret;
     }
 }

@@ -26,6 +26,8 @@ public class Point extends GLModel {
 
         buildArrays();
         bindBuffers();
+
+        setVisible(true);
     }
 
     @Override

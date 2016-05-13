@@ -24,6 +24,8 @@ public abstract class Sphere extends GLModel implements Intersectable {
 
         buildArrays();
         bindBuffers();
+
+        setVisible(true);
     }
 
     public float getRadius() {

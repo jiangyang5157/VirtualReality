@@ -17,8 +17,8 @@ public class AimRay extends Point {
     private static final int VERTEX_SHADER_RAW_RESOURCE = R.raw.point_vertex_shader;
     private static final int FRAGMENT_SHADER_RAW_RESOURCE = R.raw.point_fragment_shader;
 
-    public static final float POINT_SIZE = 10.0f;
-    public static final float SPACE = POINT_SIZE;
+    public static final float POINT_SIZE = 16.0f;
+    public static final float SPACE = (float) (Math.PI * POINT_SIZE);
 
     public static final int COLOR_NOTMAL_RES_ID = com.gmail.jiangyang5157.tookit.R.color.DeepOrange;
     public static final int COLOR_FOCUCED_RES_ID = com.gmail.jiangyang5157.tookit.R.color.Teal;

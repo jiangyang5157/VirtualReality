@@ -24,7 +24,6 @@ public class Icosphere extends Sphere {
     protected void create(float radius, int color, int recursionLevel) {
         setColor(color);
         this.recursionLevel = recursionLevel;
-
         create(radius);
     }
 
