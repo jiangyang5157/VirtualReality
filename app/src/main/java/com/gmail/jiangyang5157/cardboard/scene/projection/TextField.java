@@ -38,7 +38,7 @@ public class TextField extends Panel {
         textPaint = new TextPaint();
         textPaint.setTextSize(textSizePixels);
 
-        // TODO: 5/13/2016
+        // TODO: 5/13/2016 handle muti-lines
         int lineCount = 1;
         width = textPaint.measureText(text);
         height = textSizePixels * (1 + lineCount);

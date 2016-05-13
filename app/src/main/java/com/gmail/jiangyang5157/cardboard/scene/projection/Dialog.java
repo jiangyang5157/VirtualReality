@@ -15,16 +15,19 @@ import java.util.Collections;
  * @author Yang
  * @since 5/13/2016
  */
-public class Dialog extends Panel{
+public abstract class Dialog extends Panel {
 
     protected ArrayList<Panel> panels = new ArrayList<>();
 
-    public static final float ALPHA_BACKGROUND = 0.8f;
-    public static final int COLOR_BACKGROUND_RES_ID = com.gmail.jiangyang5157.tookit.R.color.Yellow;
+    protected static final float PADDING_LAYER = 2.0f;
+    protected static final float PADDING_BOARD = 8.0f;
+    protected static final float ALPHA_BACKGROUND = 0.2f;
 
     public Dialog(Context context) {
         super(context);
     }
+
+    public abstract void create();
 
     @Override
     protected int createTexture() {
@@ -56,10 +59,16 @@ public class Dialog extends Panel{
 
     @Override
     public void draw() {
+        // TODO: 5/14/2016 alpha lost
         for (Panel panel : panels) {
             panel.draw();
         }
+
+        // blend for rendering alpha
+        GLES20.glEnable(GLES20.GL_BLEND);
+        GLES20.glBlendFunc(GLES20.GL_ONE, GLES20.GL_ONE);
         super.draw();
+        GLES20.glDisable(GLES20.GL_BLEND);
     }
 
     @Override
@@ -75,7 +84,7 @@ public class Dialog extends Panel{
     }
 
 
-    private void addPanel(Panel panel) {
+    public void addPanel(Panel panel) {
         panels.add(panel);
     }
 

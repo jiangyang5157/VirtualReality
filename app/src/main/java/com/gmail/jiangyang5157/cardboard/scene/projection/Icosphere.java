@@ -84,7 +84,7 @@ public class Icosphere extends Sphere {
 
     @Override
     public void draw() {
-        if (!isVisible) {
+        if (!isVisible || !isProgramCreated()) {
             return;
         }
 
@@ -117,6 +117,7 @@ public class Icosphere extends Sphere {
 
     @Override
     public void destroy() {
+        super.destroy();
         Log.d("Icosphere", "destroy");
         GLES20.glDeleteBuffers(buffers.length, buffers, 0);
     }

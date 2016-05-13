@@ -20,6 +20,7 @@ public abstract class Sphere extends GLModel implements Intersectable {
     }
 
     protected void create(float radius) {
+        initializeProgram();
         this.radius = radius;
 
         buildArrays();

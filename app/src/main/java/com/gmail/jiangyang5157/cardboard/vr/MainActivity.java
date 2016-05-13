@@ -17,6 +17,7 @@ import com.gmail.jiangyang5157.cardboard.scene.projection.Marker;
 import com.gmail.jiangyang5157.cardboard.scene.Light;
 import com.gmail.jiangyang5157.cardboard.scene.Lighting;
 import com.gmail.jiangyang5157.cardboard.scene.projection.GLModel;
+import com.gmail.jiangyang5157.cardboard.scene.projection.MarkerDialog;
 import com.gmail.jiangyang5157.cardboard.scene.projection.Panel;
 import com.gmail.jiangyang5157.cardboard.ui.CardboardOverlayView;
 import com.gmail.jiangyang5157.tookit.app.DeviceUtils;
@@ -44,8 +45,6 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     private Earth earth;
     private AimRay aimRay;
     private Dialog dialog;
-
-    private AimIntersection aimIntersection;
 
     private CardboardOverlayView overlayView;
 
@@ -104,7 +103,20 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
             }
         }
 
+        checkDialog();
         checkAimIntersection();
+    }
+
+    private void checkDialog() {
+        if (dialog == null){
+            return;
+        }
+        if (dialog.isProgramCreated()){
+            return;
+        }
+
+        dialog.create();
+        dialog.setPosition(head.getCamera().getPosition(), head.forward, head.up, head.right, head.eulerAngles);
     }
 
     private void checkAimIntersection() {
@@ -112,6 +124,11 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         if (intersection == null) {
             if (dialog != null) {
                 intersection = dialog.intersect(head);
+                if (intersection == null){
+                    // TODO: 5/14/2016 earth went black after destroy dialog
+//                    dialog.destroy();
+                    dialog = null;
+                }
             }
         }
         if (intersection == null) {
@@ -119,8 +136,8 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
                 intersection = earth.intersect(head);
             }
         }
-        aimIntersection = intersection;
-        aimRay.intersectAt(aimIntersection);
+
+        aimRay.intersectAt(intersection);
     }
 
     @Override
@@ -133,12 +150,19 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         final AimIntersection intersection = aimRay.getIntersection();
         if (intersection != null) {
             if (intersection.model instanceof Marker) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
 //                        overlayView.show3DToast(((Marker) intersection.model).name);
-                    }
-                });
+//                    }
+//                });
+
+                if (intersection.model instanceof Panel) {
+                } else if (intersection.model instanceof Marker) {
+                    dialog = new MarkerDialog(this, (Marker) intersection.model);
+                } else {
+                }
+
                 debug_camer_movement = false;
             } else if (intersection.model instanceof Panel) {
             } else {
@@ -179,14 +203,14 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     }
 
     private void drawScene() {
+        if (dialog != null) {
+            dialog.draw();
+        }
         if (aimRay != null) {
             aimRay.draw();
         }
         if (earth != null) {
             earth.draw();
-        }
-        if (dialog != null) {
-            dialog.draw();
         }
     }
 
@@ -228,12 +252,9 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         Log.d(TAG, "onSurfaceChanged");
     }
 
-    /**
-     * #### why it never get called?
-     * https://github.com/raasun/cardboard/blob/master/src/com/google/vrtoolkit/cardboard/CardboardView.java
-     */
     @Override
     public void onRendererShutdown() {
         Log.d(TAG, "onRendererShutdown");
+        // TODO: 5/14/2016 WHY: this callback is never get called
     }
 }

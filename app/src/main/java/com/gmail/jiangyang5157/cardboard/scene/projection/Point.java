@@ -22,6 +22,7 @@ public class Point extends GLModel {
     }
 
     protected void create(int color) {
+        initializeProgram();
         setColor(color);
 
         buildArrays();
@@ -61,7 +62,7 @@ public class Point extends GLModel {
 
     @Override
     public void draw() {
-        if (!isVisible) {
+        if (!isVisible || !isProgramCreated()) {
             return;
         }
 
@@ -88,6 +89,7 @@ public class Point extends GLModel {
 
     @Override
     public void destroy() {
+        super.destroy();
         Log.d("Point", "destroy");
         GLES20.glDeleteBuffers(buffers.length, buffers, 0);
     }

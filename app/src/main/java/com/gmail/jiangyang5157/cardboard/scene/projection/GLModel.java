@@ -62,15 +62,22 @@ public abstract class GLModel extends Model {
 
     protected int indicesBufferCapacity;
 
-    protected final int program;
+    protected int program;
 
     protected Lighting lighting;
 
     protected Context context;
 
+    private final int vertexShaderRawResource;
+    private final int fragmentShaderRawResource;
+
     protected GLModel(Context context, int vertexShaderRawResource, int fragmentShaderRawResource) {
         this.context = context;
+        this.vertexShaderRawResource = vertexShaderRawResource;
+        this.fragmentShaderRawResource = fragmentShaderRawResource;
+    }
 
+    protected void initializeProgram(){
         Matrix.setIdentityM(model, 0);
 
         program = GLES20.glCreateProgram();
@@ -79,6 +86,10 @@ public abstract class GLModel extends Model {
         GLES20.glLinkProgram(program);
 
         initializeHandle();
+    }
+
+    public boolean isProgramCreated(){
+        return program != 0;
     }
 
     private int compileShader(int type, String code) {
@@ -138,5 +149,10 @@ public abstract class GLModel extends Model {
         int g = (int) (color[1] * 255);
         int b = (int) (color[2] * 255);
         return Color.argb(a, r, g, b);
+    }
+
+    @Override
+    public void destroy() {
+        program = 0;
     }
 }

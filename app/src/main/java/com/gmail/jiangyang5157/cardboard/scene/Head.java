@@ -10,8 +10,6 @@ public class Head {
     public float[] eulerAngles = new float[3];
     public float[] up = new float[3];
     public float[] right = new float[3];
-    public float[] quaternion = new float[4];
-    public float[] translation = new float[3];
 
     private Camera camera;
 

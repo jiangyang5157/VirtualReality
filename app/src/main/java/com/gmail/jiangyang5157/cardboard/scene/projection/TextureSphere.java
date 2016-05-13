@@ -178,7 +178,7 @@ public class TextureSphere extends Sphere {
 
     @Override
     public void draw() {
-        if (!isVisible) {
+        if (!isVisible || !isProgramCreated()) {
             return;
         }
 
@@ -219,6 +219,7 @@ public class TextureSphere extends Sphere {
 
     @Override
     public void destroy() {
+        super.destroy();
         Log.d("TextureSphere", "destroy");
         GLES20.glDeleteBuffers(buffers.length, buffers, 0);
         GLES20.glDeleteBuffers(texBuffers.length, texBuffers, 0);

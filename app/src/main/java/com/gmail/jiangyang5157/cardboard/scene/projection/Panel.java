@@ -39,6 +39,7 @@ public abstract class Panel extends Rectangle {
     }
 
     protected void create(float width, float height, int color) {
+        initializeProgram();
         this.width = width;
         this.height = height;
         setColor(color);
@@ -50,13 +51,12 @@ public abstract class Panel extends Rectangle {
         setVisible(true);
     }
 
-    public void setPosition(Head head) {
-        float[] cameraPos = head.getCamera().getPosition();
+    public void setPosition(float[] cameraPos, float[] forward, float[] up, float[] right, float[] eulerAngles) {
         Vector cameraPosVec = new Vector3d(cameraPos[0], cameraPos[1], cameraPos[2]);
-        Vector forwardVec = new Vector3d(head.forward[0], head.forward[1], head.forward[2]).times(DISTANCE);
+        Vector forwardVec = new Vector3d(forward[0], forward[1], forward[2]).times(DISTANCE);
         Vector positionVec = cameraPosVec.plus(forwardVec);
 
-        buildCorners(head.up, head.right);
+        buildCorners(up, right);
         tlVec = new Vector3d(tlVec.plus(positionVec));
         blVec = new Vector3d(blVec.plus(positionVec));
         trVec = new Vector3d(trVec.plus(positionVec));
@@ -64,9 +64,9 @@ public abstract class Panel extends Rectangle {
 
         Matrix.setIdentityM(model, 0);
         Matrix.translateM(model, 0, (float) positionVec.getData()[0], (float) positionVec.getData()[1], (float) positionVec.getData()[2]);
-        float eulerAnglesDegree0 = (float) Math.toDegrees(head.eulerAngles[0]);
-        float eulerAnglesDegree1 = (float) Math.toDegrees(head.eulerAngles[1]);
-        float eulerAnglesDegree2 = (float) Math.toDegrees(head.eulerAngles[2]);
+        float eulerAnglesDegree0 = (float) Math.toDegrees(eulerAngles[0]);
+        float eulerAnglesDegree1 = (float) Math.toDegrees(eulerAngles[1]);
+        float eulerAnglesDegree2 = (float) Math.toDegrees(eulerAngles[2]);
         Matrix.rotateM(model, 0, eulerAnglesDegree1, 0, 1f, 0);
         Matrix.rotateM(model, 0, eulerAnglesDegree0, 1f, 0, 0);
         Matrix.rotateM(model, 0, eulerAnglesDegree2, 0, 0f, 1f);
@@ -203,7 +203,7 @@ public abstract class Panel extends Rectangle {
 
     @Override
     public void draw() {
-        if (!isVisible) {
+        if (!isVisible || !isProgramCreated()) {
             return;
         }
 
@@ -238,6 +238,7 @@ public abstract class Panel extends Rectangle {
 
     @Override
     public void destroy() {
+        super.destroy();
         Log.d("Panel", "destroy");
         GLES20.glDeleteBuffers(buffers.length, buffers, 0);
         GLES20.glDeleteBuffers(texBuffers.length, texBuffers, 0);
