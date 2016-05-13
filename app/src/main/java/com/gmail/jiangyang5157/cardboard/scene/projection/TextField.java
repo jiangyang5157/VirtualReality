@@ -51,9 +51,12 @@ public class TextField extends Panel {
         Vector positionVec = cameraPosVec.plus(forwardVec);
 
         Matrix.setIdentityM(model, 0);
-        buildCorners();
-
         Matrix.translateM(model, 0, (float) positionVec.getData()[0], (float) positionVec.getData()[1], (float) positionVec.getData()[2]);
+        buildCorners(head.up, head.right);
+        tlVec = new Vector3d(tlVec.plus(positionVec));
+        blVec = new Vector3d(blVec.plus(positionVec));
+        trVec = new Vector3d(trVec.plus(positionVec));
+        brVec = new Vector3d(brVec.plus(positionVec));
 
         float eulerAnglesDegree0 = (float) Math.toDegrees(head.eulerAngles[0]);
         float eulerAnglesDegree1 = (float) Math.toDegrees(head.eulerAngles[1]);
@@ -61,34 +64,6 @@ public class TextField extends Panel {
         Matrix.rotateM(model, 0, eulerAnglesDegree1, 0, 1f, 0);
         Matrix.rotateM(model, 0, eulerAnglesDegree0, 1f, 0, 0);
         Matrix.rotateM(model, 0, eulerAnglesDegree2, 0, 0f, 1f);
-
-// TODO: 5/13/2016
-//        ((Vector3d) tlVec).rotateYaxis(head.eulerAngles[1]);
-//        ((Vector3d) tlVec).rotateXaxis(head.eulerAngles[0]);
-//        ((Vector3d) tlVec).rotateZaxis(head.eulerAngles[2]);
-//
-//        ((Vector3d) blVec).rotateYaxis(head.eulerAngles[1]);
-//        ((Vector3d) blVec).rotateXaxis(head.eulerAngles[0]);
-//        ((Vector3d) blVec).rotateZaxis(head.eulerAngles[2]);
-//
-//        ((Vector3d) trVec).rotateYaxis(head.eulerAngles[1]);
-//        ((Vector3d) trVec).rotateXaxis(head.eulerAngles[0]);
-//        ((Vector3d) trVec).rotateZaxis(head.eulerAngles[2]);
-//
-//        ((Vector3d) brVec).rotateYaxis(head.eulerAngles[1]);
-//        ((Vector3d) brVec).rotateXaxis(head.eulerAngles[0]);
-//        ((Vector3d) brVec).rotateZaxis(head.eulerAngles[2]);
-
-        tlVec = new Vector3d(tlVec.plus(positionVec));
-        blVec = new Vector3d(blVec.plus(positionVec));
-        trVec = new Vector3d(trVec.plus(positionVec));
-        brVec = new Vector3d(brVec.plus(positionVec));
-
-        Log.i("####", "pos: " + positionVec.toString());
-        Log.i("####", "tlVec: " + tlVec.toString());
-        Log.i("####", "trVec: " + trVec.toString());
-        Log.i("####", "blVec: " + blVec.toString());
-        Log.i("####", "brVec: " + brVec.toString());
     }
 
     @Override

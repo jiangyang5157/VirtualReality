@@ -35,7 +35,7 @@ public abstract class Panel extends Rectangle {
     }
 
     protected void create(float width, float height, int color) {
-        buildCorners(width, height);
+        buildCorners(width, height, new float[]{0, 1, 0}, new float[] {1, 0, 0});
         setColor(color);
 
         buildArrays();
@@ -90,21 +90,24 @@ public abstract class Panel extends Rectangle {
         texCoordHandle = GLES20.glGetAttribLocation(program, TEXTURE_COORDS_HANDLE);
     }
 
-    protected void buildCorners() {
-        buildCorners(width, height);
+    public void buildCorners(float[] up, float[] right){
+        buildCorners(width, height, up, right);
     }
 
-    protected void buildCorners(float width, float height) {
+    public void buildCorners(float width, float height, float[] up, float[] right) {
         this.width = width;
         this.height = height;
 
         final float HALF_WIDTH = width / 2.0f;
         final float HALF_HEIGHT = height / 2.0f;
 
-        tlVec = new Vector3d(-1.0f * HALF_WIDTH, 1.0f * HALF_HEIGHT, 0.0f);
-        blVec = new Vector3d(-1.0f * HALF_WIDTH, -1.0f * HALF_HEIGHT, 0.0f);
-        trVec = new Vector3d(1.0f * HALF_WIDTH, 1.0f * HALF_HEIGHT, 0.0f);
-        brVec = new Vector3d(1.0f * HALF_WIDTH, -1.0f * HALF_HEIGHT, 0.0f);
+        Vector upVec = new Vector(up[0], up[1], up[2]).times(HALF_HEIGHT);
+        Vector rightVec = new Vector(right[0], right[1], right[2]).times(HALF_WIDTH);
+
+        tlVec = upVec.plus(rightVec.negate());
+        blVec = upVec.negate().plus(rightVec.negate());
+        trVec = upVec.plus(rightVec);
+        brVec = upVec.negate().plus(rightVec);
     }
 
     @Override
