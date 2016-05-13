@@ -93,8 +93,8 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         headTransform.getHeadView(head.headView, 0);
         headTransform.getForwardVector(head.forward, 0);
         headTransform.getEulerAngles(head.eulerAngles, 0);
-        headTransform.getRightVector(head.right, 0);
         headTransform.getUpVector(head.up, 0);
+        headTransform.getRightVector(head.right, 0);
 
         if (debug_camer_movement) {
             float[] point = head.getCamera().getPosition().clone();
@@ -104,18 +104,20 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
             }
         }
 
-        AimIntersection intersection = null;
+        aimRay.intersectAt(getIntersection());
+    }
 
-        //
-        if (intersection == null) {
-            intersection = textField.intersect(head);
+    private AimIntersection getIntersection() {
+        AimIntersection ret = null;
+
+        if (ret == null) {
+            ret = textField.intersect(head);
         }
-        if (intersection == null) {
+        if (ret == null) {
             textField.setVisible(false);
         }
 
-        //
-        if (intersection == null) {
+        if (ret == null) {
             ArrayList<AimIntersection> markerIntersections = new ArrayList<AimIntersection>();
             for (final Marker mark : earth.getMarkers()) {
                 AimIntersection markIntersection = mark.intersect(head);
@@ -125,16 +127,15 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
             }
             Collections.sort(markerIntersections);
             if (markerIntersections.size() > 0) {
-                intersection = markerIntersections.get(0);
+                ret = markerIntersections.get(0);
             }
         }
 
-        //
-        if (intersection == null) {
-            intersection = earth.intersect(head);
+        if (ret == null) {
+            ret = earth.intersect(head);
         }
 
-        aimRay.intersectAt(intersection);
+        return ret;
     }
 
     @Override
