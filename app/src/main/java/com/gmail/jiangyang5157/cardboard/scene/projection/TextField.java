@@ -55,12 +55,12 @@ public class TextField extends Panel {
 
         Matrix.translateM(model, 0, (float) positionVec.getData()[0], (float) positionVec.getData()[1], (float) positionVec.getData()[2]);
 
-//        float eulerAnglesDegree0 = (float) Math.toDegrees(head.eulerAngles[0]);
-//        float eulerAnglesDegree1 = (float) Math.toDegrees(head.eulerAngles[1]);
-//        float eulerAnglesDegree2 = (float) Math.toDegrees(head.eulerAngles[2]);
-//        Matrix.rotateM(model, 0, eulerAnglesDegree1, 0, 1f, 0);
-//        Matrix.rotateM(model, 0, eulerAnglesDegree0, 1f, 0, 0);
-//        Matrix.rotateM(model, 0, eulerAnglesDegree2, 0, 0f, 1f);
+        float eulerAnglesDegree0 = (float) Math.toDegrees(head.eulerAngles[0]);
+        float eulerAnglesDegree1 = (float) Math.toDegrees(head.eulerAngles[1]);
+        float eulerAnglesDegree2 = (float) Math.toDegrees(head.eulerAngles[2]);
+        Matrix.rotateM(model, 0, eulerAnglesDegree1, 0, 1f, 0);
+        Matrix.rotateM(model, 0, eulerAnglesDegree0, 1f, 0, 0);
+        Matrix.rotateM(model, 0, eulerAnglesDegree2, 0, 0f, 1f);
 
 // TODO: 5/13/2016
 //        ((Vector3d) tlVec).rotateYaxis(head.eulerAngles[1]);
