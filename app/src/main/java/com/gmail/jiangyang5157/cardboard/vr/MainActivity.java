@@ -110,7 +110,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     }
 
     private void checkDialog() {
-        if (markerDialog == null || markerDialog.getMarker() == null || markerDialog.isProgramCreated()){
+        if (markerDialog == null || markerDialog.getMarker() == null || markerDialog.isProgramCreated()) {
             return;
         }
         markerDialog.create();
@@ -123,7 +123,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
             if (markerDialog != null) {
                 ret = markerDialog.intersect(head);
                 if (ret == null) {
-                    // TODO: 5/14/2016 earth went black after destroy
+                    // TODO: 5/14/2016 earth went black after destroy - texture confuse
                     if (markerDialog.isProgramCreated()) {
 //                        markerDialog.destroy();
                         markerDialog = null;
