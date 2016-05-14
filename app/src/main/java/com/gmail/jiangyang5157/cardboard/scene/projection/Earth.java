@@ -98,7 +98,7 @@ public class Earth extends TextureSphere {
         if (!isVisible) {
             return null;
         }
-        AimIntersection ret;
+        AimIntersection ret = null;
 
         ArrayList<AimIntersection> intersections = new ArrayList<AimIntersection>();
         for (final Marker mark : markers) {

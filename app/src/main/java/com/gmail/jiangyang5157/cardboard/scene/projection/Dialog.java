@@ -93,7 +93,7 @@ public abstract class Dialog extends Panel {
         if (!isVisible) {
             return null;
         }
-        AimIntersection ret;
+        AimIntersection ret = null;
 
         ArrayList<AimIntersection> intersections = new ArrayList<AimIntersection>();
         for (final Panel panel : panels) {

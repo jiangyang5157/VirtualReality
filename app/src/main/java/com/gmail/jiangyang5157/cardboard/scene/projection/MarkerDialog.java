@@ -21,12 +21,25 @@ public class MarkerDialog extends Dialog{
 
     @Override
     public void create() {
-        TextField textField = new TextField(context);
-        textField.create(marker.name);
-        addPanel(textField);
+        // TODO: 5/14/2016 analysis marker for creating muti-child-panel
+        TextField tf1 = new TextField(context);
+        tf1.create(marker.name);
+        addPanel(tf1);
+        TextField tf2 = new TextField(context);
+        tf2.create(marker.name);
+        addPanel(tf2);
 
-        width = textField.width + PADDING_BOARD;
-        height = textField.height + PADDING_BOARD;
+        float w = 0;
+        float h = 0;
+        h += PADDING_BOARD;
+        for (Panel panel : panels) {
+            w = Math.max(w, panel.width);
+            h += panel.height;
+            h += PADDING_BOARD;
+        }
+        w += PADDING_BOARD * 2;
+        width = w;
+        height = h;
 
         create(width, height, AppUtils.getColor(context, COLOR_BACKGROUND_RES_ID));
     }
@@ -35,12 +48,31 @@ public class MarkerDialog extends Dialog{
     public void setPosition(float[] cameraPos, float[] forward, float[] up, float[] right, float[] eulerAngles) {
         super.setPosition(cameraPos, forward, up, right, eulerAngles);
 
-        for (Panel panel : panels) {
-            // TODO: 5/14/2016 handle muti-chile-panel
-            cameraPos[0] -= forward[0] * PADDING_LAYER;
-            cameraPos[1] -= forward[1] * PADDING_LAYER;
-            cameraPos[2] -= forward[2] * PADDING_LAYER;
+        cameraPos[1] += up[1] * height / 2;
+        cameraPos[2] += up[2] * height / 2;
+        cameraPos[0] += up[0] * height / 2;
+
+        cameraPos[1] -= up[1] * PADDING_BOARD;
+        cameraPos[2] -= up[2] * PADDING_BOARD;
+        cameraPos[0] -= up[0] * PADDING_BOARD;
+
+        int panelCount = panels.size();
+        for (int i = 0; i < panelCount; i++){
+            Panel panel = panels.get(i);
+
+            cameraPos[1] -= up[1] * panel.height / 2;
+            cameraPos[2] -= up[2] * panel.height / 2;
+            cameraPos[0] -= up[0] * panel.height / 2;
+
             panel.setPosition(cameraPos, forward, up, right, eulerAngles);
+
+            cameraPos[1] -= up[1] * panel.height / 2;
+            cameraPos[2] -= up[2] * panel.height / 2;
+            cameraPos[0] -= up[0] * panel.height / 2;
+
+            cameraPos[1] -= up[1] * PADDING_BOARD;
+            cameraPos[2] -= up[2] * PADDING_BOARD;
+            cameraPos[0] -= up[0] * PADDING_BOARD;
         }
     }
 }
