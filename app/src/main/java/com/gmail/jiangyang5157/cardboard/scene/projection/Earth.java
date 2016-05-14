@@ -21,8 +21,8 @@ import java.util.Collections;
 public class Earth extends TextureSphere {
 
     private static final int TEXTURE_DRAWABLE_RESOURCE = R.drawable.no_clouds_2k;
-    private static final int VERTEX_SHADER_RAW_RESOURCE = R.raw.texture_earth_vertex_shader;
-    private static final int FRAGMENT_SHADER_RAW_RESOURCE = R.raw.texture_earth_fragment_shader;
+    private static final int VERTEX_SHADER_RAW_RESOURCE = R.raw.earth_texture_vertex_shader;
+    private static final int FRAGMENT_SHADER_RAW_RESOURCE = R.raw.earth_texture_fragment_shader;
 
     public static final float RADIUS = 4000f;
     private static final int STACKS = 64;
@@ -33,6 +33,8 @@ public class Earth extends TextureSphere {
     public static final float CAMERA_ALTITUDE = (Math.abs(MARKER_ALTITUDE) + MARKER_RADIUS + Panel.DISTANCE + Ray.SPACE) * (MARKER_ALTITUDE > 0 ? 1 : -1);
 
     private ArrayList<Marker> markers = new ArrayList<>();
+
+    private Model.Clickable onMarkerClickListener;
 
     public Earth(Context context) {
         super(context, VERTEX_SHADER_RAW_RESOURCE, FRAGMENT_SHADER_RAW_RESOURCE);
@@ -80,6 +82,7 @@ public class Earth extends TextureSphere {
         LatLng latLng = markerUrlStyle.getPosition();
 
         Marker marker = new Marker(context, this);
+        marker.setOnClickListener(onMarkerClickListener);
         marker.create(MARKER_RADIUS, name, latLng, MARKER_ALTITUDE);
         marker.setLighting(lighting);
         addMarker(marker);
@@ -115,5 +118,9 @@ public class Earth extends TextureSphere {
         }
 
         return ret;
+    }
+
+    public void setOnMarkerClickListener(Clickable onClickListener) {
+        this.onMarkerClickListener = onClickListener;
     }
 }

@@ -10,6 +10,7 @@ import com.gmail.jiangyang5157.cardboard.kml.KmlLayer;
 import com.gmail.jiangyang5157.cardboard.scene.Camera;
 import com.gmail.jiangyang5157.cardboard.scene.Intersection;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
+import com.gmail.jiangyang5157.cardboard.scene.projection.Model;
 import com.gmail.jiangyang5157.cardboard.scene.projection.Ray;
 import com.gmail.jiangyang5157.cardboard.scene.projection.Earth;
 import com.gmail.jiangyang5157.cardboard.scene.projection.Marker;
@@ -133,23 +134,22 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
     @Override
     public void onCardboardTrigger() {
-        // TODO: 5/14/2016
         final Intersection intersection = ray.getIntersection();
-        if (intersection != null) {
-            if (intersection.model instanceof Marker) {
-                if (intersection.model instanceof Panel) {
-                } else if (intersection.model instanceof Marker) {
-                    markerDialog = new MarkerDialog(this);
-                    markerDialog.setMarker((Marker) intersection.model);
-                }
-                debug_camer_movement = false;
-            } else if (intersection.model instanceof Panel) {
-                debug_camer_movement = false;
-            } else {
-                debug_camer_movement = !debug_camer_movement;
-            }
+        if (intersection.model instanceof Model.Clickable) {
+            ((Model.Clickable)intersection.model).onClick(intersection.model);
+            debug_camer_movement = false;
+        } else {
+            debug_camer_movement = !debug_camer_movement;
         }
     }
+
+    private Model.Clickable markerOnClickListener = new Model.Clickable() {
+        @Override
+        public void onClick(Model model) {
+            markerDialog = new MarkerDialog(getApplicationContext());
+            markerDialog.setMarker((Marker) model);
+        }
+    };
 
     @Override
     public void onDrawEye(Eye eye) {
@@ -226,6 +226,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         ray.create();
 
         earth = new Earth(this);
+        earth.setOnMarkerClickListener(markerOnClickListener);
         earth.setLighting(new Lighting() {
             @Override
             public float[] getLightPosInCameraSpace() {

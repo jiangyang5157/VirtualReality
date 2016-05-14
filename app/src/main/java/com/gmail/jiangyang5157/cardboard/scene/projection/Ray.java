@@ -44,7 +44,7 @@ public class Ray extends Point {
     public void setIntersection(Intersection intersection) {
         this.intersection = intersection;
 
-        if (intersection == null || intersection.model instanceof Earth || intersection.model instanceof Dialog) {
+        if (intersection.model instanceof Earth || intersection.model instanceof Dialog) {
             if (pointSize > POINT_SIZE_NORMAL){
                 pointSize -= POINT_SIZE_GRAdiENT_UNIT;
             }

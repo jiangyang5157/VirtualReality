@@ -12,10 +12,10 @@ import com.google.android.gms.maps.model.LatLng;
  * @author Yang
  * @since 4/12/2016.
  */
-public class Marker extends Icosphere {
+public class Marker extends Icosphere implements Model.Clickable{
 
-    protected static final int VERTEX_SHADER_RAW_RESOURCE = R.raw.color_sphere_vertex_shader;
-    protected static final int FRAGMENT_SHADER_RAW_RESOURCE = R.raw.color_sphere_fragment_shader;
+    protected static final int VERTEX_SHADER_RAW_RESOURCE = R.raw.sphere_color_vertex_shader;
+    protected static final int FRAGMENT_SHADER_RAW_RESOURCE = R.raw.sphere_color_sphere_fragment_shader;
 
     protected static final int DEFAULT_RECURSION_LEVEL = 3;
 
@@ -26,6 +26,8 @@ public class Marker extends Icosphere {
     public String name;
 
     private Coordinate coordinate;
+
+    private Model.Clickable onClickListener;
 
     public Marker(Context context, Earth earth) {
         this(context, earth, VERTEX_SHADER_RAW_RESOURCE, FRAGMENT_SHADER_RAW_RESOURCE);
@@ -59,5 +61,16 @@ public class Marker extends Icosphere {
 
     public void remove() {
         earth.removeMarker(this);
+    }
+
+    @Override
+    public void onClick(Model model) {
+        if (onClickListener != null){
+            onClickListener.onClick(this);
+        }
+    }
+
+    public void setOnClickListener(Clickable onClickListener) {
+        this.onClickListener = onClickListener;
     }
 }

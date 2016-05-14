@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
-import android.opengl.Matrix;
 import android.text.TextPaint;
 
 import com.gmail.jiangyang5157.cardboard.scene.Head;
@@ -16,7 +15,7 @@ import com.gmail.jiangyang5157.tookit.app.AppUtils;
  * @author Yang
  * @since 5/8/2016
  */
-public class TextField extends Panel {
+public class TextField extends Panel implements Model.Clickable{
 
     private String text;
 
@@ -27,6 +26,8 @@ public class TextField extends Panel {
 
     protected TextPaint textPaint;
     protected float textSizePixels;
+
+    private Model.Clickable onClickListener;
 
     public TextField(Context context) {
         super(context);
@@ -88,5 +89,16 @@ public class TextField extends Panel {
     @Override
     public void draw() {
         super.draw();
+    }
+
+    @Override
+    public void onClick(Model model) {
+        if (onClickListener != null){
+            onClickListener.onClick(this);
+        }
+    }
+
+    public void setOnClickListener(Clickable onClickListener) {
+        this.onClickListener = onClickListener;
     }
 }
