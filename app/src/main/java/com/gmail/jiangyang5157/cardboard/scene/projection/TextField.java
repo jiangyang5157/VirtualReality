@@ -5,8 +5,11 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
+import android.opengl.Matrix;
 import android.text.TextPaint;
 
+import com.gmail.jiangyang5157.cardboard.scene.Head;
+import com.gmail.jiangyang5157.cardboard.scene.Intersection;
 import com.gmail.jiangyang5157.tookit.app.AppUtils;
 
 /**
@@ -75,5 +78,19 @@ public class TextField extends Panel {
             bitmap.recycle();
         }
         return textureHandle[0];
+    }
+
+    @Override
+    public Intersection intersect(Head head) {
+        Intersection ret = super.intersect(head);
+        if (ret != null) {
+            Matrix.rotateM(model, 0, 10, 0, 1f, 0);
+        }
+        return ret;
+    }
+
+    @Override
+    public void draw() {
+        super.draw();
     }
 }

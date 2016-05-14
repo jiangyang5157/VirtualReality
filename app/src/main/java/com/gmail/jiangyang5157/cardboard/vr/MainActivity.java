@@ -81,15 +81,6 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
     @Override
     public void onNewFrame(HeadTransform headTransform) {
-        GLES20.glEnable(GLES20.GL_CULL_FACE);
-        GLES20.glFrontFace(GLES20.GL_CCW);
-        GLES20.glCullFace(GLES20.GL_BACK);
-
-        GLES20.glEnable(GLES20.GL_DEPTH_TEST);
-
-        GLES20.glEnable(GLES20.GL_BLEND);
-        GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
-
         headTransform.getHeadView(head.headView, 0);
         headTransform.getForwardVector(head.forward, 0);
         headTransform.getEulerAngles(head.eulerAngles, 0);
@@ -112,9 +103,6 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
     @Override
     public void onFinishFrame(Viewport viewport) {
-        GLES20.glDisable(GLES20.GL_DEPTH_TEST);
-        GLES20.glDisable(GLES20.GL_BLEND);
-        GLES20.glDisable(GLES20.GL_CULL_FACE);
     }
 
     private void checkDialog() {
@@ -195,6 +183,12 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     }
 
     private void drawScene() {
+        GLES20.glEnable(GLES20.GL_DEPTH_TEST);
+
+        GLES20.glEnable(GLES20.GL_CULL_FACE);
+        GLES20.glFrontFace(GLES20.GL_CCW);
+        GLES20.glCullFace(GLES20.GL_BACK);
+
         if (ray != null) {
             ray.draw();
         }
@@ -202,8 +196,20 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
             earth.draw();
         }
         if (markerDialog != null) {
+            GLES20.glDisable(GLES20.GL_CULL_FACE);
+
+            GLES20.glEnable(GLES20.GL_BLEND);
+            GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
+
             markerDialog.draw();
+
+            GLES20.glEnable(GLES20.GL_CULL_FACE);
+
+            GLES20.glDisable(GLES20.GL_BLEND);
         }
+
+        GLES20.glDisable(GLES20.GL_DEPTH_TEST);
+        GLES20.glDisable(GLES20.GL_CULL_FACE);
     }
 
     private float[] getModelPositionInCameraSpace(float[] model, float[] modelView) {

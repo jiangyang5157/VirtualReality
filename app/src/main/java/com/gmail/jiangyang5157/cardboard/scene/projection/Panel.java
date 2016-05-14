@@ -84,14 +84,14 @@ public abstract class Panel extends Rectangle {
 
         Vector tl_tr = new Vector3d(trVec.minus(tlVec));
         Vector tl_bl = new Vector3d(blVec.minus(tlVec));
-        Vector n = ((Vector3d) tl_tr).cross((Vector3d) tl_bl).direction();
+        Vector normal = ((Vector3d) tl_tr).cross((Vector3d) tl_bl).direction();
         Vector ray = (cameraPosVec.plus(forwardVec)).minus(cameraPosVec).direction();
-        double ndotdRay = n.dot(ray);
+        double ndotdRay = normal.dot(ray);
         if (Math.abs(ndotdRay) < Vector.EPSILON) {
             // perpendicular
             return null;
         }
-        double t = n.dot(tlVec.minus(cameraPosVec)) / ndotdRay;
+        double t = normal.dot(tlVec.minus(cameraPosVec)) / ndotdRay;
         if (t < 0) {
             // eliminate squares behind the ray
             return null;
