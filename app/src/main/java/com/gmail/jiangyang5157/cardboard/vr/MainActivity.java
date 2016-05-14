@@ -135,11 +135,13 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     @Override
     public void onCardboardTrigger() {
         final Intersection intersection = ray.getIntersection();
-        if (intersection.model instanceof Model.Clickable) {
-            ((Model.Clickable)intersection.model).onClick(intersection.model);
-            debug_camer_movement = false;
-        } else {
-            debug_camer_movement = !debug_camer_movement;
+        if (intersection != null) {
+            if (intersection.model instanceof Model.Clickable) {
+                ((Model.Clickable) intersection.model).onClick(intersection.model);
+                debug_camer_movement = false;
+            } else {
+                debug_camer_movement = !debug_camer_movement;
+            }
         }
     }
 

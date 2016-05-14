@@ -17,13 +17,13 @@ public class Ray extends Point {
     private static final int VERTEX_SHADER_RAW_RESOURCE = R.raw.ray_point_vertex_shader;
     private static final int FRAGMENT_SHADER_RAW_RESOURCE = R.raw.ray_point_fragment_shader;
 
-    public static final float POINT_SIZE_NORMAL = 18.0f;
-    public static final float POINT_SIZE_FOCUSED = POINT_SIZE_NORMAL * 3;
+    public static final float POINT_SIZE_NORMAL = 18f;
+    public static final float POINT_SIZE_FOCUSED = 48f;
     public static final float POINT_SIZE_GRAdiENT_UNIT = (POINT_SIZE_FOCUSED - POINT_SIZE_NORMAL) / 6;
 
     public static final float SPACE = (float) (Math.PI * POINT_SIZE_NORMAL);
 
-    public static final int COLOR_RES_ID = com.gmail.jiangyang5157.tookit.R.color.White;
+    public static final int COLOR_RES_ID = com.gmail.jiangyang5157.tookit.R.color.DeepOrange;
 
     private Intersection intersection;
 
