@@ -3,7 +3,7 @@ package com.gmail.jiangyang5157.cardboard.scene.projection;
 import android.content.Context;
 
 import com.gmail.jiangyang5157.cardboard.kml.KmlPlacemark;
-import com.gmail.jiangyang5157.cardboard.scene.AimIntersection;
+import com.gmail.jiangyang5157.cardboard.scene.Intersection;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
 import com.gmail.jiangyang5157.cardboard.vr.R;
 import com.gmail.jiangyang5157.tookit.math.Vector;
@@ -94,15 +94,15 @@ public class Earth extends TextureSphere {
     }
 
     @Override
-    public AimIntersection intersect(Head head) {
+    public Intersection intersect(Head head) {
         if (!isVisible) {
             return null;
         }
-        AimIntersection ret = null;
+        Intersection ret = null;
 
-        ArrayList<AimIntersection> intersections = new ArrayList<AimIntersection>();
+        ArrayList<Intersection> intersections = new ArrayList<Intersection>();
         for (final Marker mark : markers) {
-            AimIntersection intersection = mark.intersect(head);
+            Intersection intersection = mark.intersect(head);
             if (intersection != null) {
                 intersections.add(intersection);
             }

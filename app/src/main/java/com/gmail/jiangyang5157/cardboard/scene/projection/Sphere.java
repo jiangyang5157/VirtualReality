@@ -2,7 +2,8 @@ package com.gmail.jiangyang5157.cardboard.scene.projection;
 
 import android.content.Context;
 
-import com.gmail.jiangyang5157.cardboard.scene.AimIntersection;
+import com.gmail.jiangyang5157.cardboard.scene.Intersectable;
+import com.gmail.jiangyang5157.cardboard.scene.Intersection;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
 import com.gmail.jiangyang5157.tookit.math.Vector;
 import com.gmail.jiangyang5157.tookit.math.Vector3d;
@@ -34,7 +35,7 @@ public abstract class Sphere extends GLModel implements Intersectable {
     }
 
     @Override
-    public AimIntersection intersect(Head head) {
+    public Intersection intersect(Head head) {
         if (!isVisible) {
             return null;
         }
@@ -68,6 +69,6 @@ public abstract class Sphere extends GLModel implements Intersectable {
             return null;
         }
 
-        return new AimIntersection(this, cameraPosVec, cameraPosVec.plus(forwardVec.times(t)), t);
+        return new Intersection(this, cameraPosVec, cameraPosVec.plus(forwardVec.times(t)), t);
     }
 }

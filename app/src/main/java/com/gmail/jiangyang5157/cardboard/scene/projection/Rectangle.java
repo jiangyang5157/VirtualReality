@@ -1,6 +1,9 @@
 package com.gmail.jiangyang5157.cardboard.scene.projection;
 
 import android.content.Context;
+
+import com.gmail.jiangyang5157.cardboard.scene.Intersectable;
+
 /**
  * @author Yang
  * @since 5/5/2016

@@ -5,7 +5,7 @@ import android.opengl.GLES20;
 import android.opengl.Matrix;
 import android.util.Log;
 
-import com.gmail.jiangyang5157.cardboard.scene.AimIntersection;
+import com.gmail.jiangyang5157.cardboard.scene.Intersection;
 import com.gmail.jiangyang5157.cardboard.scene.Camera;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
 import com.gmail.jiangyang5157.cardboard.vr.R;
@@ -73,7 +73,7 @@ public abstract class Panel extends Rectangle {
     }
 
     @Override
-    public AimIntersection intersect(Head head) {
+    public Intersection intersect(Head head) {
         if (!isVisible) {
             return null;
         }
@@ -108,7 +108,7 @@ public abstract class Panel extends Rectangle {
             return null;
         }
 
-        return new AimIntersection(this, cameraPosVec, cameraPosVec.plus(forwardVec.times(t)), t);
+        return new Intersection(this, cameraPosVec, cameraPosVec.plus(forwardVec.times(t)), t);
     }
 
     @Override

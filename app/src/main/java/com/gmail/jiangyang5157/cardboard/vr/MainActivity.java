@@ -8,7 +8,7 @@ import android.widget.Toast;
 
 import com.gmail.jiangyang5157.cardboard.kml.KmlLayer;
 import com.gmail.jiangyang5157.cardboard.scene.Camera;
-import com.gmail.jiangyang5157.cardboard.scene.AimIntersection;
+import com.gmail.jiangyang5157.cardboard.scene.Intersection;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
 import com.gmail.jiangyang5157.cardboard.scene.projection.AimRay;
 import com.gmail.jiangyang5157.cardboard.scene.projection.Dialog;
@@ -104,7 +104,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         }
 
         checkDialog();
-        checkAimIntersection();
+        checkIntersection();
     }
 
     private void checkDialog() {
@@ -119,8 +119,8 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         dialog.setPosition(head.getCamera().getPosition(), head.forward, head.up, head.right, head.eulerAngles);
     }
 
-    private void checkAimIntersection() {
-        AimIntersection intersection = null;
+    private void checkIntersection() {
+        Intersection intersection = null;
         if (intersection == null) {
             if (dialog != null) {
                 intersection = dialog.intersect(head);
@@ -147,7 +147,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
     @Override
     public void onCardboardTrigger() {
-        final AimIntersection intersection = aimRay.getIntersection();
+        final Intersection intersection = aimRay.getIntersection();
         if (intersection != null) {
             if (intersection.model instanceof Marker) {
                 if (intersection.model instanceof Panel) {

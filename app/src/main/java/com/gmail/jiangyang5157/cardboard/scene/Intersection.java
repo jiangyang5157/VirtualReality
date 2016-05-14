@@ -7,7 +7,7 @@ import com.gmail.jiangyang5157.tookit.math.Vector;
  * @author Yang
  * @since 5/3/2016
  */
-public class AimIntersection implements Comparable {
+public class Intersection implements Comparable {
 
     public final Model model;
     public final Vector cameraPosVec;
@@ -15,7 +15,7 @@ public class AimIntersection implements Comparable {
 
     private final double t;
 
-    public AimIntersection(Model model, Vector cameraPosVec, Vector intersecttPosVec, double t) {
+    public Intersection(Model model, Vector cameraPosVec, Vector intersecttPosVec, double t) {
         this.model = model;
         this.cameraPosVec = cameraPosVec;
         this.intersecttPosVec = intersecttPosVec;
@@ -25,7 +25,7 @@ public class AimIntersection implements Comparable {
 
     @Override
     public int compareTo(Object another) {
-        AimIntersection that = (AimIntersection) another;
+        Intersection that = (Intersection) another;
 
         double ret = this.t - that.t;
         if (ret < 0) {

@@ -4,9 +4,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
-import android.util.Log;
 
-import com.gmail.jiangyang5157.cardboard.scene.AimIntersection;
+import com.gmail.jiangyang5157.cardboard.scene.Intersection;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
 
 import java.util.ArrayList;
@@ -90,15 +89,15 @@ public abstract class Dialog extends Panel {
     }
 
     @Override
-    public AimIntersection intersect(Head head) {
+    public Intersection intersect(Head head) {
         if (!isVisible) {
             return null;
         }
-        AimIntersection ret = null;
+        Intersection ret = null;
 
-        ArrayList<AimIntersection> intersections = new ArrayList<AimIntersection>();
+        ArrayList<Intersection> intersections = new ArrayList<Intersection>();
         for (final Panel panel : panels) {
-            AimIntersection intersection = panel.intersect(head);
+            Intersection intersection = panel.intersect(head);
             if (intersection != null) {
                 intersections.add(intersection);
             }
