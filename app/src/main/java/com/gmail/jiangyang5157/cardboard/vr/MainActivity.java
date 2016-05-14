@@ -10,7 +10,7 @@ import com.gmail.jiangyang5157.cardboard.kml.KmlLayer;
 import com.gmail.jiangyang5157.cardboard.scene.Camera;
 import com.gmail.jiangyang5157.cardboard.scene.Intersection;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
-import com.gmail.jiangyang5157.cardboard.scene.projection.AimRay;
+import com.gmail.jiangyang5157.cardboard.scene.projection.Ray;
 import com.gmail.jiangyang5157.cardboard.scene.projection.Dialog;
 import com.gmail.jiangyang5157.cardboard.scene.projection.Earth;
 import com.gmail.jiangyang5157.cardboard.scene.projection.Marker;
@@ -43,7 +43,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     private Light light;
 
     private Earth earth;
-    private AimRay aimRay;
+    private Ray ray;
     private Dialog dialog;
 
     private CardboardOverlayView overlayView;
@@ -72,8 +72,8 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         if (earth != null) {
             earth.destroy();
         }
-        if (aimRay != null) {
-            aimRay.destroy();
+        if (ray != null) {
+            ray.destroy();
         }
         if (dialog != null) {
             dialog.destroy();
@@ -137,7 +137,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
             }
         }
 
-        aimRay.intersectAt(intersection);
+        ray.setIntersection(intersection);
     }
 
     @Override
@@ -147,7 +147,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
     @Override
     public void onCardboardTrigger() {
-        final Intersection intersection = aimRay.getIntersection();
+        final Intersection intersection = ray.getIntersection();
         if (intersection != null) {
             if (intersection.model instanceof Marker) {
                 if (intersection.model instanceof Panel) {
@@ -184,8 +184,8 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     }
 
     private void updateScene(float[] view, float[] perspective) {
-        if (aimRay != null) {
-            aimRay.update(view, perspective);
+        if (ray != null) {
+            ray.update(view, perspective);
         }
         if (earth != null) {
             earth.update(view, perspective);
@@ -199,8 +199,8 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         if (dialog != null) {
             dialog.draw();
         }
-        if (aimRay != null) {
-            aimRay.draw();
+        if (ray != null) {
+            ray.draw();
         }
         if (earth != null) {
             earth.draw();
@@ -221,8 +221,8 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         head = new Head();
         light = new Light();
 
-        aimRay = new AimRay(this);
-        aimRay.create();
+        ray = new Ray(this);
+        ray.create();
 
         earth = new Earth(this);
         earth.setLighting(new Lighting() {

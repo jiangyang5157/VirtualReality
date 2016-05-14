@@ -12,7 +12,7 @@ import com.gmail.jiangyang5157.tookit.math.Vector;
  * @author Yang
  * @since 5/1/2016
  */
-public class AimRay extends Point {
+public class Ray extends Point {
 
     private static final int VERTEX_SHADER_RAW_RESOURCE = R.raw.point_vertex_shader;
     private static final int FRAGMENT_SHADER_RAW_RESOURCE = R.raw.point_fragment_shader;
@@ -25,7 +25,7 @@ public class AimRay extends Point {
 
     private Intersection intersection;
 
-    public AimRay(Context context) {
+    public Ray(Context context) {
         super(context, VERTEX_SHADER_RAW_RESOURCE, FRAGMENT_SHADER_RAW_RESOURCE);
         setPointSize(POINT_SIZE);
     }
@@ -39,25 +39,23 @@ public class AimRay extends Point {
         Matrix.translateM(model, 0, position[0], position[1], position[2]);
     }
 
-    public void intersectAt(Intersection intersection) {
+    public void setIntersection(Intersection intersection) {
         this.intersection = intersection;
 
-        if (intersection == null){
+        if (intersection == null) {
             return;
         }
 
-        if (intersection.model instanceof Panel) {
-            setColor(AppUtils.getColor(context, COLOR_FOCUCED_RES_ID));
-        } else if (intersection.model instanceof Marker) {
-            setColor(AppUtils.getColor(context, COLOR_FOCUCED_RES_ID));
-        } else {
+        if (intersection.model instanceof Earth) {
             setColor(AppUtils.getColor(context, COLOR_NOTMAL_RES_ID));
+        } else {
+            setColor(AppUtils.getColor(context, COLOR_FOCUCED_RES_ID));
         }
 
         Matrix.setIdentityM(model, 0);
         Vector i_camera = intersection.cameraPosVec.minus(intersection.intersecttPosVec);
-        Vector newIntersectPosVec = intersection.intersecttPosVec.plus(i_camera.direction().times(SPACE));
-        setPosition(new float[]{(float) newIntersectPosVec.getData()[0], (float) newIntersectPosVec.getData()[1], (float) newIntersectPosVec.getData()[2]});
+        double[] rayPos = new Vector(intersection.intersecttPosVec.plus(i_camera.direction().times(Ray.SPACE))).getData();
+        setPosition(new float[]{(float) rayPos[0], (float) rayPos[1], (float) rayPos[2]});
     }
 
     public Intersection getIntersection() {
