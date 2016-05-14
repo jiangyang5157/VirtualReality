@@ -66,10 +66,9 @@ public class Earth extends TextureSphere {
         super.destroy();
     }
 
-    public ArrayList<Marker> getMarkers() {
-        return markers;
+    public void removeMarker(Marker marker) {
+        markers.remove(marker);
     }
-
 
     private void addMarker(Marker marker) {
         markers.add(marker);

@@ -88,10 +88,6 @@ public abstract class GLModel extends Model {
         initializeHandle();
     }
 
-    public boolean isProgramCreated(){
-        return program != 0;
-    }
-
     private int compileShader(int type, String code) {
         int shader = GLES20.glCreateShader(type);
         GLES20.glShaderSource(shader, code);
@@ -154,5 +150,9 @@ public abstract class GLModel extends Model {
     @Override
     public void destroy() {
         program = 0;
+    }
+
+    public boolean isProgramCreated(){
+        return program != 0;
     }
 }

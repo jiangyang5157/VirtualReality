@@ -14,8 +14,15 @@ public class MarkerDialog extends Dialog{
 
     private Marker marker;
 
-    public MarkerDialog(Context context, Marker marker) {
+    public MarkerDialog(Context context) {
         super(context);
+    }
+
+    public Marker getMarker() {
+        return marker;
+    }
+
+    public void setMarker(Marker marker) {
         this.marker = marker;
     }
 

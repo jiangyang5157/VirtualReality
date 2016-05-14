@@ -11,7 +11,6 @@ import com.gmail.jiangyang5157.cardboard.scene.Camera;
 import com.gmail.jiangyang5157.cardboard.scene.Intersection;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
 import com.gmail.jiangyang5157.cardboard.scene.projection.Ray;
-import com.gmail.jiangyang5157.cardboard.scene.projection.Dialog;
 import com.gmail.jiangyang5157.cardboard.scene.projection.Earth;
 import com.gmail.jiangyang5157.cardboard.scene.projection.Marker;
 import com.gmail.jiangyang5157.cardboard.scene.Light;
@@ -44,7 +43,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
     private Earth earth;
     private Ray ray;
-    private Dialog dialog;
+    private MarkerDialog markerDialog;
 
     private CardboardOverlayView overlayView;
 
@@ -69,8 +68,8 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (dialog != null) {
-            dialog.destroy();
+        if (markerDialog != null) {
+            markerDialog.destroy();
         }
         if (earth != null) {
             earth.destroy();
@@ -95,6 +94,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         headTransform.getUpVector(head.up, 0);
         headTransform.getRightVector(head.right, 0);
 
+        // TODO: 5/14/2016 test camera movement
         if (debug_camer_movement) {
             float[] point = head.getCamera().getPosition().clone();
             Camera.forward(point, head.forward, Camera.MOVE_UNIT);
@@ -104,40 +104,38 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         }
 
         checkDialog();
-        checkIntersection();
+
+
+        ray.setIntersection(getIntersection());
     }
 
     private void checkDialog() {
-        if (dialog == null){
+        if (markerDialog == null || markerDialog.isProgramCreated()){
             return;
         }
-        if (dialog.isProgramCreated()){
-            return;
-        }
-
-        dialog.create();
-        dialog.setPosition(head.getCamera().getPosition(), head.forward, head.up, head.right, head.eulerAngles);
+        markerDialog.create();
+        markerDialog.setPosition(head.getCamera().getPosition(), head.forward, head.up, head.right, head.eulerAngles);
     }
 
-    private void checkIntersection() {
-        Intersection intersection = null;
-        if (intersection == null) {
-            if (dialog != null) {
-                intersection = dialog.intersect(head);
-                if (intersection == null){
-                    // TODO: 5/14/2016 earth went black after destroy dialog
-//                    dialog.destroy();
-                    dialog = null;
+    private Intersection getIntersection() {
+        Intersection ret = null;
+        if (ret == null) {
+            if (markerDialog != null) {
+                ret = markerDialog.intersect(head);
+                if (ret == null){
+                    // TODO: 5/14/2016 earth went black after destroy
+//                    markerDialog.setMarker(null);
+                    markerDialog.destroy();
+                    markerDialog = null;
                 }
             }
         }
-        if (intersection == null) {
+        if (ret == null) {
             if (earth != null) {
-                intersection = earth.intersect(head);
+                ret = earth.intersect(head);
             }
         }
-
-        ray.setIntersection(intersection);
+        return ret;
     }
 
     @Override
@@ -153,17 +151,15 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
             if (intersection.model instanceof Marker) {
                 if (intersection.model instanceof Panel) {
                 } else if (intersection.model instanceof Marker) {
-                    dialog = new MarkerDialog(this, (Marker) intersection.model);
-                } else {
+                    markerDialog = new MarkerDialog(this);
+                    markerDialog.setMarker((Marker) intersection.model);
                 }
-
                 debug_camer_movement = false;
             } else if (intersection.model instanceof Panel) {
+                debug_camer_movement = false;
             } else {
                 debug_camer_movement = !debug_camer_movement;
             }
-        } else {
-            debug_camer_movement = !debug_camer_movement;
         }
     }
 
@@ -185,8 +181,8 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     }
 
     private void updateScene(float[] view, float[] perspective) {
-        if (dialog != null) {
-            dialog.update(view, perspective);
+        if (markerDialog != null) {
+            markerDialog.update(view, perspective);
         }
         if (ray != null) {
             ray.update(view, perspective);
@@ -197,8 +193,8 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     }
 
     private void drawScene() {
-        if (dialog != null) {
-            dialog.draw();
+        if (markerDialog != null) {
+            markerDialog.draw();
         }
         if (ray != null) {
             ray.draw();

@@ -58,6 +58,6 @@ public class Marker extends Icosphere {
     }
 
     public void remove() {
-        earth.getMarkers().remove(this);
+        earth.removeMarker(this);
     }
 }
