@@ -124,8 +124,15 @@ public abstract class Panel extends Rectangle {
         final float HALF_WIDTH = width / 2.0f;
         final float HALF_HEIGHT = height / 2.0f;
 
-        Vector upVec = new Vector(up[0], up[1], up[2]).times(HALF_HEIGHT);
-        Vector rightVec = new Vector(right[0], right[1], right[2]).times(HALF_WIDTH);
+        Vector upVec = new Vector(up[0], up[1], up[2]);
+        Vector rightVec = new Vector(right[0], right[1], right[2]);
+        double[] dNormals = (new Vector3d(rightVec)).cross(new Vector3d(upVec)).getData();
+        normals = new float[]{
+                (float) dNormals[0], (float) dNormals[1], (float) dNormals[2]
+        };
+
+        upVec = upVec.times(HALF_HEIGHT);
+        rightVec = rightVec.times(HALF_WIDTH);
 
         tlVec = upVec.plus(rightVec.negate());
         blVec = upVec.negate().plus(rightVec.negate());
