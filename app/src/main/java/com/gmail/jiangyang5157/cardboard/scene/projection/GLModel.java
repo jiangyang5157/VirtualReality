@@ -149,6 +149,7 @@ public abstract class GLModel extends Model {
 
     @Override
     public void destroy() {
+        setVisible(false);
         program = 0;
     }
 

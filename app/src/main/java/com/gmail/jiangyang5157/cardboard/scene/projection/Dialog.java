@@ -76,13 +76,9 @@ public abstract class Dialog extends Panel {
         for (Panel panel : panels) {
             panel.destroy();
         }
+        panels.clear();
         super.destroy();
     }
-
-    public ArrayList<Panel> getPanels() {
-        return panels;
-    }
-
 
     public void addPanel(Panel panel) {
         panels.add(panel);

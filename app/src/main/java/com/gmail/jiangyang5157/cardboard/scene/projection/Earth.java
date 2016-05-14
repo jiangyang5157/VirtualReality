@@ -63,6 +63,7 @@ public class Earth extends TextureSphere {
         for (Marker marker : markers) {
             marker.destroy();
         }
+        markers.clear();
         super.destroy();
     }
 

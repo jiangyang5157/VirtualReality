@@ -27,6 +27,12 @@ public class MarkerDialog extends Dialog{
     }
 
     @Override
+    public void destroy() {
+        super.destroy();
+        setMarker(null);
+    }
+
+    @Override
     public void create() {
         // TODO: 5/14/2016 analysis marker for creating muti-child-panel
         TextField tf1 = new TextField(context);

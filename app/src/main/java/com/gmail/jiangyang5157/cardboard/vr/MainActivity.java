@@ -110,7 +110,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     }
 
     private void checkDialog() {
-        if (markerDialog == null || markerDialog.isProgramCreated()){
+        if (markerDialog == null || markerDialog.getMarker() == null || markerDialog.isProgramCreated()){
             return;
         }
         markerDialog.create();
@@ -122,11 +122,12 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         if (ret == null) {
             if (markerDialog != null) {
                 ret = markerDialog.intersect(head);
-                if (ret == null){
+                if (ret == null) {
                     // TODO: 5/14/2016 earth went black after destroy
-//                    markerDialog.setMarker(null);
-                    markerDialog.destroy();
-                    markerDialog = null;
+                    if (markerDialog.isProgramCreated()) {
+//                        markerDialog.destroy();
+                        markerDialog = null;
+                    }
                 }
             }
         }
@@ -235,6 +236,8 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         } catch (XmlPullParserException | IOException e) {
             e.printStackTrace();
         }
+
+        //markerDialog = new MarkerDialog(this);
     }
 
     @Override
