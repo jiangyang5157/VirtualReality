@@ -81,13 +81,15 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
     @Override
     public void onNewFrame(HeadTransform headTransform) {
-        GLES20.glEnable(GLES20.GL_DEPTH_TEST);
-
         GLES20.glEnable(GLES20.GL_CULL_FACE);
         GLES20.glFrontFace(GLES20.GL_CCW);
         GLES20.glCullFace(GLES20.GL_BACK);
 
-        GLES20.glClearColor(0.1f, 0.1f, 0.1f, 0.5f);
+        GLES20.glEnable(GLES20.GL_DEPTH_TEST);
+
+        GLES20.glEnable(GLES20.GL_BLEND);
+        GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
+
         headTransform.getHeadView(head.headView, 0);
         headTransform.getForwardVector(head.forward, 0);
         headTransform.getEulerAngles(head.eulerAngles, 0);
@@ -105,8 +107,14 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
         checkDialog();
 
-
         ray.setIntersection(getIntersection());
+    }
+
+    @Override
+    public void onFinishFrame(Viewport viewport) {
+        GLES20.glDisable(GLES20.GL_DEPTH_TEST);
+        GLES20.glDisable(GLES20.GL_BLEND);
+        GLES20.glDisable(GLES20.GL_CULL_FACE);
     }
 
     private void checkDialog() {
@@ -124,10 +132,8 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
                 ret = markerDialog.intersect(head);
                 if (ret == null) {
                     // TODO: 5/14/2016 earth went black after destroy - texture confuse
-                    if (markerDialog.isProgramCreated()) {
-//                        markerDialog.destroy();
-                        markerDialog = null;
-                    }
+//                  markerDialog.destroy();
+                    markerDialog = null;
                 }
             }
         }
@@ -137,11 +143,6 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
             }
         }
         return ret;
-    }
-
-    @Override
-    public void onFinishFrame(Viewport viewport) {
-        GLES20.glDisable(GLES20.GL_DEPTH_TEST);
     }
 
     @Override
@@ -182,26 +183,26 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     }
 
     private void updateScene(float[] view, float[] perspective) {
-        if (markerDialog != null) {
-            markerDialog.update(view, perspective);
-        }
         if (ray != null) {
             ray.update(view, perspective);
         }
         if (earth != null) {
             earth.update(view, perspective);
         }
+        if (markerDialog != null) {
+            markerDialog.update(view, perspective);
+        }
     }
 
     private void drawScene() {
-        if (markerDialog != null) {
-            markerDialog.draw();
-        }
         if (ray != null) {
             ray.draw();
         }
         if (earth != null) {
             earth.draw();
+        }
+        if (markerDialog != null) {
+            markerDialog.draw();
         }
     }
 

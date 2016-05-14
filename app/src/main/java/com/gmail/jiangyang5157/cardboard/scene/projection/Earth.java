@@ -25,8 +25,8 @@ public class Earth extends TextureSphere {
     private static final int FRAGMENT_SHADER_RAW_RESOURCE = R.raw.texture_earth_fragment_shader;
 
     public static final float RADIUS = 4000f;
-    private static final int STACKS = 32;
-    private static final int SLICES = 32;
+    private static final int STACKS = 64;
+    private static final int SLICES = 64;
 
     public static final float MARKER_RADIUS = RADIUS / 50;
     public static final float MARKER_ALTITUDE = -1 * MARKER_RADIUS;

@@ -17,9 +17,10 @@ public class TextField extends Panel {
 
     private String text;
 
-    public static final float ALPHA_BACKGROUND = 0.4f;
-    public static final int COLOR_BACKGROUND_RES_ID = com.gmail.jiangyang5157.tookit.R.color.BlueGrey;
-    public static final int COLOR_TEXT_RES_ID = com.gmail.jiangyang5157.tookit.R.color.White;
+    public static final float ALPHA_BACKGROUND = 0.5f;
+    public static final int COLOR_BACKGROUND_RES_ID = com.gmail.jiangyang5157.tookit.R.color.White;
+
+    public static final int COLOR_TEXT_RES_ID = com.gmail.jiangyang5157.tookit.R.color.DeepOrange;
 
     protected TextPaint textPaint;
     protected float textSizePixels;
@@ -74,14 +75,5 @@ public class TextField extends Panel {
             bitmap.recycle();
         }
         return textureHandle[0];
-    }
-
-    @Override
-    public void draw() {
-        // blend for rendering alpha
-        GLES20.glEnable(GLES20.GL_BLEND);
-        GLES20.glBlendFunc(GLES20.GL_ONE, GLES20.GL_ONE);
-        super.draw();
-        GLES20.glDisable(GLES20.GL_BLEND);
     }
 }

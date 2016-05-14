@@ -10,8 +10,6 @@ import com.gmail.jiangyang5157.tookit.app.AppUtils;
  */
 public class MarkerDialog extends Dialog{
 
-    public static final int COLOR_BACKGROUND_RES_ID = com.gmail.jiangyang5157.tookit.R.color.DeepOrange;
-
     private Marker marker;
 
     public MarkerDialog(Context context) {
@@ -61,31 +59,34 @@ public class MarkerDialog extends Dialog{
     public void setPosition(float[] cameraPos, float[] forward, float[] up, float[] right, float[] eulerAngles) {
         super.setPosition(cameraPos, forward, up, right, eulerAngles);
 
+        //
+        cameraPos[0] -= forward[0] * PADDING_LAYER;
+        cameraPos[1] -= forward[1] * PADDING_LAYER;
+        cameraPos[2] -= forward[2] * PADDING_LAYER;
+
+        //
+        cameraPos[0] += up[0] * height / 2;
         cameraPos[1] += up[1] * height / 2;
         cameraPos[2] += up[2] * height / 2;
-        cameraPos[0] += up[0] * height / 2;
 
+        cameraPos[0] -= up[0] * PADDING_BOARD;
         cameraPos[1] -= up[1] * PADDING_BOARD;
         cameraPos[2] -= up[2] * PADDING_BOARD;
-        cameraPos[0] -= up[0] * PADDING_BOARD;
 
-        int panelCount = panels.size();
-        for (int i = 0; i < panelCount; i++){
-            Panel panel = panels.get(i);
-
+        for (Panel panel : panels){
+            cameraPos[0] -= up[0] * panel.height / 2;
             cameraPos[1] -= up[1] * panel.height / 2;
             cameraPos[2] -= up[2] * panel.height / 2;
-            cameraPos[0] -= up[0] * panel.height / 2;
 
             panel.setPosition(cameraPos, forward, up, right, eulerAngles);
 
+            cameraPos[0] -= up[0] * panel.height / 2;
             cameraPos[1] -= up[1] * panel.height / 2;
             cameraPos[2] -= up[2] * panel.height / 2;
-            cameraPos[0] -= up[0] * panel.height / 2;
 
+            cameraPos[0] -= up[0] * PADDING_BOARD;
             cameraPos[1] -= up[1] * PADDING_BOARD;
             cameraPos[2] -= up[2] * PADDING_BOARD;
-            cameraPos[0] -= up[0] * PADDING_BOARD;
         }
     }
 }

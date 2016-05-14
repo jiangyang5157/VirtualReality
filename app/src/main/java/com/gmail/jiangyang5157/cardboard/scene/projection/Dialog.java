@@ -19,9 +19,11 @@ public abstract class Dialog extends Panel {
 
     protected ArrayList<Panel> panels = new ArrayList<>();
 
-    protected static final float PADDING_LAYER = 2.0f;
-    protected static final float PADDING_BOARD = 8.0f;
-    protected static final float ALPHA_BACKGROUND = 0.2f;
+    protected static final float ALPHA_BACKGROUND = 0.5f;
+    public static final int COLOR_BACKGROUND_RES_ID = com.gmail.jiangyang5157.tookit.R.color.Teal;
+
+    protected static final float PADDING_LAYER = 1.0f;
+    protected static final float PADDING_BOARD = 2.0f;
 
     public Dialog(Context context) {
         super(context);
@@ -64,11 +66,7 @@ public abstract class Dialog extends Panel {
             panel.draw();
         }
 
-        // blend for rendering alpha
-        GLES20.glEnable(GLES20.GL_BLEND);
-        GLES20.glBlendFunc(GLES20.GL_ONE, GLES20.GL_ONE);
         super.draw();
-        GLES20.glDisable(GLES20.GL_BLEND);
     }
 
     @Override
