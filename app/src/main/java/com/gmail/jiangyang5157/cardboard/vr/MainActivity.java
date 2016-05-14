@@ -115,14 +115,12 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
     private Intersection getIntersection() {
         Intersection ret = null;
-        if (ret == null) {
-            if (markerDialog != null) {
-                ret = markerDialog.intersect(head);
-                if (ret == null) {
-                    // TODO: 5/14/2016 earth went black after destroy - texture confuse
+        if (markerDialog != null) {
+            ret = markerDialog.intersect(head);
+            if (ret == null) {
+                // TODO: 5/14/2016 earth went black after destroy - texture confuse
 //                  markerDialog.destroy();
-                    markerDialog = null;
-                }
+                markerDialog = null;
             }
         }
         if (ret == null) {
@@ -200,12 +198,10 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
             GLES20.glEnable(GLES20.GL_BLEND);
             GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
-
             markerDialog.draw();
+            GLES20.glDisable(GLES20.GL_BLEND);
 
             GLES20.glEnable(GLES20.GL_CULL_FACE);
-
-            GLES20.glDisable(GLES20.GL_BLEND);
         }
 
         GLES20.glDisable(GLES20.GL_DEPTH_TEST);
@@ -243,8 +239,6 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         } catch (XmlPullParserException | IOException e) {
             e.printStackTrace();
         }
-
-        //markerDialog = new MarkerDialog(this);
     }
 
     @Override

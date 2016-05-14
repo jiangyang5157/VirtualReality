@@ -13,7 +13,7 @@ import java.nio.ByteOrder;
  */
 public class Point extends GLModel {
 
-    private float pointSize;
+    protected float pointSize;
 
     private final int[] buffers = new int[1];
 
@@ -92,9 +92,5 @@ public class Point extends GLModel {
         super.destroy();
         Log.d("Point", "destroy");
         GLES20.glDeleteBuffers(buffers.length, buffers, 0);
-    }
-
-    public void setPointSize(float pointSize) {
-        this.pointSize = pointSize;
     }
 }

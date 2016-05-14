@@ -17,8 +17,11 @@ public class Ray extends Point {
     private static final int VERTEX_SHADER_RAW_RESOURCE = R.raw.point_vertex_shader;
     private static final int FRAGMENT_SHADER_RAW_RESOURCE = R.raw.point_fragment_shader;
 
-    public static final float POINT_SIZE = 16.0f;
-    public static final float SPACE = (float) (Math.PI * POINT_SIZE);
+    public static final float POINT_SIZE_NORMAL = 12.0f;
+    public static final float POINT_SIZE_FOCUSED = POINT_SIZE_NORMAL * 3;
+    public static final float POINT_SIZE_GRAdiENT_UNIT = (POINT_SIZE_FOCUSED - POINT_SIZE_NORMAL) / 6;
+
+    public static final float SPACE = (float) (Math.PI * POINT_SIZE_NORMAL);
 
     public static final int COLOR_NOTMAL_RES_ID = com.gmail.jiangyang5157.tookit.R.color.DeepOrange;
     public static final int COLOR_FOCUCED_RES_ID = com.gmail.jiangyang5157.tookit.R.color.Teal;
@@ -27,7 +30,7 @@ public class Ray extends Point {
 
     public Ray(Context context) {
         super(context, VERTEX_SHADER_RAW_RESOURCE, FRAGMENT_SHADER_RAW_RESOURCE);
-        setPointSize(POINT_SIZE);
+        pointSize = POINT_SIZE_NORMAL;
     }
 
     public void create() {
@@ -42,14 +45,18 @@ public class Ray extends Point {
     public void setIntersection(Intersection intersection) {
         this.intersection = intersection;
 
-        if (intersection == null) {
-            return;
-        }
-
-        if (intersection.model instanceof Earth) {
+        if (intersection == null || intersection.model instanceof Earth) {
             setColor(AppUtils.getColor(context, COLOR_NOTMAL_RES_ID));
+
+            if (pointSize > POINT_SIZE_NORMAL){
+                pointSize -= POINT_SIZE_GRAdiENT_UNIT;
+            }
         } else {
             setColor(AppUtils.getColor(context, COLOR_FOCUCED_RES_ID));
+
+            if (pointSize < POINT_SIZE_FOCUSED){
+                pointSize += POINT_SIZE_GRAdiENT_UNIT;
+            }
         }
 
         Matrix.setIdentityM(model, 0);
