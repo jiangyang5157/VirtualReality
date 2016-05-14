@@ -2,7 +2,6 @@ package com.gmail.jiangyang5157.cardboard.scene.projection;
 
 import android.content.Context;
 
-import com.gmail.jiangyang5157.cardboard.scene.Intersectable;
 import com.gmail.jiangyang5157.cardboard.scene.Intersection;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
 import com.gmail.jiangyang5157.tookit.math.Vector;
@@ -12,7 +11,7 @@ import com.gmail.jiangyang5157.tookit.math.Vector3d;
  * @author Yang
  * @since 4/30/2016
  */
-public abstract class Sphere extends GLModel implements Intersectable {
+public abstract class Sphere extends GLModel implements Intersection.Intersectable {
 
     protected float radius;
 

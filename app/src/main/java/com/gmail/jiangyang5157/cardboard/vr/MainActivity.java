@@ -69,14 +69,14 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (dialog != null) {
+            dialog.destroy();
+        }
         if (earth != null) {
             earth.destroy();
         }
         if (ray != null) {
             ray.destroy();
-        }
-        if (dialog != null) {
-            dialog.destroy();
         }
     }
 
@@ -147,6 +147,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
     @Override
     public void onCardboardTrigger() {
+        // TODO: 5/14/2016
         final Intersection intersection = ray.getIntersection();
         if (intersection != null) {
             if (intersection.model instanceof Marker) {
@@ -184,14 +185,14 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     }
 
     private void updateScene(float[] view, float[] perspective) {
+        if (dialog != null) {
+            dialog.update(view, perspective);
+        }
         if (ray != null) {
             ray.update(view, perspective);
         }
         if (earth != null) {
             earth.update(view, perspective);
-        }
-        if (dialog != null) {
-            dialog.update(view, perspective);
         }
     }
 
