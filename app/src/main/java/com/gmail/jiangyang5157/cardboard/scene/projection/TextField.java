@@ -62,7 +62,7 @@ public class TextField extends Panel {
         if (textureHandle[0] == 0) {
             throw new RuntimeException("Error loading texture.");
         } else {
-            Bitmap bitmap = Bitmap.createBitmap((int) width, (int) height, Bitmap.Config.ARGB_8888);
+            Bitmap bitmap = Bitmap.createBitmap((int) width, (int) height, Bitmap.Config.ARGB_4444);
             Canvas canvas = new Canvas(bitmap);
             bitmap.eraseColor(getColorWithAlpha(ALPHA_BACKGROUND));
 

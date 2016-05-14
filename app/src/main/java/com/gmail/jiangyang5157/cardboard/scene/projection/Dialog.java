@@ -23,7 +23,7 @@ public abstract class Dialog extends Panel {
     public static final int COLOR_BACKGROUND_RES_ID = com.gmail.jiangyang5157.tookit.R.color.Teal;
 
     protected static final float PADDING_LAYER = 2.0f;
-    protected static final float PADDING_BOARD = 4.0f;
+    protected static final float PADDING_BOARD = 8.0f;
 
     public Dialog(Context context) {
         super(context);
@@ -39,7 +39,7 @@ public abstract class Dialog extends Panel {
         if (textureHandle[0] == 0) {
             throw new RuntimeException("Error loading texture.");
         } else {
-            Bitmap bitmap = Bitmap.createBitmap((int) width, (int) height, Bitmap.Config.ARGB_8888);
+            Bitmap bitmap = Bitmap.createBitmap((int) width, (int) height, Bitmap.Config.ARGB_4444);
             bitmap.eraseColor(getColorWithAlpha(ALPHA_BACKGROUND));
 
             GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureHandle[0]);
