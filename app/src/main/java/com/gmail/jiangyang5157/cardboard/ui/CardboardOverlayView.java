@@ -16,6 +16,7 @@
 
 package com.gmail.jiangyang5157.cardboard.ui;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -29,6 +30,8 @@ import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.gmail.jiangyang5157.cardboard.scene.projection.Marker;
 
 /**
  * Contains two sub-views to provide a simple stereo HUD.
@@ -61,6 +64,15 @@ public class CardboardOverlayView extends LinearLayout {
 
         textFadeAnimation = new AlphaAnimation(1.0f, 0.0f);
         textFadeAnimation.setDuration(5000);
+    }
+
+    public void show3DToastOnUIThread(Activity activity, final String message) {
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                show3DToast(message);
+            }
+        });
     }
 
     public void show3DToast(String message) {

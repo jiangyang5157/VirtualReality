@@ -150,13 +150,6 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         final AimIntersection intersection = aimRay.getIntersection();
         if (intersection != null) {
             if (intersection.model instanceof Marker) {
-//                runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        overlayView.show3DToast(((Marker) intersection.model).name);
-//                    }
-//                });
-
                 if (intersection.model instanceof Panel) {
                 } else if (intersection.model instanceof Marker) {
                     dialog = new MarkerDialog(this, (Marker) intersection.model);
