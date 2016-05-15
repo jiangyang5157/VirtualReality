@@ -53,6 +53,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
     private SensorManager sensorManager;
     private Sensor accelerometer;
+    private Sensor mageticField;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,6 +65,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        mageticField = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
 
         setContentView(R.layout.activity_main);
 
@@ -270,6 +272,9 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         if (!sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL)) {
             throw new UnsupportedOperationException("Accelerometer not supported");
         }
+        if (!sensorManager.registerListener(this, mageticField, SensorManager.SENSOR_DELAY_NORMAL)) {
+            throw new UnsupportedOperationException("MageticField not supported");
+        }
     }
 
     @Override
@@ -279,13 +284,29 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     }
 
     float[] accelerometerValues;
+    float[] magneticFieldValues;
 
     @Override
     public void onSensorChanged(SensorEvent event) {
         if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
             accelerometerValues = event.values;
 //            Log.i("####", "ACCELEROMETER: " + accelerometerValues[0] + "," + accelerometerValues[1] + "," + accelerometerValues[2]);
+        } else if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
+//            Log.i("####", "MAGNETIC_FIELD: " + event.values[0] + "," + event.values[1] + "," + event.values[2]);
+            magneticFieldValues = event.values;
         }
+//        if (accelerometerValues != null && magneticFieldValues != null) {
+//            float[] rotation = new float[9];
+//            boolean success = SensorManager.getRotationMatrix(rotation, null, accelerometerValues, magneticFieldValues);
+//            if (success) {
+//                float[] values = new float[3];
+//                SensorManager.getOrientation(rotation, values);
+//                values[0] = (float) Math.toDegrees(values[0]);
+//                values[1] = (float) Math.toDegrees(values[1]);
+//                values[2] = (float) Math.toDegrees(values[2]);
+//                Log.i("####", "ROTATED VALUES: " + values[0] + "," + values[1] + "," + values[2]);
+//            }
+//        }
     }
 
     @Override
