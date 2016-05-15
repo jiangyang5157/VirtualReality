@@ -53,6 +53,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
     private SensorManager sensorManager;
     private Sensor accelerometer;
+    private Sensor linerAcceleration;
     private Sensor mageticField;
 
     @Override
@@ -65,6 +66,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        linerAcceleration = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
         mageticField = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
 
         setContentView(R.layout.activity_main);
@@ -272,6 +274,9 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         if (!sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL)) {
             throw new UnsupportedOperationException("Accelerometer not supported");
         }
+        if (!sensorManager.registerListener(this, linerAcceleration, SensorManager.SENSOR_DELAY_NORMAL)) {
+            throw new UnsupportedOperationException("LinerAcceleration not supported");
+        }
         if (!sensorManager.registerListener(this, mageticField, SensorManager.SENSOR_DELAY_NORMAL)) {
             throw new UnsupportedOperationException("MageticField not supported");
         }
@@ -284,6 +289,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     }
 
     float[] accelerometerValues;
+    float[] linerAccelerationValues;
     float[] magneticFieldValues;
 
     @Override
@@ -291,13 +297,19 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
             accelerometerValues = event.values;
 //            Log.i("####", "ACCELEROMETER: " + accelerometerValues[0] + "," + accelerometerValues[1] + "," + accelerometerValues[2]);
-        } else if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
-//            Log.i("####", "MAGNETIC_FIELD: " + event.values[0] + "," + event.values[1] + "," + event.values[2]);
-            magneticFieldValues = event.values;
         }
-//        if (accelerometerValues != null && magneticFieldValues != null) {
+        if (event.sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION) {
+            linerAccelerationValues = event.values;
+            Log.i("####", "LINEAR_ACCELERATION: " + linerAccelerationValues[0] + "," + linerAccelerationValues[1] + "," + linerAccelerationValues[2]);
+        }
+        if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
+            magneticFieldValues = event.values;
+//            Log.i("####", "MAGNETIC_FIELD: " + magneticFieldValues[0] + "," + magneticFieldValues[1] + "," + magneticFieldValues[2]);
+        }
+
+//        if (linerAccelerationValues != null && magneticFieldValues != null) {
 //            float[] rotation = new float[9];
-//            SensorManager.getRotationMatrix(rotation, null, accelerometerValues, magneticFieldValues);
+//            SensorManager.getRotationMatrix(rotation, null, linerAccelerationValues, magneticFieldValues);
 //            float[] values = new float[3];
 //            SensorManager.getOrientation(rotation, values);
 //            values[0] = (float) Math.toDegrees(values[0]); // z
