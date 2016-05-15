@@ -37,8 +37,11 @@ public class MarkerDialog extends Dialog{
         tf1.create(marker.name);
         addPanel(tf1);
         TextField tf2 = new TextField(context);
-        tf2.create(marker.name);
+        tf2.create("2nd TextField");
         addPanel(tf2);
+        TextField tf3 = new TextField(context);
+        tf3.create("3rd");
+        addPanel(tf3);
 
         float w = 0;
         float h = 0;

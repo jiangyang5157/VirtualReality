@@ -1,5 +1,9 @@
 package com.gmail.jiangyang5157.cardboard.vr;
 
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
 import android.os.Bundle;
@@ -18,7 +22,6 @@ import com.gmail.jiangyang5157.cardboard.scene.Light;
 import com.gmail.jiangyang5157.cardboard.scene.Lighting;
 import com.gmail.jiangyang5157.cardboard.scene.projection.GLModel;
 import com.gmail.jiangyang5157.cardboard.scene.projection.MarkerDialog;
-import com.gmail.jiangyang5157.cardboard.scene.projection.Panel;
 import com.gmail.jiangyang5157.cardboard.ui.CardboardOverlayView;
 import com.gmail.jiangyang5157.tookit.app.DeviceUtils;
 import com.google.vrtoolkit.cardboard.CardboardActivity;
@@ -33,7 +36,7 @@ import java.io.IOException;
 
 import javax.microedition.khronos.egl.EGLConfig;
 
-public class MainActivity extends CardboardActivity implements CardboardView.StereoRenderer {
+public class MainActivity extends CardboardActivity implements CardboardView.StereoRenderer, SensorEventListener {
 
     boolean debug_camer_movement;
 
@@ -48,6 +51,9 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
     private CardboardOverlayView overlayView;
 
+    private SensorManager sensorManager;
+    private Sensor accelerometer;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +61,9 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
             Toast.makeText(this, getString(R.string.error_gles_version_not_supported), Toast.LENGTH_SHORT).show();
             finish();
         }
+
+        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
         setContentView(R.layout.activity_main);
 
@@ -253,5 +262,33 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     public void onRendererShutdown() {
         Log.d(TAG, "onRendererShutdown");
         // TODO: 5/14/2016 WHY: this callback is never get called
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL)) {
+            throw new UnsupportedOperationException("Accelerometer not supported");
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        sensorManager.unregisterListener(this);
+    }
+
+    float[] accelerometerValues;
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+            accelerometerValues = event.values;
+//            Log.i("####", "ACCELEROMETER: " + accelerometerValues[0] + "," + accelerometerValues[1] + "," + accelerometerValues[2]);
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
     }
 }

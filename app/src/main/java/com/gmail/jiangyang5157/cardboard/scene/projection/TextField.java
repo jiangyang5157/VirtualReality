@@ -6,6 +6,8 @@ import android.graphics.Canvas;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
 import android.text.TextPaint;
+import android.util.Log;
+import android.util.TypedValue;
 
 import com.gmail.jiangyang5157.cardboard.scene.Head;
 import com.gmail.jiangyang5157.cardboard.scene.Intersection;
@@ -19,13 +21,14 @@ public class TextField extends Panel implements Model.Clickable{
 
     private String text;
 
+    public static final float TEXT_SIZE = 8f;
+
     public static final float ALPHA_BACKGROUND = 0.5f;
     public static final int COLOR_BACKGROUND_RES_ID = com.gmail.jiangyang5157.tookit.R.color.White;
 
     public static final int COLOR_TEXT_RES_ID = com.gmail.jiangyang5157.tookit.R.color.DeepOrange;
 
     protected TextPaint textPaint;
-    protected float textSizePixels;
 
     private Model.Clickable onClickListener;
 
@@ -36,11 +39,8 @@ public class TextField extends Panel implements Model.Clickable{
     public void create(String text) {
         this.text = text;
 
-        final float GESTURE_THRESHOLD_DP = 16.0f; // The gesture threshold expressed in dp
-        final float scale = context.getResources().getDisplayMetrics().density;
-        textSizePixels = (GESTURE_THRESHOLD_DP * scale + 0.5f); // Convert the dps to pixels, based on density scale
-
         textPaint = new TextPaint();
+        float textSizePixels = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, TEXT_SIZE, context.getResources().getDisplayMetrics());
         textPaint.setTextSize(textSizePixels);
 
         // TODO: 5/13/2016 handle muti-lines
