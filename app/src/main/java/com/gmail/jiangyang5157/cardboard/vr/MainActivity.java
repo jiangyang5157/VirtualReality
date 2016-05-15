@@ -297,15 +297,13 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         }
 //        if (accelerometerValues != null && magneticFieldValues != null) {
 //            float[] rotation = new float[9];
-//            boolean success = SensorManager.getRotationMatrix(rotation, null, accelerometerValues, magneticFieldValues);
-//            if (success) {
-//                float[] values = new float[3];
-//                SensorManager.getOrientation(rotation, values);
-//                values[0] = (float) Math.toDegrees(values[0]);
-//                values[1] = (float) Math.toDegrees(values[1]);
-//                values[2] = (float) Math.toDegrees(values[2]);
-//                Log.i("####", "ROTATED VALUES: " + values[0] + "," + values[1] + "," + values[2]);
-//            }
+//            SensorManager.getRotationMatrix(rotation, null, accelerometerValues, magneticFieldValues);
+//            float[] values = new float[3];
+//            SensorManager.getOrientation(rotation, values);
+//            values[0] = (float) Math.toDegrees(values[0]); // z
+//            values[1] = (float) Math.toDegrees(values[1]); // x
+//            values[2] = (float) Math.toDegrees(values[2]); // y
+//            Log.i("####", "ROTATED VALUES: " + values[0] + "," + values[1] + "," + values[2]);
 //        }
     }
 
