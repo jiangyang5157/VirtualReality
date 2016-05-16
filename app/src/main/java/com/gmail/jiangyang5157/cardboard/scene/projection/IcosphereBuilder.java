@@ -9,6 +9,8 @@ import android.util.Log;
  */
 public class IcosphereBuilder {
 
+    private static final String TAG = "IcosphereBuilder ####";
+
     private volatile static IcosphereBuilder uniqueInstance;
 
     private ArrayMap<Integer, IcosphereVertex> icosphereVertices;
@@ -39,7 +41,7 @@ public class IcosphereBuilder {
         if (ret == null) {
             ret = new IcosphereVertex(recursionLevel);
             icosphereVertices.put(vertexCount, ret);
-            Log.d("####", "IcosphereBuilder: created IcosephereVertex object with vertexCount=" + vertexCount);
+            Log.d(TAG, "IcosphereBuilder: created IcosephereVertex object with vertexCount=" + vertexCount);
         }
         return ret;
     }

@@ -294,15 +294,15 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     public void onSensorChanged(SensorEvent event) {
         if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
             head.accelerometerValues = event.values;
-//            Log.i("####", "ACCELEROMETER: " + head.accelerometerValues[0] + "," + head.accelerometerValues[1] + "," + head.accelerometerValues[2]);
+//            Log.i(TAG, "ACCELEROMETER: " + head.accelerometerValues[0] + "," + head.accelerometerValues[1] + "," + head.accelerometerValues[2]);
         }
         if (event.sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION) {
             head.linerAccelerationValues = event.values;
-            Log.i("####", "LINEAR_ACCELERATION: " + head.linerAccelerationValues[0] + "," + head.linerAccelerationValues[1] + "," + head.linerAccelerationValues[2]);
+            Log.i(TAG, "LINEAR_ACCELERATION: " + head.linerAccelerationValues[0] + "," + head.linerAccelerationValues[1] + "," + head.linerAccelerationValues[2]);
         }
         if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
             head.magneticFieldValues = event.values;
-//            Log.i("####", "MAGNETIC_FIELD: " + head.magneticFieldValues[0] + "," + head.magneticFieldValues[1] + "," + head.magneticFieldValues[2]);
+//            Log.i(TAG, "MAGNETIC_FIELD: " + head.magneticFieldValues[0] + "," + head.magneticFieldValues[1] + "," + head.magneticFieldValues[2]);
         }
 
 //        if (linerAccelerationValues != null && magneticFieldValues != null) {
