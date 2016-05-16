@@ -32,12 +32,13 @@ public class Earth extends TextureSphere {
     public static final float MARKER_ALTITUDE = -1 * MARKER_RADIUS;
     public static final float CAMERA_ALTITUDE = (Math.abs(MARKER_ALTITUDE) + MARKER_RADIUS + Panel.DISTANCE + Ray.SPACE) * (MARKER_ALTITUDE > 0 ? 1 : -1);
 
-    private ArrayList<Marker> markers = new ArrayList<>();
+    private ArrayList<Marker> markers;
 
     private Model.Clickable onMarkerClickListener;
 
     public Earth(Context context) {
         super(context, VERTEX_SHADER_RAW_RESOURCE, FRAGMENT_SHADER_RAW_RESOURCE);
+        markers = new ArrayList<>();
     }
 
     public void create() {

@@ -16,8 +16,6 @@ public class Head {
     public float[] linerAccelerationValues;
     public float[] magneticFieldValues;
 
-
-
     private Camera camera;
 
     public Head() {

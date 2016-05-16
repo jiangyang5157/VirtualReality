@@ -17,7 +17,7 @@ import java.util.Collections;
  */
 public abstract class Dialog extends Panel {
 
-    protected ArrayList<Panel> panels = new ArrayList<>();
+    protected ArrayList<Panel> panels;
 
     protected static final float ALPHA_BACKGROUND = 0.5f;
     public static final int COLOR_BACKGROUND_RES_ID = com.gmail.jiangyang5157.tookit.R.color.Teal;
@@ -27,6 +27,7 @@ public abstract class Dialog extends Panel {
 
     public Dialog(Context context) {
         super(context);
+        panels = new ArrayList<>();
     }
 
     public abstract void create();
