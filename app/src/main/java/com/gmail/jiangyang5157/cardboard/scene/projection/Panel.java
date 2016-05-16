@@ -43,7 +43,7 @@ public abstract class Panel extends Rectangle {
         this.width = width;
         this.height = height;
         setColor(color);
-        buildCorners(Camera.UP, Camera.RIGHT);
+        buildCorners(INITIAL_UP, INITIAL_RIGHT);
 
         buildArrays();
         bindBuffers();

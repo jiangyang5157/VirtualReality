@@ -18,7 +18,6 @@ import com.gmail.jiangyang5157.cardboard.scene.projection.Model;
 import com.gmail.jiangyang5157.cardboard.scene.projection.Ray;
 import com.gmail.jiangyang5157.cardboard.scene.projection.Earth;
 import com.gmail.jiangyang5157.cardboard.scene.projection.Marker;
-import com.gmail.jiangyang5157.cardboard.scene.Light;
 import com.gmail.jiangyang5157.cardboard.scene.Lighting;
 import com.gmail.jiangyang5157.cardboard.scene.projection.GLModel;
 import com.gmail.jiangyang5157.cardboard.scene.projection.MarkerDialog;
@@ -43,7 +42,9 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     private static final String TAG = "MainActivity ####";
 
     private Head head;
-    private Light light;
+
+    public static final float[] LIGHT_POS_IN_WORLD_SPACE = new float[]{0.0f, 0.0f, 0.0f, 1.0f};
+    public float[] lightPosInCameraSpace = new float[4];
 
     private Earth earth;
     private Ray ray;
@@ -77,6 +78,8 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         setCardboardView(cardboardView);
 
         overlayView = (CardboardOverlayView) findViewById(R.id.cardboard_overlay_view);
+
+        head = new Head();
     }
 
     @Override
@@ -174,7 +177,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         Matrix.multiplyMM(head.getCamera().view, 0, eye.getEyeView(), 0, head.getCamera().matrix, 0);
 
         // Set the position of the light
-        Matrix.multiplyMV(light.lightPosInCameraSpace, 0, head.getCamera().view, 0, Light.LIGHT_POS_IN_WORLD_SPACE, 0);
+        Matrix.multiplyMV(lightPosInCameraSpace, 0, head.getCamera().view, 0, LIGHT_POS_IN_WORLD_SPACE, 0);
 
         // Build the ModelView and ModelViewProjection matrices for calculating different object's position
         float[] perspective = eye.getPerspective(Camera.Z_NEAR, Camera.Z_FAR);
@@ -234,9 +237,6 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
     @Override
     public void onSurfaceCreated(EGLConfig eglConfig) {
-        head = new Head();
-        light = new Light();
-
         ray = new Ray(this);
         ray.create();
 
@@ -245,7 +245,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         earth.setLighting(new Lighting() {
             @Override
             public float[] getLightPosInCameraSpace() {
-                return light.lightPosInCameraSpace;
+                return lightPosInCameraSpace;
             }
         });
         earth.create();
@@ -288,23 +288,21 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         sensorManager.unregisterListener(this);
     }
 
-    float[] accelerometerValues;
-    float[] linerAccelerationValues;
-    float[] magneticFieldValues;
+
 
     @Override
     public void onSensorChanged(SensorEvent event) {
         if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-            accelerometerValues = event.values;
-//            Log.i("####", "ACCELEROMETER: " + accelerometerValues[0] + "," + accelerometerValues[1] + "," + accelerometerValues[2]);
+            head.accelerometerValues = event.values;
+//            Log.i("####", "ACCELEROMETER: " + head.accelerometerValues[0] + "," + head.accelerometerValues[1] + "," + head.accelerometerValues[2]);
         }
         if (event.sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION) {
-            linerAccelerationValues = event.values;
-            Log.i("####", "LINEAR_ACCELERATION: " + linerAccelerationValues[0] + "," + linerAccelerationValues[1] + "," + linerAccelerationValues[2]);
+            head.linerAccelerationValues = event.values;
+            Log.i("####", "LINEAR_ACCELERATION: " + head.linerAccelerationValues[0] + "," + head.linerAccelerationValues[1] + "," + head.linerAccelerationValues[2]);
         }
         if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
-            magneticFieldValues = event.values;
-//            Log.i("####", "MAGNETIC_FIELD: " + magneticFieldValues[0] + "," + magneticFieldValues[1] + "," + magneticFieldValues[2]);
+            head.magneticFieldValues = event.values;
+//            Log.i("####", "MAGNETIC_FIELD: " + head.magneticFieldValues[0] + "," + head.magneticFieldValues[1] + "," + head.magneticFieldValues[2]);
         }
 
 //        if (linerAccelerationValues != null && magneticFieldValues != null) {
