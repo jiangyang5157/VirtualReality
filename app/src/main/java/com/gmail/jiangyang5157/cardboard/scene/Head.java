@@ -1,7 +1,6 @@
 package com.gmail.jiangyang5157.cardboard.scene;
 
 import com.gmail.jiangyang5157.cardboard.scene.projection.Earth;
-import com.gmail.jiangyang5157.tookit.math.Vector;
 
 /**
  * @author Yang
@@ -18,9 +17,13 @@ public class Head {
     private Camera camera;
 
     public static final float MOVE_UNIT = Earth.RADIUS / 100;
+
+    private float[] accelerometerValues;
     private float[] linerAccelerationValues;
-    private float[] a;
+    private float[] magneticFieldValues;
+
     private float[] v;
+    private float[] a;
 
     public Head() {
         camera = new Camera();
@@ -39,7 +42,9 @@ public class Head {
     }
 
     private void adjustVelocity(){
-
+//        v[0] = 0;
+//        v[1] = accelerometerValues[1] * Head.MOVE_UNIT;
+//        v[2] = accelerometerValues[2] * Head.MOVE_UNIT;
 
         v[0] = forward[0] * Head.MOVE_UNIT;
         v[1] = forward[1] * Head.MOVE_UNIT;
@@ -50,13 +55,33 @@ public class Head {
         return camera;
     }
 
-    public void setLinerAccelerationValues(float[] linerAccelerationValues) {
-        this.linerAccelerationValues = linerAccelerationValues;
-    }
-
     public static void forward(float[] src, float[] dir) {
         src[0] += dir[0];
         src[1] += dir[1];
         src[2] += dir[2];
+    }
+
+    public void setAccelerometerValues(float[] accelerometerValues) {
+        this.accelerometerValues = accelerometerValues;
+    }
+
+    public float[] getAccelerometerValues() {
+        return accelerometerValues;
+    }
+
+    public void setLinerAccelerationValues(float[] linerAccelerationValues) {
+        this.linerAccelerationValues = linerAccelerationValues;
+    }
+
+    public float[] getLinerAccelerationValues() {
+        return linerAccelerationValues;
+    }
+
+    public void setMagneticFieldValues(float[] magneticFieldValues) {
+        this.magneticFieldValues = magneticFieldValues;
+    }
+
+    public float[] getMagneticFieldValues() {
+        return magneticFieldValues;
     }
 }

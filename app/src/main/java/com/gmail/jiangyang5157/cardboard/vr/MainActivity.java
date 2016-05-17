@@ -115,6 +115,9 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
     @Override
     public void onFinishFrame(Viewport viewport) {
+        Log.i(TAG, "Accele: " + head.getAccelerometerValues()[0] + "," + head.getAccelerometerValues()[1] + "," + head.getAccelerometerValues()[2]);
+        Log.i(TAG, "LinerA: " + head.getLinerAccelerationValues()[0] + "," + head.getLinerAccelerationValues()[1] + "," + head.getLinerAccelerationValues()[2]);
+//        Log.i(TAG, "Magnet: " + head.getMagneticFieldValues()[0] + "," + head.getMagneticFieldValues()[1] + "," + head.getMagneticFieldValues()[2]);
     }
 
     private void checkDialog() {
@@ -287,9 +290,14 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
     @Override
     public void onSensorChanged(SensorEvent event) {
+        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+            head.setAccelerometerValues(event.values);
+        }
         if (event.sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION) {
             head.setLinerAccelerationValues(event.values);
-            Log.i(TAG, "LinerAcceleration: " + event.values[0] + "," + event.values[1] + "," + event.values[2]);
+        }
+        if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
+            head.setMagneticFieldValues(event.values);
         }
     }
 
