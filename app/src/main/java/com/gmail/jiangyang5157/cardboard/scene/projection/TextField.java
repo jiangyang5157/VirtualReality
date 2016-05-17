@@ -55,14 +55,14 @@ public class TextField extends Panel implements Model.Clickable {
             StaticLayout staticLayout = new StaticLayout(text, textPaint, (int) width, align, 1.0f, 0.0f, false);
             int lines = staticLayout.getLineCount();
             Paint.FontMetrics fm = textPaint.getFontMetrics();
-            height = lines * (textSizePixels + fm.bottom);
+            height = fm.descent + lines * (textSizePixels + fm.bottom);
             create(width, height, AppUtils.getColor(context, COLOR_BACKGROUND_RES_ID));
 
             Bitmap bitmap = Bitmap.createBitmap((int) width, (int) height, Bitmap.Config.ARGB_4444);
             Canvas canvas = new Canvas(bitmap);
             bitmap.eraseColor(getColorWithAlpha(ALPHA_BACKGROUND));
             canvas.save();
-            canvas.translate(0, 0);
+            canvas.translate(0, fm.descent);
             staticLayout.draw(canvas);
             canvas.restore();
 
