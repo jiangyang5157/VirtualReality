@@ -44,7 +44,7 @@ public class Ray extends Point {
     public void setIntersection(Intersection intersection) {
         this.intersection = intersection;
 
-        if (intersection.model instanceof Earth || intersection.model instanceof Dialog) {
+        if (intersection.getModel() instanceof Earth || intersection.getModel() instanceof Dialog) {
             if (pointSize > POINT_SIZE_NORMAL){
                 pointSize -= POINT_SIZE_GRAdiENT_UNIT;
             }
@@ -55,8 +55,8 @@ public class Ray extends Point {
         }
 
         Matrix.setIdentityM(model, 0);
-        Vector i_camera = intersection.cameraPosVec.minus(intersection.intersecttPosVec);
-        double[] rayPos = new Vector(intersection.intersecttPosVec.plus(i_camera.direction().times(Ray.SPACE))).getData();
+        Vector i_camera = intersection.getCameraPosVec().minus(intersection.getIntersecttPosVec());
+        double[] rayPos = new Vector(intersection.getIntersecttPosVec().plus(i_camera.direction().times(Ray.SPACE))).getData();
         setPosition(new float[]{(float) rayPos[0], (float) rayPos[1], (float) rayPos[2]});
     }
 

@@ -152,8 +152,8 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     public void onCardboardTrigger() {
         final Intersection intersection = ray.getIntersection();
         if (intersection != null) {
-            if (intersection.model instanceof Model.Clickable) {
-                ((Model.Clickable) intersection.model).onClick(intersection.model);
+            if (intersection.getModel() instanceof Model.Clickable) {
+                ((Model.Clickable) intersection.getModel()).onClick(intersection.getModel());
                 debug_camer_movement = false;
             } else {
                 debug_camer_movement = !debug_camer_movement;
@@ -292,29 +292,10 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-            head.accelerometerValues = event.values;
-//            Log.i(TAG, "ACCELEROMETER: " + head.accelerometerValues[0] + "," + head.accelerometerValues[1] + "," + head.accelerometerValues[2]);
-        }
         if (event.sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION) {
-            head.linerAccelerationValues = event.values;
-            Log.i(TAG, "LINEAR_ACCELERATION: " + head.linerAccelerationValues[0] + "," + head.linerAccelerationValues[1] + "," + head.linerAccelerationValues[2]);
+            head.setLinerAccelerationValues(event.values);
+            Log.i(TAG, "LinerAcceleration: " + event.values[0] + "," + event.values[1] + "," + event.values[2]);
         }
-        if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
-            head.magneticFieldValues = event.values;
-//            Log.i(TAG, "MAGNETIC_FIELD: " + head.magneticFieldValues[0] + "," + head.magneticFieldValues[1] + "," + head.magneticFieldValues[2]);
-        }
-
-//        if (linerAccelerationValues != null && magneticFieldValues != null) {
-//            float[] rotation = new float[9];
-//            SensorManager.getRotationMatrix(rotation, null, linerAccelerationValues, magneticFieldValues);
-//            float[] values = new float[3];
-//            SensorManager.getOrientation(rotation, values);
-//            values[0] = (float) Math.toDegrees(values[0]);
-//            values[1] = (float) Math.toDegrees(values[1]);
-//            values[2] = (float) Math.toDegrees(values[2]);
-//            Log.i("####", "ROTATED VALUES: " + values[0] + "," + values[1] + "," + values[2]);
-//        }
     }
 
     @Override

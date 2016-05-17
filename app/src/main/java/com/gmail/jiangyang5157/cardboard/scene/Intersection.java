@@ -13,10 +13,9 @@ public class Intersection implements Comparable {
         Intersection intersect(Head head);
     }
 
-    public final Model model;
-    public final Vector cameraPosVec;
-    public final Vector intersecttPosVec;
-
+    private final Model model;
+    private final Vector cameraPosVec;
+    private final Vector intersecttPosVec;
     private final double t;
 
     public Intersection(Model model, Vector cameraPosVec, Vector intersecttPosVec, double t) {
@@ -26,6 +25,17 @@ public class Intersection implements Comparable {
         this.t = t;
     }
 
+    public Model getModel() {
+        return model;
+    }
+
+    public Vector getIntersecttPosVec() {
+        return intersecttPosVec;
+    }
+
+    public Vector getCameraPosVec() {
+        return cameraPosVec;
+    }
 
     @Override
     public int compareTo(Object another) {

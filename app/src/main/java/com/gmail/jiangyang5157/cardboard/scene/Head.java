@@ -12,9 +12,7 @@ public class Head {
     public float[] up = new float[3];
     public float[] right = new float[3];
 
-    public float[] accelerometerValues;
-    public float[] linerAccelerationValues;
-    public float[] magneticFieldValues;
+    private float[] linerAccelerationValues;
 
     private Camera camera;
 
@@ -22,7 +20,15 @@ public class Head {
         camera = new Camera();
     }
 
+    public void adjustCamera(){
+
+    }
+
     public Camera getCamera() {
         return camera;
+    }
+
+    public void setLinerAccelerationValues(float[] linerAccelerationValues) {
+        this.linerAccelerationValues = linerAccelerationValues;
     }
 }

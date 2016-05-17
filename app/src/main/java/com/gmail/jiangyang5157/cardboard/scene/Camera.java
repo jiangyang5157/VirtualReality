@@ -20,7 +20,7 @@ public class Camera {
 
     private float[] position = new float[]{0.0f, 0.0f, 0.0f};
     private float[] lookAt = new float[]{0.0f, 0.0f, -1.0f};
-    public static final float[] UP = new float[]{0.0f, 1.0f, 0.0f};
+    private static final float[] UP = new float[]{0.0f, 1.0f, 0.0f};
 
     public Camera() {
         matrix = new float[16];
