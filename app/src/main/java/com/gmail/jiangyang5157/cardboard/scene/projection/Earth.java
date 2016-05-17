@@ -79,12 +79,13 @@ public class Earth extends TextureSphere {
     }
 
     public Marker addMarker(KmlPlacemark kmlPlacemark, MarkerOptions markerUrlStyle) {
-        String name = kmlPlacemark.getProperty("name");
         LatLng latLng = markerUrlStyle.getPosition();
 
         Marker marker = new Marker(context, this);
         marker.setOnClickListener(onMarkerClickListener);
-        marker.create(MARKER_RADIUS, name, latLng, MARKER_ALTITUDE);
+        marker.create(MARKER_RADIUS, latLng, MARKER_ALTITUDE);
+        marker.setName(kmlPlacemark.getProperty("name"));
+        marker.setDescription(kmlPlacemark.getProperty("description"));
         marker.setLighting(lighting);
         addMarker(marker);
         return marker;

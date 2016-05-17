@@ -42,9 +42,17 @@ public class MarkerDialog extends Dialog{
     }
 
     private void createContent() {
-        TextField tf1 = new TextField(context);
-        tf1.create(marker.name, WIDTH, DEFAULT_TEXT_SIZE, Layout.Alignment.ALIGN_CENTER);
-        addPanel(tf1);
+        if (marker.getName() != null) {
+            TextField tf1 = new TextField(context);
+            tf1.create(marker.getName(), WIDTH, DEFAULT_TEXT_SIZE, Layout.Alignment.ALIGN_CENTER);
+            addPanel(tf1);
+        }
+        if (marker.getDescription() != null) {
+            TextField tf1 = new TextField(context);
+            tf1.create(marker.getDescription(), WIDTH, DEFAULT_TEXT_SIZE, Layout.Alignment.ALIGN_NORMAL);
+            addPanel(tf1);
+        }
+
         TextField tf2 = new TextField(context);
         tf2.create("2nd TextField", WIDTH, DEFAULT_TEXT_SIZE, Layout.Alignment.ALIGN_OPPOSITE);
         addPanel(tf2);

@@ -23,7 +23,8 @@ public class Marker extends Icosphere implements Model.Clickable{
 
     private final Earth earth;
 
-    public String name;
+    private String name;
+    private String description;
 
     private Coordinate coordinate;
 
@@ -38,10 +39,8 @@ public class Marker extends Icosphere implements Model.Clickable{
         this.earth = earth;
     }
 
-    public void create(float radius, String name, LatLng latlng, float altitude) {
+    public void create(float radius, LatLng latlng, float altitude) {
         create(radius, AppUtils.getColor(context, COLOR_NORMAL_RES_ID), DEFAULT_RECURSION_LEVEL);
-
-        this.name = name;
         setLocation(latlng, altitude);
     }
 
@@ -72,5 +71,20 @@ public class Marker extends Icosphere implements Model.Clickable{
 
     public void setOnClickListener(Clickable onClickListener) {
         this.onClickListener = onClickListener;
+    }
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
