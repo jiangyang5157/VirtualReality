@@ -48,17 +48,18 @@ public class MarkerDialog extends Dialog{
     private void createContent() {
         if (marker.getName() != null) {
             TextField tf1 = new TextField(context);
-            tf1.create(marker.getName(), WIDTH, TEXT_SIZE_LARGE, Layout.Alignment.ALIGN_CENTER);
+            tf1.create(marker.getName(), WIDTH - PADDING_BOARD * 2, TEXT_SIZE_LARGE, Layout.Alignment.ALIGN_CENTER);
             addPanel(tf1);
         }
         if (marker.getDescription() != null) {
             TextField tf2 = new TextField(context);
-            tf2.create(marker.getDescription(), WIDTH, TEXT_SIZE_SMALL, Layout.Alignment.ALIGN_NORMAL);
+            tf2.create(marker.getDescription(), WIDTH - PADDING_BOARD * 2, TEXT_SIZE_SMALL, Layout.Alignment.ALIGN_NORMAL);
             addPanel(tf2);
         }
 
         TextField tf3 = new TextField(context);
-        tf3.create("3rdasdfghjklqasdasdasdasdasdsadasdasdasdasdhj5h9348huigne-9asd80435tasunzxbwe]]t,rtyrdyrtybsgpoweir/das/[asd]]1234567890'", WIDTH, TEXT_SIZE_TINY, Layout.Alignment.ALIGN_NORMAL);
+        tf3.create("3rdasdfghjklqasdasdasdasdasdsadasdasdasdasdhj5h9348huigne-9asd80435tasunzxbwe]]t,rtyrdyrtybsgpoweir/das/[asd]]1234567890'",
+                WIDTH - PADDING_BOARD * 2, TEXT_SIZE_TINY, Layout.Alignment.ALIGN_NORMAL);
         addPanel(tf3);
     }
 
@@ -69,7 +70,7 @@ public class MarkerDialog extends Dialog{
             h += panel.height;
             h += PADDING_BOARD;
         }
-        width = WIDTH + PADDING_BOARD * 2;
+        width = WIDTH;
         height = h;
     }
 
