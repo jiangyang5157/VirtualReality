@@ -37,18 +37,40 @@ public class TextField extends Panel implements Model.Clickable{
     }
 
     public void create(String text) {
+        prepare(text);
+        create(width, height, AppUtils.getColor(context, COLOR_BACKGROUND_RES_ID));
+    }
+
+    public void create(float width, float height) {
+        if (text == null || textPaint == null){
+            throw new RuntimeException("Function prepare() need to be called before create.");
+        }
+        this.width = width;
+        this.height = height;
+        create(width, height, AppUtils.getColor(context, COLOR_BACKGROUND_RES_ID));
+    }
+
+    public void prepare(String text) {
         this.text = text;
 
         textPaint = new TextPaint();
-        float textSizePixels = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, TEXT_SIZE, context.getResources().getDisplayMetrics());
+        float textSizePixels = dp2px(context, TEXT_SIZE);
         textPaint.setTextSize(textSizePixels);
 
         // TODO: 5/13/2016 handle muti-lines
         int lineCount = 1;
         width = textPaint.measureText(text);
         height = textSizePixels * (1 + lineCount);
+    }
 
-        create(width, height, AppUtils.getColor(context, COLOR_BACKGROUND_RES_ID));
+    public float dp2px(Context context, float dp){
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.getResources().getDisplayMetrics());
+    }
+
+    public float getMeasureWidth(String text, float size){
+        TextPaint tp = new TextPaint();
+        tp.setTextSize(size);
+        return tp.measureText(text);
     }
 
     @Override
