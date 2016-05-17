@@ -7,7 +7,7 @@
 
         <Placemark>
             <name>South Pole</name>
-            <description>A placemark contains a xml format extened data</description>
+            <description>descriptiondescription</description>
             <ExtendedData xmlns:camp="http://campsites.com">
                 <camp:number>12</camp:number>
                 <camp:parkingSpaces>4</camp:parkingSpaces>
@@ -18,7 +18,7 @@
         </Placemark>
         <Placemark>
             <name>North Pole</name>
-            <description>A placemark contains a set of keyset value</description>
+            <description>descriptiondescription</description>
             <ExtendedData>
                 <Data name="CampNumber">
                     <value>12</value>
@@ -39,24 +39,28 @@
         </Placemark>
         <Placemark>
             <name>0/0</name>
+            <description>descriptiondescription</description>
             <Point>
                 <coordinates>0,0</coordinates>
             </Point>
         </Placemark>
         <Placemark>
             <name>90/0</name>
+            <description>descriptiondescription</description>
             <Point>
                 <coordinates>90,0</coordinates>
             </Point>
         </Placemark>
         <Placemark>
             <name>-90/0</name>
+            <description>descriptiondescription</description>
             <Point>
                 <coordinates>-90,0</coordinates>
             </Point>
         </Placemark>
         <Placemark>
             <name>-180/0</name>
+            <description>descriptiondescription</description>
             <Point>
                 <coordinates>-180,0</coordinates>
             </Point>
