@@ -3,6 +3,7 @@ package com.gmail.jiangyang5157.cardboard.scene;
 import android.opengl.Matrix;
 
 import com.gmail.jiangyang5157.cardboard.scene.projection.Earth;
+import com.gmail.jiangyang5157.tookit.math.Vector;
 
 /**
  * @author Yang
@@ -34,18 +35,13 @@ public class Camera {
         return position.clone();
     }
 
-    public void move(float[] forwardDir, float distance) {
-        forward(position, forwardDir, distance);
-        forward(lookAt, forwardDir, distance);
+    protected void move(float[] v) {
+        Head.forward(position, v);
+        Head.forward(lookAt, v);
+
         Matrix.setLookAtM(matrix, 0,
                 position[0], position[1], position[2],
                 lookAt[0], lookAt[1], lookAt[2],
                 UP[0], UP[1], UP[2]);
-    }
-
-    public static void forward(float[] src, float[] dir, float dis) {
-        src[0] += dir[0] * dis;
-        src[1] += dir[1] * dis;
-        src[2] += dir[2] * dis;
     }
 }

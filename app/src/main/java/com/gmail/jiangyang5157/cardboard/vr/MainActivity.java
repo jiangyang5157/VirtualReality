@@ -104,15 +104,8 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         headTransform.getUpVector(head.up, 0);
         headTransform.getRightVector(head.right, 0);
 
-        // TODO: 5/14/2016 test camera movement
         if (debug_camer_movement) {
-            head.adjustCameraPosition();
-
-            float[] point = head.getCamera().getPosition().clone();
-            Camera.forward(point, head.forward, Head.MOVE_UNIT);
-            if (earth.contain(point)) {
-                head.getCamera().move(head.forward, Head.MOVE_UNIT);
-            }
+            head.adjustPosition(earth);
         }
 
         checkDialog();
