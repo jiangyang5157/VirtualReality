@@ -11,8 +11,12 @@ import com.gmail.jiangyang5157.tookit.app.AppUtils;
  */
 public class MarkerDialog extends Dialog{
 
-    private static final float WIDTH = 350f;
-    private static final float DEFAULT_TEXT_SIZE = 10f;
+    private static final float TEXT_SIZE_LARGE = 12f;
+    private static final float TEXT_SIZE_MEDIUM = 10f;
+    private static final float TEXT_SIZE_SMALL = 8f;
+    private static final float TEXT_SIZE_TINY = 6f;
+
+    private static final float WIDTH = 400f;
 
     private Marker marker;
 
@@ -44,21 +48,18 @@ public class MarkerDialog extends Dialog{
     private void createContent() {
         if (marker.getName() != null) {
             TextField tf1 = new TextField(context);
-            tf1.create(marker.getName(), WIDTH, DEFAULT_TEXT_SIZE, Layout.Alignment.ALIGN_CENTER);
+            tf1.create(marker.getName(), WIDTH, TEXT_SIZE_LARGE, Layout.Alignment.ALIGN_CENTER);
             addPanel(tf1);
         }
         if (marker.getDescription() != null) {
             TextField tf2 = new TextField(context);
-            tf2.create(marker.getDescription(), WIDTH, DEFAULT_TEXT_SIZE, Layout.Alignment.ALIGN_NORMAL);
+            tf2.create(marker.getDescription(), WIDTH, TEXT_SIZE_SMALL, Layout.Alignment.ALIGN_NORMAL);
             addPanel(tf2);
         }
 
         TextField tf3 = new TextField(context);
-        tf3.create("2nd TextField", WIDTH, DEFAULT_TEXT_SIZE, Layout.Alignment.ALIGN_OPPOSITE);
+        tf3.create("3rdasdfghjklqasdasdasdasdasdsadasdasdasdasdhj5h9348huigne-9asd80435tasunzxbwe]]t,rtyrdyrtybsgpoweir/das/[asd]]1234567890'", WIDTH, TEXT_SIZE_TINY, Layout.Alignment.ALIGN_NORMAL);
         addPanel(tf3);
-        TextField tf4 = new TextField(context);
-        tf4.create("3rdasdfghjklqasdasdasdasdasdsadasdasdasdasdhj5h9348huigne-9asd80435tasunzxbwe]]t,rtyrdyrtybsgpoweir/das/[asd]]1234567890'", WIDTH, 6, Layout.Alignment.ALIGN_NORMAL);
-        addPanel(tf4);
     }
 
     private void adjustBounds() {
