@@ -20,7 +20,7 @@ public class Head {
         camera = new Camera();
     }
 
-    public void adjustCamera(){
+    public void adjustCameraPosition(){
 
     }
 
