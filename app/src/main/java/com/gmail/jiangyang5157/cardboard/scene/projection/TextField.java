@@ -5,6 +5,8 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
+import android.text.Layout;
+import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.util.Log;
 import android.util.TypedValue;
@@ -61,6 +63,13 @@ public class TextField extends Panel implements Model.Clickable{
         int lineCount = 1;
         width = textPaint.measureText(text);
         height = textSizePixels * (1 + lineCount);
+
+        //solution for muti-lines
+//        StaticLayout staticLayout = new StaticLayout(text, textPaint, canvas.getWidth(), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+//        canvas.save();
+//        canvas.translate(x, y);
+//        staticLayout.draw(canvas);
+//        canvas.restore();
     }
 
     public float dp2px(Context context, float dp){

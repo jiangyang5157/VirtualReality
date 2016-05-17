@@ -1,5 +1,7 @@
 package com.gmail.jiangyang5157.cardboard.scene;
 
+import com.gmail.jiangyang5157.cardboard.scene.projection.Earth;
+
 /**
  * @author Yang
  * @since 5/12/2016
@@ -12,9 +14,12 @@ public class Head {
     public float[] up = new float[3];
     public float[] right = new float[3];
 
-    private float[] linerAccelerationValues;
-
     private Camera camera;
+
+    public static final float MOVE_UNIT = Earth.RADIUS / 100;
+    private float[] linerAccelerationValues;
+    private float a;
+    private float v;
 
     public Head() {
         camera = new Camera();

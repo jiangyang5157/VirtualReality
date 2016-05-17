@@ -106,10 +106,12 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
         // TODO: 5/14/2016 test camera movement
         if (debug_camer_movement) {
+            head.adjustCameraPosition();
+
             float[] point = head.getCamera().getPosition().clone();
-            Camera.forward(point, head.forward, Camera.MOVE_UNIT);
+            Camera.forward(point, head.forward, Head.MOVE_UNIT);
             if (earth.contain(point)) {
-                head.getCamera().move(head.forward, Camera.MOVE_UNIT);
+                head.getCamera().move(head.forward, Head.MOVE_UNIT);
             }
         }
 

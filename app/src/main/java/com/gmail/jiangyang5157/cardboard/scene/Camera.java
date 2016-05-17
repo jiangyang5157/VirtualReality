@@ -13,8 +13,6 @@ public class Camera {
     public static final float Z_NEAR = 0.1f;
     public static final float Z_FAR = Earth.RADIUS * 2;
 
-    public static final float MOVE_UNIT = Earth.RADIUS / 100;
-
     public float[] matrix;
     public float[] view;
 
