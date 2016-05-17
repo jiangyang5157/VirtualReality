@@ -36,6 +36,12 @@ public class MarkerDialog extends Dialog{
 
     @Override
     public void create() {
+        createContent();
+        adjustBounds();
+        create(width, height, AppUtils.getColor(context, COLOR_BACKGROUND_RES_ID));
+    }
+
+    private void createContent() {
         TextField tf1 = new TextField(context);
         tf1.create(marker.name, WIDTH, DEFAULT_TEXT_SIZE, Layout.Alignment.ALIGN_CENTER);
         addPanel(tf1);
@@ -45,9 +51,6 @@ public class MarkerDialog extends Dialog{
         TextField tf3 = new TextField(context);
         tf3.create("3rdasdfghjklqasdasdasdasdasdsadasdasdasdasdhj5h9348huigne-9asd80435tasunzxbwe]]t,rtyrdyrtybsgpoweir/das/[asd]]1234567890'", WIDTH, 6, Layout.Alignment.ALIGN_NORMAL);
         addPanel(tf3);
-
-        adjustBounds();
-        create(width, height, AppUtils.getColor(context, COLOR_BACKGROUND_RES_ID));
     }
 
     private void adjustBounds() {
