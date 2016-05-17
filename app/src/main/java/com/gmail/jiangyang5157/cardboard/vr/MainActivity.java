@@ -116,7 +116,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     @Override
     public void onFinishFrame(Viewport viewport) {
         Log.i(TAG, "Accele: " + head.getAccelerometerValues()[0] + "," + head.getAccelerometerValues()[1] + "," + head.getAccelerometerValues()[2]);
-        Log.i(TAG, "LinerA: " + head.getLinerAccelerationValues()[0] + "," + head.getLinerAccelerationValues()[1] + "," + head.getLinerAccelerationValues()[2]);
+//        Log.i(TAG, "LinerA: " + head.getLinerAccelerationValues()[0] + "," + head.getLinerAccelerationValues()[1] + "," + head.getLinerAccelerationValues()[2]);
 //        Log.i(TAG, "Magnet: " + head.getMagneticFieldValues()[0] + "," + head.getMagneticFieldValues()[1] + "," + head.getMagneticFieldValues()[2]);
     }
 

@@ -8,7 +8,6 @@ import android.opengl.GLUtils;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
-import android.util.Log;
 import android.util.TypedValue;
 
 import com.gmail.jiangyang5157.cardboard.scene.Head;
@@ -19,97 +18,67 @@ import com.gmail.jiangyang5157.tookit.app.AppUtils;
  * @author Yang
  * @since 5/8/2016
  */
-public class TextField extends Panel implements Model.Clickable{
+public class TextField extends Panel implements Model.Clickable {
 
     private String text;
 
-    private static final float TEXT_SIZE = 8f;
-
     private static final float ALPHA_BACKGROUND = 0.5f;
     private static final int COLOR_BACKGROUND_RES_ID = com.gmail.jiangyang5157.tookit.R.color.White;
-
     private static final int COLOR_TEXT_RES_ID = com.gmail.jiangyang5157.tookit.R.color.DeepOrange;
 
     private TextPaint textPaint;
 
     private Model.Clickable onClickListener;
 
+    private final int[] texBuffers = new int[1];
+
     public TextField(Context context) {
         super(context);
     }
 
-    public void create(String text) {
-        prepare(text);
-        create(width, height, AppUtils.getColor(context, COLOR_BACKGROUND_RES_ID));
-    }
+    protected void create(String text, float width, float textSize, Layout.Alignment align) {
+        GLES20.glGenTextures(1, texBuffers, 0);
 
-    public void create(float width, float height) {
-        if (text == null || textPaint == null){
-            throw new RuntimeException("Function prepare() need to be called before create.");
-        }
-        this.width = width;
-        this.height = height;
-        create(width, height, AppUtils.getColor(context, COLOR_BACKGROUND_RES_ID));
-    }
-
-    public void prepare(String text) {
-        this.text = text;
-
-        textPaint = new TextPaint();
-        float textSizePixels = dp2px(context, TEXT_SIZE);
-        textPaint.setTextSize(textSizePixels);
-
-        // TODO: 5/13/2016 handle muti-lines
-        int lineCount = 1;
-        width = textPaint.measureText(text);
-        height = textSizePixels * (1 + lineCount);
-
-        //solution for muti-lines
-//        StaticLayout staticLayout = new StaticLayout(text, textPaint, canvas.getWidth(), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
-//        canvas.save();
-//        canvas.translate(x, y);
-//        staticLayout.draw(canvas);
-//        canvas.restore();
-    }
-
-    public float dp2px(Context context, float dp){
-        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.getResources().getDisplayMetrics());
-    }
-
-    public float getMeasureWidth(String text, float size){
-        TextPaint tp = new TextPaint();
-        tp.setTextSize(size);
-        return tp.measureText(text);
-    }
-
-    @Override
-    protected int createTexture() {
-        return createTextTexture();
-    }
-
-    private int createTextTexture() {
-        final int[] textureHandle = new int[1];
-        GLES20.glGenTextures(1, textureHandle, 0);
-
-        if (textureHandle[0] == 0) {
+        if (texBuffers[0] == 0) {
             throw new RuntimeException("Error loading texture.");
         } else {
+            this.text = text;
+            this.width = width;
+
+            textPaint = new TextPaint();
+            float textSizePixels = dp2px(context, textSize);
+            textPaint.setTextSize(textSizePixels);
+            textPaint.setAntiAlias(true);
+            textPaint.setColor(AppUtils.getColor(context, COLOR_TEXT_RES_ID));
+
+            StaticLayout staticLayout = new StaticLayout(text, textPaint, (int) width, align, 1.0f, 0.0f, false);
+            int lines = staticLayout.getLineCount();
+            height = lines * (textSizePixels + textPaint.getFontMetrics().bottom);
+            create(width, height, AppUtils.getColor(context, COLOR_BACKGROUND_RES_ID));
+
             Bitmap bitmap = Bitmap.createBitmap((int) width, (int) height, Bitmap.Config.ARGB_4444);
             Canvas canvas = new Canvas(bitmap);
             bitmap.eraseColor(getColorWithAlpha(ALPHA_BACKGROUND));
+            canvas.save();
+            canvas.translate(0, 0);
+            staticLayout.draw(canvas);
+            canvas.restore();
 
-            textPaint.setAntiAlias(true);
-            textPaint.setColor(AppUtils.getColor(context, COLOR_TEXT_RES_ID));
-            int baseY = (int) ((canvas.getHeight() / 2) - ((textPaint.descent() + textPaint.ascent()) / 2));
-            canvas.drawText(text, 0, baseY, textPaint);
-
-            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureHandle[0]);
+            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texBuffers[0]);
             GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
             GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_NEAREST);
             GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
             bitmap.recycle();
         }
-        return textureHandle[0];
+    }
+
+    private float dp2px(Context context, float dp) {
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.getResources().getDisplayMetrics());
+    }
+
+    @Override
+    protected int createTexture() {
+        return texBuffers[0];
     }
 
     @Override
@@ -124,12 +93,16 @@ public class TextField extends Panel implements Model.Clickable{
 
     @Override
     public void onClick(Model model) {
-        if (onClickListener != null){
+        if (onClickListener != null) {
             onClickListener.onClick(this);
         }
     }
 
     public void setOnClickListener(Clickable onClickListener) {
         this.onClickListener = onClickListener;
+    }
+
+    public String getText() {
+        return text;
     }
 }

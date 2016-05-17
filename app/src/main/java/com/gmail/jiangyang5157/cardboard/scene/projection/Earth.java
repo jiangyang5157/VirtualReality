@@ -28,9 +28,9 @@ public class Earth extends TextureSphere {
     private static final int STACKS = 32;
     private static final int SLICES = 32;
 
-    protected static final float MARKER_RADIUS = RADIUS / 50;
-    protected static final float MARKER_ALTITUDE = -1 * MARKER_RADIUS;
-    protected static final float CAMERA_ALTITUDE = (Math.abs(MARKER_ALTITUDE) + MARKER_RADIUS + Panel.DISTANCE + Ray.SPACE) * (MARKER_ALTITUDE > 0 ? 1 : -1);
+    private static final float MARKER_RADIUS = RADIUS / 50;
+    private static final float MARKER_ALTITUDE = -1 * MARKER_RADIUS;
+    private static final float CAMERA_ALTITUDE = (Math.abs(MARKER_ALTITUDE) + MARKER_RADIUS + Panel.DISTANCE + Ray.SPACE) * (MARKER_ALTITUDE > 0 ? 1 : -1);
 
     private ArrayList<Marker> markers;
 

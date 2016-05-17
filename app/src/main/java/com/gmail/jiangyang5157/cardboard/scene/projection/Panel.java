@@ -21,8 +21,8 @@ import java.nio.ByteOrder;
  */
 public abstract class Panel extends Rectangle {
 
-    protected static final int VERTEX_SHADER_RAW_RESOURCE = R.raw.panel_vertex_shader;
-    protected static final int FRAGMENT_SHADER_RAW_RESOURCE = R.raw.panel_fragment_shader;
+    private static final int VERTEX_SHADER_RAW_RESOURCE = R.raw.panel_vertex_shader;
+    private static final int FRAGMENT_SHADER_RAW_RESOURCE = R.raw.panel_fragment_shader;
 
     private final int[] buffers = new int[3];
     private final int[] texBuffers = new int[1];

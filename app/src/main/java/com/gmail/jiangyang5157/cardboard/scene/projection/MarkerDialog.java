@@ -1,6 +1,7 @@
 package com.gmail.jiangyang5157.cardboard.scene.projection;
 
 import android.content.Context;
+import android.text.Layout;
 
 import com.gmail.jiangyang5157.tookit.app.AppUtils;
 
@@ -9,6 +10,9 @@ import com.gmail.jiangyang5157.tookit.app.AppUtils;
  * @since 5/13/2016
  */
 public class MarkerDialog extends Dialog{
+
+    private static final float WIDTH = 350f;
+    private static final float DEFAULT_TEXT_SIZE = 10f;
 
     private Marker marker;
 
@@ -32,30 +36,29 @@ public class MarkerDialog extends Dialog{
 
     @Override
     public void create() {
-        // TODO: 5/14/2016 analysis marker for creating muti-child-panel
         TextField tf1 = new TextField(context);
-        tf1.create(marker.name);
+        tf1.create(marker.name, WIDTH, DEFAULT_TEXT_SIZE, Layout.Alignment.ALIGN_CENTER);
         addPanel(tf1);
         TextField tf2 = new TextField(context);
-        tf2.create("2nd TextField");
+        tf2.create("2nd TextField", WIDTH, DEFAULT_TEXT_SIZE, Layout.Alignment.ALIGN_OPPOSITE);
         addPanel(tf2);
         TextField tf3 = new TextField(context);
-        tf3.create("3rd");
+        tf3.create("3rdasdfghjklqasdasdasdasdasdsadasdasdasdasdhj5h9348huigne-9asd80435tasunzxbwe]]t,rtyrdyrtybsgpoweir/das/[asd]]1234567890'", WIDTH, 6, Layout.Alignment.ALIGN_NORMAL);
         addPanel(tf3);
 
-        float w = 0;
+        adjustBounds();
+        create(width, height, AppUtils.getColor(context, COLOR_BACKGROUND_RES_ID));
+    }
+
+    private void adjustBounds() {
         float h = 0;
         h += PADDING_BOARD;
         for (Panel panel : panels) {
-            w = Math.max(w, panel.width);
             h += panel.height;
             h += PADDING_BOARD;
         }
-        w += PADDING_BOARD * 2;
-        width = w;
+        width = WIDTH + PADDING_BOARD * 2;
         height = h;
-
-        create(width, height, AppUtils.getColor(context, COLOR_BACKGROUND_RES_ID));
     }
 
     @Override
