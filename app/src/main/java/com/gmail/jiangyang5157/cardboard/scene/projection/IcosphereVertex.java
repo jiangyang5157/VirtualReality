@@ -20,9 +20,9 @@ public class IcosphereVertex implements Geometry {
      */
     protected static final int[] VERTEX_COUNTS = new int[]{12, 42, 162, 642, 2562, 10242};
 
-    protected float[] vertices;
+    private float[] vertices;
 
-    protected short[] indices;
+    private short[] indices;
 
     protected IcosphereVertex(int recursionLevel) {
         build(recursionLevel);
@@ -197,5 +197,13 @@ public class IcosphereVertex implements Geometry {
             ret[i] = src[i];
         }
         return ret;
+    }
+
+    public float[] getVertices() {
+        return vertices;
+    }
+
+    public short[] getIndices() {
+        return indices;
     }
 }

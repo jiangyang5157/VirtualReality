@@ -21,14 +21,14 @@ public class TextField extends Panel implements Model.Clickable{
 
     private String text;
 
-    public static final float TEXT_SIZE = 8f;
+    private static final float TEXT_SIZE = 8f;
 
-    public static final float ALPHA_BACKGROUND = 0.5f;
-    public static final int COLOR_BACKGROUND_RES_ID = com.gmail.jiangyang5157.tookit.R.color.White;
+    private static final float ALPHA_BACKGROUND = 0.5f;
+    private static final int COLOR_BACKGROUND_RES_ID = com.gmail.jiangyang5157.tookit.R.color.White;
 
-    public static final int COLOR_TEXT_RES_ID = com.gmail.jiangyang5157.tookit.R.color.DeepOrange;
+    private static final int COLOR_TEXT_RES_ID = com.gmail.jiangyang5157.tookit.R.color.DeepOrange;
 
-    protected TextPaint textPaint;
+    private TextPaint textPaint;
 
     private Model.Clickable onClickListener;
 

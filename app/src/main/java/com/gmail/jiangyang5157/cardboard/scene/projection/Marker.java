@@ -14,12 +14,12 @@ import com.google.android.gms.maps.model.LatLng;
  */
 public class Marker extends Icosphere implements Model.Clickable{
 
-    protected static final int VERTEX_SHADER_RAW_RESOURCE = R.raw.sphere_color_vertex_shader;
-    protected static final int FRAGMENT_SHADER_RAW_RESOURCE = R.raw.sphere_color_sphere_fragment_shader;
+    private static final int VERTEX_SHADER_RAW_RESOURCE = R.raw.sphere_color_vertex_shader;
+    private static final int FRAGMENT_SHADER_RAW_RESOURCE = R.raw.sphere_color_sphere_fragment_shader;
 
-    protected static final int DEFAULT_RECURSION_LEVEL = 3;
+    private static final int DEFAULT_RECURSION_LEVEL = 3;
 
-    public static final int COLOR_NORMAL_RES_ID = com.gmail.jiangyang5157.tookit.R.color.LightBlue;
+    private static final int COLOR_NORMAL_RES_ID = com.gmail.jiangyang5157.tookit.R.color.LightBlue;
 
     private final Earth earth;
 
