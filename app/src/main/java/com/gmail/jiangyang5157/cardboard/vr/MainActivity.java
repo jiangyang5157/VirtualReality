@@ -28,6 +28,7 @@ import com.google.vrtoolkit.cardboard.CardboardView;
 import com.google.vrtoolkit.cardboard.Eye;
 import com.google.vrtoolkit.cardboard.HeadTransform;
 import com.google.vrtoolkit.cardboard.Viewport;
+import com.google.vrtoolkit.cardboard.sensors.HeadTracker;
 
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -103,6 +104,8 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         headTransform.getEulerAngles(head.eulerAngles, 0);
         headTransform.getUpVector(head.up, 0);
         headTransform.getRightVector(head.right, 0);
+        headTransform.getQuaternion(head.quaternion, 0);
+        headTransform.getTranslation(head.translation, 0);
 
         if (debug_camer_movement) {
             head.adjustPosition(earth);
@@ -115,7 +118,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
     @Override
     public void onFinishFrame(Viewport viewport) {
-        Log.i(TAG, "Accele: " + head.getAccelerometerValues()[0] + "," + head.getAccelerometerValues()[1] + "," + head.getAccelerometerValues()[2]);
+//        Log.i(TAG, "Accele: " + head.getAccelerometerValues()[0] + "," + head.getAccelerometerValues()[1] + "," + head.getAccelerometerValues()[2]);
 //        Log.i(TAG, "LinerA: " + head.getLinerAccelerationValues()[0] + "," + head.getLinerAccelerationValues()[1] + "," + head.getLinerAccelerationValues()[2]);
 //        Log.i(TAG, "Magnet: " + head.getMagneticFieldValues()[0] + "," + head.getMagneticFieldValues()[1] + "," + head.getMagneticFieldValues()[2]);
     }
