@@ -109,7 +109,7 @@ public class Head {
 //        laV.rotateZaxis(eulerAnglesDegree2);
         double[] laD = laV.getData();
         laD[2] = -laD[2];
-        Log.i("####", "laD: " + laD[0] + ", " + laD[1] + ", " + laD[2]);
+//        Log.i("####", "laD: " + laD[0] + ", " + laD[1] + ", " + laD[2]);
 
         v[0] *= 0.9;
         v[1] *= 0.9;

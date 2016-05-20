@@ -297,10 +297,42 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
             head.setAccelerometerValues(event.values);
         }
         if (event.sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION) {
+            checkLinearAccelerationCalibration(event.values);
             head.setLinerAccelerationValues(event.values);
         }
         if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
             head.setMagneticFieldValues(event.values);
+        }
+    }
+
+    private final int CALIBRATION_COUNT = 1024;
+    private int calibrationCount = 0;
+    private float[] linearAccelerationCalibration = new float[]{
+            0,
+            0,
+            0
+    };
+
+    // -0.056425788, -0.0072070286, -0.0072070286
+    // -0.064609334, -0.0037402313, -0.0037402313
+    private void checkLinearAccelerationCalibration(float[] values) {
+        if (calibrationCount < CALIBRATION_COUNT) {
+            linearAccelerationCalibration[0] += values[0];
+            linearAccelerationCalibration[1] += values[1];
+            linearAccelerationCalibration[2] += values[2];
+            calibrationCount++;
+            Log.i("####", "calibrationCount: " + calibrationCount);
+        } else if (calibrationCount == CALIBRATION_COUNT) {
+            linearAccelerationCalibration[0] /= CALIBRATION_COUNT;
+            linearAccelerationCalibration[1] /= CALIBRATION_COUNT;
+            linearAccelerationCalibration[2] /= CALIBRATION_COUNT;
+            calibrationCount++;
+            Log.i("####", "linearAccelerationCalibration: " + linearAccelerationCalibration[0] + ", " + linearAccelerationCalibration[1] + ", " + linearAccelerationCalibration[2]);
+        } else {
+            calibrationCount = 0;
+            linearAccelerationCalibration[0] = 0;
+            linearAccelerationCalibration[1] = 0;
+            linearAccelerationCalibration[2] = 0;
         }
     }
 
