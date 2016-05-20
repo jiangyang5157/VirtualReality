@@ -297,7 +297,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
             head.setAccelerometerValues(event.values);
         }
         if (event.sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION) {
-            checkLinearAccelerationCalibration(event.values);
+//            checkLinearAccelerationCalibration(event.values);
             head.setLinerAccelerationValues(event.values);
         }
         if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
@@ -308,13 +308,17 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     private final int CALIBRATION_COUNT = 1024;
     private int calibrationCount = 0;
     private float[] linearAccelerationCalibration = new float[]{
-            0,
-            0,
-            0
+            -0.094960876f, 0.47013694f, 0.012373058f
     };
 
-    // -0.056425788, -0.0072070286, -0.0072070286
-    // -0.064609334, -0.0037402313, -0.0037402313
+//    05-21 00:55:46.680 2551-2551/com.gmail.jiangyang5157.cardboard.vr I/####: linearAccelerationCalibration: -0.008671884, 0.55198205, 0.035556685
+//    05-21 00:57:08.759 2551-2551/com.gmail.jiangyang5157.cardboard.vr I/####: linearAccelerationCalibration: -0.034140643, 0.5937298, 0.02614262
+//    05-21 00:58:30.842 2551-2551/com.gmail.jiangyang5157.cardboard.vr I/####: linearAccelerationCalibration: -0.057363264, 0.5488669, 0.023750026
+//    05-21 00:59:52.921 2551-2551/com.gmail.jiangyang5157.cardboard.vr I/####: linearAccelerationCalibration: -0.09416006, 0.5037602, 0.014326191
+//    05-21 01:01:15.001 2551-2551/com.gmail.jiangyang5157.cardboard.vr I/####: linearAccelerationCalibration: -0.094960876, 0.47013694, 0.012373058
+//    05-21 01:02:37.086 2551-2551/com.gmail.jiangyang5157.cardboard.vr I/####: linearAccelerationCalibration: -0.06868171, 0.40137696, 0.0056054695
+//    05-21 01:03:59.166 2551-2551/com.gmail.jiangyang5157.cardboard.vr I/####: linearAccelerationCalibration: -0.033769578, 0.4110544, 0.0053320304
+//    05-21 01:05:21.240 2551-2551/com.gmail.jiangyang5157.cardboard.vr I/####: linearAccelerationCalibration: -0.005771477, 0.30939493, 0.0069628954
     private void checkLinearAccelerationCalibration(float[] values) {
         if (calibrationCount < CALIBRATION_COUNT) {
             linearAccelerationCalibration[0] += values[0];
