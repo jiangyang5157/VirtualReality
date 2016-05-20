@@ -32,7 +32,9 @@ public class Camera {
     }
 
     public float[] getPosition() {
-        return position.clone();
+        float[] ret = new float[3];
+        System.arraycopy(position, 0, ret, 0, 3);
+        return ret;
     }
 
     protected void move(float[] v) {
