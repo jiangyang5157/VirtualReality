@@ -54,9 +54,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     private CardboardOverlayView overlayView;
 
     private SensorManager sensorManager;
-    private Sensor accelerometer;
     private Sensor linerAcceleration;
-    private Sensor mageticField;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -67,9 +65,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         }
 
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-        accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         linerAcceleration = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
-        mageticField = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
 
         setContentView(R.layout.activity_main);
 
@@ -272,14 +268,8 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     @Override
     protected void onResume() {
         super.onResume();
-        if (!sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL)) {
-            throw new UnsupportedOperationException("Accelerometer not supported");
-        }
         if (!sensorManager.registerListener(this, linerAcceleration, SensorManager.SENSOR_DELAY_NORMAL)) {
             throw new UnsupportedOperationException("LinerAcceleration not supported");
-        }
-        if (!sensorManager.registerListener(this, mageticField, SensorManager.SENSOR_DELAY_NORMAL)) {
-            throw new UnsupportedOperationException("MageticField not supported");
         }
     }
 
@@ -293,15 +283,9 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-            head.setAccelerometerValues(event.values);
-        }
         if (event.sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION) {
 //            checkLinearAccelerationCalibration(event.values);
-            head.setLinerAccelerationValues(event.values);
-        }
-        if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
-            head.setMagneticFieldValues(event.values);
+            head.setA(event.values);
         }
     }
 

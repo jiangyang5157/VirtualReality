@@ -37,9 +37,9 @@ public class Camera {
         return ret;
     }
 
-    protected void move(float[] v) {
-        Head.forward(position, v);
-        Head.forward(lookAt, v);
+    protected void move(float[] offset) {
+        Head.forward(position, offset);
+        Head.forward(lookAt, offset);
 
         Matrix.setLookAtM(matrix, 0,
                 position[0], position[1], position[2],

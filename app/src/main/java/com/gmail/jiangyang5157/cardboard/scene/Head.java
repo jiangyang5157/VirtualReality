@@ -1,6 +1,7 @@
 package com.gmail.jiangyang5157.cardboard.scene;
 
 import android.opengl.Matrix;
+import android.provider.Settings;
 import android.util.Log;
 
 import com.gmail.jiangyang5157.cardboard.scene.projection.Earth;
@@ -24,107 +25,111 @@ public class Head {
 
     public static final float MOVE_UNIT = Earth.RADIUS / 50;
 
-    private float[] accelerometerValues;
-    private float[] linerAccelerationValues;
+    private float[] linerAccelerationValues = new float[3];
     private float[] lastLinerAccelerationValues = new float[3];
-    private float[] magneticFieldValues;
 
-    private float[] v;
-    private float[] a;
+    private float[] a = new float[3];
+    private float[] lastA = new float[3];
+
+    private float[] v = new float[3];
+    private float[] lastV = new float[3];
 
     public Head() {
         camera = new Camera();
-        a = new float[3];
-        v = new float[3];
     }
 
     public void adjustPosition(Earth earth){
-        adjustVelocity();
+//
+//        a[0] = linerAccelerationValues[0] - lastLinerAccelerationValues[0];
+//        a[1] = linerAccelerationValues[1] - lastLinerAccelerationValues[1];
+//        a[2] = linerAccelerationValues[2] - lastLinerAccelerationValues[2];
+//        System.arraycopy(linerAccelerationValues, 0, lastLinerAccelerationValues, 0, 3);
 
+//        a[0] -= -0.094960876f;
+//        a[1] -= 0.47013694f;
+//        a[2] -= 0.012373058f;
+
+
+        float k = 1f;
+        if (-k < a[0] && a[0] < k){
+            a[0] = 0;
+        }
+        if (-k < a[1] && a[1] < k){
+            a[1] = 0;
+        }
+        if (-k < a[2] && a[2] < k){
+            a[2] = 0;
+        }
+
+        Log.i("####", "a: " + a[0] + "," + a[1] + "," + a[2]);
+
+        a[2] = -a[2];
+//        rotateZaxis(a, Math.toRadians(90));
+
+
+        v[0] = lastV[0] + lastA[0] + (a[0] - lastA[0]) / 2;
+        v[1] = lastV[1] + lastA[1] + (a[1] - lastA[1]) / 2;
+        v[2] = lastV[2] + lastA[2] + (a[2] - lastA[2]) / 2;
+//        v[0] = lastV[0] + lastA[0] + (a[0]) / 2;
+//        v[1] = lastV[1] + lastA[1] + (a[1]) / 2;
+//        v[2] = lastV[2] + lastA[2] + (a[2]) / 2;
+
+
+
+        float[] offset = new float[]{
+                lastV[0] + (v[0] - lastV[0]) / 2,
+                lastV[1] + (v[1] - lastV[1]) / 2,
+                lastV[2] + (v[2] - lastV[2]) / 2
+        };
+        offset[0] *= 20;
+        offset[1] *= 20;
+        offset[2] *= 20;
+
+
+        System.arraycopy(a, 0, lastA, 0, 3);
+        System.arraycopy(v, 0, lastV, 0, 3);
+
+        checkMovementEnd();
+                
         float[] pos = camera.getPosition();
-        forward(pos, v);
+        forward(pos, offset);
         if (earth.contain(pos)) {
-            camera.move(v);
+            camera.move(offset);
         }
     }
 
-    private void adjustVelocity(){
-
-//        Log.i("####", "la: " + linerAccelerationValues[0] + "," + linerAccelerationValues[1] + "," + linerAccelerationValues[2]);
-//        Log.i("####", "last la: " + lastLinerAccelerationValues[0] + "," + lastLinerAccelerationValues[1] + "," + lastLinerAccelerationValues[2]);
-        if (lastLinerAccelerationValues == null){
-            a[0] = 0;
-            a[1] = 0;
-            a[2] = 0;
-        }else{
-            a[0] = linerAccelerationValues[0] - lastLinerAccelerationValues[0];
-            a[1] = linerAccelerationValues[1] - lastLinerAccelerationValues[1];
-            a[2] = linerAccelerationValues[2] - lastLinerAccelerationValues[2];
-        }
-        lastLinerAccelerationValues[0] = linerAccelerationValues[0];
-        lastLinerAccelerationValues[1] = linerAccelerationValues[1];
-        lastLinerAccelerationValues[2] = linerAccelerationValues[2];
-
-//        Log.i("####", "a: " + a[0] + "," + a[1] + "," + a[2]);
-
-//        Log.i("####", "linerA: " + linerAccelerationValues[0] + "," + linerAccelerationValues[1] + "," + linerAccelerationValues[2]);
-//        float[] laF = new float[]{Math.round(linerAccelerationValues[0]), Math.round(linerAccelerationValues[0]), Math.round(linerAccelerationValues[2])};
-//        Log.i("####", "laF: " + laF[0] + "," + laF[1] + "," + laF[2]);
-
-//        float eulerAnglesDegree0 = (float) Math.toDegrees(eulerAngles[0]);
-//        float eulerAnglesDegree1 = (float) Math.toDegrees(eulerAngles[1]);
-//        float eulerAnglesDegree2 = (float) Math.toDegrees(eulerAngles[2]);
-//        Log.i("####", "eulerD: " + eulerAnglesDegree0 + "," + eulerAnglesDegree1 + "," + eulerAnglesDegree2);
-//        Vector3d la = new Vector3d(linerAccelerationValues[0], linerAccelerationValues[1], linerAccelerationValues[2]);
-//        la.rotateZaxis(Math.toRadians(90));
-//        double[] laD = la.getData();
-//        laD[2] = -laD[2];
-//        Log.i("####", "laD: " + laD[0] + "," + laD[1] + "," + laD[2]);
-
-
-//        laD[0] *= laD[0];
-//        laD[1] *= laD[1];
-//        laD[2] *= laD[2];
-
-//        a[0] = Math.round(a[0]);
-//        a[1] = Math.round(a[1]);
-//        a[2] = Math.round(a[2]);
-
-        float[] la = new float[3];
-        float k = 0.5f;
-        if (a[0] > k || a[0] < -k){
-            la[0] = a[0];
-        }
-        if (a[1] > k || a[1] < -k){
-            la[1] = a[1];
-        }
-        if (a[2] > k || a[2] < -k){
-            la[2] = a[2];
+    final int CHECK_MOVEMENT_COUNT = 20;
+    int[] checkMovementEndCount = new int[3];
+    private void checkMovementEnd() {
+        if (a[0] == 0) {
+            checkMovementEndCount[0]++;
+        } else {
+            checkMovementEndCount[0] = 0;
         }
 
-        Vector3d laV = new Vector3d(la[0], la[1], la[2]);
-        laV.rotateZaxis(Math.toRadians(90));
-//        laV.rotateXaxis(eulerAnglesDegree0);
-//        laV.rotateZaxis(eulerAnglesDegree1);
-//        laV.rotateZaxis(eulerAnglesDegree2);
-        double[] laD = laV.getData();
-        laD[2] = -laD[2];
-//        Log.i("####", "laD: " + laD[0] + ", " + laD[1] + ", " + laD[2]);
+        if (checkMovementEndCount[0] >= CHECK_MOVEMENT_COUNT) {
+            lastV[0] = v[0] = 0;
+        }
 
-        v[0] *= 0.9;
-        v[1] *= 0.9;
-        v[2] *= 0.9;
+        if (a[0] == 0) {
+            checkMovementEndCount[1]++;
+        } else {
+            checkMovementEndCount[1] = 0;
+        }
 
-        v[0] += (float) ((laD[0]) * Head.MOVE_UNIT);
-        v[1] += (float) ((laD[1]) * Head.MOVE_UNIT);
-        v[2] += (float) ((laD[2]) * Head.MOVE_UNIT);
+        if (checkMovementEndCount[1] >= CHECK_MOVEMENT_COUNT) {
+            lastV[1] = v[1] = 0;
+        }
 
+        if (a[2] == 0) {
+            checkMovementEndCount[2]++;
+        } else {
+            checkMovementEndCount[2] = 0;
+        }
 
-
-//        v[0] = forward[0] * Head.MOVE_UNIT;
-//        v[1] = forward[1] * Head.MOVE_UNIT;
-//        v[2] = forward[2] * Head.MOVE_UNIT;
-//        Log.i("####", "v: " + v[0] + ", " + v[1] + ", " + v[2]);
+        if (checkMovementEndCount[2] >= CHECK_MOVEMENT_COUNT) {
+            lastV[2] = v[2] = 0;
+        }
     }
 
     public Camera getCamera() {
@@ -137,27 +142,38 @@ public class Head {
         src[2] += dir[2];
     }
 
-    public void setAccelerometerValues(float[] accelerometerValues) {
-        this.accelerometerValues = accelerometerValues;
-    }
-
-    public float[] getAccelerometerValues() {
-        return accelerometerValues;
+    public void setA(float[] a) {
+        this.a = a;
     }
 
     public void setLinerAccelerationValues(float[] linerAccelerationValues) {
         this.linerAccelerationValues = linerAccelerationValues;
     }
 
-    public float[] getLinerAccelerationValues() {
-        return linerAccelerationValues;
+    public void rotateXaxis(float[] data, double radian) {
+        double sin = Math.sin(radian);
+        double cos = Math.cos(radian);
+        float y = data[1];
+        float z = data[2];
+        data[1] = (float) (y * cos + z * sin);
+        data[2] = (float) (y * -sin + z * cos);
     }
 
-    public void setMagneticFieldValues(float[] magneticFieldValues) {
-        this.magneticFieldValues = magneticFieldValues;
+    public void rotateYaxis(float[] data, double radian) {
+        double sin = Math.sin(radian);
+        double cos = Math.cos(radian);
+        float x = data[0];
+        float z = data[2];
+        data[0] = (float) (x * cos - z * sin);
+        data[2] = (float) (x * sin + z * cos);
     }
 
-    public float[] getMagneticFieldValues() {
-        return magneticFieldValues;
+    public void rotateZaxis(float[] data, double radian) {
+        double sin = Math.sin(radian);
+        double cos = Math.cos(radian);
+        float x = data[0];
+        float y = data[1];
+        data[0] = (float) (x * cos + y * sin);
+        data[1] = (float) (x * -sin + y * cos);
     }
 }
