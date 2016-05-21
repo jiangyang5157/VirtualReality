@@ -37,12 +37,6 @@ public class Head {
 
     public void adjustPosition(Earth earth){
 
-
-//        a[0] -= -0.094960876f;
-//        a[1] -= 0.47013694f;
-//        a[2] -= 0.012373058f;
-
-
         float k = 0.5f;
         if (-k < a[0] && a[0] < k){
             a[0] = 0;
@@ -63,20 +57,22 @@ public class Head {
 //        v[0] = lastV[0] + lastA[0] + (a[0] - lastA[0]) / 2;
 //        v[1] = lastV[1] + lastA[1] + (a[1] - lastA[1]) / 2;
 //        v[2] = lastV[2] + lastA[2] + (a[2] - lastA[2]) / 2;
-        v[0] = lastV[0] + (a[0] - lastA[0]) / 2;
-        v[1] = lastV[1] + (a[1] - lastA[1]) / 2;
-        v[2] = lastV[2] + (a[2] - lastA[2]) / 2;
-
-
+        v[0] = lastV[0] + (a[0] - lastA[0]);
+        v[1] = lastV[1] + (a[1] - lastA[1]);
+        v[2] = lastV[2] + (a[2] - lastA[2]);
+        Log.i("####", "v: " + v[0] + "," + v[1] + "," + v[2]);
 
         float[] offset = new float[]{
-                lastV[0] + (v[0] - lastV[0]) / 2,
-                lastV[1] + (v[1] - lastV[1]) / 2,
-                lastV[2] + (v[2] - lastV[2]) / 2
+//                lastV[0] + (v[0] - lastV[0]) / 2,
+//                lastV[1] + (v[1] - lastV[1]) / 2,
+//                lastV[2] + (v[2] - lastV[2]) / 2
+                v[0],
+                v[1],
+                v[2]
         };
-        offset[0] *= 200;
-        offset[1] *= 200;
-        offset[2] *= 200;
+        offset[0] *= MOVE_UNIT;
+        offset[1] *= MOVE_UNIT;
+        offset[2] *= MOVE_UNIT;
 
 
         System.arraycopy(a, 0, lastA, 0, 3);
