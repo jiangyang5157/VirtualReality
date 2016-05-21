@@ -25,9 +25,6 @@ public class Head {
 
     public static final float MOVE_UNIT = Earth.RADIUS / 50;
 
-    private float[] linerAccelerationValues = new float[3];
-    private float[] lastLinerAccelerationValues = new float[3];
-
     private float[] a = new float[3];
     private float[] lastA = new float[3];
 
@@ -39,18 +36,14 @@ public class Head {
     }
 
     public void adjustPosition(Earth earth){
-//
-//        a[0] = linerAccelerationValues[0] - lastLinerAccelerationValues[0];
-//        a[1] = linerAccelerationValues[1] - lastLinerAccelerationValues[1];
-//        a[2] = linerAccelerationValues[2] - lastLinerAccelerationValues[2];
-//        System.arraycopy(linerAccelerationValues, 0, lastLinerAccelerationValues, 0, 3);
+
 
 //        a[0] -= -0.094960876f;
 //        a[1] -= 0.47013694f;
 //        a[2] -= 0.012373058f;
 
 
-        float k = 1f;
+        float k = 0.5f;
         if (-k < a[0] && a[0] < k){
             a[0] = 0;
         }
@@ -63,16 +56,16 @@ public class Head {
 
         Log.i("####", "a: " + a[0] + "," + a[1] + "," + a[2]);
 
-        a[2] = -a[2];
+//        a[2] = -a[2];
 //        rotateZaxis(a, Math.toRadians(90));
 
 
-        v[0] = lastV[0] + lastA[0] + (a[0] - lastA[0]) / 2;
-        v[1] = lastV[1] + lastA[1] + (a[1] - lastA[1]) / 2;
-        v[2] = lastV[2] + lastA[2] + (a[2] - lastA[2]) / 2;
-//        v[0] = lastV[0] + lastA[0] + (a[0]) / 2;
-//        v[1] = lastV[1] + lastA[1] + (a[1]) / 2;
-//        v[2] = lastV[2] + lastA[2] + (a[2]) / 2;
+//        v[0] = lastV[0] + lastA[0] + (a[0] - lastA[0]) / 2;
+//        v[1] = lastV[1] + lastA[1] + (a[1] - lastA[1]) / 2;
+//        v[2] = lastV[2] + lastA[2] + (a[2] - lastA[2]) / 2;
+        v[0] = lastV[0] + (a[0] - lastA[0]) / 2;
+        v[1] = lastV[1] + (a[1] - lastA[1]) / 2;
+        v[2] = lastV[2] + (a[2] - lastA[2]) / 2;
 
 
 
@@ -81,9 +74,9 @@ public class Head {
                 lastV[1] + (v[1] - lastV[1]) / 2,
                 lastV[2] + (v[2] - lastV[2]) / 2
         };
-        offset[0] *= 20;
-        offset[1] *= 20;
-        offset[2] *= 20;
+        offset[0] *= 200;
+        offset[1] *= 200;
+        offset[2] *= 200;
 
 
         System.arraycopy(a, 0, lastA, 0, 3);
@@ -144,10 +137,6 @@ public class Head {
 
     public void setA(float[] a) {
         this.a = a;
-    }
-
-    public void setLinerAccelerationValues(float[] linerAccelerationValues) {
-        this.linerAccelerationValues = linerAccelerationValues;
     }
 
     public void rotateXaxis(float[] data, double radian) {
