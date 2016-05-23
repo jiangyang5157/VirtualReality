@@ -99,7 +99,7 @@ public class Head {
         float[] offset = new float[]{
 //                lastV[0] + (v[0] - lastV[0]) / 2,
 //                lastV[1] + (v[1] - lastV[1]) / 2,
-//                lastV[2] + (v[2] - lastV[2]) / 2
+//                lastV[2] + (v[2] - lastV[2]) / 2,
 //                v[0] + lastV[0] * 0.7f,
 //                v[1] + lastV[1] * 0.7f,
 //                v[2] + lastV[2] * 0.7f,
