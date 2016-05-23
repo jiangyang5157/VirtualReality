@@ -5,6 +5,7 @@ import android.provider.Settings;
 import android.util.Log;
 
 import com.gmail.jiangyang5157.cardboard.scene.projection.Earth;
+import com.gmail.jiangyang5157.tookit.math.Vector;
 import com.gmail.jiangyang5157.tookit.math.Vector3d;
 
 /**
@@ -37,7 +38,7 @@ public class Head {
 
     public void adjustPosition(Earth earth){
 
-        float k = 0.5f;
+        float k = 1.5f;
         if (-k < a[0] && a[0] < k){
             a[0] = 0;
         }
@@ -47,32 +48,68 @@ public class Head {
         if (-k < a[2] && a[2] < k){
             a[2] = 0;
         }
+        Log.i("####", "original a: " + a[0] + "," + a[1] + "," + a[2]);
 
-        Log.i("####", "a: " + a[0] + "," + a[1] + "," + a[2]);
+        a[0] = 0f;//test
+        a[1] = 0f;
+        a[2] = 0.2f;
 
-//        a[2] = -a[2];
-//        rotateZaxis(a, Math.toRadians(90));
+        float[] fixedUp = new float[]{
+                up[0] * a[0],
+                up[1] * a[0],
+                up[2] * a[0],
+        };
+        float[] fixedRight = new float[]{
+                right[0] * a[1],
+                right[1] * a[1],
+                right[2] * a[1],
+        };
+        float[] fixedForward = new float[]{
+                forward[0] * a[2],
+                forward[1] * a[2],
+                forward[2] * a[2],
+        };
+        a[0] = fixedRight[0] + fixedUp[0] + fixedForward[0];
+        a[1] = fixedRight[1] + fixedUp[1] + fixedForward[1];
+        a[2] = fixedRight[2] + fixedUp[2] + fixedForward[2];
+        Log.i("####", "fixed a: " + a[0] + "," + a[1] + "," + a[2]);
 
+
+
+        Vector lastVVec = new Vector(lastV[0], lastV[1], lastV[2]);
+        float lastVLength = (float) lastVVec.length();
 
 //        v[0] = lastV[0] + lastA[0] + (a[0] - lastA[0]) / 2;
 //        v[1] = lastV[1] + lastA[1] + (a[1] - lastA[1]) / 2;
 //        v[2] = lastV[2] + lastA[2] + (a[2] - lastA[2]) / 2;
-        v[0] = lastV[0] + (a[0] - lastA[0]);
-        v[1] = lastV[1] + (a[1] - lastA[1]);
-        v[2] = lastV[2] + (a[2] - lastA[2]);
+//        v[0] = a[0] + lastA[0] * 0.7f;
+//        v[1] = a[1] + lastA[1] * 0.7f;
+//        v[2] = a[2] + lastA[2] * 0.7f;
+//        v[0] = a[0];
+//        v[1] = a[1];
+//        v[2] = a[2];
+//        v[0] += lastV[0] * 0.7f;
+//        v[1] += lastV[1] * 0.7f;
+//        v[2] += lastV[2] * 0.7f;
+        v[0] = lastV[0] + lastA[0] + (a[0] - lastA[0]) / 2;
+        v[1] = lastV[1] + lastA[1] + (a[1] - lastA[1]) / 2;
+        v[2] = lastV[2] + lastA[2] + (a[2] - lastA[2]) / 2;
         Log.i("####", "v: " + v[0] + "," + v[1] + "," + v[2]);
 
         float[] offset = new float[]{
 //                lastV[0] + (v[0] - lastV[0]) / 2,
 //                lastV[1] + (v[1] - lastV[1]) / 2,
 //                lastV[2] + (v[2] - lastV[2]) / 2
+//                v[0] + lastV[0] * 0.7f,
+//                v[1] + lastV[1] * 0.7f,
+//                v[2] + lastV[2] * 0.7f,
                 v[0],
                 v[1],
-                v[2]
+                v[2],
         };
-        offset[0] *= MOVE_UNIT;
-        offset[1] *= MOVE_UNIT;
-        offset[2] *= MOVE_UNIT;
+        offset[0] *= 10;
+        offset[1] *= 10;
+        offset[2] *= 10;
 
 
         System.arraycopy(a, 0, lastA, 0, 3);
@@ -132,7 +169,7 @@ public class Head {
     }
 
     public void setA(float[] a) {
-        this.a = a;
+        System.arraycopy(a, 0, this.a, 0, 3);
     }
 
     public void rotateXaxis(float[] data, double radian) {
