@@ -38,8 +38,6 @@ import javax.microedition.khronos.egl.EGLConfig;
 
 public class MainActivity extends CardboardActivity implements CardboardView.StereoRenderer, SensorEventListener {
 
-    boolean debug_camer_movement;
-
     private static final String TAG = "MainActivity ####";
 
     private Head head;
@@ -75,8 +73,6 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         setCardboardView(cardboardView);
 
         overlayView = (CardboardOverlayView) findViewById(R.id.cardboard_overlay_view);
-
-        head = new Head();
     }
 
     @Override
@@ -103,9 +99,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         headTransform.getQuaternion(head.quaternion, 0);
         headTransform.getTranslation(head.translation, 0);
 
-        if (debug_camer_movement) {
-            head.adjustPosition(earth);
-        }
+        head.adjustPosition(earth);
 
         checkDialog();
 
@@ -151,9 +145,6 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         if (intersection != null) {
             if (intersection.getModel() instanceof Model.Clickable) {
                 ((Model.Clickable) intersection.getModel()).onClick(intersection.getModel());
-                debug_camer_movement = false;
-            } else {
-                debug_camer_movement = !debug_camer_movement;
             }
         }
     }
@@ -234,6 +225,8 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
     @Override
     public void onSurfaceCreated(EGLConfig eglConfig) {
+        head = new Head();
+
         ray = new Ray(this);
         ray.create();
 
@@ -246,6 +239,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
             }
         });
         earth.create();
+
         try {
             KmlLayer kmlLayer = new KmlLayer(earth, R.raw.example, getApplicationContext());
             kmlLayer.addLayerToMap();
@@ -285,7 +279,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     public void onSensorChanged(SensorEvent event) {
         if (event.sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION) {
 //            checkLinearAccelerationCalibration(event.values);
-            head.setA(event.values);
+            head.setLinearAcceleration(event.values);
         }
     }
 
@@ -295,14 +289,6 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
             -0.094960876f, 0.47013694f, 0.012373058f
     };
 
-//    05-21 00:55:46.680 2551-2551/com.gmail.jiangyang5157.cardboard.vr I/####: linearAccelerationCalibration: -0.008671884, 0.55198205, 0.035556685
-//    05-21 00:57:08.759 2551-2551/com.gmail.jiangyang5157.cardboard.vr I/####: linearAccelerationCalibration: -0.034140643, 0.5937298, 0.02614262
-//    05-21 00:58:30.842 2551-2551/com.gmail.jiangyang5157.cardboard.vr I/####: linearAccelerationCalibration: -0.057363264, 0.5488669, 0.023750026
-//    05-21 00:59:52.921 2551-2551/com.gmail.jiangyang5157.cardboard.vr I/####: linearAccelerationCalibration: -0.09416006, 0.5037602, 0.014326191
-//    05-21 01:01:15.001 2551-2551/com.gmail.jiangyang5157.cardboard.vr I/####: linearAccelerationCalibration: -0.094960876, 0.47013694, 0.012373058
-//    05-21 01:02:37.086 2551-2551/com.gmail.jiangyang5157.cardboard.vr I/####: linearAccelerationCalibration: -0.06868171, 0.40137696, 0.0056054695
-//    05-21 01:03:59.166 2551-2551/com.gmail.jiangyang5157.cardboard.vr I/####: linearAccelerationCalibration: -0.033769578, 0.4110544, 0.0053320304
-//    05-21 01:05:21.240 2551-2551/com.gmail.jiangyang5157.cardboard.vr I/####: linearAccelerationCalibration: -0.005771477, 0.30939493, 0.0069628954
     private void checkLinearAccelerationCalibration(float[] values) {
         if (calibrationCount < CALIBRATION_COUNT) {
             linearAccelerationCalibration[0] += values[0];
