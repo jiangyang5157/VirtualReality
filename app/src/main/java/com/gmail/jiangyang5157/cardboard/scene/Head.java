@@ -27,7 +27,6 @@ public class Head implements SensorEventListener {
 
     private Camera camera;
 
-//    public static final float MOVEMENT_UNIT = Earth.RADIUS / 200;
     public static final float MOVEMENT_UNIT = Earth.RADIUS / 50;
 
     private float[] linearAcceleration = new float[3];
