@@ -5,14 +5,9 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.opengl.Matrix;
-import android.provider.Settings;
 import android.util.Log;
 
 import com.gmail.jiangyang5157.cardboard.scene.projection.Earth;
-import com.gmail.jiangyang5157.tookit.math.Vector;
-import com.gmail.jiangyang5157.tookit.math.Vector3d;
-import com.google.vrtoolkit.cardboard.CardboardView;
 
 /**
  * @author Yang
@@ -30,15 +25,15 @@ public class Head implements SensorEventListener {
 
     private Camera camera;
 
-    public static final float MOVEMENT_UNIT = Earth.RADIUS / 1000;
+    public static final float MOVEMENT_UNIT = Earth.RADIUS / 100;
 
     private float[] linearAcceleration = new float[3];
 
     private float[] a = new float[3];
-    private float[] lastA = new float[3];
+    private float[] last_a = new float[3];
 
     private float[] v = new float[3];
-    private float[] lastV = new float[3];
+    private float[] last_v = new float[3];
 
     private SensorManager sensorManager;
     private Sensor accelerometer;
@@ -54,10 +49,10 @@ public class Head implements SensorEventListener {
     }
 
     public void onResume() {
-        if (!sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL)) {
+        if (!sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_GAME)) {
             throw new UnsupportedOperationException("Accelerometer not supported");
         }
-        if (!sensorManager.registerListener(this, linerAcceleration, SensorManager.SENSOR_DELAY_FASTEST)) {
+        if (!sensorManager.registerListener(this, linerAcceleration, SensorManager.SENSOR_DELAY_GAME)) { //dt ~= 0.02
             throw new UnsupportedOperationException("LinerAcceleration not supported");
         }
     }
@@ -65,10 +60,18 @@ public class Head implements SensorEventListener {
     public void onPause() {
         sensorManager.unregisterListener(this);
     }
+
+    long last_timestamp;
+    final float NS2S = 1.0f / 1000000000.0f;
     @Override
     public void onSensorChanged(SensorEvent event) {
         if (event.sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION) {
             System.arraycopy(event.values, 0, linearAcceleration, 0, 3);
+
+            float dt = (event.timestamp - last_timestamp) * NS2S;
+//            Log.i("####", "dt: " + event.timestamp + " - " + last_timestamp + " = " + dt);
+            last_timestamp = event.timestamp;
+
 //            Log.i("####", "LinerA: " + event.values[0] + "," + event.values[1] + "," + event.values[2]);
         }
 
@@ -147,31 +150,26 @@ public class Head implements SensorEventListener {
         a[2] = fixedRight[2] + fixedUp[2] + fixedForward[2];
 //        Log.i("####", "head a: " + a[0] + "," + a[1] + "," + a[2]);
 
-        //NANOSECOND_TO_SECOND = 1.0f / 1000000000.0f;
-
-//        v[0] = lastV[0] + lastA[0] + (a[0] - lastA[0]) / 2;
-//        v[1] = lastV[1] + lastA[1] + (a[1] - lastA[1]) / 2;
-//        v[2] = lastV[2] + lastA[2] + (a[2] - lastA[2]) / 2;
-        v[0] = lastV[0] + a[0];
-        v[1] = lastV[1] + a[1];
-        v[2] = lastV[2] + a[2];
+//        v[0] = last_v[0] + (last_a[0] + a[0]) / 2;
+//        v[1] = last_v[1] + (last_a[1] + a[1]) / 2;
+//        v[2] = last_v[2] + (last_a[2] + a[2]) / 2;
+        v[0] = (last_a[0] + a[0]) / 2;
+        v[1] = (last_a[1] + a[1]) / 2;
+        v[2] = (last_a[2] + a[2]) / 2;
         Log.i("####", "v: " + v[0] + "," + v[1] + "," + v[2]);
 
         float[] offset = new float[]{
-//                lastV[0] + (v[0] - lastV[0]) / 2,
-//                lastV[1] + (v[1] - lastV[1]) / 2,
-//                lastV[2] + (v[2] - lastV[2]) / 2,
-                lastV[0] + v[0],
-                lastV[0] + v[1],
-                lastV[0] + v[2],
+                (last_v[0] + v[0]) / 2,
+                (last_v[1] + v[1]) / 2,
+                (last_v[2] + v[2]) / 2,
         };
 
         offset[0] *= MOVEMENT_UNIT;
         offset[1] *= MOVEMENT_UNIT;
         offset[2] *= MOVEMENT_UNIT;
 
-        System.arraycopy(a, 0, lastA, 0, 3);
-        System.arraycopy(v, 0, lastV, 0, 3);
+        System.arraycopy(a, 0, last_a, 0, 3);
+        System.arraycopy(v, 0, last_v, 0, 3);
 
         checkMovementEnd();
 
@@ -182,9 +180,8 @@ public class Head implements SensorEventListener {
         }
     }
 
-    final int CHECK_MOVEMENT_COUNT = 20;
+    final int CHECK_MOVEMENT_COUNT = 10;
     int[] checkMovementEndCount = new int[3];
-
     private void checkMovementEnd() {
         if (a[0] == 0) {
             checkMovementEndCount[0]++;
@@ -193,7 +190,7 @@ public class Head implements SensorEventListener {
         }
 
         if (checkMovementEndCount[0] >= CHECK_MOVEMENT_COUNT) {
-            lastV[0] = v[0] = 0;
+            last_v[0] = v[0] = 0;
         }
 
         if (a[0] == 0) {
@@ -203,7 +200,7 @@ public class Head implements SensorEventListener {
         }
 
         if (checkMovementEndCount[1] >= CHECK_MOVEMENT_COUNT) {
-            lastV[1] = v[1] = 0;
+            last_v[1] = v[1] = 0;
         }
 
         if (a[2] == 0) {
@@ -213,7 +210,7 @@ public class Head implements SensorEventListener {
         }
 
         if (checkMovementEndCount[2] >= CHECK_MOVEMENT_COUNT) {
-            lastV[2] = v[2] = 0;
+            last_v[2] = v[2] = 0;
         }
     }
 
