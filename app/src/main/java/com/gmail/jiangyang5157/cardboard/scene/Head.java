@@ -30,8 +30,7 @@ public class Head implements SensorEventListener {
 
     private Camera camera;
 
-    public static final float NANOSECOND_TO_SECOND = 1.0f / 1000000000.0f;
-    public static final float MOVEMENT_UNIT = Earth.RADIUS / 500;
+    public static final float MOVEMENT_UNIT = Earth.RADIUS / 1000;
 
     private float[] linearAcceleration = new float[3];
 
@@ -106,6 +105,7 @@ public class Head implements SensorEventListener {
 
     public void adjustPosition(Earth earth) {
         System.arraycopy(linearAcceleration, 0, a, 0, 3);
+
         Log.i("####", "original a: " + a[0] + "," + a[1] + "," + a[2]);
 //        a[0] = -a[0];
 //        a[1] = -a[1];
@@ -147,21 +147,23 @@ public class Head implements SensorEventListener {
         a[2] = fixedRight[2] + fixedUp[2] + fixedForward[2];
 //        Log.i("####", "head a: " + a[0] + "," + a[1] + "," + a[2]);
 
-        v[0] = lastV[0] + lastA[0] + (a[0] - lastA[0]) / 2;
-        v[1] = lastV[1] + lastA[1] + (a[1] - lastA[1]) / 2;
-        v[2] = lastV[2] + lastA[2] + (a[2] - lastA[2]) / 2;
-//        v[0] = lastA[0] + (a[0]);
-//        v[1] = lastA[1] + (a[1]);
-//        v[2] = lastA[2] + (a[2]);
+        //NANOSECOND_TO_SECOND = 1.0f / 1000000000.0f;
+
+//        v[0] = lastV[0] + lastA[0] + (a[0] - lastA[0]) / 2;
+//        v[1] = lastV[1] + lastA[1] + (a[1] - lastA[1]) / 2;
+//        v[2] = lastV[2] + lastA[2] + (a[2] - lastA[2]) / 2;
+        v[0] = lastV[0] + a[0];
+        v[1] = lastV[1] + a[1];
+        v[2] = lastV[2] + a[2];
         Log.i("####", "v: " + v[0] + "," + v[1] + "," + v[2]);
 
         float[] offset = new float[]{
 //                lastV[0] + (v[0] - lastV[0]) / 2,
 //                lastV[1] + (v[1] - lastV[1]) / 2,
 //                lastV[2] + (v[2] - lastV[2]) / 2,
-                v[0],
-                v[1],
-                v[2]
+                lastV[0] + v[0],
+                lastV[0] + v[1],
+                lastV[0] + v[2],
         };
 
         offset[0] *= MOVEMENT_UNIT;
