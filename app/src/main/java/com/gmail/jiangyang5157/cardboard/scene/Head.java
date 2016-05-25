@@ -1,5 +1,10 @@
 package com.gmail.jiangyang5157.cardboard.scene;
 
+import android.content.Context;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.opengl.Matrix;
 import android.provider.Settings;
 import android.util.Log;
@@ -7,12 +12,13 @@ import android.util.Log;
 import com.gmail.jiangyang5157.cardboard.scene.projection.Earth;
 import com.gmail.jiangyang5157.tookit.math.Vector;
 import com.gmail.jiangyang5157.tookit.math.Vector3d;
+import com.google.vrtoolkit.cardboard.CardboardView;
 
 /**
  * @author Yang
  * @since 5/12/2016
  */
-public class Head {
+public class Head implements SensorEventListener {
 
     public float[] headView = new float[16];
     public float[] forward = new float[3];
@@ -35,9 +41,69 @@ public class Head {
     private float[] v = new float[3];
     private float[] lastV = new float[3];
 
-    public Head() {
+    private SensorManager sensorManager;
+    private Sensor accelerometer;
+    private Sensor linerAcceleration;
+
+    public Head(Context context) {
+
+        sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+        accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        linerAcceleration = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
+
         camera = new Camera();
     }
+
+    public void onResume() {
+        if (!sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL)) {
+            throw new UnsupportedOperationException("Accelerometer not supported");
+        }
+        if (!sensorManager.registerListener(this, linerAcceleration, SensorManager.SENSOR_DELAY_NORMAL)) {
+            throw new UnsupportedOperationException("LinerAcceleration not supported");
+        }
+    }
+
+    public void onPause() {
+        sensorManager.unregisterListener(this);
+    }
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        if (event.sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION) {
+//            checkLinearAccelerationCalibration(event.values);
+            setLinearAcceleration(event.values);
+            Log.i("####", "LinerA: " + event.values[0] + "," + event.values[1] + "," + event.values[2]);
+        }
+
+        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+//            Log.i("####", "Accele: " + event.values[0] + "," + event.values[1] + "," + event.values[2]);
+        }
+    }
+
+//    private final int CALIBRATION_COUNT = 1024;
+//    private int calibrationCount = 0;
+//    private float[] linearAccelerationCalibration = new float[]{
+//            -0.094960876f, 0.47013694f, 0.012373058f
+//    };
+//    private void checkLinearAccelerationCalibration(float[] values) {
+//        if (calibrationCount < CALIBRATION_COUNT) {
+//            linearAccelerationCalibration[0] += values[0];
+//            linearAccelerationCalibration[1] += values[1];
+//            linearAccelerationCalibration[2] += values[2];
+//            calibrationCount++;
+//            Log.i("####", "calibrationCount: " + calibrationCount);
+//        } else if (calibrationCount == CALIBRATION_COUNT) {
+//            linearAccelerationCalibration[0] /= CALIBRATION_COUNT;
+//            linearAccelerationCalibration[1] /= CALIBRATION_COUNT;
+//            linearAccelerationCalibration[2] /= CALIBRATION_COUNT;
+//            calibrationCount++;
+//            Log.i("####", "linearAccelerationCalibration: " + linearAccelerationCalibration[0] + ", " + linearAccelerationCalibration[1] + ", " + linearAccelerationCalibration[2]);
+//        } else {
+//            calibrationCount = 0;
+//            linearAccelerationCalibration[0] = 0;
+//            linearAccelerationCalibration[1] = 0;
+//            linearAccelerationCalibration[2] = 0;
+//        }
+//    }
 
     public void adjustPosition(Earth earth) {
         System.arraycopy(linearAcceleration, 0, a, 0, 3);
@@ -164,30 +230,34 @@ public class Head {
         System.arraycopy(linearAcceleration, 0, this.linearAcceleration, 0, 3);
     }
 
-    public void rotateXaxis(float[] data, double radian) {
-        double sin = Math.sin(radian);
-        double cos = Math.cos(radian);
-        float y = data[1];
-        float z = data[2];
-        data[1] = (float) (y * cos + z * sin);
-        data[2] = (float) (y * -sin + z * cos);
-    }
+//    public void rotateXaxis(float[] data, double radian) {
+//        double sin = Math.sin(radian);
+//        double cos = Math.cos(radian);
+//        float y = data[1];
+//        float z = data[2];
+//        data[1] = (float) (y * cos + z * sin);
+//        data[2] = (float) (y * -sin + z * cos);
+//    }
+//
+//    public void rotateYaxis(float[] data, double radian) {
+//        double sin = Math.sin(radian);
+//        double cos = Math.cos(radian);
+//        float x = data[0];
+//        float z = data[2];
+//        data[0] = (float) (x * cos - z * sin);
+//        data[2] = (float) (x * sin + z * cos);
+//    }
+//
+//    public void rotateZaxis(float[] data, double radian) {
+//        double sin = Math.sin(radian);
+//        double cos = Math.cos(radian);
+//        float x = data[0];
+//        float y = data[1];
+//        data[0] = (float) (x * cos + y * sin);
+//        data[1] = (float) (x * -sin + y * cos);
+//    }
 
-    public void rotateYaxis(float[] data, double radian) {
-        double sin = Math.sin(radian);
-        double cos = Math.cos(radian);
-        float x = data[0];
-        float z = data[2];
-        data[0] = (float) (x * cos - z * sin);
-        data[2] = (float) (x * sin + z * cos);
-    }
-
-    public void rotateZaxis(float[] data, double radian) {
-        double sin = Math.sin(radian);
-        double cos = Math.cos(radian);
-        float x = data[0];
-        float y = data[1];
-        data[0] = (float) (x * cos + y * sin);
-        data[1] = (float) (x * -sin + y * cos);
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
     }
 }

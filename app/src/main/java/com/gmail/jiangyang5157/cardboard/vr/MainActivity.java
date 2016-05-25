@@ -1,9 +1,5 @@
 package com.gmail.jiangyang5157.cardboard.vr;
 
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
 import android.os.Bundle;
@@ -28,7 +24,6 @@ import com.google.vrtoolkit.cardboard.CardboardView;
 import com.google.vrtoolkit.cardboard.Eye;
 import com.google.vrtoolkit.cardboard.HeadTransform;
 import com.google.vrtoolkit.cardboard.Viewport;
-import com.google.vrtoolkit.cardboard.sensors.HeadTracker;
 
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -36,7 +31,7 @@ import java.io.IOException;
 
 import javax.microedition.khronos.egl.EGLConfig;
 
-public class MainActivity extends CardboardActivity implements CardboardView.StereoRenderer, SensorEventListener {
+public class MainActivity extends CardboardActivity implements CardboardView.StereoRenderer {
 
     private static final String TAG = "MainActivity ####";
 
@@ -51,10 +46,6 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
     private CardboardOverlayView overlayView;
 
-    private SensorManager sensorManager;
-    private Sensor accelerometer;
-    private Sensor linerAcceleration;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,10 +53,6 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
             Toast.makeText(this, getString(R.string.error_gles_version_not_supported), Toast.LENGTH_SHORT).show();
             finish();
         }
-
-        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-        accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        linerAcceleration = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
 
         setContentView(R.layout.activity_main);
 
@@ -75,6 +62,8 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         setCardboardView(cardboardView);
 
         overlayView = (CardboardOverlayView) findViewById(R.id.cardboard_overlay_view);
+
+        head = new Head(this);
     }
 
     @Override
@@ -224,8 +213,6 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
     @Override
     public void onSurfaceCreated(EGLConfig eglConfig) {
-        head = new Head();
-
         ray = new Ray(this);
         ray.create();
 
@@ -261,63 +248,12 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     @Override
     protected void onResume() {
         super.onResume();
-        if (!sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL)) {
-            throw new UnsupportedOperationException("Accelerometer not supported");
-        }
-        if (!sensorManager.registerListener(this, linerAcceleration, SensorManager.SENSOR_DELAY_NORMAL)) {
-            throw new UnsupportedOperationException("LinerAcceleration not supported");
-        }
+        head.onResume();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        sensorManager.unregisterListener(this);
-    }
-
-
-
-    @Override
-    public void onSensorChanged(SensorEvent event) {
-        if (event.sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION) {
-//            checkLinearAccelerationCalibration(event.values);
-            head.setLinearAcceleration(event.values);
-            Log.i(TAG, "LinerA: " + event.values[0] + "," + event.values[1] + "," + event.values[2]);
-        }
-
-        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-//            Log.i(TAG, "Accele: " + event.values[0] + "," + event.values[1] + "," + event.values[2]);
-        }
-    }
-
-    private final int CALIBRATION_COUNT = 1024;
-    private int calibrationCount = 0;
-    private float[] linearAccelerationCalibration = new float[]{
-            -0.094960876f, 0.47013694f, 0.012373058f
-    };
-
-    private void checkLinearAccelerationCalibration(float[] values) {
-        if (calibrationCount < CALIBRATION_COUNT) {
-            linearAccelerationCalibration[0] += values[0];
-            linearAccelerationCalibration[1] += values[1];
-            linearAccelerationCalibration[2] += values[2];
-            calibrationCount++;
-            Log.i("####", "calibrationCount: " + calibrationCount);
-        } else if (calibrationCount == CALIBRATION_COUNT) {
-            linearAccelerationCalibration[0] /= CALIBRATION_COUNT;
-            linearAccelerationCalibration[1] /= CALIBRATION_COUNT;
-            linearAccelerationCalibration[2] /= CALIBRATION_COUNT;
-            calibrationCount++;
-            Log.i("####", "linearAccelerationCalibration: " + linearAccelerationCalibration[0] + ", " + linearAccelerationCalibration[1] + ", " + linearAccelerationCalibration[2]);
-        } else {
-            calibrationCount = 0;
-            linearAccelerationCalibration[0] = 0;
-            linearAccelerationCalibration[1] = 0;
-            linearAccelerationCalibration[2] = 0;
-        }
-    }
-
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        head.onPause();
     }
 }
