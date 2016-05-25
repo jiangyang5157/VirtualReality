@@ -25,7 +25,7 @@ public class Head implements SensorEventListener {
 
     private Camera camera;
 
-    public static final float MOVEMENT_UNIT = Earth.RADIUS / 100;
+    public static final float MOVEMENT_UNIT = Earth.RADIUS / 200;
 
     private float[] linearAcceleration = new float[3];
 
@@ -114,7 +114,7 @@ public class Head implements SensorEventListener {
 //        a[1] = -a[1];
 //        a[2] = -a[2];
 
-        float k = 1f;
+        float k = 0.5f;
 //        if (-k < a[0] && a[0] < k) {
             a[0] = 0;
 //        }
@@ -153,6 +153,9 @@ public class Head implements SensorEventListener {
 //        v[0] = last_v[0] + (last_a[0] + a[0]) / 2;
 //        v[1] = last_v[1] + (last_a[1] + a[1]) / 2;
 //        v[2] = last_v[2] + (last_a[2] + a[2]) / 2;
+//        v[0] = (last_a[0] + a[0]) / 2;
+//        v[1] = (last_a[1] + a[1]) / 2;
+//        v[2] = (last_a[2] + a[2]) / 2;
         v[0] = (last_a[0] + a[0]);
         v[1] = (last_a[1] + a[1]);
         v[2] = (last_a[2] + a[2]);
@@ -165,7 +168,6 @@ public class Head implements SensorEventListener {
                 (last_v[0] + v[0]),
                 (last_v[1] + v[1]),
                 (last_v[2] + v[2]),
-
         };
 
         offset[0] *= MOVEMENT_UNIT;
