@@ -52,6 +52,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     private CardboardOverlayView overlayView;
 
     private SensorManager sensorManager;
+    private Sensor accelerometer;
     private Sensor linerAcceleration;
 
     @Override
@@ -63,6 +64,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         }
 
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         linerAcceleration = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
 
         setContentView(R.layout.activity_main);
@@ -108,9 +110,6 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
     @Override
     public void onFinishFrame(Viewport viewport) {
-//        Log.i(TAG, "Accele: " + head.getAccelerometerValues()[0] + "," + head.getAccelerometerValues()[1] + "," + head.getAccelerometerValues()[2]);
-//        Log.i(TAG, "LinerA: " + head.getLinerAccelerationValues()[0] + "," + head.getLinerAccelerationValues()[1] + "," + head.getLinerAccelerationValues()[2]);
-//        Log.i(TAG, "Magnet: " + head.getMagneticFieldValues()[0] + "," + head.getMagneticFieldValues()[1] + "," + head.getMagneticFieldValues()[2]);
     }
 
     private void checkDialog() {
@@ -262,6 +261,9 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     @Override
     protected void onResume() {
         super.onResume();
+        if (!sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL)) {
+            throw new UnsupportedOperationException("Accelerometer not supported");
+        }
         if (!sensorManager.registerListener(this, linerAcceleration, SensorManager.SENSOR_DELAY_NORMAL)) {
             throw new UnsupportedOperationException("LinerAcceleration not supported");
         }
@@ -280,6 +282,11 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         if (event.sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION) {
 //            checkLinearAccelerationCalibration(event.values);
             head.setLinearAcceleration(event.values);
+            Log.i(TAG, "LinerA: " + event.values[0] + "," + event.values[1] + "," + event.values[2]);
+        }
+
+        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+//            Log.i(TAG, "Accele: " + event.values[0] + "," + event.values[1] + "," + event.values[2]);
         }
     }
 
