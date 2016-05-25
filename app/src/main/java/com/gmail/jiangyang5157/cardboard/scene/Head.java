@@ -15,6 +15,8 @@ import com.gmail.jiangyang5157.cardboard.scene.projection.Earth;
  */
 public class Head implements SensorEventListener {
 
+    private static final String TAG = "Head ####";
+
     public float[] headView = new float[16];
     public float[] forward = new float[3];
     public float[] eulerAngles = new float[3];
@@ -25,7 +27,8 @@ public class Head implements SensorEventListener {
 
     private Camera camera;
 
-    public static final float MOVEMENT_UNIT = Earth.RADIUS / 200;
+//    public static final float MOVEMENT_UNIT = Earth.RADIUS / 200;
+    public static final float MOVEMENT_UNIT = Earth.RADIUS / 50;
 
     private float[] linearAcceleration = new float[3];
 
@@ -69,14 +72,14 @@ public class Head implements SensorEventListener {
             System.arraycopy(event.values, 0, linearAcceleration, 0, 3);
 
             float dt = (event.timestamp - last_timestamp) * NS2S;
-//            Log.i("####", "dt: " + event.timestamp + " - " + last_timestamp + " = " + dt);
+//            Log.i(TAG, "dt: " + event.timestamp + " - " + last_timestamp + " = " + dt);
             last_timestamp = event.timestamp;
 
-//            Log.i("####", "LinerA: " + event.values[0] + "," + event.values[1] + "," + event.values[2]);
+//            Log.i(TAG, "LinerA: " + event.values[0] + "," + event.values[1] + "," + event.values[2]);
         }
 
         if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-//            Log.i("####", "Accele: " + event.values[0] + "," + event.values[1] + "," + event.values[2]);
+//            Log.i(TAG, "Accele: " + event.values[0] + "," + event.values[1] + "," + event.values[2]);
         }
     }
 
@@ -91,13 +94,13 @@ public class Head implements SensorEventListener {
 //            linearAccelerationCalibration[1] += values[1];
 //            linearAccelerationCalibration[2] += values[2];
 //            calibrationCount++;
-//            Log.i("####", "calibrationCount: " + calibrationCount);
+//            Log.i(TAG, "calibrationCount: " + calibrationCount);
 //        } else if (calibrationCount == CALIBRATION_COUNT) {
 //            linearAccelerationCalibration[0] /= CALIBRATION_COUNT;
 //            linearAccelerationCalibration[1] /= CALIBRATION_COUNT;
 //            linearAccelerationCalibration[2] /= CALIBRATION_COUNT;
 //            calibrationCount++;
-//            Log.i("####", "linearAccelerationCalibration: " + linearAccelerationCalibration[0] + ", " + linearAccelerationCalibration[1] + ", " + linearAccelerationCalibration[2]);
+//            Log.i(TAG, "linearAccelerationCalibration: " + linearAccelerationCalibration[0] + ", " + linearAccelerationCalibration[1] + ", " + linearAccelerationCalibration[2]);
 //        } else {
 //            calibrationCount = 0;
 //            linearAccelerationCalibration[0] = 0;
@@ -109,12 +112,12 @@ public class Head implements SensorEventListener {
     public void adjustPosition(Earth earth) {
         System.arraycopy(linearAcceleration, 0, a, 0, 3);
 
-        Log.i("####", "original a: " + a[0] + "," + a[1] + "," + a[2]);
+        Log.i(TAG, "original a: " + a[0] + "," + a[1] + "," + a[2]);
 //        a[0] = -a[0];
 //        a[1] = -a[1];
 //        a[2] = -a[2];
 
-        float k = 0.5f;
+        float k = 4f;
 //        if (-k < a[0] && a[0] < k) {
             a[0] = 0;
 //        }
@@ -124,11 +127,11 @@ public class Head implements SensorEventListener {
         if (-k < a[2] && a[2] < k) {
             a[2] = 0;
         }
-        Log.i("####", "a: " + a[0] + "," + a[1] + "," + a[2]);
+        Log.i(TAG, "a: " + a[0] + "," + a[1] + "," + a[2]);
 
 //        Vector aVec = new Vector(a[0], a[1], a[2]);
 //        double aVecLength = aVec.length();
-//        Log.i("####", "aVecLength: " + aVecLength);
+//        Log.i(TAG, "aVecLength: " + aVecLength);
 
         float[] fixedUp = new float[]{
                 up[0] * a[0],
@@ -148,26 +151,26 @@ public class Head implements SensorEventListener {
         a[0] = fixedRight[0] + fixedUp[0] + fixedForward[0];
         a[1] = fixedRight[1] + fixedUp[1] + fixedForward[1];
         a[2] = fixedRight[2] + fixedUp[2] + fixedForward[2];
-        Log.i("####", "head a: " + a[0] + "," + a[1] + "," + a[2]);
+        Log.i(TAG, "head a: " + a[0] + "," + a[1] + "," + a[2]);
 
 //        v[0] = last_v[0] + (last_a[0] + a[0]) / 2;
 //        v[1] = last_v[1] + (last_a[1] + a[1]) / 2;
 //        v[2] = last_v[2] + (last_a[2] + a[2]) / 2;
-//        v[0] = (last_a[0] + a[0]) / 2;
-//        v[1] = (last_a[1] + a[1]) / 2;
-//        v[2] = (last_a[2] + a[2]) / 2;
-        v[0] = (last_a[0] + a[0]);
-        v[1] = (last_a[1] + a[1]);
-        v[2] = (last_a[2] + a[2]);
-        Log.i("####", "v: " + v[0] + "," + v[1] + "," + v[2]);
+        v[0] = (last_a[0] + a[0]) / 2;
+        v[1] = (last_a[1] + a[1]) / 2;
+        v[2] = (last_a[2] + a[2]) / 2;
+//        v[0] = (last_a[0] + a[0]);
+//        v[1] = (last_a[1] + a[1]);
+//        v[2] = (last_a[2] + a[2]);
+        Log.i(TAG, "v: " + v[0] + "," + v[1] + "," + v[2]);
 
         float[] offset = new float[]{
-//                (last_v[0] + v[0]) / 2,
-//                (last_v[1] + v[1]) / 2,
-//                (last_v[2] + v[2]) / 2,
-                (last_v[0] + v[0]),
-                (last_v[1] + v[1]),
-                (last_v[2] + v[2]),
+                (last_v[0] + v[0]) / 2,
+                (last_v[1] + v[1]) / 2,
+                (last_v[2] + v[2]) / 2,
+//                (last_v[0] + v[0]),
+//                (last_v[1] + v[1]),
+//                (last_v[2] + v[2]),
         };
 
         offset[0] *= MOVEMENT_UNIT;
