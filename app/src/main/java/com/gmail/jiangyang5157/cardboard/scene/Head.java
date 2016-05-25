@@ -148,20 +148,24 @@ public class Head implements SensorEventListener {
         a[0] = fixedRight[0] + fixedUp[0] + fixedForward[0];
         a[1] = fixedRight[1] + fixedUp[1] + fixedForward[1];
         a[2] = fixedRight[2] + fixedUp[2] + fixedForward[2];
-//        Log.i("####", "head a: " + a[0] + "," + a[1] + "," + a[2]);
+        Log.i("####", "head a: " + a[0] + "," + a[1] + "," + a[2]);
 
 //        v[0] = last_v[0] + (last_a[0] + a[0]) / 2;
 //        v[1] = last_v[1] + (last_a[1] + a[1]) / 2;
 //        v[2] = last_v[2] + (last_a[2] + a[2]) / 2;
-        v[0] = (last_a[0] + a[0]) / 2;
-        v[1] = (last_a[1] + a[1]) / 2;
-        v[2] = (last_a[2] + a[2]) / 2;
+        v[0] = (last_a[0] + a[0]);
+        v[1] = (last_a[1] + a[1]);
+        v[2] = (last_a[2] + a[2]);
         Log.i("####", "v: " + v[0] + "," + v[1] + "," + v[2]);
 
         float[] offset = new float[]{
-                (last_v[0] + v[0]) / 2,
-                (last_v[1] + v[1]) / 2,
-                (last_v[2] + v[2]) / 2,
+//                (last_v[0] + v[0]) / 2,
+//                (last_v[1] + v[1]) / 2,
+//                (last_v[2] + v[2]) / 2,
+                (last_v[0] + v[0]),
+                (last_v[1] + v[1]),
+                (last_v[2] + v[2]),
+
         };
 
         offset[0] *= MOVEMENT_UNIT;
