@@ -58,7 +58,7 @@ public class Head implements SensorEventListener {
         if (!sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL)) {
             throw new UnsupportedOperationException("Accelerometer not supported");
         }
-        if (!sensorManager.registerListener(this, linerAcceleration, SensorManager.SENSOR_DELAY_NORMAL)) {
+        if (!sensorManager.registerListener(this, linerAcceleration, SensorManager.SENSOR_DELAY_FASTEST)) {
             throw new UnsupportedOperationException("LinerAcceleration not supported");
         }
     }
@@ -69,9 +69,8 @@ public class Head implements SensorEventListener {
     @Override
     public void onSensorChanged(SensorEvent event) {
         if (event.sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION) {
-//            checkLinearAccelerationCalibration(event.values);
-            setLinearAcceleration(event.values);
-            Log.i("####", "LinerA: " + event.values[0] + "," + event.values[1] + "," + event.values[2]);
+            System.arraycopy(event.values, 0, linearAcceleration, 0, 3);
+//            Log.i("####", "LinerA: " + event.values[0] + "," + event.values[1] + "," + event.values[2]);
         }
 
         if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
@@ -107,10 +106,10 @@ public class Head implements SensorEventListener {
 
     public void adjustPosition(Earth earth) {
         System.arraycopy(linearAcceleration, 0, a, 0, 3);
-        Log.i("####", "a: " + a[0] + "," + a[1] + "," + a[2]);
-        a[0] = -a[0];
-        a[1] = -a[1];
-        a[2] = -a[2];
+        Log.i("####", "original a: " + a[0] + "," + a[1] + "," + a[2]);
+//        a[0] = -a[0];
+//        a[1] = -a[1];
+//        a[2] = -a[2];
 
         float k = 1f;
 //        if (-k < a[0] && a[0] < k) {
@@ -122,7 +121,7 @@ public class Head implements SensorEventListener {
         if (-k < a[2] && a[2] < k) {
             a[2] = 0;
         }
-//        Log.i("####", "original a: " + a[0] + "," + a[1] + "," + a[2]);
+        Log.i("####", "a: " + a[0] + "," + a[1] + "," + a[2]);
 
 //        Vector aVec = new Vector(a[0], a[1], a[2]);
 //        double aVecLength = aVec.length();
@@ -154,7 +153,7 @@ public class Head implements SensorEventListener {
 //        v[0] = lastA[0] + (a[0]);
 //        v[1] = lastA[1] + (a[1]);
 //        v[2] = lastA[2] + (a[2]);
-//        Log.i("####", "v: " + v[0] + "," + v[1] + "," + v[2]);
+        Log.i("####", "v: " + v[0] + "," + v[1] + "," + v[2]);
 
         float[] offset = new float[]{
 //                lastV[0] + (v[0] - lastV[0]) / 2,
@@ -175,7 +174,7 @@ public class Head implements SensorEventListener {
         checkMovementEnd();
 
         float[] pos = camera.getPosition();
-        forward(pos, offset);
+        camera.forward(pos, offset);
         if (earth.contain(pos)) {
             camera.move(offset);
         }
@@ -218,16 +217,6 @@ public class Head implements SensorEventListener {
 
     public Camera getCamera() {
         return camera;
-    }
-
-    public static void forward(float[] src, float[] dir) {
-        src[0] += dir[0];
-        src[1] += dir[1];
-        src[2] += dir[2];
-    }
-
-    public void setLinearAcceleration(float[] linearAcceleration) {
-        System.arraycopy(linearAcceleration, 0, this.linearAcceleration, 0, 3);
     }
 
 //    public void rotateXaxis(float[] data, double radian) {

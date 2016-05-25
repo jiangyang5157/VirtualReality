@@ -38,12 +38,18 @@ public class Camera {
     }
 
     protected void move(float[] offset) {
-        Head.forward(position, offset);
-        Head.forward(lookAt, offset);
+        forward(position, offset);
+        forward(lookAt, offset);
 
         Matrix.setLookAtM(matrix, 0,
                 position[0], position[1], position[2],
                 lookAt[0], lookAt[1], lookAt[2],
                 UP[0], UP[1], UP[2]);
+    }
+
+    protected void forward(float[] src, float[] dir) {
+        src[0] += dir[0];
+        src[1] += dir[1];
+        src[2] += dir[2];
     }
 }
