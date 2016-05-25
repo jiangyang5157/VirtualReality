@@ -28,7 +28,7 @@ public class Head implements SensorEventListener {
     private Camera camera;
 
 //    public static final float MOVEMENT_UNIT = Earth.RADIUS / 200;
-    public static final float MOVEMENT_UNIT = Earth.RADIUS / 60;
+    public static final float MOVEMENT_UNIT = Earth.RADIUS / 50;
 
     private float[] linearAcceleration = new float[3];
 
@@ -113,17 +113,14 @@ public class Head implements SensorEventListener {
         System.arraycopy(linearAcceleration, 0, a, 0, 3);
 
         Log.i(TAG, "original a: " + a[0] + "," + a[1] + "," + a[2]);
-//        a[0] = -a[0];
-//        a[1] = -a[1];
-//        a[2] = -a[2];
 
-        float k = 4f;
-//        if (-k < a[0] && a[0] < k) {
+        float k = 3f;
+        if (-k < a[0] && a[0] < k) {
             a[0] = 0;
-//        }
-//        if (-k < a[1] && a[1] < k) {
+        }
+        if (-k < a[1] && a[1] < k) {
             a[1] = 0;
-//        }
+        }
         if (-k < a[2] && a[2] < k) {
             a[2] = 0;
         }
@@ -134,9 +131,9 @@ public class Head implements SensorEventListener {
 //        Log.i(TAG, "aVecLength: " + aVecLength);
 
         float[] fixedUp = new float[]{
-                up[0] * a[0],
-                up[1] * a[0],
-                up[2] * a[0],
+                up[0] * -a[0],
+                up[1] * -a[0],
+                up[2] * -a[0],
         };
         float[] fixedRight = new float[]{
                 right[0] * a[1],
