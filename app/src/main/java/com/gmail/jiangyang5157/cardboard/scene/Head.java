@@ -114,12 +114,12 @@ public class Head implements SensorEventListener {
         Log.i(TAG, "original a: " + a[0] + "," + a[1] + "," + a[2]);
 
         float k = 3f;
-        if (-k < a[0] && a[0] < k) {
+//        if (-k < a[0] && a[0] < k) {
             a[0] = 0;
-        }
-        if (-k < a[1] && a[1] < k) {
+//        }
+//        if (-k < a[1] && a[1] < k) {
             a[1] = 0;
-        }
+//        }
         if (-k < a[2] && a[2] < k) {
             a[2] = 0;
         }
