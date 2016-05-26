@@ -36,22 +36,17 @@ public class Head implements SensorEventListener {
     private float[] last_v = new float[3];
 
     private SensorManager sensorManager;
-    private Sensor accelerometer;
     private Sensor linerAcceleration;
 
     public Head(Context context) {
 
         sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
-        accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         linerAcceleration = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
 
         camera = new Camera();
     }
 
     public void onResume() {
-        if (!sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_GAME)) {
-            throw new UnsupportedOperationException("Accelerometer not supported");
-        }
         if (!sensorManager.registerListener(this, linerAcceleration, SensorManager.SENSOR_DELAY_GAME)) { //dt ~= 0.02
             throw new UnsupportedOperationException("LinerAcceleration not supported");
         }
@@ -74,14 +69,6 @@ public class Head implements SensorEventListener {
             last_timestamp = event.timestamp;
 
 //            Log.i(TAG, "LinerA: "
-//                    + event.values[0]
-//                    + "," + event.values[1]
-//                    + "," + event.values[2]
-//            );
-        }
-
-        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-//            Log.i(TAG, "Accele: "
 //                    + event.values[0]
 //                    + "," + event.values[1]
 //                    + "," + event.values[2]
