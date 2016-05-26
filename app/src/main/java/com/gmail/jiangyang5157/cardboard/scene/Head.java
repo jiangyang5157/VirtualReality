@@ -27,8 +27,6 @@ public class Head implements SensorEventListener {
 
     private Camera camera;
 
-    public static final float MOVEMENT_UNIT = Earth.RADIUS / 50;
-
     private float[] linearAcceleration = new float[3];
 
     private float[] a = new float[3];
@@ -65,6 +63,7 @@ public class Head implements SensorEventListener {
 
     long last_timestamp;
     final float NS2S = 1.0f / 1000000000.0f;
+
     @Override
     public void onSensorChanged(SensorEvent event) {
         if (event.sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION) {
@@ -74,11 +73,19 @@ public class Head implements SensorEventListener {
 //            Log.i(TAG, "dt: " + event.timestamp + " - " + last_timestamp + " = " + dt);
             last_timestamp = event.timestamp;
 
-//            Log.i(TAG, "LinerA: " + event.values[0] + "," + event.values[1] + "," + event.values[2]);
+//            Log.i(TAG, "LinerA: "
+//                    + event.values[0]
+//                    + "," + event.values[1]
+//                    + "," + event.values[2]
+//            );
         }
 
         if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-//            Log.i(TAG, "Accele: " + event.values[0] + "," + event.values[1] + "," + event.values[2]);
+//            Log.i(TAG, "Accele: "
+//                    + event.values[0]
+//                    + "," + event.values[1]
+//                    + "," + event.values[2]
+//            );
         }
     }
 
@@ -110,10 +117,15 @@ public class Head implements SensorEventListener {
 
     public void adjustPosition(Earth earth) {
         System.arraycopy(linearAcceleration, 0, a, 0, 3);
+//        Log.i(TAG, "original a: " + a[0] + "," + a[1] + "," + a[2]);
 
-        Log.i(TAG, "original a: " + a[0] + "," + a[1] + "," + a[2]);
+        Log.i(TAG, "original a: "
+//                + a[0] + ","
+//                + a[1] + ","
+                + a[2]
+        );
 
-        float k = 3f;
+        float k = 1f;
 //        if (-k < a[0] && a[0] < k) {
             a[0] = 0;
 //        }
@@ -123,11 +135,15 @@ public class Head implements SensorEventListener {
         if (-k < a[2] && a[2] < k) {
             a[2] = 0;
         }
-        Log.i(TAG, "a: " + a[0] + "," + a[1] + "," + a[2]);
+//        Log.i(TAG, "a: " + a[0] + "," + a[1] + "," + a[2]);
 
 //        Vector aVec = new Vector(a[0], a[1], a[2]);
 //        double aVecLength = aVec.length();
 //        Log.i(TAG, "aVecLength: " + aVecLength);
+
+//        a[0] = -a[0];
+//        a[1] = -a[1];
+//        a[2] = -a[2];
 
         float[] fixedUp = new float[]{
                 up[0] * -a[0],
@@ -147,28 +163,45 @@ public class Head implements SensorEventListener {
         a[0] = fixedRight[0] + fixedUp[0] + fixedForward[0];
         a[1] = fixedRight[1] + fixedUp[1] + fixedForward[1];
         a[2] = fixedRight[2] + fixedUp[2] + fixedForward[2];
-        Log.i(TAG, "head a: " + a[0] + "," + a[1] + "," + a[2]);
+//        Log.i(TAG, "head a: " + a[0] + "," + a[1] + "," + a[2]);
 
-//        v[0] = last_v[0] + (last_a[0] + a[0]) / 2;
-//        v[1] = last_v[1] + (last_a[1] + a[1]) / 2;
-//        v[2] = last_v[2] + (last_a[2] + a[2]) / 2;
-        v[0] = (last_a[0] + a[0]) / 2;
-        v[1] = (last_a[1] + a[1]) / 2;
-        v[2] = (last_a[2] + a[2]) / 2;
+        last_v[0] *= 0.9;
+        last_v[1] *= 0.9;
+        last_v[2] *= 0.9;
+        v[0] = last_v[0] + (last_a[0] + a[0]) / 2;
+        v[1] = last_v[1] + (last_a[1] + a[1]) / 2;
+        v[2] = last_v[2] + (last_a[2] + a[2]) / 2;
+//        v[0] = (last_a[0] + a[0]) / 2;
+//        v[1] = (last_a[1] + a[1]) / 2;
+//        v[2] = (last_a[2] + a[2]) / 2;
 //        v[0] = (last_a[0] + a[0]);
 //        v[1] = (last_a[1] + a[1]);
 //        v[2] = (last_a[2] + a[2]);
-        Log.i(TAG, "v: " + v[0] + "," + v[1] + "," + v[2]);
+//        v[0] = last_v[0] + (last_a[0] + a[0]);
+//        v[1] = last_v[1] + (last_a[1] + a[1]);
+//        v[2] = last_v[2] + (last_a[2] + a[2]);
+//        v[0] = last_v[0] + (a[0]);
+//        v[1] = last_v[1] + (a[1]);
+//        v[2] = last_v[2] + (a[2]);
+        Log.i(TAG, "v: "
+//                + v[0] + ","
+//                + v[1] + ","
+                + v[2]
+        );
 
         float[] offset = new float[]{
-                (last_v[0] + v[0]) / 2,
-                (last_v[1] + v[1]) / 2,
-                (last_v[2] + v[2]) / 2,
+//                (last_v[0] + v[0]) / 2,
+//                (last_v[1] + v[1]) / 2,
+//                (last_v[2] + v[2]) / 2,
 //                (last_v[0] + v[0]),
 //                (last_v[1] + v[1]),
 //                (last_v[2] + v[2]),
+                v[0],
+                v[1],
+                v[2]
         };
 
+        final float MOVEMENT_UNIT = 5;
         offset[0] *= MOVEMENT_UNIT;
         offset[1] *= MOVEMENT_UNIT;
         offset[2] *= MOVEMENT_UNIT;
@@ -176,7 +209,7 @@ public class Head implements SensorEventListener {
         System.arraycopy(a, 0, last_a, 0, 3);
         System.arraycopy(v, 0, last_v, 0, 3);
 
-        checkMovementEnd();
+//        checkMovementEnd();
 
         float[] pos = camera.getPosition();
         camera.forward(pos, offset);
@@ -198,7 +231,7 @@ public class Head implements SensorEventListener {
             last_v[0] = v[0] = 0;
         }
 
-        if (a[0] == 0) {
+        if (a[1] == 0) {
             checkMovementEndCount[1]++;
         } else {
             checkMovementEndCount[1] = 0;
