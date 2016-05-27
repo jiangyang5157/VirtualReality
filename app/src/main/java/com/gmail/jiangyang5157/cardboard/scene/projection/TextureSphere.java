@@ -222,6 +222,6 @@ public class TextureSphere extends Sphere {
         super.destroy();
         Log.d("TextureSphere", "destroy");
         GLES20.glDeleteBuffers(buffers.length, buffers, 0);
-        GLES20.glDeleteBuffers(texBuffers.length, texBuffers, 0);
+        GLES20.glDeleteTextures(texBuffers.length, texBuffers, 0);
     }
 }

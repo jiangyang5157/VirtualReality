@@ -114,8 +114,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         if (markerDialog != null) {
             ret = markerDialog.intersect(head);
             if (ret == null) {
-                // TODO: 5/14/2016 earth went black after destroy - texture confuse
-//                  markerDialog.destroy();
+                markerDialog.destroy();
                 markerDialog = null;
             }
         }
@@ -187,6 +186,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         if (earth != null) {
             earth.draw();
         }
+
         if (markerDialog != null) {
             GLES20.glDisable(GLES20.GL_CULL_FACE);
 
