@@ -8,10 +8,6 @@ import android.opengl.Matrix;
  */
 public abstract class Model {
 
-    public interface Clickable {
-        void onClick(Model model);
-    }
-
     protected static final int BYTES_PER_FLOAT = 4;
     protected static final int BYTES_PER_SHORT = 2;
 

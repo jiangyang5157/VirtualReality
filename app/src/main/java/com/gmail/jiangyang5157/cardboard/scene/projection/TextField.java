@@ -19,7 +19,7 @@ import com.gmail.jiangyang5157.tookit.app.AppUtils;
  * @author Yang
  * @since 5/8/2016
  */
-public class TextField extends Panel implements Model.Clickable {
+public class TextField extends Panel implements Intersection.Clickable {
 
     private String text;
 
@@ -29,7 +29,7 @@ public class TextField extends Panel implements Model.Clickable {
 
     private TextPaint textPaint;
 
-    private Model.Clickable onClickListener;
+    private Intersection.Clickable onClickListener;
 
     private final int[] texBuffers = new int[1];
 
@@ -100,7 +100,7 @@ public class TextField extends Panel implements Model.Clickable {
         }
     }
 
-    public void setOnClickListener(Clickable onClickListener) {
+    public void setOnClickListener(Intersection.Clickable onClickListener) {
         this.onClickListener = onClickListener;
     }
 

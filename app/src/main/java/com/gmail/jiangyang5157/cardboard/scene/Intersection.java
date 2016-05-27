@@ -13,6 +13,10 @@ public class Intersection implements Comparable {
         Intersection intersect(Head head);
     }
 
+    public interface Clickable {
+        void onClick(Model model);
+    }
+
     private final Model model;
     private final Vector cameraPosVec;
     private final Vector intersecttPosVec;

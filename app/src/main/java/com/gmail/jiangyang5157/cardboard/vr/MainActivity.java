@@ -126,13 +126,14 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     public void onCardboardTrigger() {
         final Intersection intersection = ray.getIntersection();
         if (intersection != null) {
-            if (intersection.getModel() instanceof Model.Clickable) {
-                ((Model.Clickable) intersection.getModel()).onClick(intersection.getModel());
+            if (intersection.getModel() instanceof Intersection.Clickable) {
+                ((Intersection.Clickable) intersection.getModel()).onClick(intersection.getModel());
             }
         }
     }
 
-    private Model.Clickable markerOnClickListener = new Model.Clickable() {
+    private Intersection.Clickable markerOnClickListener = new Intersection.Clickable() {
+
         @Override
         public void onClick(Model model) {
             markerDialog.setMarker((Marker) model);

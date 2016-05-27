@@ -44,7 +44,7 @@ public class Ray extends Point {
     public void setIntersection(Intersection intersection) {
         this.intersection = intersection;
 
-        if (intersection.getModel() instanceof Model.Clickable) {
+        if (intersection.getModel() instanceof Intersection.Clickable) {
             if (pointSize < POINT_SIZE_FOCUSED){
                 pointSize += POINT_SIZE_GRAdiENT_UNIT;
             }

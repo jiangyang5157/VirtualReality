@@ -4,6 +4,7 @@ import android.content.Context;
 import android.opengl.Matrix;
 
 import com.gmail.jiangyang5157.cardboard.scene.Coordinate;
+import com.gmail.jiangyang5157.cardboard.scene.Intersection;
 import com.gmail.jiangyang5157.cardboard.vr.R;
 import com.gmail.jiangyang5157.tookit.app.AppUtils;
 import com.google.android.gms.maps.model.LatLng;
@@ -12,7 +13,7 @@ import com.google.android.gms.maps.model.LatLng;
  * @author Yang
  * @since 4/12/2016.
  */
-public class Marker extends Icosphere implements Model.Clickable{
+public class Marker extends Icosphere implements Intersection.Clickable{
 
     private static final int VERTEX_SHADER_RAW_RESOURCE = R.raw.sphere_color_vertex_shader;
     private static final int FRAGMENT_SHADER_RAW_RESOURCE = R.raw.sphere_color_sphere_fragment_shader;
@@ -30,7 +31,7 @@ public class Marker extends Icosphere implements Model.Clickable{
 
     private Coordinate coordinate;
 
-    private Model.Clickable onClickListener;
+    private Intersection.Clickable onClickListener;
 
     public Marker(Context context, Earth earth) {
         this(context, earth, VERTEX_SHADER_RAW_RESOURCE, FRAGMENT_SHADER_RAW_RESOURCE);
@@ -71,7 +72,7 @@ public class Marker extends Icosphere implements Model.Clickable{
         }
     }
 
-    public void setOnClickListener(Clickable onClickListener) {
+    public void setOnClickListener(Intersection.Clickable onClickListener) {
         this.onClickListener = onClickListener;
     }
     public String getName() {

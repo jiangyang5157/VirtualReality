@@ -36,7 +36,7 @@ public class Earth extends TextureSphere {
 
     private ArrayList<Marker> markers;
 
-    private Model.Clickable onMarkerClickListener;
+    private Intersection.Clickable onMarkerClickListener;
 
     public Earth(Context context) {
         super(context, VERTEX_SHADER_RAW_RESOURCE, FRAGMENT_SHADER_RAW_RESOURCE);
@@ -135,7 +135,7 @@ public class Earth extends TextureSphere {
         return ret;
     }
 
-    public void setOnMarkerClickListener(Clickable onClickListener) {
+    public void setOnMarkerClickListener(Intersection.Clickable onClickListener) {
         this.onMarkerClickListener = onClickListener;
     }
 }
