@@ -92,7 +92,10 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
         head.adjustPosition(earth);
 
-        checkDialog();
+        if (markerDialog.getMarker() != null && !markerDialog.isProgramCreated()) {
+            markerDialog.create();
+            markerDialog.setPosition(head.getCamera().getPosition(), head.forward, head.up, head.right, head.eulerAngles);
+        }
 
         ray.setIntersection(getIntersection());
     }
@@ -101,21 +104,14 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     public void onFinishFrame(Viewport viewport) {
     }
 
-    private void checkDialog() {
-        if (markerDialog == null || markerDialog.getMarker() == null || markerDialog.isProgramCreated()) {
-            return;
-        }
-        markerDialog.create();
-        markerDialog.setPosition(head.getCamera().getPosition(), head.forward, head.up, head.right, head.eulerAngles);
-    }
-
     private Intersection getIntersection() {
         Intersection ret = null;
         if (markerDialog != null) {
             ret = markerDialog.intersect(head);
             if (ret == null) {
-                markerDialog.destroy();
-                markerDialog = null;
+                if (markerDialog.isProgramCreated()) {
+                    markerDialog.destroy();
+                }
             }
         }
         if (ret == null) {
@@ -139,7 +135,6 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     private Model.Clickable markerOnClickListener = new Model.Clickable() {
         @Override
         public void onClick(Model model) {
-            markerDialog = new MarkerDialog(getApplicationContext());
             markerDialog.setMarker((Marker) model);
         }
     };
@@ -225,6 +220,8 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
             }
         });
         earth.create();
+
+        markerDialog = new MarkerDialog(this);
 
         try {
             KmlLayer kmlLayer = new KmlLayer(earth, R.raw.example, getApplicationContext());
