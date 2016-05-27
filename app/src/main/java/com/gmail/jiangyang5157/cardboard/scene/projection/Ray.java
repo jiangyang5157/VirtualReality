@@ -44,13 +44,13 @@ public class Ray extends Point {
     public void setIntersection(Intersection intersection) {
         this.intersection = intersection;
 
-        if (intersection.getModel() instanceof Earth || intersection.getModel() instanceof Dialog) {
-            if (pointSize > POINT_SIZE_NORMAL){
-                pointSize -= POINT_SIZE_GRAdiENT_UNIT;
-            }
-        } else {
+        if (intersection.getModel() instanceof Model.Clickable) {
             if (pointSize < POINT_SIZE_FOCUSED){
                 pointSize += POINT_SIZE_GRAdiENT_UNIT;
+            }
+        } else {
+            if (pointSize > POINT_SIZE_NORMAL){
+                pointSize -= POINT_SIZE_GRAdiENT_UNIT;
             }
         }
 
