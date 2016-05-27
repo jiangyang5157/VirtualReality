@@ -68,13 +68,20 @@ public abstract class GLModel extends Model {
 
     protected Context context;
 
-    private final int vertexShaderRawResource;
-    private final int fragmentShaderRawResource;
+    private int vertexShaderRawResource;
+    private int fragmentShaderRawResource;
+
+    protected void setShaderRawResources(int vertexShaderRawResource, int fragmentShaderRawResource){
+        this.vertexShaderRawResource = vertexShaderRawResource;
+        this.fragmentShaderRawResource = fragmentShaderRawResource;
+    }
+    protected GLModel(Context context) {
+        this.context = context;
+    }
 
     protected GLModel(Context context, int vertexShaderRawResource, int fragmentShaderRawResource) {
         this.context = context;
-        this.vertexShaderRawResource = vertexShaderRawResource;
-        this.fragmentShaderRawResource = fragmentShaderRawResource;
+        setShaderRawResources(vertexShaderRawResource, fragmentShaderRawResource);
     }
 
     protected void initializeProgram(){

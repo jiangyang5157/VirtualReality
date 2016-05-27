@@ -26,6 +26,8 @@ public class Marker extends Icosphere implements Model.Clickable{
     private String name;
     private String description;
 
+    private Obj obj;
+
     private Coordinate coordinate;
 
     private Model.Clickable onClickListener;
@@ -86,5 +88,13 @@ public class Marker extends Icosphere implements Model.Clickable{
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Obj getObj() {
+        return obj;
+    }
+
+    public void setObj(Obj obj) {
+        this.obj = obj;
     }
 }

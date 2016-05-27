@@ -56,11 +56,16 @@ public class MarkerDialog extends Dialog{
             tf2.create(marker.getDescription(), WIDTH - PADDING_BOARD * 2, TEXT_SIZE_SMALL, Layout.Alignment.ALIGN_NORMAL);
             addPanel(tf2);
         }
+        if (marker.getObj() != null) {
+            TextField tf3 = new TextField(context);
+            tf3.create(marker.getObj().getTitle(), WIDTH - PADDING_BOARD * 2, TEXT_SIZE_SMALL, Layout.Alignment.ALIGN_NORMAL);
+            addPanel(tf3);
+        }
 
-        TextField tf3 = new TextField(context);
-        tf3.create("3rdasdfghjklqasdasdasdasdasdsadasdasdasdasdhj5h9348huigne-9asd80435tasunzxbwe]]t,rtyrdyrtybsgpoweir/das/[asd]]1234567890'",
+        TextField tfTest = new TextField(context);
+        tfTest.create("3rdasdfghjklqasd\nasdas\ndasdasdsnadasdasdasdasdhj5h9348huigne-9asd80435tasunnzxbwe]]t,rtyrdyrtybsgpoweir/das/[asd]]1234567890'",
                 WIDTH - PADDING_BOARD * 2, TEXT_SIZE_TINY, Layout.Alignment.ALIGN_NORMAL);
-        addPanel(tf3);
+        addPanel(tfTest);
     }
 
     private void adjustBounds() {
