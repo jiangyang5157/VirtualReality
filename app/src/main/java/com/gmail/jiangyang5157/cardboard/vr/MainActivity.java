@@ -242,6 +242,12 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
         earth = new Earth(this);
         earth.setOnMarkerClickListener(markerOnClickListener);
+        earth.setLighting(new Lighting() {
+            @Override
+            public float[] getLightPosInCameraSpace() {
+                return lightPosInCameraSpace;
+            }
+        });
         earth.setMarkerLighting(new Lighting() {
             @Override
             public float[] getLightPosInCameraSpace() {

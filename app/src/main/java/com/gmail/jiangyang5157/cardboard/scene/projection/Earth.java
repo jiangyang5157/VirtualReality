@@ -1,6 +1,7 @@
 package com.gmail.jiangyang5157.cardboard.scene.projection;
 
 import android.content.Context;
+import android.opengl.Matrix;
 import android.util.Log;
 
 import com.gmail.jiangyang5157.cardboard.kml.KmlPlacemark;
@@ -90,7 +91,7 @@ public class Earth extends TextureSphere {
         marker.create(MARKER_RADIUS, latLng, MARKER_ALTITUDE);
         marker.setName(kmlPlacemark.getProperty("name"));
         marker.setDescription(kmlPlacemark.getProperty("description"));
-        marker.setLighting(lighting);
+        marker.setLighting(markerLighting);
 
         String objProperty = kmlPlacemark.getProperty("obj");
         if (objProperty != null) {

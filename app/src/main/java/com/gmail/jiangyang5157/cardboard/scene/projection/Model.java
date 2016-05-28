@@ -36,7 +36,6 @@ public abstract class Model {
         Matrix.setIdentityM(model, 0);
 
         Matrix.multiplyMM(model, 0, rotation, 0, model, 0);
-
         Matrix.scaleM(model, 0, scale, scale, scale);
         Matrix.multiplyMM(model, 0, translation, 0, model, 0);
 

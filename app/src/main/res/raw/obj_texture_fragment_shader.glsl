@@ -11,13 +11,10 @@ void main()
 {
     vec3 lightVec = normalize(u_LightPos - v_Position);
 
-    float diffuse = max(dot(v_Normal, lightVec), 0.1);
+    float diffuse = max(dot(v_Normal, lightVec), 0.0);
 
     float distance = length(u_LightPos - v_Position);
-    diffuse = diffuse * (1.0 / (1.0 + (0.0001 * distance * distance)));
-
-    diffuse += 0.9;
-    diffuse = min(diffuse, 1.0);
+    diffuse = diffuse * (1.0 / (1.0 + (0.02 * distance * distance)));
 
     gl_FragColor = texture2D(u_TexId, v_texCoord) * diffuse;
 }

@@ -20,7 +20,7 @@ public class Marker extends Icosphere implements Intersection.Clickable{
 
     private static final int DEFAULT_RECURSION_LEVEL = 3;
 
-    private static final int COLOR_NORMAL_RES_ID = com.gmail.jiangyang5157.tookit.R.color.LightBlue;
+    private static final int COLOR_NORMAL_RES_ID = com.gmail.jiangyang5157.tookit.R.color.Green;
 
     private final Earth earth;
 
