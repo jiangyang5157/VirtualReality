@@ -1,7 +1,6 @@
 package com.gmail.jiangyang5157.cardboard.scene.projection;
 
 import android.content.Context;
-import android.graphics.Color;
 
 import com.gmail.jiangyang5157.cardboard.vr.R;
 
