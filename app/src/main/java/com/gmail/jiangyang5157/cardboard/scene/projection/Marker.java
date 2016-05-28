@@ -48,9 +48,9 @@ public class Marker extends Icosphere implements Intersection.Clickable{
     }
 
     public void setLocation(LatLng latlng, float altitude) {
-        Matrix.setIdentityM(model, 0);
         this.coordinate = new Coordinate(latlng.latitude, latlng.longitude, altitude, this.earth.getRadius());
-        Matrix.translateM(model, 0,
+        Matrix.setIdentityM(translation, 0);
+        Matrix.translateM(translation, 0,
                 (float) coordinate.ecef[0],
                 (float) coordinate.ecef[1],
                 (float) coordinate.ecef[2]);

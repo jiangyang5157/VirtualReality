@@ -36,11 +36,6 @@ public class Ray extends Point {
         create(AppUtils.getColor(context, COLOR_RES_ID));
     }
 
-    public void setPosition(float[] position) {
-        Matrix.setIdentityM(model, 0);
-        Matrix.translateM(model, 0, position[0], position[1], position[2]);
-    }
-
     public void setIntersection(Intersection intersection) {
         this.intersection = intersection;
 
@@ -54,10 +49,11 @@ public class Ray extends Point {
             }
         }
 
-        Matrix.setIdentityM(model, 0);
         Vector i_camera = intersection.getCameraPosVec().minus(intersection.getIntersecttPosVec());
         double[] rayPos = new Vector(intersection.getIntersecttPosVec().plus(i_camera.direction().times(Ray.SPACE))).getData();
-        setPosition(new float[]{(float) rayPos[0], (float) rayPos[1], (float) rayPos[2]});
+
+        Matrix.setIdentityM(translation, 0);
+        Matrix.translateM(translation, 0, (float) rayPos[0], (float) rayPos[1], (float) rayPos[2]);
     }
 
     public Intersection getIntersection() {

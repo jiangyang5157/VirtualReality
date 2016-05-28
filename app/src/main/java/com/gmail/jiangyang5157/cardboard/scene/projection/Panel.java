@@ -62,14 +62,16 @@ public abstract class Panel extends Rectangle {
         trVec = new Vector3d(trVec.plus(positionVec));
         brVec = new Vector3d(brVec.plus(positionVec));
 
-        Matrix.setIdentityM(model, 0);
-        Matrix.translateM(model, 0, (float) positionVec.getData()[0], (float) positionVec.getData()[1], (float) positionVec.getData()[2]);
+        Matrix.setIdentityM(translation, 0);
+        Matrix.translateM(translation, 0, (float) positionVec.getData()[0], (float) positionVec.getData()[1], (float) positionVec.getData()[2]);
         float eulerAnglesDegree0 = (float) Math.toDegrees(eulerAngles[0]);
         float eulerAnglesDegree1 = (float) Math.toDegrees(eulerAngles[1]);
         float eulerAnglesDegree2 = (float) Math.toDegrees(eulerAngles[2]);
-        Matrix.rotateM(model, 0, eulerAnglesDegree1, 0, 1f, 0);
-        Matrix.rotateM(model, 0, eulerAnglesDegree0, 1f, 0, 0);
-        Matrix.rotateM(model, 0, eulerAnglesDegree2, 0, 0f, 1f);
+
+        Matrix.setIdentityM(rotation, 0);
+        Matrix.rotateM(rotation, 0, eulerAnglesDegree1, 0, 1f, 0);
+        Matrix.rotateM(rotation, 0, eulerAnglesDegree0, 1f, 0, 0);
+        Matrix.rotateM(rotation, 0, eulerAnglesDegree2, 0, 0f, 1f);
     }
 
     @Override

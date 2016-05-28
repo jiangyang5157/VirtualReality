@@ -72,14 +72,13 @@ public abstract class GLModel extends Model {
     private final int fragmentShaderRawResource;
 
     protected GLModel(Context context, int vertexShaderRawResource, int fragmentShaderRawResource) {
+        super();
         this.context = context;
         this.vertexShaderRawResource = vertexShaderRawResource;
         this.fragmentShaderRawResource = fragmentShaderRawResource;
     }
 
     protected void initializeProgram(){
-        Matrix.setIdentityM(model, 0);
-
         program = GLES20.glCreateProgram();
         GLES20.glAttachShader(program, compileShader(GLES20.GL_VERTEX_SHADER, vertexShaderRawResource));
         GLES20.glAttachShader(program, compileShader(GLES20.GL_FRAGMENT_SHADER, fragmentShaderRawResource));
