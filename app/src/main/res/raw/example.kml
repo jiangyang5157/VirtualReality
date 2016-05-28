@@ -52,7 +52,7 @@
                    <value>this is the title for the obj model</value>
                 </Data>
                 <Data name="obj">
-                    <value>../example.obj</value>
+                    <value>cube</value>
                 </Data>
             </ExtendedData>
             <Point>

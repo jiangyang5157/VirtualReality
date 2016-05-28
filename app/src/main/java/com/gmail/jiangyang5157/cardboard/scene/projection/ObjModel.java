@@ -1,8 +1,12 @@
 package com.gmail.jiangyang5157.cardboard.scene.projection;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.gmail.jiangyang5157.cardboard.vr.R;
+import com.gmail.jiangyang5157.tookit.app.AppUtils;
+
+import java.io.InputStream;
 
 /**
  * @author Yang
@@ -17,7 +21,6 @@ public class ObjModel extends GLModel {
 
     private String title;
     private String obj;
-    private String data;
 
     protected ObjModel(Context context, String title, String obj) {
         super(context, VERTEX_SHADER_RAW_RESOURCE, FRAGMENT_SHADER_RAW_RESOURCE);
@@ -27,10 +30,9 @@ public class ObjModel extends GLModel {
     }
 
     public void create() {
-        //todo
-
         setColor(COLOR_NORMAL_RES_ID);
 
+        InputStream ins = context.getResources().openRawResource(context.getResources().getIdentifier(obj, "raw", context.getPackageName()));
 
 //        initializeProgram();
 //
@@ -38,7 +40,8 @@ public class ObjModel extends GLModel {
 //        bindBuffers();
 
 
-        setVisible(true);
+        program = -1;
+//        setVisible(true);
     }
 
     @Override
@@ -64,14 +67,4 @@ public class ObjModel extends GLModel {
     public String getTitle() {
         return title;
     }
-
-
-    public String getData() {
-        return data;
-    }
-
-    public void setData(String data){
-        this.data = data;
-    }
-
 }
