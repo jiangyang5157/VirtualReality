@@ -1,6 +1,7 @@
 package com.gmail.jiangyang5157.cardboard.scene.projection;
 
 import android.content.Context;
+import android.media.UnsupportedSchemeException;
 import android.opengl.GLES20;
 import android.util.Log;
 
@@ -8,12 +9,15 @@ import com.gmail.jiangyang5157.cardboard.vr.R;
 import com.gmail.jiangyang5157.tookit.data.text.IoUtils;
 
 import java.io.InputStream;
+import java.nio.charset.UnsupportedCharsetException;
 
 /**
  * @author Yang
  * @since 5/27/2016
  */
 public class ObjModel extends GLModel {
+
+    private static final String TAG = "ObjModel ####";
 
     private static final int VERTEX_SHADER_RAW_RESOURCE = R.raw.obj_color_vertex_shader;
     private static final int FRAGMENT_SHADER_RAW_RESOURCE = R.raw.obj_color_fragment_shader;
@@ -51,16 +55,32 @@ public class ObjModel extends GLModel {
         IoUtils.read(ins, new IoUtils.OnReadingListener() {
             @Override
             public boolean onReadLine(String line) {
-                if(line == null) {
+                if (line == null) {
                     return false;
                 } else {
-                    Log.i("####", line);
+                    // http://paulbourke.net/dataformats/obj/
+                    Log.i(TAG, line);
+                    if (line.startsWith("v")) {
+                        parserGeometricVertices(line);
+                    } else if (line.startsWith("f")) {
+                        parserFace(line);
+                    } else {
+                        Log.i(TAG, "Unsupported regex: " + line);
+                    }
                     return true;
                 }
             }
         });
 
 
+    }
+
+    private void parserGeometricVertices(String line) {
+
+    }
+
+
+    private void parserFace(String line) {
 
     }
 
