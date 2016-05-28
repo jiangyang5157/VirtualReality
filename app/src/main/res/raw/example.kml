@@ -49,7 +49,7 @@
             <description>descriptiondescription</description>
             <ExtendedData>
                 <Data name="title">
-                   <value>this is the title for the obj model</value>
+                   <value>cube obj model</value>
                 </Data>
                 <Data name="obj">
                     <value>cube</value>
@@ -62,6 +62,14 @@
         <Placemark>
             <name>-90/0</name>
             <description>descriptiondescription</description>
+            <ExtendedData>
+                <Data name="title">
+                   <value>cow obj model</value>
+                </Data>
+                <Data name="obj">
+                    <value>cow</value>
+                </Data>
+            </ExtendedData>
             <Point>
                 <coordinates>-90,0</coordinates>
             </Point>
@@ -69,6 +77,14 @@
         <Placemark>
             <name>-180/0</name>
             <description>descriptiondescription</description>
+            <ExtendedData>
+                <Data name="title">
+                   <value>teapot obj model</value>
+                </Data>
+                <Data name="obj">
+                    <value>teapot</value>
+                </Data>
+            </ExtendedData>
             <Point>
                 <coordinates>-180,0</coordinates>
             </Point>
