@@ -163,25 +163,25 @@ public class IcosphereVertex implements Geometry {
         vertices[indexOffset + 2] = z / length;
     }
 
-    protected float[] scale(float factor) {
-        if (vertices == null) {
+    protected static float[] scale(float[] src, float factor) {
+        if (src == null) {
             throw new RuntimeException("Array has not been initialized.");
         }
 
         float[] ret;
         if (factor == 1.0f) {
-            ret = getArrayCopy(vertices);
+            ret = getArrayCopy(src);
         } else {
-            final int LENGTH = vertices.length;
+            final int LENGTH = src.length;
             ret = new float[LENGTH];
             for (int i = 0; i < LENGTH; i++) {
-                ret[i] = vertices[i] * factor;
+                ret[i] = src[i] * factor;
             }
         }
         return ret;
     }
 
-    public float[] getArrayCopy(float[] src) {
+    public static float[] getArrayCopy(float[] src) {
         final int LENGTH = src.length;
         float[] ret = new float[LENGTH];
         for (int i = 0; i < LENGTH; i++) {
@@ -190,7 +190,7 @@ public class IcosphereVertex implements Geometry {
         return ret;
     }
 
-    public short[] getArrayCopy(short[] src) {
+    public static short[] getArrayCopy(short[] src) {
         final int LENGTH = src.length;
         short[] ret = new short[LENGTH];
         for (int i = 0; i < LENGTH; i++) {

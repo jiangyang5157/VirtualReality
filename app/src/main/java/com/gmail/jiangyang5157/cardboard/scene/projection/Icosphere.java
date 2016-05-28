@@ -41,9 +41,11 @@ public class Icosphere extends Sphere {
     @Override
     protected void buildArrays() {
         IcosphereVertex icosphereVertex = IcosphereBuilder.getInstance().build(recursionLevel);
-        indices = icosphereVertex.getArrayCopy(icosphereVertex.getIndices());
-        normals = icosphereVertex.getArrayCopy(icosphereVertex.getVertices());
-        vertices = icosphereVertex.scale(radius);
+
+        indices = IcosphereVertex.getArrayCopy(icosphereVertex.getIndices());
+        normals = IcosphereVertex.getArrayCopy(icosphereVertex.getVertices());
+        vertices = IcosphereVertex.getArrayCopy(icosphereVertex.getVertices());
+        vertices = IcosphereVertex.scale(vertices, radius);
     }
 
     @Override
