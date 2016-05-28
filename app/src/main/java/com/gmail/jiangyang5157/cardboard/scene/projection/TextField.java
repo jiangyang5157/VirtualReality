@@ -84,8 +84,8 @@ public class TextField extends Panel implements Intersection.Clickable {
     }
 
     @Override
-    public Intersection intersect(Head head) {
-        return super.intersect(head);
+    public Intersection onIntersect(Head head) {
+        return super.onIntersect(head);
     }
 
     @Override

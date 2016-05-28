@@ -10,7 +10,7 @@ import com.gmail.jiangyang5157.tookit.math.Vector;
 public class Intersection implements Comparable {
 
     public interface Intersectable {
-        Intersection intersect(Head head);
+        Intersection onIntersect(Head head);
     }
 
     public interface Clickable {

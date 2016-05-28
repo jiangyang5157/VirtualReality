@@ -11,6 +11,7 @@ import com.gmail.jiangyang5157.cardboard.scene.Camera;
 import com.gmail.jiangyang5157.cardboard.scene.Intersection;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
 import com.gmail.jiangyang5157.cardboard.scene.projection.Model;
+import com.gmail.jiangyang5157.cardboard.scene.projection.Obj;
 import com.gmail.jiangyang5157.cardboard.scene.projection.Ray;
 import com.gmail.jiangyang5157.cardboard.scene.projection.Earth;
 import com.gmail.jiangyang5157.cardboard.scene.projection.Marker;
@@ -107,7 +108,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     private Intersection getIntersection() {
         Intersection ret = null;
         if (markerDialog != null) {
-            ret = markerDialog.intersect(head);
+            ret = markerDialog.onIntersect(head);
             if (ret == null) {
                 if (markerDialog.isProgramCreated()) {
                     markerDialog.destroy();
@@ -116,7 +117,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         }
         if (ret == null) {
             if (earth != null) {
-                ret = earth.intersect(head);
+                ret = earth.onIntersect(head);
             }
         }
         return ret;
@@ -137,6 +138,13 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         @Override
         public void onClick(Model model) {
             markerDialog.setMarker((Marker) model);
+        }
+    };
+
+    private MarkerDialog.Event markerDialogEventListener = new MarkerDialog.Event() {
+        @Override
+        public void showObj(Obj obj) {
+            //// TODO: 5/28/2016
         }
     };
 
@@ -223,6 +231,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         earth.create();
 
         markerDialog = new MarkerDialog(this);
+        markerDialog.setEventListener(markerDialogEventListener);
 
         try {
             KmlLayer kmlLayer = new KmlLayer(earth, R.raw.example, getApplicationContext());

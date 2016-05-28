@@ -83,7 +83,7 @@ public abstract class Dialog extends Panel {
     }
 
     @Override
-    public Intersection intersect(Head head) {
+    public Intersection onIntersect(Head head) {
         if (!isVisible) {
             return null;
         }
@@ -91,7 +91,7 @@ public abstract class Dialog extends Panel {
 
         ArrayList<Intersection> intersections = new ArrayList<Intersection>();
         for (final Panel panel : panels) {
-            Intersection intersection = panel.intersect(head);
+            Intersection intersection = panel.onIntersect(head);
             if (intersection != null) {
                 intersections.add(intersection);
             }
@@ -100,7 +100,7 @@ public abstract class Dialog extends Panel {
         if (intersections.size() > 0) {
             ret = intersections.get(0);
         } else {
-            ret = super.intersect(head);
+            ret = super.onIntersect(head);
         }
 
         return ret;

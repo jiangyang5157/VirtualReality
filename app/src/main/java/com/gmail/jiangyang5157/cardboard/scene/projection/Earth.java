@@ -1,7 +1,6 @@
 package com.gmail.jiangyang5157.cardboard.scene.projection;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.util.Log;
 
 import com.gmail.jiangyang5157.cardboard.kml.KmlPlacemark;
@@ -112,7 +111,7 @@ public class Earth extends TextureSphere {
     }
 
     @Override
-    public Intersection intersect(Head head) {
+    public Intersection onIntersect(Head head) {
         if (!isVisible) {
             return null;
         }
@@ -120,7 +119,7 @@ public class Earth extends TextureSphere {
 
         ArrayList<Intersection> intersections = new ArrayList<Intersection>();
         for (final Marker mark : markers) {
-            Intersection intersection = mark.intersect(head);
+            Intersection intersection = mark.onIntersect(head);
             if (intersection != null) {
                 intersections.add(intersection);
             }
@@ -129,7 +128,7 @@ public class Earth extends TextureSphere {
         if (intersections.size() > 0) {
             ret = intersections.get(0);
         } else {
-            ret = super.intersect(head);
+            ret = super.onIntersect(head);
         }
 
         return ret;

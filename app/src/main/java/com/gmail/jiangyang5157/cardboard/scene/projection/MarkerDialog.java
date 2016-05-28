@@ -3,13 +3,20 @@ package com.gmail.jiangyang5157.cardboard.scene.projection;
 import android.content.Context;
 import android.text.Layout;
 
+import com.gmail.jiangyang5157.cardboard.scene.Head;
+import com.gmail.jiangyang5157.cardboard.scene.Intersection;
 import com.gmail.jiangyang5157.tookit.app.AppUtils;
 
 /**
  * @author Yang
  * @since 5/13/2016
  */
-public class MarkerDialog extends Dialog{
+public class MarkerDialog extends Dialog {
+
+    private Event eventListener;
+    public interface Event {
+        void showObj(Obj obj);
+    }
 
     private static final float TEXT_SIZE_LARGE = 12f;
     private static final float TEXT_SIZE_MEDIUM = 10f;
@@ -60,6 +67,15 @@ public class MarkerDialog extends Dialog{
             TextField tf3 = new TextField(context);
             tf3.create(marker.getObj().getTitle(), WIDTH - PADDING_BOARD * 2, TEXT_SIZE_SMALL, Layout.Alignment.ALIGN_NORMAL);
             addPanel(tf3);
+
+            tf3.setOnClickListener(new Intersection.Clickable() {
+                @Override
+                public void onClick(Model model) {
+                    if (eventListener != null){
+                        eventListener.showObj(marker.getObj());
+                    }
+                }
+            });
         }
 
         TextField tfTest = new TextField(context);
@@ -97,7 +113,7 @@ public class MarkerDialog extends Dialog{
         cameraPos[1] -= up[1] * PADDING_BOARD;
         cameraPos[2] -= up[2] * PADDING_BOARD;
 
-        for (Panel panel : panels){
+        for (Panel panel : panels) {
             cameraPos[0] -= up[0] * panel.height / 2;
             cameraPos[1] -= up[1] * panel.height / 2;
             cameraPos[2] -= up[2] * panel.height / 2;
@@ -112,5 +128,13 @@ public class MarkerDialog extends Dialog{
             cameraPos[1] -= up[1] * PADDING_BOARD;
             cameraPos[2] -= up[2] * PADDING_BOARD;
         }
+    }
+
+    public Event getEventListener() {
+        return eventListener;
+    }
+
+    public void setEventListener(Event eventListener) {
+        this.eventListener = eventListener;
     }
 }
