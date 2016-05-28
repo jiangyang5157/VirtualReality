@@ -60,9 +60,9 @@ public class ObjModel extends GLModel {
                 } else {
                     // http://paulbourke.net/dataformats/obj/
                     Log.i(TAG, line);
-                    if (line.startsWith("v")) {
+                    if (line.startsWith("v ")) {
                         parserGeometricVertices(line);
-                    } else if (line.startsWith("f")) {
+                    } else if (line.startsWith("f ")) {
                         parserFace(line);
                     } else {
                         Log.i(TAG, "Unsupported regex: " + line);
@@ -76,12 +76,20 @@ public class ObjModel extends GLModel {
     }
 
     private void parserGeometricVertices(String line) {
-
+        String[] tokens = line.split("[ ]+");
+        int length = tokens.length;
+        for (int i = 1; i < length; i++) {
+            Log.i(TAG, "parserGeometricVertices: " + tokens[i]);
+        }
     }
 
 
     private void parserFace(String line) {
-
+        String[] tokens = line.split("[ ]+");
+        int length = tokens.length;
+        for (int i = 1; i < length; i++) {
+            Log.i(TAG, "parserFace: " + tokens[i]);
+        }
     }
 
     @Override
