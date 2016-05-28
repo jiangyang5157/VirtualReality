@@ -48,14 +48,11 @@
             <name>90/0</name>
             <description>descriptiondescription</description>
             <ExtendedData>
-                <Data name="obj">
-                    <value>../example.obj</value>
-                </Data>
                 <Data name="title">
                    <value>this is the title for the obj model</value>
                 </Data>
-                <Data name="color">
-                    <value>#AA1111</value>
+                <Data name="obj">
+                    <value>../example.obj</value>
                 </Data>
             </ExtendedData>
             <Point>

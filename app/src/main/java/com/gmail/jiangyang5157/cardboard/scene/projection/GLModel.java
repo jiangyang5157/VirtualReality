@@ -68,20 +68,13 @@ public abstract class GLModel extends Model {
 
     protected Context context;
 
-    private int vertexShaderRawResource;
-    private int fragmentShaderRawResource;
-
-    protected void setShaderRawResources(int vertexShaderRawResource, int fragmentShaderRawResource){
-        this.vertexShaderRawResource = vertexShaderRawResource;
-        this.fragmentShaderRawResource = fragmentShaderRawResource;
-    }
-    protected GLModel(Context context) {
-        this.context = context;
-    }
+    private final int vertexShaderRawResource;
+    private final int fragmentShaderRawResource;
 
     protected GLModel(Context context, int vertexShaderRawResource, int fragmentShaderRawResource) {
         this.context = context;
-        setShaderRawResources(vertexShaderRawResource, fragmentShaderRawResource);
+        this.vertexShaderRawResource = vertexShaderRawResource;
+        this.fragmentShaderRawResource = fragmentShaderRawResource;
     }
 
     protected void initializeProgram(){
@@ -131,6 +124,10 @@ public abstract class GLModel extends Model {
     protected abstract void buildArrays();
 
     protected abstract void bindBuffers();
+
+   public void setColor(String hex){
+       setColor(Color.parseColor(hex));
+   }
 
     public void setColor(int hex) {
         int r = (hex >> 16) & 0xFF;

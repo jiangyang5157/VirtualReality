@@ -11,7 +11,7 @@ import com.gmail.jiangyang5157.cardboard.scene.Camera;
 import com.gmail.jiangyang5157.cardboard.scene.Intersection;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
 import com.gmail.jiangyang5157.cardboard.scene.projection.Model;
-import com.gmail.jiangyang5157.cardboard.scene.projection.Obj;
+import com.gmail.jiangyang5157.cardboard.scene.projection.ObjModel;
 import com.gmail.jiangyang5157.cardboard.scene.projection.Ray;
 import com.gmail.jiangyang5157.cardboard.scene.projection.Earth;
 import com.gmail.jiangyang5157.cardboard.scene.projection.Marker;
@@ -44,6 +44,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     private Earth earth;
     private Ray ray;
     private MarkerDialog markerDialog;
+    private ObjModel objModel;
 
     private CardboardOverlayView overlayView;
 
@@ -70,6 +71,9 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (objModel != null){
+            objModel.destroy();
+        }
         if (markerDialog != null) {
             markerDialog.destroy();
         }
@@ -93,9 +97,13 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
         head.adjustPosition(earth);
 
-        if (markerDialog.getMarker() != null && !markerDialog.isProgramCreated()) {
+        if (markerDialog != null && !markerDialog.isProgramCreated()) {
             markerDialog.create();
             markerDialog.setPosition(head.getCamera().getPosition(), head.forward, head.up, head.right, head.eulerAngles);
+        }
+
+        if (objModel != null && !objModel.isProgramCreated()){
+            objModel.create();
         }
 
         ray.setIntersection(getIntersection());
@@ -107,19 +115,23 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
     private Intersection getIntersection() {
         Intersection ret = null;
+
         if (markerDialog != null) {
             ret = markerDialog.onIntersect(head);
             if (ret == null) {
                 if (markerDialog.isProgramCreated()) {
                     markerDialog.destroy();
+                    markerDialog = null;
                 }
             }
         }
+
         if (ret == null) {
             if (earth != null) {
                 ret = earth.onIntersect(head);
             }
         }
+
         return ret;
     }
 
@@ -137,14 +149,15 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
         @Override
         public void onClick(Model model) {
-            markerDialog.setMarker((Marker) model);
+            markerDialog = new MarkerDialog(getApplicationContext(), (Marker) model);
+            markerDialog.setEventListener(markerDialogEventListener);
         }
     };
 
     private MarkerDialog.Event markerDialogEventListener = new MarkerDialog.Event() {
         @Override
-        public void showObj(Obj obj) {
-            //// TODO: 5/28/2016
+        public void showObjModel(ObjModel model) {
+            objModel = model;
         }
     };
 
@@ -175,6 +188,9 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         if (markerDialog != null) {
             markerDialog.update(view, perspective);
         }
+        if (objModel != null){
+            objModel.update(view, perspective);
+        }
     }
 
     private void drawScene() {
@@ -200,6 +216,10 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
             GLES20.glDisable(GLES20.GL_BLEND);
 
             GLES20.glEnable(GLES20.GL_CULL_FACE);
+        }
+
+        if (objModel != null) {
+            objModel.draw();
         }
 
         GLES20.glDisable(GLES20.GL_DEPTH_TEST);
@@ -229,9 +249,6 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
             }
         });
         earth.create();
-
-        markerDialog = new MarkerDialog(this);
-        markerDialog.setEventListener(markerDialogEventListener);
 
         try {
             KmlLayer kmlLayer = new KmlLayer(earth, R.raw.example, getApplicationContext());

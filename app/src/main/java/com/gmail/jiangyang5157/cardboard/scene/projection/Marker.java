@@ -16,7 +16,7 @@ import com.google.android.gms.maps.model.LatLng;
 public class Marker extends Icosphere implements Intersection.Clickable{
 
     private static final int VERTEX_SHADER_RAW_RESOURCE = R.raw.sphere_color_vertex_shader;
-    private static final int FRAGMENT_SHADER_RAW_RESOURCE = R.raw.sphere_color_sphere_fragment_shader;
+    private static final int FRAGMENT_SHADER_RAW_RESOURCE = R.raw.sphere_color_fragment_shader;
 
     private static final int DEFAULT_RECURSION_LEVEL = 3;
 
@@ -27,7 +27,7 @@ public class Marker extends Icosphere implements Intersection.Clickable{
     private String name;
     private String description;
 
-    private Obj obj;
+    private ObjModel objModel;
 
     private Coordinate coordinate;
 
@@ -91,11 +91,11 @@ public class Marker extends Icosphere implements Intersection.Clickable{
         this.description = description;
     }
 
-    public Obj getObj() {
-        return obj;
+    public ObjModel getObjModel() {
+        return objModel;
     }
 
-    public void setObj(Obj obj) {
-        this.obj = obj;
+    public void setObjModel(ObjModel model) {
+        this.objModel = model;
     }
 }

@@ -91,12 +91,11 @@ public class Earth extends TextureSphere {
 
         String objProperty = kmlPlacemark.getProperty("obj");
         if (objProperty != null) {
-            Obj obj = new Obj(context,
-                    objProperty,
+            ObjModel objModel = new ObjModel(context,
                     kmlPlacemark.getProperty("title"),
-                    kmlPlacemark.getProperty("color"));
-            obj.setLighting(lighting);
-            marker.setObj(obj);
+                    objProperty);
+            objModel.setLighting(lighting);
+            marker.setObjModel(objModel);
         }
 
         addMarker(marker);

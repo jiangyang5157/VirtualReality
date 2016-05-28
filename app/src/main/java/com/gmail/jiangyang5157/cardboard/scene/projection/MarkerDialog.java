@@ -3,7 +3,6 @@ package com.gmail.jiangyang5157.cardboard.scene.projection;
 import android.content.Context;
 import android.text.Layout;
 
-import com.gmail.jiangyang5157.cardboard.scene.Head;
 import com.gmail.jiangyang5157.cardboard.scene.Intersection;
 import com.gmail.jiangyang5157.tookit.app.AppUtils;
 
@@ -15,7 +14,7 @@ public class MarkerDialog extends Dialog {
 
     private Event eventListener;
     public interface Event {
-        void showObj(Obj obj);
+        void showObjModel(ObjModel model);
     }
 
     private static final float TEXT_SIZE_LARGE = 12f;
@@ -27,22 +26,14 @@ public class MarkerDialog extends Dialog {
 
     private Marker marker;
 
-    public MarkerDialog(Context context) {
+    public MarkerDialog(Context context, Marker marker) {
         super(context);
-    }
-
-    public Marker getMarker() {
-        return marker;
-    }
-
-    public void setMarker(Marker marker) {
         this.marker = marker;
     }
 
     @Override
     public void destroy() {
         super.destroy();
-        setMarker(null);
     }
 
     @Override
@@ -63,16 +54,16 @@ public class MarkerDialog extends Dialog {
             tf2.create(marker.getDescription(), WIDTH - PADDING_BOARD * 2, TEXT_SIZE_SMALL, Layout.Alignment.ALIGN_NORMAL);
             addPanel(tf2);
         }
-        if (marker.getObj() != null) {
+        if (marker.getObjModel() != null) {
             TextField tf3 = new TextField(context);
-            tf3.create(marker.getObj().getTitle(), WIDTH - PADDING_BOARD * 2, TEXT_SIZE_SMALL, Layout.Alignment.ALIGN_NORMAL);
+            tf3.create(marker.getObjModel().getTitle(), WIDTH - PADDING_BOARD * 2, TEXT_SIZE_SMALL, Layout.Alignment.ALIGN_NORMAL);
             addPanel(tf3);
 
             tf3.setOnClickListener(new Intersection.Clickable() {
                 @Override
                 public void onClick(Model model) {
                     if (eventListener != null){
-                        eventListener.showObj(marker.getObj());
+                        eventListener.showObjModel(marker.getObjModel());
                     }
                 }
             });
