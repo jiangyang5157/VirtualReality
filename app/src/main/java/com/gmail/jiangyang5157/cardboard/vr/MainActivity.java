@@ -71,7 +71,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (objModel != null){
+        if (objModel != null) {
             objModel.destroy();
         }
         if (markerDialog != null) {
@@ -102,7 +102,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
             markerDialog.setPosition(head.getCamera().getPosition(), head.forward, head.up, head.right, head.eulerAngles);
         }
 
-        if (objModel != null && !objModel.isProgramCreated()){
+        if (objModel != null && !objModel.isProgramCreated()) {
             objModel.create();
         }
 
@@ -188,7 +188,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         if (markerDialog != null) {
             markerDialog.update(view, perspective);
         }
-        if (objModel != null){
+        if (objModel != null) {
             objModel.update(view, perspective);
         }
     }
@@ -242,7 +242,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
         earth = new Earth(this);
         earth.setOnMarkerClickListener(markerOnClickListener);
-        earth.setLighting(new Lighting() {
+        earth.setMarkerLighting(new Lighting() {
             @Override
             public float[] getLightPosInCameraSpace() {
                 return lightPosInCameraSpace;

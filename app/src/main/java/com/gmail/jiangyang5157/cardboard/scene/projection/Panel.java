@@ -62,8 +62,9 @@ public abstract class Panel extends Rectangle {
         trVec = new Vector3d(trVec.plus(positionVec));
         brVec = new Vector3d(brVec.plus(positionVec));
 
+        double[] positionVecData = positionVec.getData();
         Matrix.setIdentityM(translation, 0);
-        Matrix.translateM(translation, 0, (float) positionVec.getData()[0], (float) positionVec.getData()[1], (float) positionVec.getData()[2]);
+        Matrix.translateM(translation, 0, (float) positionVecData[0], (float) positionVecData[1], (float) positionVecData[2]);
         float eulerAnglesDegree0 = (float) Math.toDegrees(eulerAngles[0]);
         float eulerAnglesDegree1 = (float) Math.toDegrees(eulerAngles[1]);
         float eulerAnglesDegree2 = (float) Math.toDegrees(eulerAngles[2]);
@@ -221,9 +222,6 @@ public abstract class Panel extends Rectangle {
         GLES20.glEnableVertexAttribArray(texCoordHandle);
 
         GLES20.glUniformMatrix4fv(mvpMatrixHandle, 1, false, modelViewProjection, 0);
-        if (lighting != null) {
-            GLES20.glUniform3fv(lightPosHandle, 1, lighting.getLightPosInCameraSpace(), 0);
-        }
 
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, verticesBuffHandle);
         GLES20.glVertexAttribPointer(vertexHandle, 3, GLES20.GL_FLOAT, false, 0, 0);

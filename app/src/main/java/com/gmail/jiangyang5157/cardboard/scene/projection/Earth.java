@@ -6,6 +6,7 @@ import android.util.Log;
 import com.gmail.jiangyang5157.cardboard.kml.KmlPlacemark;
 import com.gmail.jiangyang5157.cardboard.scene.Intersection;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
+import com.gmail.jiangyang5157.cardboard.scene.Lighting;
 import com.gmail.jiangyang5157.cardboard.vr.R;
 import com.gmail.jiangyang5157.tookit.math.Vector;
 import com.gmail.jiangyang5157.tookit.math.Vector3d;
@@ -36,6 +37,8 @@ public class Earth extends TextureSphere {
     private ArrayList<Marker> markers;
 
     private Intersection.Clickable onMarkerClickListener;
+
+    protected Lighting markerLighting;
 
     public Earth(Context context) {
         super(context, VERTEX_SHADER_RAW_RESOURCE, FRAGMENT_SHADER_RAW_RESOURCE);
@@ -94,12 +97,16 @@ public class Earth extends TextureSphere {
             ObjModel objModel = new ObjModel(context,
                     kmlPlacemark.getProperty("title"),
                     objProperty);
-            objModel.setLighting(lighting);
+            objModel.setLighting(markerLighting);
             marker.setObjModel(objModel);
         }
 
         addMarker(marker);
         return marker;
+    }
+
+    public void setMarkerLighting(Lighting lighting) {
+        this.markerLighting = lighting;
     }
 
     public boolean contain(float[] point) {

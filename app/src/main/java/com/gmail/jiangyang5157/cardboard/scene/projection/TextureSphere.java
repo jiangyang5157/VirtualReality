@@ -62,13 +62,9 @@ public class TextureSphere extends Sphere {
                 float y = (float) Math.cos(phi);
                 float z = (float) (Math.sin(theta) * Math.sin(phi));
 
-                normals[vertexIndex] = x;
-                normals[vertexIndex + 1] = y;
-                normals[vertexIndex + 2] = z;
-
-                vertices[vertexIndex] = x * radius;
-                vertices[vertexIndex + 1] = y * radius;
-                vertices[vertexIndex + 2] = z * radius;
+                vertices[vertexIndex] = normals[vertexIndex] = x;
+                vertices[vertexIndex + 1] = normals[vertexIndex + 1] = y;
+                vertices[vertexIndex + 2] = normals[vertexIndex + 2] = z;
                 vertexIndex += 3;
 
                 textures[textureIndex] = u;

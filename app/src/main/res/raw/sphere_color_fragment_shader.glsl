@@ -13,7 +13,7 @@ void main()
     float diffuse = max(dot(v_Normal, lightVec), 0.1);
 
     float distance = length(u_LightPos - v_Position);
-    diffuse = diffuse * (1.0 / (1.0 + (0.0002 * distance * distance)));
+    diffuse = diffuse * (1.0 / (1.0 + (0.015 * distance * distance)));
 
     gl_FragColor = vec4(v_Color, 1.0) * diffuse;
 }

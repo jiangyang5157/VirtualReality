@@ -50,10 +50,12 @@ public class Ray extends Point {
         }
 
         Vector i_camera = intersection.getCameraPosVec().minus(intersection.getIntersecttPosVec());
-        double[] rayPos = new Vector(intersection.getIntersecttPosVec().plus(i_camera.direction().times(Ray.SPACE))).getData();
+
+        Vector rayPosVec = new Vector(intersection.getIntersecttPosVec().plus(i_camera.direction().times(Ray.SPACE)));
+        double[] rayPosVecData = rayPosVec.getData();
 
         Matrix.setIdentityM(translation, 0);
-        Matrix.translateM(translation, 0, (float) rayPos[0], (float) rayPos[1], (float) rayPos[2]);
+        Matrix.translateM(translation, 0, (float) rayPosVecData[0], (float) rayPosVecData[1], (float) rayPosVecData[2]);
     }
 
     public Intersection getIntersection() {

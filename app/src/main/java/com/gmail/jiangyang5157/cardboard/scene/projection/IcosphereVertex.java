@@ -21,7 +21,7 @@ public class IcosphereVertex implements Geometry {
     protected static final int[] VERTEX_COUNTS = new int[]{12, 42, 162, 642, 2562, 10242};
 
     private float[] vertices;
-
+    private float[] normals;
     private short[] indices;
 
     protected IcosphereVertex(int recursionLevel) {
@@ -31,6 +31,7 @@ public class IcosphereVertex implements Geometry {
     private void build(int recursionLevel) {
         final int VERTEX_ARRAY_LENGTH = VERTEX_COUNTS[recursionLevel] * 3;
         vertices = new float[VERTEX_ARRAY_LENGTH];
+        normals = new float[VERTEX_ARRAY_LENGTH];
 
         // create 12 vertices of a icosahedron - http://blog.andreaskahler.com/2009/06/creating-icosphere-mesh-in-code.html
         short vIndex = 0;
@@ -158,52 +159,21 @@ public class IcosphereVertex implements Geometry {
     private void addVertex(float x, float y, float z, int index) {
         float length = Matrix.length(x, y, z);
         int indexOffset = index * 3;
-        vertices[indexOffset] = x / length;
-        vertices[indexOffset + 1] = y / length;
-        vertices[indexOffset + 2] = z / length;
-    }
 
-    protected static float[] scale(float[] src, float factor) {
-        if (src == null) {
-            throw new RuntimeException("Array has not been initialized.");
-        }
-
-        float[] ret;
-        if (factor == 1.0f) {
-            ret = getArrayCopy(src);
-        } else {
-            final int LENGTH = src.length;
-            ret = new float[LENGTH];
-            for (int i = 0; i < LENGTH; i++) {
-                ret[i] = src[i] * factor;
-            }
-        }
-        return ret;
-    }
-
-    public static float[] getArrayCopy(float[] src) {
-        final int LENGTH = src.length;
-        float[] ret = new float[LENGTH];
-        for (int i = 0; i < LENGTH; i++) {
-            ret[i] = src[i];
-        }
-        return ret;
-    }
-
-    public static short[] getArrayCopy(short[] src) {
-        final int LENGTH = src.length;
-        short[] ret = new short[LENGTH];
-        for (int i = 0; i < LENGTH; i++) {
-            ret[i] = src[i];
-        }
-        return ret;
+        vertices[indexOffset] = normals[indexOffset] = x / length;
+        vertices[indexOffset + 1] = normals[indexOffset + 1] = y / length;
+        vertices[indexOffset + 2] = normals[indexOffset + 2] = z / length;
     }
 
     public float[] getVertices() {
-        return vertices;
+        return vertices.clone();
+    }
+
+    public float[] getNormals() {
+        return normals.clone();
     }
 
     public short[] getIndices() {
-        return indices;
+        return indices.clone();
     }
 }
