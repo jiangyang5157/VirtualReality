@@ -8,6 +8,7 @@ import android.util.Log;
 import com.gmail.jiangyang5157.cardboard.scene.Lighting;
 import com.gmail.jiangyang5157.tookit.data.text.IoUtils;
 
+import java.io.InputStream;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
 
@@ -104,7 +105,8 @@ public abstract class GLModel extends Model {
     }
 
     private int compileShader(int type, int resId) {
-        return compileShader(type, IoUtils.readTextFile(context, resId));
+        InputStream ins = context.getResources().openRawResource(resId);
+        return compileShader(type, IoUtils.read(ins));
     }
 
     public static void checkGlEsError(String label) {
