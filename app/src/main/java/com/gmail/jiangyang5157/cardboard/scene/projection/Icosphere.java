@@ -52,34 +52,34 @@ public class Icosphere extends Sphere {
         verticesBuffer.put(vertices).position(0);
         vertices = null;
 
-        normalsBuffer = ByteBuffer.allocateDirect(normals.length * BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
-        normalsBuffer.put(normals).position(0);
-        normals = null;
-
         indicesBuffer = ByteBuffer.allocateDirect(indices.length * BYTES_PER_SHORT).order(ByteOrder.nativeOrder()).asShortBuffer();
         indicesBuffer.put(indices).position(0);
         indices = null;
         indicesBufferCapacity = indicesBuffer.capacity();
 
+        normalsBuffer = ByteBuffer.allocateDirect(normals.length * BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
+        normalsBuffer.put(normals).position(0);
+        normals = null;
+
         GLES20.glGenBuffers(buffers.length, buffers, 0);
         verticesBuffHandle = buffers[0];
-        normalsBuffHandle = buffers[1];
-        indicesBuffHandle = buffers[2];
+        indicesBuffHandle = buffers[1];
+        normalsBuffHandle = buffers[2];
 
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, verticesBuffHandle);
         GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, verticesBuffer.capacity() * BYTES_PER_FLOAT, verticesBuffer, GLES20.GL_STATIC_DRAW);
         verticesBuffer.limit(0);
         verticesBuffer = null;
 
-        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, normalsBuffHandle);
-        GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, normalsBuffer.capacity() * BYTES_PER_FLOAT, normalsBuffer, GLES20.GL_STATIC_DRAW);
-        normalsBuffer.limit(0);
-        normalsBuffer = null;
-
         GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, indicesBuffHandle);
         GLES20.glBufferData(GLES20.GL_ELEMENT_ARRAY_BUFFER, indicesBuffer.capacity() * BYTES_PER_SHORT, indicesBuffer, GLES20.GL_STATIC_DRAW);
         indicesBuffer.limit(0);
         indicesBuffer = null;
+
+        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, normalsBuffHandle);
+        GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, normalsBuffer.capacity() * BYTES_PER_FLOAT, normalsBuffer, GLES20.GL_STATIC_DRAW);
+        normalsBuffer.limit(0);
+        normalsBuffer = null;
     }
 
     @Override
