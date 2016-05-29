@@ -35,11 +35,11 @@ public class ObjModel extends GLModel {
     private String obj;
 
     private Vector<Float> v;
-    private Vector<Float> vt;
+    private Vector<Float> vt; // unsupported
     private Vector<Float> vn;
     private Vector<Short> fv;
-    private Vector<Short> fvt;
-    private Vector<Short> fvn;
+    private Vector<Short> fvt; // unsupported
+    private Vector<Short> fvn; // unsupported
 
     protected final int[] buffers = new int[3];
 
