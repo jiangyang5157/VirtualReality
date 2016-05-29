@@ -56,12 +56,11 @@ public class ObjModel extends GLModel {
         initializeProgram();
         bindBuffers();
 
+        setScale(10f);
         setVisible(true);
     }
 
     public void setPosition(float[] cameraPos, float[] forward, float[] up, float[] right, float[] eulerAngles) {
-        setScale(10f);
-
         com.gmail.jiangyang5157.tookit.math.Vector cameraPosVec = new Vector3d(cameraPos[0], cameraPos[1], cameraPos[2]);
         com.gmail.jiangyang5157.tookit.math.Vector forwardVec = new Vector3d(forward[0], forward[1], forward[2]).times(DISTANCE);
         com.gmail.jiangyang5157.tookit.math.Vector positionVec = cameraPosVec.plus(forwardVec);

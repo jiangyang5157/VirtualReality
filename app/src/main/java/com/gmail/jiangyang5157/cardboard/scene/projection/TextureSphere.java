@@ -45,7 +45,6 @@ public class TextureSphere extends Sphere {
     @Override
     protected void buildArrays() {
         vertices = new float[stacks * slices * 3];
-        normals = new float[stacks * slices * 3];
         indices = new short[stacks * slices * 6];
         textures = new float[stacks * slices * 2];
 
@@ -69,9 +68,9 @@ public class TextureSphere extends Sphere {
                 float y = (float) Math.cos(phi);
                 float z = (float) (Math.sin(theta) * Math.sin(phi));
 
-                vertices[vertexIndex] = normals[vertexIndex] = x;
-                vertices[vertexIndex + 1] = normals[vertexIndex + 1] = y;
-                vertices[vertexIndex + 2] = normals[vertexIndex + 2] = z;
+                vertices[vertexIndex] = x;
+                vertices[vertexIndex + 1] = y;
+                vertices[vertexIndex + 2] = z;
                 vertexIndex += 3;
 
                 textures[textureIndex] = u;
@@ -96,6 +95,8 @@ public class TextureSphere extends Sphere {
                 indexIndex += 6;
             }
         }
+
+        normals = vertices.clone();
     }
 
     @Override

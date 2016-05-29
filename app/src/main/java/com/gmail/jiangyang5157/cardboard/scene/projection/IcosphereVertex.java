@@ -21,7 +21,6 @@ public class IcosphereVertex implements Geometry {
     protected static final int[] VERTEX_COUNTS = new int[]{12, 42, 162, 642, 2562, 10242};
 
     private float[] vertices;
-    private float[] normals;
     private short[] indices;
 
     protected IcosphereVertex(int recursionLevel) {
@@ -31,7 +30,6 @@ public class IcosphereVertex implements Geometry {
     private void build(int recursionLevel) {
         final int VERTEX_ARRAY_LENGTH = VERTEX_COUNTS[recursionLevel] * 3;
         vertices = new float[VERTEX_ARRAY_LENGTH];
-        normals = new float[VERTEX_ARRAY_LENGTH];
 
         // create 12 vertices of a icosahedron - http://blog.andreaskahler.com/2009/06/creating-icosphere-mesh-in-code.html
         short vIndex = 0;
@@ -160,17 +158,13 @@ public class IcosphereVertex implements Geometry {
         float length = Matrix.length(x, y, z);
         int indexOffset = index * 3;
 
-        vertices[indexOffset] = normals[indexOffset] = x / length;
-        vertices[indexOffset + 1] = normals[indexOffset + 1] = y / length;
-        vertices[indexOffset + 2] = normals[indexOffset + 2] = z / length;
+        vertices[indexOffset] = x / length;
+        vertices[indexOffset + 1] = y / length;
+        vertices[indexOffset + 2] = z / length;
     }
 
     public float[] getVertices() {
         return vertices.clone();
-    }
-
-    public float[] getNormals() {
-        return normals.clone();
     }
 
     public short[] getIndices() {
