@@ -36,7 +36,7 @@ public abstract class Sphere extends GLModel implements Intersection.Intersectab
 
     @Override
     public Intersection onIntersect(Head head) {
-        if (!isVisible) {
+        if (!isVisible || !isProgramCreated()) {
             return null;
         }
 

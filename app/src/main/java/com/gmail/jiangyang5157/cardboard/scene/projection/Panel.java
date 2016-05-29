@@ -84,7 +84,7 @@ public abstract class Panel extends Rectangle {
 
     @Override
     public Intersection onIntersect(Head head) {
-        if (!isVisible) {
+        if (!isVisible || !isProgramCreated()) {
             return null;
         }
 

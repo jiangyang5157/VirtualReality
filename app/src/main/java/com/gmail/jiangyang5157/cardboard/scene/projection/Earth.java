@@ -112,10 +112,10 @@ public class Earth extends TextureSphere {
 
     @Override
     public Intersection onIntersect(Head head) {
-        if (!isVisible) {
+        if (!isVisible || !isProgramCreated()) {
             return null;
         }
-        Intersection ret = null;
+        Intersection ret;
 
         ArrayList<Intersection> intersections = new ArrayList<Intersection>();
         for (final Marker mark : markers) {
