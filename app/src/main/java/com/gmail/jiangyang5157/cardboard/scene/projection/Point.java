@@ -27,8 +27,8 @@ public class Point extends GLModel {
     protected void create(int color) {
         setColor(color);
 
-        initializeProgram();
         buildArrays();
+        initializeProgram();
         bindBuffers();
 
         setVisible(true);

@@ -23,8 +23,8 @@ public abstract class Sphere extends GLModel implements Intersection.Intersectab
         this.radius = radius;
         setScale(radius);
 
-        initializeProgram();
         buildArrays();
+        initializeProgram();
         bindBuffers();
 
         setVisible(true);

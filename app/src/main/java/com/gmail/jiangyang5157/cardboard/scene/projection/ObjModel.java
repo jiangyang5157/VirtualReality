@@ -53,9 +53,8 @@ public class ObjModel extends GLModel {
     public void create() {
         setColor(AppUtils.getColor(context, COLOR_NORMAL_RES_ID));
 
-        initializeProgram();
-
         buildArrays();
+        initializeProgram();
         bindBuffers();
 
         setVisible(true);
