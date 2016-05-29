@@ -46,8 +46,9 @@ public class ObjModel extends GLModel {
         this.title = title;
         this.obj = obj;
 
+        setScale(50f);
         Matrix.setIdentityM(translation, 0);
-        Matrix.translateM(translation, 0, 0, -20, -20);
+        Matrix.translateM(translation, 0, 0, -200, -200);
     }
 
     public void create() {
@@ -264,7 +265,7 @@ public class ObjModel extends GLModel {
     }
 
     private Vector<Short> triangulate(Vector<Short> polygon) {
-        Vector<Short> triangles = new Vector<Short>();
+        Vector<Short> triangles = new Vector<>();
         int length = polygon.size();
         for (int i = 1; i < length - 1; i++) {
             triangles.add(polygon.get(0));
