@@ -3,7 +3,6 @@ package com.gmail.jiangyang5157.cardboard.scene.projection;
 import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
-import android.os.AsyncTask;
 import android.util.Log;
 
 import com.gmail.jiangyang5157.cardboard.vr.R;
@@ -44,23 +43,6 @@ public class ObjModel extends GLModel {
 
     protected final int[] buffers = new int[3];
 
-    private Creator creator;
-    private class Creator extends AsyncTask<Void, Void, Void> {
-        @Override
-        protected Void doInBackground(Void... params) {
-            buildArrays();
-            bindBuffers();
-            isCreated = true;
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            setVisible(true);
-        }
-    }
-
     protected ObjModel(Context context, String title, String obj) {
         super(context, VERTEX_SHADER_RAW_RESOURCE, FRAGMENT_SHADER_RAW_RESOURCE);
         this.title = title;
@@ -78,11 +60,6 @@ public class ObjModel extends GLModel {
         isCreated = true;
 
         setVisible(true);
-//
-//        if (creator == null) {
-//            creator = new Creator();
-//            creator.execute();
-//        }
     }
 
     protected void setPosition(float[] cameraPos, float[] forward, float[] up, float[] right, float[] eulerAngles) {
@@ -129,6 +106,13 @@ public class ObjModel extends GLModel {
             normalsBuffer.put(vn.get(i));
         }
         normalsBuffer.position(0);
+
+        v = null;
+        vt = null;
+        vn = null;
+        fv = null;
+        fvt = null;
+        fvn = null;
 
         GLES20.glGenBuffers(buffers.length, buffers, 0);
         verticesBuffHandle = buffers[0];
