@@ -30,8 +30,6 @@ public abstract class Dialog extends Panel {
         panels = new ArrayList<>();
     }
 
-    public abstract void create();
-
     @Override
     protected int createTexture() {
         final int[] textureHandle = new int[1];

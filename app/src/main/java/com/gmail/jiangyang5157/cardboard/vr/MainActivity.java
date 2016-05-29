@@ -99,14 +99,12 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
         if (markerDialog != null) {
             if (!markerDialog.isProgramCreated()) {
-                markerDialog.create();
-                markerDialog.setPosition(head.getCamera().getPosition(), head.forward, head.up, head.right, head.eulerAngles);
+                markerDialog.create(head.getCamera().getPosition(), head.forward, head.up, head.right, head.eulerAngles);
             }
 
             if (objModel != null) {
                 if (!objModel.isProgramCreated()) {
-                    objModel.create();
-                    objModel.setPosition(head.getCamera().getPosition(), head.forward, head.up, head.right, head.eulerAngles);
+                    objModel.create(head.getCamera().getPosition(), head.forward, head.up, head.right, head.eulerAngles);
                 }
             }
         }
