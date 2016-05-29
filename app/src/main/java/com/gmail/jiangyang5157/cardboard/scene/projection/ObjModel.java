@@ -21,15 +21,12 @@ import java.util.Vector;
  * @since 5/27/2016
  */
 public class ObjModel extends GLModel {
-
     private static final String TAG = "ObjModel ####";
 
     private static final int VERTEX_SHADER_RAW_RESOURCE = R.raw.obj_color_vertex_shader;
     private static final int FRAGMENT_SHADER_RAW_RESOURCE = R.raw.obj_color_fragment_shader;
 
     private static final int COLOR_NORMAL_RES_ID = com.gmail.jiangyang5157.tookit.R.color.DeepOrange;
-
-    private final int[] buffers = new int[2];
 
     private String title;
     private String obj;
@@ -40,6 +37,8 @@ public class ObjModel extends GLModel {
     private Vector<Short> fv;
     private Vector<Short> fvt;
     private Vector<Short> fvn;
+
+    private final int[] buffers = new int[2];
 
     protected ObjModel(Context context, String title, String obj) {
         super(context, VERTEX_SHADER_RAW_RESOURCE, FRAGMENT_SHADER_RAW_RESOURCE);
@@ -277,10 +276,13 @@ public class ObjModel extends GLModel {
 
     @Override
     protected void initializeHandle() {
+        mvMatrixHandle = GLES20.glGetUniformLocation(program, MODEL_VIEW_HANDLE);
         mvpMatrixHandle = GLES20.glGetUniformLocation(program, MODEL_VIEW_PROJECTION_HANDLE);
         colorHandle = GLES20.glGetUniformLocation(program, COLOR_HANDLE);
+        lightPosHandle = GLES20.glGetUniformLocation(program, LIGHT_POSITION_HANDLE);
 
         vertexHandle = GLES20.glGetAttribLocation(program, VERTEX_HANDLE);
+        normalHandle = GLES20.glGetAttribLocation(program, NORMAL_HANDLE);
     }
 
     @Override

@@ -17,11 +17,11 @@ public class Icosphere extends Sphere {
 
     private int recursionLevel;
 
-    private final int[] buffers = new int[3];
-
     protected float[] vertices;
     protected float[] normals;
     protected short[] indices;
+
+    private final int[] buffers = new int[3];
 
     public Icosphere(Context context, int vertexShaderRawResource, int fragmentShaderRawResource) {
         super(context, vertexShaderRawResource, fragmentShaderRawResource);

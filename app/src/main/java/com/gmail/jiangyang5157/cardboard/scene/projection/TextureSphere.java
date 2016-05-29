@@ -22,13 +22,13 @@ public class TextureSphere extends Sphere {
     private int slices;
     private int textureDrawableResource;
 
-    private final int[] buffers = new int[4];
-    private final int[] texBuffers = new int[1];
-
     protected float[] vertices;
     protected float[] normals;
     protected short[] indices;
     protected float[] textures;
+
+    private final int[] buffers = new int[4];
+    private final int[] texBuffers = new int[1];
 
     public TextureSphere(Context context, int vertexShaderRawResource, int fragmentShaderRawResource) {
         super(context, vertexShaderRawResource, fragmentShaderRawResource);

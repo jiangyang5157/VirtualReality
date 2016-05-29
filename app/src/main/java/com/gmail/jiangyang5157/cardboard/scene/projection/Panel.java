@@ -31,13 +31,13 @@ public abstract class Panel extends Rectangle {
     protected short[] indices;
     protected float[] textures;
 
-    private final int[] buffers = new int[3];
-    private final int[] texBuffers = new int[1];
-
     protected Vector tlVec;
     protected Vector blVec;
     protected Vector trVec;
     protected Vector brVec;
+
+    private final int[] buffers = new int[3];
+    private final int[] texBuffers = new int[1];
 
     protected static final float DISTANCE = 400;
 
