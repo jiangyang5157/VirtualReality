@@ -44,7 +44,7 @@ public class ObjModel extends GLModel {
         this.obj = obj;
 
         Matrix.setIdentityM(translation, 0);
-        Matrix.translateM(translation, 0, 0, -200, 0);
+        Matrix.translateM(translation, 0, 0, -20, -20);
     }
 
     public void create() {
