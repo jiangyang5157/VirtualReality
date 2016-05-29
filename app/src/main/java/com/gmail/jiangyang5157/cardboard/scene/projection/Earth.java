@@ -39,8 +39,6 @@ public class Earth extends TextureSphere {
 
     private Intersection.Clickable onMarkerClickListener;
 
-    protected Lighting markerLighting;
-
     public Earth(Context context) {
         super(context, VERTEX_SHADER_RAW_RESOURCE, FRAGMENT_SHADER_RAW_RESOURCE);
         markers = new ArrayList<>();
@@ -84,30 +82,25 @@ public class Earth extends TextureSphere {
     }
 
     public Marker addMarker(KmlPlacemark kmlPlacemark, MarkerOptions markerUrlStyle) {
-        Log.i("####", kmlPlacemark.toString());
         LatLng latLng = markerUrlStyle.getPosition();
         Marker marker = new Marker(context, this);
         marker.setOnClickListener(onMarkerClickListener);
         marker.create(MARKER_RADIUS, latLng, MARKER_ALTITUDE);
         marker.setName(kmlPlacemark.getProperty("name"));
         marker.setDescription(kmlPlacemark.getProperty("description"));
-        marker.setLighting(markerLighting);
+        marker.setLighting(lighting);
 
         String objProperty = kmlPlacemark.getProperty("obj");
         if (objProperty != null) {
             ObjModel objModel = new ObjModel(context,
                     kmlPlacemark.getProperty("title"),
                     objProperty);
-            objModel.setLighting(markerLighting);
+            objModel.setLighting(lighting);
             marker.setObjModel(objModel);
         }
 
         addMarker(marker);
         return marker;
-    }
-
-    public void setMarkerLighting(Lighting lighting) {
-        this.markerLighting = lighting;
     }
 
     public boolean contain(float[] point) {

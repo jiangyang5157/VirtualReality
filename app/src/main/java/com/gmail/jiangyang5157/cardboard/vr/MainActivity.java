@@ -248,12 +248,6 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
                 return lightPosInCameraSpace;
             }
         });
-        earth.setMarkerLighting(new Lighting() {
-            @Override
-            public float[] getLightPosInCameraSpace() {
-                return lightPosInCameraSpace;
-            }
-        });
         earth.create();
 
         try {

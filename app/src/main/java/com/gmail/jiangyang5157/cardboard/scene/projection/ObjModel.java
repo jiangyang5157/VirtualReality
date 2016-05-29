@@ -38,7 +38,7 @@ public class ObjModel extends GLModel {
     private Vector<Short> fvt;
     private Vector<Short> fvn;
 
-    private final int[] buffers = new int[2];
+    private final int[] buffers = new int[3];
 
     protected ObjModel(Context context, String title, String obj) {
         super(context, VERTEX_SHADER_RAW_RESOURCE, FRAGMENT_SHADER_RAW_RESOURCE);
@@ -78,9 +78,21 @@ public class ObjModel extends GLModel {
         indicesBuffer.position(0);
         indicesBufferCapacity = indicesBuffer.capacity();
 
+        size = vn.size();
+        if (size == 0) {
+            vn.addAll(v);
+            size = vn.size();
+        }
+        FloatBuffer normalsBuffer = ByteBuffer.allocateDirect(size * BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
+        for (int i = 0; i < size; i++) {
+            normalsBuffer.put(vn.get(i));
+        }
+        normalsBuffer.position(0);
+
         GLES20.glGenBuffers(buffers.length, buffers, 0);
         verticesBuffHandle = buffers[0];
         indicesBuffHandle = buffers[1];
+        normalsBuffHandle = buffers[2];
 
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, verticesBuffHandle);
         GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, verticesBuffer.capacity() * BYTES_PER_FLOAT, verticesBuffer, GLES20.GL_STATIC_DRAW);
@@ -89,6 +101,10 @@ public class ObjModel extends GLModel {
         GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, indicesBuffHandle);
         GLES20.glBufferData(GLES20.GL_ELEMENT_ARRAY_BUFFER, indicesBuffer.capacity() * BYTES_PER_SHORT, indicesBuffer, GLES20.GL_STATIC_DRAW);
         indicesBuffer.limit(0);
+
+        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, normalsBuffHandle);
+        GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, normalsBuffer.capacity() * BYTES_PER_FLOAT, normalsBuffer, GLES20.GL_STATIC_DRAW);
+        normalsBuffer.limit(0);
     }
 
     @Override
@@ -293,17 +309,26 @@ public class ObjModel extends GLModel {
 
         GLES20.glUseProgram(program);
         GLES20.glEnableVertexAttribArray(vertexHandle);
+        GLES20.glEnableVertexAttribArray(normalHandle);
 
+        GLES20.glUniformMatrix4fv(mvMatrixHandle, 1, false, modelView, 0);
         GLES20.glUniformMatrix4fv(mvpMatrixHandle, 1, false, modelViewProjection, 0);
         GLES20.glUniform3fv(colorHandle, 1, color, 0);
+        if (lighting != null) {
+            GLES20.glUniform3fv(lightPosHandle, 1, lighting.getLightPosInCameraSpace(), 0);
+        }
 
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, verticesBuffHandle);
         GLES20.glVertexAttribPointer(vertexHandle, 3, GLES20.GL_FLOAT, false, 0, 0);
+
+        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, normalsBuffHandle);
+        GLES20.glVertexAttribPointer(normalHandle, 3, GLES20.GL_FLOAT, false, 0, 0);
 
         GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, indicesBuffHandle);
         GLES20.glDrawElements(GLES20.GL_TRIANGLES, indicesBufferCapacity, GLES20.GL_UNSIGNED_SHORT, 0);
 
         GLES20.glDisableVertexAttribArray(vertexHandle);
+        GLES20.glDisableVertexAttribArray(normalHandle);
         GLES20.glUseProgram(0);
 
         checkGlEsError("ObjModel - draw end");
@@ -311,6 +336,12 @@ public class ObjModel extends GLModel {
 
     public String getTitle() {
         return title;
+    }
+
+    @Override
+    public void update(float[] view, float[] perspective) {
+        Matrix.rotateM(rotation, 0, 0.5f, 0, 1, 0);
+        super.update(view, perspective);
     }
 
     @Override
