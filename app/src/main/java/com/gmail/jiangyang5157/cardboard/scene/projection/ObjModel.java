@@ -3,6 +3,7 @@ package com.gmail.jiangyang5157.cardboard.scene.projection;
 import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import com.gmail.jiangyang5157.cardboard.vr.R;
@@ -43,6 +44,32 @@ public class ObjModel extends GLModel {
 
     protected final int[] buffers = new int[3];
 
+    private Creator creator;
+    private class Creator extends AsyncTask<Void, Void, Void> {
+        float[] cameraPos;
+        float[] forward;
+        float[] up;
+        float[] right;
+        float[] eulerAngles;
+
+        public Creator(float[] cameraPos, float[] forward, float[] up, float[] right, float[] eulerAngles) {
+            this.cameraPos = cameraPos;
+            this.forward = forward;
+            this.up = up;
+            this.right = right;
+            this.eulerAngles = eulerAngles;
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+        }
+    }
+
     protected ObjModel(Context context, String title, String obj) {
         super(context, VERTEX_SHADER_RAW_RESOURCE, FRAGMENT_SHADER_RAW_RESOURCE);
         this.title = title;
@@ -50,16 +77,20 @@ public class ObjModel extends GLModel {
     }
 
     public void create(float[] cameraPos, float[] forward, float[] up, float[] right, float[] eulerAngles) {
+        initializeProgram();
         setColor(AppUtils.getColor(context, COLOR_NORMAL_RES_ID));
+        setScale(10f);
+        setPosition(cameraPos, forward, up, right, eulerAngles);
 
         buildArrays();
-        initializeProgram();
         bindBuffers();
 
-        setScale(10f);
         setVisible(true);
 
-        setPosition(cameraPos, forward, up, right, eulerAngles);
+//        if (creator == null) {
+//            creator = new Creator(cameraPos, forward, up, right, eulerAngles);
+//            creator.execute();
+//        }
     }
 
     protected void setPosition(float[] cameraPos, float[] forward, float[] up, float[] right, float[] eulerAngles) {

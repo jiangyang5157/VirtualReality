@@ -46,13 +46,12 @@ public abstract class Panel extends Rectangle {
     }
 
     protected void create(float width, float height, int color) {
+        initializeProgram();
         this.width = width;
         this.height = height;
         setColor(color);
 
-        buildCorners(INITIAL_UP, INITIAL_RIGHT);
         buildArrays();
-        initializeProgram();
         bindBuffers();
 
         setVisible(true);
@@ -152,6 +151,8 @@ public abstract class Panel extends Rectangle {
 
     @Override
     protected void buildArrays() {
+        buildCorners(INITIAL_UP, INITIAL_RIGHT);
+
         double[] tl = tlVec.getData();
         double[] bl = blVec.getData();
         double[] tr = trVec.getData();
