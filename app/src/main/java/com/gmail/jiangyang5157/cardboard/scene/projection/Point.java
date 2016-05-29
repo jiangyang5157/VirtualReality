@@ -30,6 +30,7 @@ public class Point extends GLModel {
 
         buildArrays();
         bindBuffers();
+        isCreated = true;
 
         setVisible(true);
     }
@@ -64,7 +65,7 @@ public class Point extends GLModel {
 
     @Override
     public void draw() {
-        if (!isVisible || !isProgramCreated()) {
+        if (!isVisible || !isCreated()) {
             return;
         }
 

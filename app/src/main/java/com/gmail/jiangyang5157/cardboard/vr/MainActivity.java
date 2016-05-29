@@ -98,12 +98,12 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         head.adjustPosition(earth);
 
         if (markerDialog != null) {
-            if (!markerDialog.isProgramCreated()) {
+            if (!markerDialog.isCreated()) {
                 markerDialog.create(head.getCamera().getPosition(), head.forward, head.up, head.right, head.eulerAngles);
             }
 
             if (objModel != null) {
-                if (!objModel.isProgramCreated()) {
+                if (!objModel.isCreated()) {
                     objModel.create(head.getCamera().getPosition(), head.forward, head.up, head.right, head.eulerAngles);
                 }
             }
@@ -122,7 +122,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         if (markerDialog != null) {
             ret = markerDialog.onIntersect(head);
             if (ret == null) {
-                if (markerDialog.isProgramCreated()) {
+                if (markerDialog.isCreated()) {
                     markerDialog.destroy();
                     markerDialog = null;
                     objModel.destroy();
@@ -142,7 +142,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
     @Override
     public void onCardboardTrigger() {
-        if (objModel != null && objModel.isProgramCreated()) {
+        if (objModel != null && objModel.isCreated()) {
             objModel.destroy();
             objModel = null;
             return;

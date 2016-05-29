@@ -50,6 +50,8 @@ public class ObjModel extends GLModel {
         protected Void doInBackground(Void... params) {
             buildArrays();
             bindBuffers();
+            isCreated = true;
+
             return null;
         }
 
@@ -73,6 +75,7 @@ public class ObjModel extends GLModel {
 
         buildArrays();
         bindBuffers();
+        isCreated = true;
 
         setVisible(true);
 //
@@ -341,7 +344,7 @@ public class ObjModel extends GLModel {
 
     @Override
     public void draw() {
-        if (!isVisible || !isProgramCreated()) {
+        if (!isVisible || !isCreated()) {
             return;
         }
 

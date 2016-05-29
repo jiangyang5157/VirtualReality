@@ -1,13 +1,10 @@
 package com.gmail.jiangyang5157.cardboard.scene.projection;
 
 import android.content.Context;
-import android.opengl.Matrix;
-import android.util.Log;
 
 import com.gmail.jiangyang5157.cardboard.kml.KmlPlacemark;
 import com.gmail.jiangyang5157.cardboard.scene.Intersection;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
-import com.gmail.jiangyang5157.cardboard.scene.Lighting;
 import com.gmail.jiangyang5157.cardboard.vr.R;
 import com.gmail.jiangyang5157.tookit.math.Vector;
 import com.gmail.jiangyang5157.tookit.math.Vector3d;
@@ -112,7 +109,7 @@ public class Earth extends TextureSphere {
 
     @Override
     public Intersection onIntersect(Head head) {
-        if (!isVisible || !isProgramCreated()) {
+        if (!isVisible || !isCreated()) {
             return null;
         }
         Intersection ret;

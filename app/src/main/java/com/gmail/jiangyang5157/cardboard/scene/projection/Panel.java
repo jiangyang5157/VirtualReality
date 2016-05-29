@@ -6,7 +6,6 @@ import android.opengl.Matrix;
 import android.util.Log;
 
 import com.gmail.jiangyang5157.cardboard.scene.Intersection;
-import com.gmail.jiangyang5157.cardboard.scene.Camera;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
 import com.gmail.jiangyang5157.cardboard.vr.R;
 import com.gmail.jiangyang5157.tookit.math.Vector;
@@ -53,6 +52,7 @@ public abstract class Panel extends Rectangle {
 
         buildArrays();
         bindBuffers();
+        isCreated = true;
 
         setVisible(true);
     }
@@ -83,7 +83,7 @@ public abstract class Panel extends Rectangle {
 
     @Override
     public Intersection onIntersect(Head head) {
-        if (!isVisible || !isProgramCreated()) {
+        if (!isVisible || !isCreated()) {
             return null;
         }
 
@@ -218,7 +218,7 @@ public abstract class Panel extends Rectangle {
 
     @Override
     public void draw() {
-        if (!isVisible || !isProgramCreated()) {
+        if (!isVisible || !isCreated()) {
             return;
         }
 

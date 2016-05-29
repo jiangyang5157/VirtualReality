@@ -178,7 +178,7 @@ public class TextureSphere extends Sphere {
 
     @Override
     public void draw() {
-        if (!isVisible || !isProgramCreated()) {
+        if (!isVisible || !isCreated()) {
             return;
         }
 

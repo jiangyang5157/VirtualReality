@@ -45,6 +45,7 @@ public abstract class GLModel extends Model {
     protected int indicesBuffHandle;
     protected int texturesBuffHandle;
 
+    protected boolean isCreated = false;
     protected int program;
     protected int indicesBufferCapacity;
     protected float[] color;
@@ -138,10 +139,10 @@ public abstract class GLModel extends Model {
     @Override
     public void destroy() {
         setVisible(false);
-        program = 0;
+        isCreated = false;
     }
 
-    public boolean isProgramCreated() {
-        return program != 0;
+    public boolean isCreated() {
+        return isCreated;
     }
 }

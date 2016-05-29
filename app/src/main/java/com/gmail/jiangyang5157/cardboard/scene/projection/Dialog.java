@@ -82,7 +82,7 @@ public abstract class Dialog extends Panel {
 
     @Override
     public Intersection onIntersect(Head head) {
-        if (!isVisible || !isProgramCreated()) {
+        if (!isVisible || !isCreated()) {
             return null;
         }
         Intersection ret;
