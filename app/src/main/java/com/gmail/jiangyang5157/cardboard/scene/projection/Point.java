@@ -6,6 +6,7 @@ import android.util.Log;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.nio.FloatBuffer;
 
 /**
  * @author Yang
@@ -16,6 +17,8 @@ public class Point extends GLModel {
     protected float pointSize;
 
     private final int[] buffers = new int[1];
+
+    protected float[] vertices;
 
     public Point(Context context, int vertexShaderRawResource, int fragmentShaderRawResource) {
         super(context, vertexShaderRawResource, fragmentShaderRawResource);
@@ -47,7 +50,7 @@ public class Point extends GLModel {
 
     @Override
     protected void bindBuffers() {
-        verticesBuffer = ByteBuffer.allocateDirect(vertices.length * BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
+        FloatBuffer verticesBuffer = ByteBuffer.allocateDirect(vertices.length * BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
         verticesBuffer.put(vertices).position(0);
         vertices = null;
 
@@ -57,7 +60,6 @@ public class Point extends GLModel {
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, verticesBuffHandle);
         GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, verticesBuffer.capacity() * BYTES_PER_FLOAT, verticesBuffer, GLES20.GL_STATIC_DRAW);
         verticesBuffer.limit(0);
-        verticesBuffer = null;
     }
 
     @Override

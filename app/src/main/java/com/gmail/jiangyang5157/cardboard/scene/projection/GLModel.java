@@ -9,8 +9,6 @@ import com.gmail.jiangyang5157.cardboard.scene.Lighting;
 import com.gmail.jiangyang5157.tookit.data.text.IoUtils;
 
 import java.io.InputStream;
-import java.nio.FloatBuffer;
-import java.nio.ShortBuffer;
 
 /**
  * @author Yang
@@ -37,37 +35,22 @@ public abstract class GLModel extends Model {
     protected int texIdHandle;
     protected int colorHandle;
     protected int pointSizeHandle;
-    protected int radiusHandle;
     protected int lightPosHandle;
-
     protected int vertexHandle;
     protected int normalHandle;
     protected int texCoordHandle;
-
-    protected float[] vertices;
-    protected float[] normals;
-    protected short[] indices;
-    protected float[] textures;
-
-    protected FloatBuffer verticesBuffer;
-    protected FloatBuffer normalsBuffer;
-    protected ShortBuffer indicesBuffer;
-    protected FloatBuffer texturesBuffer;
 
     protected int verticesBuffHandle;
     protected int normalsBuffHandle;
     protected int indicesBuffHandle;
     protected int texturesBuffHandle;
 
+    protected int program;
+    protected int indicesBufferCapacity;
     protected float[] color;
 
-    protected int indicesBufferCapacity;
-
-    protected int program;
-
-    protected Lighting lighting;
-
     protected Context context;
+    protected Lighting lighting;
 
     private final int vertexShaderRawResource;
     private final int fragmentShaderRawResource;
@@ -79,7 +62,7 @@ public abstract class GLModel extends Model {
         this.fragmentShaderRawResource = fragmentShaderRawResource;
     }
 
-    protected void initializeProgram(){
+    protected void initializeProgram() {
         program = GLES20.glCreateProgram();
         GLES20.glAttachShader(program, compileShader(GLES20.GL_VERTEX_SHADER, vertexShaderRawResource));
         GLES20.glAttachShader(program, compileShader(GLES20.GL_FRAGMENT_SHADER, fragmentShaderRawResource));
@@ -126,9 +109,9 @@ public abstract class GLModel extends Model {
 
     protected abstract void bindBuffers();
 
-   public void setColor(String hex){
-       setColor(Color.parseColor(hex));
-   }
+    public void setColor(String hex) {
+        setColor(Color.parseColor(hex));
+    }
 
     public void setColor(int hex) {
         int r = (hex >> 16) & 0xFF;
@@ -158,7 +141,7 @@ public abstract class GLModel extends Model {
         program = 0;
     }
 
-    public boolean isProgramCreated(){
+    public boolean isProgramCreated() {
         return program != 0;
     }
 }

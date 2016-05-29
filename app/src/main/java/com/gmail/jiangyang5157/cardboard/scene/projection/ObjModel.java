@@ -6,11 +6,14 @@ import android.opengl.Matrix;
 import android.util.Log;
 
 import com.gmail.jiangyang5157.cardboard.vr.R;
+import com.gmail.jiangyang5157.tookit.app.AppUtils;
 import com.gmail.jiangyang5157.tookit.data.text.IoUtils;
 
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.nio.FloatBuffer;
+import java.nio.ShortBuffer;
 import java.util.Vector;
 
 /**
@@ -48,8 +51,7 @@ public class ObjModel extends GLModel {
     }
 
     public void create() {
-        // TODO: 5/29/2016
-        setColor(COLOR_NORMAL_RES_ID);
+        setColor(AppUtils.getColor(context, COLOR_NORMAL_RES_ID));
 
         initializeProgram();
 
@@ -62,14 +64,14 @@ public class ObjModel extends GLModel {
     @Override
     protected void bindBuffers() {
         int size = v.size();
-        verticesBuffer = ByteBuffer.allocateDirect(size * BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
+        FloatBuffer verticesBuffer = ByteBuffer.allocateDirect(size * BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
         for (int i = 0; i < size; i++) {
             verticesBuffer.put(v.get(i));
         }
         verticesBuffer.position(0);
 
         size = fv.size();
-        indicesBuffer = ByteBuffer.allocateDirect(size * BYTES_PER_SHORT).order(ByteOrder.nativeOrder()).asShortBuffer();
+        ShortBuffer indicesBuffer = ByteBuffer.allocateDirect(size * BYTES_PER_SHORT).order(ByteOrder.nativeOrder()).asShortBuffer();
         for (int i = 0; i < size; i++) {
             indicesBuffer.put(fv.get(i));
         }
@@ -83,23 +85,21 @@ public class ObjModel extends GLModel {
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, verticesBuffHandle);
         GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, verticesBuffer.capacity() * BYTES_PER_FLOAT, verticesBuffer, GLES20.GL_STATIC_DRAW);
         verticesBuffer.limit(0);
-        verticesBuffer = null;
 
         GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, indicesBuffHandle);
         GLES20.glBufferData(GLES20.GL_ELEMENT_ARRAY_BUFFER, indicesBuffer.capacity() * BYTES_PER_SHORT, indicesBuffer, GLES20.GL_STATIC_DRAW);
         indicesBuffer.limit(0);
-        indicesBuffer = null;
     }
 
     @Override
     protected void buildArrays() {
-        v = new Vector<Float>();
-        vt = new Vector<Float>();
-        vn = new Vector<Float>();
+        v = new Vector<>();
+        vt = new Vector<>();
+        vn = new Vector<>();
 
-        fv = new Vector<Short>();
-        fvt = new Vector<Short>();
-        fvn = new Vector<Short>();
+        fv = new Vector<>();
+        fvt = new Vector<>();
+        fvn = new Vector<>();
 
         InputStream ins = context.getResources().openRawResource(context.getResources().getIdentifier(obj, "raw", context.getPackageName()));
         IoUtils.read(ins, new IoUtils.OnReadingListener() {

@@ -14,6 +14,8 @@ import com.gmail.jiangyang5157.tookit.math.Vector3d;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.nio.FloatBuffer;
+import java.nio.ShortBuffer;
 
 /**
  * @author Yang
@@ -23,6 +25,11 @@ public abstract class Panel extends Rectangle {
 
     private static final int VERTEX_SHADER_RAW_RESOURCE = R.raw.panel_vertex_shader;
     private static final int FRAGMENT_SHADER_RAW_RESOURCE = R.raw.panel_fragment_shader;
+
+    protected float[] vertices;
+    protected float[] normals;
+    protected short[] indices;
+    protected float[] textures;
 
     private final int[] buffers = new int[3];
     private final int[] texBuffers = new int[1];
@@ -173,16 +180,16 @@ public abstract class Panel extends Rectangle {
 
     @Override
     protected void bindBuffers() {
-        verticesBuffer = ByteBuffer.allocateDirect(vertices.length * BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
+        FloatBuffer verticesBuffer = ByteBuffer.allocateDirect(vertices.length * BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
         verticesBuffer.put(vertices).position(0);
         vertices = null;
 
-        indicesBuffer = ByteBuffer.allocateDirect(indices.length * BYTES_PER_SHORT).order(ByteOrder.nativeOrder()).asShortBuffer();
+        ShortBuffer indicesBuffer = ByteBuffer.allocateDirect(indices.length * BYTES_PER_SHORT).order(ByteOrder.nativeOrder()).asShortBuffer();
         indicesBuffer.put(indices).position(0);
         indices = null;
         indicesBufferCapacity = indicesBuffer.capacity();
 
-        texturesBuffer = ByteBuffer.allocateDirect(textures.length * BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
+        FloatBuffer texturesBuffer = ByteBuffer.allocateDirect(textures.length * BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
         texturesBuffer.put(textures).position(0);
         textures = null;
 
@@ -194,17 +201,14 @@ public abstract class Panel extends Rectangle {
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, verticesBuffHandle);
         GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, verticesBuffer.capacity() * BYTES_PER_FLOAT, verticesBuffer, GLES20.GL_STATIC_DRAW);
         verticesBuffer.limit(0);
-        verticesBuffer = null;
 
         GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, indicesBuffHandle);
         GLES20.glBufferData(GLES20.GL_ELEMENT_ARRAY_BUFFER, indicesBuffer.capacity() * BYTES_PER_SHORT, indicesBuffer, GLES20.GL_STATIC_DRAW);
         indicesBuffer.limit(0);
-        indicesBuffer = null;
 
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, texturesBuffHandle);
         GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, texturesBuffer.capacity() * BYTES_PER_FLOAT, texturesBuffer, GLES20.GL_STATIC_DRAW);
         texturesBuffer.limit(0);
-        texturesBuffer = null;
 
         texBuffers[0] = createTexture();
     }

@@ -9,6 +9,8 @@ import android.util.Log;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.nio.FloatBuffer;
+import java.nio.ShortBuffer;
 
 /**
  * @author Yang
@@ -22,6 +24,11 @@ public class TextureSphere extends Sphere {
 
     private final int[] buffers = new int[4];
     private final int[] texBuffers = new int[1];
+
+    protected float[] vertices;
+    protected float[] normals;
+    protected short[] indices;
+    protected float[] textures;
 
     public TextureSphere(Context context, int vertexShaderRawResource, int fragmentShaderRawResource) {
         super(context, vertexShaderRawResource, fragmentShaderRawResource);
@@ -93,20 +100,20 @@ public class TextureSphere extends Sphere {
 
     @Override
     protected void bindBuffers() {
-        verticesBuffer = ByteBuffer.allocateDirect(vertices.length * BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
+        FloatBuffer verticesBuffer = ByteBuffer.allocateDirect(vertices.length * BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
         verticesBuffer.put(vertices).position(0);
         vertices = null;
 
-        indicesBuffer = ByteBuffer.allocateDirect(indices.length * BYTES_PER_SHORT).order(ByteOrder.nativeOrder()).asShortBuffer();
+        ShortBuffer indicesBuffer = ByteBuffer.allocateDirect(indices.length * BYTES_PER_SHORT).order(ByteOrder.nativeOrder()).asShortBuffer();
         indicesBuffer.put(indices).position(0);
         indices = null;
         indicesBufferCapacity = indicesBuffer.capacity();
 
-        normalsBuffer = ByteBuffer.allocateDirect(normals.length * BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
+        FloatBuffer normalsBuffer = ByteBuffer.allocateDirect(normals.length * BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
         normalsBuffer.put(normals).position(0);
         normals = null;
 
-        texturesBuffer = ByteBuffer.allocateDirect(textures.length * BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
+        FloatBuffer texturesBuffer = ByteBuffer.allocateDirect(textures.length * BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
         texturesBuffer.put(textures).position(0);
         textures = null;
 
@@ -119,22 +126,18 @@ public class TextureSphere extends Sphere {
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, verticesBuffHandle);
         GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, verticesBuffer.capacity() * BYTES_PER_FLOAT, verticesBuffer, GLES20.GL_STATIC_DRAW);
         verticesBuffer.limit(0);
-        verticesBuffer = null;
 
         GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, indicesBuffHandle);
         GLES20.glBufferData(GLES20.GL_ELEMENT_ARRAY_BUFFER, indicesBuffer.capacity() * BYTES_PER_SHORT, indicesBuffer, GLES20.GL_STATIC_DRAW);
         indicesBuffer.limit(0);
-        indicesBuffer = null;
 
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, normalsBuffHandle);
         GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, normalsBuffer.capacity() * BYTES_PER_FLOAT, normalsBuffer, GLES20.GL_STATIC_DRAW);
         normalsBuffer.limit(0);
-        normalsBuffer = null;
 
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, texturesBuffHandle);
         GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, texturesBuffer.capacity() * BYTES_PER_FLOAT, texturesBuffer, GLES20.GL_STATIC_DRAW);
         texturesBuffer.limit(0);
-        texturesBuffer = null;
 
         texBuffers[0] = loadTexture(context, textureDrawableResource);
     }
