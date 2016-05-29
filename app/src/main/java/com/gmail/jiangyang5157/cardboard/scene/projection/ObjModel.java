@@ -75,8 +75,7 @@ public class ObjModel extends GLModel {
         bindBuffers();
 
         setVisible(true);
-
-        //A/libc: Fatal signal 11 (SIGSEGV), code 1, fault addr 0x0 in tid 4716 (GLThread 3824)
+//
 //        if (creator == null) {
 //            creator = new Creator();
 //            creator.execute();

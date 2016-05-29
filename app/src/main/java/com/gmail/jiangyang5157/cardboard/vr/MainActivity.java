@@ -125,7 +125,6 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
                 if (markerDialog.isProgramCreated()) {
                     markerDialog.destroy();
                     markerDialog = null;
-
                     objModel.destroy();
                     objModel = null;
                 }
@@ -143,8 +142,9 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
     @Override
     public void onCardboardTrigger() {
-        if (objModel != null && objModel.isProgramCreated() && objModel.isVisible()) {
-            objModel.setVisible(false);
+        if (objModel != null && objModel.isProgramCreated()) {
+            objModel.destroy();
+            objModel = null;
             return;
         }
 
@@ -169,7 +169,6 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         @Override
         public void showObjModel(ObjModel model) {
             objModel = model;
-            objModel.setVisible(true);
         }
     };
 

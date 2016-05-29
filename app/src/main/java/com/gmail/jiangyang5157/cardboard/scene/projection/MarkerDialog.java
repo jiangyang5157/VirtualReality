@@ -40,7 +40,6 @@ public class MarkerDialog extends Dialog {
         createContent();
         adjustBounds();
         create(width, height, AppUtils.getColor(context, COLOR_BACKGROUND_RES_ID));
-
         setPosition(cameraPos, forward, up, right, eulerAngles);
     }
 
@@ -120,10 +119,6 @@ public class MarkerDialog extends Dialog {
             cameraPos[1] -= up[1] * PADDING_BOARD;
             cameraPos[2] -= up[2] * PADDING_BOARD;
         }
-    }
-
-    public Event getEventListener() {
-        return eventListener;
     }
 
     public void setEventListener(Event eventListener) {
