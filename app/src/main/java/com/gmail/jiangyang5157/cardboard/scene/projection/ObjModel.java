@@ -46,27 +46,16 @@ public class ObjModel extends GLModel {
 
     private Creator creator;
     private class Creator extends AsyncTask<Void, Void, Void> {
-        float[] cameraPos;
-        float[] forward;
-        float[] up;
-        float[] right;
-        float[] eulerAngles;
-
-        public Creator(float[] cameraPos, float[] forward, float[] up, float[] right, float[] eulerAngles) {
-            this.cameraPos = cameraPos;
-            this.forward = forward;
-            this.up = up;
-            this.right = right;
-            this.eulerAngles = eulerAngles;
-        }
-
         @Override
         protected Void doInBackground(Void... params) {
+            buildArrays();
+            bindBuffers();
             return null;
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
+            setVisible(true);
         }
     }
 
@@ -87,8 +76,9 @@ public class ObjModel extends GLModel {
 
         setVisible(true);
 
+        //A/libc: Fatal signal 11 (SIGSEGV), code 1, fault addr 0x0 in tid 4716 (GLThread 3824)
 //        if (creator == null) {
-//            creator = new Creator(cameraPos, forward, up, right, eulerAngles);
+//            creator = new Creator();
 //            creator.execute();
 //        }
     }
