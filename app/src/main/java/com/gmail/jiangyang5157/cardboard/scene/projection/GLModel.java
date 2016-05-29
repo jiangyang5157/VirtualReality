@@ -39,6 +39,7 @@ public abstract class GLModel extends Model {
     protected int pointSizeHandle;
     protected int radiusHandle;
     protected int lightPosHandle;
+
     protected int vertexHandle;
     protected int normalHandle;
     protected int texCoordHandle;

@@ -8,9 +8,13 @@
         <Placemark>
             <name>South Pole</name>
             <description>descriptiondescription</description>
-            <ExtendedData xmlns:camp="http://campsites.com">
-                <camp:number>12</camp:number>
-                <camp:parkingSpaces>4</camp:parkingSpaces>
+            <ExtendedData>
+                <Data name="title">
+                   <value>cube obj model</value>
+                </Data>
+                <Data name="obj">
+                    <value>cube</value>
+                </Data>
             </ExtendedData>
             <Point>
                 <coordinates>0,-90</coordinates>
@@ -57,10 +61,10 @@
             <description>descriptiondescription</description>
             <ExtendedData>
                 <Data name="title">
-                   <value>cube obj model</value>
+                   <value>teapot obj model</value>
                 </Data>
                 <Data name="obj">
-                    <value>cube</value>
+                    <value>teapot</value>
                 </Data>
             </ExtendedData>
             <Point>
@@ -70,6 +74,10 @@
         <Placemark>
             <name>-90/0</name>
             <description>descriptiondescription</description>
+            <ExtendedData xmlns:camp="http://campsites.com">
+                <camp:number>12</camp:number>
+                <camp:parkingSpaces>4</camp:parkingSpaces>
+            </ExtendedData>
             <Point>
                 <coordinates>-90,0</coordinates>
             </Point>
@@ -77,14 +85,6 @@
         <Placemark>
             <name>-180/0</name>
             <description>descriptiondescription</description>
-            <ExtendedData>
-                <Data name="title">
-                   <value>teapot obj model</value>
-                </Data>
-                <Data name="obj">
-                    <value>teapot</value>
-                </Data>
-            </ExtendedData>
             <Point>
                 <coordinates>-180,0</coordinates>
             </Point>
