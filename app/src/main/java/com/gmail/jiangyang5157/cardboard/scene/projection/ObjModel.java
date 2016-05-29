@@ -8,6 +8,7 @@ import android.util.Log;
 import com.gmail.jiangyang5157.cardboard.vr.R;
 import com.gmail.jiangyang5157.tookit.app.AppUtils;
 import com.gmail.jiangyang5157.tookit.data.text.IoUtils;
+import com.gmail.jiangyang5157.tookit.math.Vector3d;
 
 import java.io.InputStream;
 import java.nio.ByteBuffer;
@@ -28,6 +29,8 @@ public class ObjModel extends GLModel {
 
     private static final int COLOR_NORMAL_RES_ID = com.gmail.jiangyang5157.tookit.R.color.DeepOrange;
 
+    private static final float DISTANCE = 100;
+
     private String title;
     private String obj;
 
@@ -38,16 +41,12 @@ public class ObjModel extends GLModel {
     private Vector<Short> fvt;
     private Vector<Short> fvn;
 
-    private final int[] buffers = new int[3];
+    protected final int[] buffers = new int[3];
 
     protected ObjModel(Context context, String title, String obj) {
         super(context, VERTEX_SHADER_RAW_RESOURCE, FRAGMENT_SHADER_RAW_RESOURCE);
         this.title = title;
         this.obj = obj;
-
-        setScale(50f);
-        Matrix.setIdentityM(translation, 0);
-        Matrix.translateM(translation, 0, 0, -200, -200);
     }
 
     public void create() {
@@ -58,6 +57,25 @@ public class ObjModel extends GLModel {
         bindBuffers();
 
         setVisible(true);
+    }
+
+    public void setPosition(float[] cameraPos, float[] forward, float[] up, float[] right, float[] eulerAngles) {
+        setScale(10f);
+
+        com.gmail.jiangyang5157.tookit.math.Vector cameraPosVec = new Vector3d(cameraPos[0], cameraPos[1], cameraPos[2]);
+        com.gmail.jiangyang5157.tookit.math.Vector forwardVec = new Vector3d(forward[0], forward[1], forward[2]).times(DISTANCE);
+        com.gmail.jiangyang5157.tookit.math.Vector positionVec = cameraPosVec.plus(forwardVec);
+        double[] positionVecData = positionVec.getData();
+        Matrix.setIdentityM(translation, 0);
+        Matrix.translateM(translation, 0, (float) positionVecData[0], (float) positionVecData[1], (float) positionVecData[2]);
+        float eulerAnglesDegree0 = (float) Math.toDegrees(eulerAngles[0]);
+        float eulerAnglesDegree1 = (float) Math.toDegrees(eulerAngles[1]);
+        float eulerAnglesDegree2 = (float) Math.toDegrees(eulerAngles[2]);
+
+        Matrix.setIdentityM(rotation, 0);
+        Matrix.rotateM(rotation, 0, eulerAnglesDegree1, 0, 1f, 0);
+        Matrix.rotateM(rotation, 0, eulerAnglesDegree0, 1f, 0, 0);
+        Matrix.rotateM(rotation, 0, eulerAnglesDegree2, 0, 0f, 1f);
     }
 
     @Override
@@ -108,13 +126,13 @@ public class ObjModel extends GLModel {
 
     @Override
     protected void buildArrays() {
-        v = new Vector<>();
-        vt = new Vector<>();
-        vn = new Vector<>();
+        v = new java.util.Vector<>();
+        vt = new java.util.Vector<>();
+        vn = new java.util.Vector<>();
 
-        fv = new Vector<>();
-        fvt = new Vector<>();
-        fvn = new Vector<>();
+        fv = new java.util.Vector<>();
+        fvt = new java.util.Vector<>();
+        fvn = new java.util.Vector<>();
 
         InputStream ins = context.getResources().openRawResource(context.getResources().getIdentifier(obj, "raw", context.getPackageName()));
         IoUtils.read(ins, new IoUtils.OnReadingListener() {

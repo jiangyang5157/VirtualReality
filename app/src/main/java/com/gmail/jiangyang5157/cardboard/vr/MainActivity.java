@@ -104,6 +104,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
         if (objModel != null && !objModel.isProgramCreated()) {
             objModel.create();
+            objModel.setPosition(head.getCamera().getPosition(), head.forward, head.up, head.right, head.eulerAngles);
         }
 
         ray.setIntersection(getIntersection());
