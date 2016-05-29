@@ -97,14 +97,18 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
         head.adjustPosition(earth);
 
-        if (markerDialog != null && !markerDialog.isProgramCreated()) {
-            markerDialog.create();
-            markerDialog.setPosition(head.getCamera().getPosition(), head.forward, head.up, head.right, head.eulerAngles);
-        }
+        if (markerDialog != null) {
+            if (!markerDialog.isProgramCreated()) {
+                markerDialog.create();
+                markerDialog.setPosition(head.getCamera().getPosition(), head.forward, head.up, head.right, head.eulerAngles);
+            }
 
-        if (objModel != null && !objModel.isProgramCreated()) {
-            objModel.create();
-            objModel.setPosition(head.getCamera().getPosition(), head.forward, head.up, head.right, head.eulerAngles);
+            if (objModel != null) {
+                if (!objModel.isProgramCreated()) {
+                    objModel.create();
+                    objModel.setPosition(head.getCamera().getPosition(), head.forward, head.up, head.right, head.eulerAngles);
+                }
+            }
         }
 
         ray.setIntersection(getIntersection());
@@ -123,6 +127,9 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
                 if (markerDialog.isProgramCreated()) {
                     markerDialog.destroy();
                     markerDialog = null;
+
+                    objModel.destroy();
+                    objModel = null;
                 }
             }
         }
@@ -138,6 +145,11 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
     @Override
     public void onCardboardTrigger() {
+        if (objModel != null && objModel.isProgramCreated() && objModel.isVisible()) {
+            objModel.setVisible(false);
+            return;
+        }
+
         final Intersection intersection = ray.getIntersection();
         if (intersection != null) {
             if (intersection.getModel() instanceof Intersection.Clickable) {
@@ -159,6 +171,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         @Override
         public void showObjModel(ObjModel model) {
             objModel = model;
+            objModel.setVisible(true);
         }
     };
 

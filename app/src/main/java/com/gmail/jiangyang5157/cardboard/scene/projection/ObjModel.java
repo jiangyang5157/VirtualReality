@@ -151,7 +151,7 @@ public class ObjModel extends GLModel {
                     } else if (line.startsWith("f ")) {
                         parserFace(line);
                     } else {
-                        Log.i(TAG, "Unsupported regex: " + line);
+                        Log.w(TAG, "Unsupported regex: " + line);
                     }
                     return true;
                 }
@@ -160,7 +160,7 @@ public class ObjModel extends GLModel {
     }
 
     private void parserGeometricVertices(String line) {
-        Log.i(TAG, "parserGeometricVertices: " + line);
+        Log.d(TAG, "parserGeometricVertices: " + line);
         String[] tokens = line.split("[ ]+");
         int length = tokens.length;
         for (int i = 1; i < length; i++) {
@@ -169,7 +169,7 @@ public class ObjModel extends GLModel {
     }
 
     private void parserTextureVertices(String line) {
-        Log.i(TAG, "parserTextureVertices: " + line);
+        Log.d(TAG, "parserTextureVertices: " + line);
         String[] tokens = line.split("[ ]+");
         int length = tokens.length;
         for (int i = 1; i < length; i++) {
@@ -178,7 +178,7 @@ public class ObjModel extends GLModel {
     }
 
     private void parserVertexNormals(String line) {
-        Log.i(TAG, "parserVertexNormals: " + line);
+        Log.d(TAG, "parserVertexNormals: " + line);
         String[] tokens = line.split("[ ]+");
         int length = tokens.length;
         for (int i = 1; i < length; i++) {
@@ -187,7 +187,7 @@ public class ObjModel extends GLModel {
     }
 
     private void parserFace(String line) {
-        Log.i(TAG, "parserFace: " + line);
+        Log.d(TAG, "parserFace: " + line);
         String[] tokens = line.split("[ ]+");
         int length = tokens.length;
 
