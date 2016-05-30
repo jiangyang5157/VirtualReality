@@ -365,7 +365,7 @@ public class ObjModel extends GLModel {
 
     @Override
     public void update(float[] view, float[] perspective) {
-        Matrix.rotateM(rotation, 0, 0.5f, 0, 1, 0);
+        Matrix.rotateM(rotation, 0, 0.5f, 1, 1, 0);
         super.update(view, perspective);
     }
 
