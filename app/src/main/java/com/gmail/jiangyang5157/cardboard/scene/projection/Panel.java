@@ -72,16 +72,16 @@ public abstract class Panel extends Rectangle {
         Matrix.setIdentityM(translation, 0);
         Matrix.translateM(translation, 0, (float) positionVecData[0], (float) positionVecData[1], (float) positionVecData[2]);
 
-//        Matrix.setIdentityM(rotation, 0);
-//        float eulerAnglesDegree0 = (float) Math.toDegrees(eulerAngles[0]);
-//        float eulerAnglesDegree1 = (float) Math.toDegrees(eulerAngles[1]);
-//        float eulerAnglesDegree2 = (float) Math.toDegrees(eulerAngles[2]);
-//        Matrix.rotateM(rotation, 0, eulerAnglesDegree1, 0, 1f, 0);
-//        Matrix.rotateM(rotation, 0, eulerAnglesDegree0, 1f, 0, 0);
-//        Matrix.rotateM(rotation, 0, eulerAnglesDegree2, 0, 0f, 1f);
-        float[] r = new float[16];
-        setQquaternionRotatMatrix(r, quaternion);
-        Matrix.multiplyMM(rotation, 0, r, 0, rotation, 0);
+        Matrix.setIdentityM(rotation, 0);
+        float eulerAnglesDegree0 = (float) Math.toDegrees(eulerAngles[0]);
+        float eulerAnglesDegree1 = (float) Math.toDegrees(eulerAngles[1]);
+        float eulerAnglesDegree2 = (float) Math.toDegrees(eulerAngles[2]);
+        Matrix.rotateM(rotation, 0, eulerAnglesDegree1, 0, 1f, 0);
+        Matrix.rotateM(rotation, 0, eulerAnglesDegree0, 1f, 0, 0);
+        Matrix.rotateM(rotation, 0, eulerAnglesDegree2, 0, 0f, 1f);
+//        float[] r = new float[16];
+//        setQquaternionRotatMatrix(r, quaternion);
+//        Matrix.multiplyMM(rotation, 0, r, 0, rotation, 0);
     }
 
     public void setQquaternionRotatMatrix(float[] rm, float[] quaternion) {

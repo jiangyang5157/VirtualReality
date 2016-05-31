@@ -104,7 +104,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
             if (objModel != null) {
                 if (!objModel.isCreated()) {
-                    objModel.create(head.getCamera().getPosition(), head.forward, head.up, head.right, head.eulerAngles);
+                    objModel.create(head.getCamera().getPosition(), head.forward, head.up, head.right, head.eulerAngles, head.quaternion);
                 }
             }
         }
