@@ -36,11 +36,10 @@ public class MarkerDialog extends Dialog {
         super.destroy();
     }
 
-    public void create(float[] cameraPos, float[] forward, float[] quaternion, float[] up, float[] right) {
+    public void create() {
         createContent();
         adjustBounds();
         create(width, height, AppUtils.getColor(context, COLOR_BACKGROUND_RES_ID));
-        setPosition(cameraPos, forward, quaternion, up, right);
     }
 
     private void createContent() {
@@ -87,7 +86,7 @@ public class MarkerDialog extends Dialog {
     }
 
     @Override
-    protected void setPosition(float[] cameraPos, float[] forward, float[] quaternion, float[] up, float[] right) {
+    public void setPosition(float[] cameraPos, float[] forward, float[] quaternion, float[] up, float[] right) {
         super.setPosition(cameraPos, forward, quaternion, up, right);
 
         //

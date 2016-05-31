@@ -20,11 +20,11 @@ public abstract class Sphere extends GLModel implements Intersection.Intersectab
     }
 
     protected void create(float radius) {
-        initializeProgram();
         this.radius = radius;
         setScale(radius);
-
         buildArrays();
+
+        initializeProgram();
         bindBuffers();
         isCreated = true;
 
