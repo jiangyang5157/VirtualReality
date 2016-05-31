@@ -45,19 +45,19 @@ public abstract class Panel extends Rectangle {
     }
 
     protected void create(float width, float height, int color) {
-        initializeProgram();
         this.width = width;
         this.height = height;
         setColor(color);
-
         buildArrays();
+
+        initializeProgram();
         bindBuffers();
         isCreated = true;
 
         setVisible(true);
     }
 
-    protected void setPosition(float[] cameraPos, float[] forward, float[] quaternion, float[] up, float[] right) {
+    public void setPosition(float[] cameraPos, float[] forward, float[] quaternion, float[] up, float[] right) {
         Vector cameraPosVec = new Vector3d(cameraPos[0], cameraPos[1], cameraPos[2]);
         Vector forwardVec = new Vector3d(forward[0], forward[1], forward[2]).times(DISTANCE);
         Vector positionVec = cameraPosVec.plus(forwardVec);
