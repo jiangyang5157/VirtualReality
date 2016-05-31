@@ -1,7 +1,5 @@
 package com.gmail.jiangyang5157.cardboard.scene;
 
-import com.google.vrtoolkit.cardboard.sensors.internal.Matrix3x3d;
-
 public class Coordinate {
 
     public static final double WGS84_SEMI_MAJOR_AXIS = 6378137.0;
@@ -51,70 +49,7 @@ public class Coordinate {
         // Ecef coord system is [y-east z-north(up)], and x points to the 0,0
         // Our coord system is [x-east, y-north(up)], and x points to the 0,180
         // So,we reversal x, and use z as y
-        double[] ret = {-x, z, y};
-
-//        Matrix3x3d m = new Matrix3x3d();
-//        m.setIdentity();
-//        //Matrix3x3d.mult(getRotationMatrixFromU(new double[]{1, 0, 0}, 90), m, m);
-//        Vector3d ecefVec = new Vector3d(x, y, z);
-//        double length = ecefVec.length();
-//        ecefVec.normalize();
-//        Matrix3x3d.mult(m, ecefVec, ecefVec);
-//        ecefVec = new Vector3d(ecefVec.x * length, ecefVec.y * length, ecefVec.z * length);
-//        double[] ret = new double[]{-ecefVec.x, ecefVec.z, ecefVec.y};
-
-        return ret;
-    }
-
-    private Matrix3x3d getRotationMatrixFromX(double angle) {
-        double radian = Math.toRadians(angle);
-        double sin = Math.sin(radian);
-        double cos = Math.cos(radian);
-        return new Matrix3x3d(
-                1, 0, 0,
-                0, cos, sin,
-                0, -sin, cos
-        );
-    }
-
-    private Matrix3x3d getRotationMatrixFromY(double angle) {
-        double radian = Math.toRadians(angle);
-        double sin = Math.sin(radian);
-        double cos = Math.cos(radian);
-        return new Matrix3x3d(
-                cos, 0, -sin,
-                0, 1, 0,
-                sin, 0, cos
-        );
-    }
-
-    private Matrix3x3d getRotationMatrixFromZ(double angle) {
-        double radian = Math.toRadians(angle);
-        double sin = Math.sin(radian);
-        double cos = Math.cos(radian);
-        return new Matrix3x3d(
-                cos, sin, 0,
-                -sin, cos, 0,
-                0, 0, 1
-        );
-    }
-
-    private Matrix3x3d getRotationMatrixFromU(double[] u, double angle) {
-        double radian = Math.toRadians(angle);
-        double sin = Math.sin(radian);
-        double cos = Math.cos(radian);
-        double u0sin = u[0] * sin;
-        double u1sin = u[1] * sin;
-        double u2sin = u[2] * sin;
-        double u0u1 = u[0] * u[1];
-        double u0u2 = u[0] * u[2];
-        double u1u2 = u[1] * u[2];
-
-        return new Matrix3x3d(
-                Math.pow(u[0], 2) * (1.0 - cos) + cos, u0u1 * (1.0 - cos) + u2sin, u0u2 * (1.0 - cos) - u1sin,
-                u0u1 * (1.0 - cos) - u2sin, Math.pow(u[1], 2) * (1.0 - cos) + cos, u1u2 * (1.0 - cos) + u0sin,
-                u0u2 * (1.0 - cos) + u1sin, u1u2 * (1.0 - cos) - u0sin, Math.pow(u[2], 2) * (1.0 - cos) + cos
-        );
+        return new double[]{-x, z, y};
     }
 
     @Override

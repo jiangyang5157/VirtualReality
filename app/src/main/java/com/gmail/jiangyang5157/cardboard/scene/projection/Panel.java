@@ -57,28 +57,22 @@ public abstract class Panel extends Rectangle {
         setVisible(true);
     }
 
-    protected void setPosition(float[] cameraPos, float[] forward, float[] up, float[] right, float[] eulerAngles) {
+    protected void setPosition(float[] cameraPos, float[] forward, float[] quaternion, float[] up, float[] right) {
         Vector cameraPosVec = new Vector3d(cameraPos[0], cameraPos[1], cameraPos[2]);
         Vector forwardVec = new Vector3d(forward[0], forward[1], forward[2]).times(DISTANCE);
         Vector positionVec = cameraPosVec.plus(forwardVec);
 
-        buildCorners(up, right);
-        tlVec = new Vector3d(tlVec.plus(positionVec));
-        blVec = new Vector3d(blVec.plus(positionVec));
-        trVec = new Vector3d(trVec.plus(positionVec));
-        brVec = new Vector3d(brVec.plus(positionVec));
-
         double[] positionVecData = positionVec.getData();
         Matrix.setIdentityM(translation, 0);
         Matrix.translateM(translation, 0, (float) positionVecData[0], (float) positionVecData[1], (float) positionVecData[2]);
-        float eulerAnglesDegree0 = (float) Math.toDegrees(eulerAngles[0]);
-        float eulerAnglesDegree1 = (float) Math.toDegrees(eulerAngles[1]);
-        float eulerAnglesDegree2 = (float) Math.toDegrees(eulerAngles[2]);
 
         Matrix.setIdentityM(rotation, 0);
-        Matrix.rotateM(rotation, 0, eulerAnglesDegree1, 0, 1f, 0);
-        Matrix.rotateM(rotation, 0, eulerAnglesDegree0, 1f, 0, 0);
-        Matrix.rotateM(rotation, 0, eulerAnglesDegree2, 0, 0f, 1f);
+        // it should face to eye
+        float[] q = new float[]{-quaternion[0], -quaternion[1], -quaternion[2], quaternion[3]};
+        Matrix.multiplyMM(rotation, 0, Head.getQquaternionMatrix(q), 0, rotation, 0);
+
+        // build corners' vector, they are for intersect calculation
+        buildCorners(up, right, positionVec);
     }
 
     @Override
@@ -147,6 +141,14 @@ public abstract class Panel extends Rectangle {
         blVec = upVec.negate().plus(rightVec.negate());
         trVec = upVec.plus(rightVec);
         brVec = upVec.negate().plus(rightVec);
+    }
+
+    protected void buildCorners(float[] up, float[] right, Vector posVec) {
+        buildCorners(up, right);
+        tlVec = tlVec.plus(posVec);
+        blVec = blVec.plus(posVec);
+        trVec = trVec.plus(posVec);
+        brVec = brVec.plus(posVec);
     }
 
     @Override

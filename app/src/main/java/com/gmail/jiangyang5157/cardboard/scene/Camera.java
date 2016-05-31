@@ -31,9 +31,7 @@ public class Camera {
     }
 
     public float[] getPosition() {
-        float[] ret = new float[3];
-        System.arraycopy(position, 0, ret, 0, 3);
-        return ret;
+        return position.clone();
     }
 
     protected void move(float[] offset) {
@@ -46,7 +44,7 @@ public class Camera {
                 UP[0], UP[1], UP[2]);
     }
 
-    protected void forward(float[] src, float[] dir) {
+    protected static void forward(float[] src, float[] dir) {
         src[0] += dir[0];
         src[1] += dir[1];
         src[2] += dir[2];

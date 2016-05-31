@@ -20,11 +20,9 @@ public class Head implements SensorEventListener {
 
     public float[] headView = new float[16];
     public float[] forward = new float[3];
-    public float[] eulerAngles = new float[3];
     public float[] up = new float[3];
     public float[] right = new float[3];
     public float[] quaternion = new float[4];
-    public float[] translation = new float[3];
 
     private SensorManager sensorManager;
     private Sensor stepDetector;
@@ -66,13 +64,11 @@ public class Head implements SensorEventListener {
         };
         stepsCounter = 0;
 
-        velocity[0] *= 0.9;
-        velocity[1] *= 0.9;
-        velocity[2] *= 0.9;
+        final float D = 0.9f;
         float[] newVelocity = new float[]{
-                velocity[0] + a[0],
-                velocity[1] + a[1],
-                velocity[2] + a[2]
+                velocity[0] * D + a[0],
+                velocity[1] * D + a[1],
+                velocity[2] * D + a[2]
         };
         final float MOVEMENT_UNIT = 80;
         float[] offset = new float[]{
@@ -82,13 +78,62 @@ public class Head implements SensorEventListener {
         };
 
         float[] pos = camera.getPosition();
-        camera.forward(pos, offset);
+        Camera.forward(pos, offset);
         if (earth.contain(pos)) {
             camera.move(offset);
         } else {
             newVelocity[0] = newVelocity[1] = newVelocity[2] = 0;
         }
-        System.arraycopy(newVelocity, 0, velocity, 0, 3);
+        velocity = newVelocity;
+    }
+
+    public static float[] getQquaternionMatrix(float[] quaternion) {
+        float x = quaternion[0];
+        float y = quaternion[1];
+        float z = quaternion[2];
+        float w = quaternion[3];
+
+        float xx = x * x;
+        float xy = x * y;
+        float xz = x * z;
+        float xw = x * w;
+        float yy = y * y;
+        float yz = y * z;
+        float yw = y * w;
+        float zz = z * z;
+        float zw = z * w;
+
+        float xx2 = xx * 2.0f;
+        float xy2 = xy * 2.0f;
+        float xz2 = xz * 2.0f;
+        float xw2 = xw * 2.0f;
+        float yy2 = yy * 2.0f;
+        float yz2 = yz * 2.0f;
+        float yw2 = yw * 2.0f;
+        float zz2 = zz * 2.0f;
+        float zw2 = zw * 2.0f;
+
+        float[] ret = new float[16];
+        ret[0] = 1.0f - yy2 - zz2;
+        ret[1] = xy2 - zw2;
+        ret[2] = xz2 + yw2;
+        ret[3] = 0.0f;
+
+        ret[4] = xy2 + zw2;
+        ret[5] = 1.0f - xx2 - zz2;
+        ret[6] = yz2 - xw2;
+        ret[7] = 0.0f;
+
+        ret[8] = xz2 - yw2;
+        ret[9] = yz2 + xw2;
+        ret[10] = 1.0f - xx2 - yy2;
+        ret[11] = 0.0f;
+
+        ret[12] = 0.0f;
+        ret[13] = 0.0f;
+        ret[14] = 0.0f;
+        ret[15] = 1.0f;
+        return ret;
     }
 
     public Camera getCamera() {
