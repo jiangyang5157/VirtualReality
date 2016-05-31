@@ -97,6 +97,8 @@ public class ObjModel extends GLModel {
 
         size = vn.size();
         if (size == 0) {
+            // TODO: 6/1/2016
+            // use v as the normal
             vn.addAll(v);
             size = vn.size();
         }
