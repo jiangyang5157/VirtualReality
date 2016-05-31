@@ -64,13 +64,11 @@ public class Head implements SensorEventListener {
         };
         stepsCounter = 0;
 
-        velocity[0] *= 0.9;
-        velocity[1] *= 0.9;
-        velocity[2] *= 0.9;
+        final float D = 0.9f;
         float[] newVelocity = new float[]{
-                velocity[0] + a[0],
-                velocity[1] + a[1],
-                velocity[2] + a[2]
+                velocity[0] * D + a[0],
+                velocity[1] * D + a[1],
+                velocity[2] * D + a[2]
         };
         final float MOVEMENT_UNIT = 80;
         float[] offset = new float[]{
@@ -80,13 +78,13 @@ public class Head implements SensorEventListener {
         };
 
         float[] pos = camera.getPosition();
-        camera.forward(pos, offset);
+        Camera.forward(pos, offset);
         if (earth.contain(pos)) {
             camera.move(offset);
         } else {
             newVelocity[0] = newVelocity[1] = newVelocity[2] = 0;
         }
-        System.arraycopy(newVelocity, 0, velocity, 0, 3);
+        velocity = newVelocity;
     }
 
     public static float[] getQquaternionMatrix(float[] quaternion) {
