@@ -159,12 +159,12 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
 
         if (markerDialog != null) {
             if (!markerDialog.isCreated()) {
-                markerDialog.create(head.getCamera().getPosition(), head.forward, head.up, head.right, head.quaternion);
+                markerDialog.create(head.getCamera().getPosition(), head.forward, head.quaternion, head.up, head.right);
             }
 
             if (objModel != null) {
                 if (!objModel.isCreated()) {
-                    objModel.create(head.getCamera().getPosition(), head.forward, head.up, head.right, head.quaternion);
+                    objModel.create(head.getCamera().getPosition(), head.forward, head.quaternion);
                 }
             }
         }

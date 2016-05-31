@@ -57,7 +57,7 @@ public abstract class Panel extends Rectangle {
         setVisible(true);
     }
 
-    protected void setPosition(float[] cameraPos, float[] forward, float[] up, float[] right, float[] quaternion) {
+    protected void setPosition(float[] cameraPos, float[] forward, float[] quaternion, float[] up, float[] right) {
         Vector cameraPosVec = new Vector3d(cameraPos[0], cameraPos[1], cameraPos[2]);
         Vector forwardVec = new Vector3d(forward[0], forward[1], forward[2]).times(DISTANCE);
         Vector positionVec = cameraPosVec.plus(forwardVec);
