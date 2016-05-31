@@ -153,7 +153,7 @@ public abstract class Panel extends Rectangle {
 
     @Override
     protected void buildArrays() {
-        buildCorners(INITIAL_UP, INITIAL_RIGHT);
+        buildCorners(UP, RIGHT);
 
         double[] tl = tlVec.getData();
         double[] bl = blVec.getData();
