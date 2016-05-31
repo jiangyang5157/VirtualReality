@@ -31,6 +31,7 @@ public class ObjModel extends GLModel {
     private static final int COLOR_NORMAL_RES_ID = com.gmail.jiangyang5157.tookit.R.color.DeepOrange;
 
     private static final float DISTANCE = 100;
+    private static final float TIME_DELTA_ROTATION = 0.3f;
 
     private String title;
     private String obj;
@@ -363,7 +364,7 @@ public class ObjModel extends GLModel {
 
     @Override
     public void update(float[] view, float[] perspective) {
-        Matrix.rotateM(rotation, 0, 0.5f, 1, 1, 0);
+        Matrix.rotateM(rotation, 0, TIME_DELTA_ROTATION, 0.5f, 1.0f, 0.5f);
         super.update(view, perspective);
     }
 

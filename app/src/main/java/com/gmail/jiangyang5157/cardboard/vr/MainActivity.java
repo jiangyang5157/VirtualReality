@@ -45,6 +45,11 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
     private MarkerDialog markerDialog;
     private ObjModel objModel;
 
+    private GvrView gvrView;
+
+    private static final long TIME_DELTA_DOUBLE_CLICK = 200;
+    private long lastTimeOnCardboardTrigger = 0;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,11 +60,13 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
 
         setContentView(R.layout.activity_main);
 
-        GvrView gvrView = (GvrView) findViewById(R.id.gvr_view);
+        gvrView = (GvrView) findViewById(R.id.gvr_view);
         gvrView.setEGLConfigChooser(8, 8, 8, 8, 16, 8);
 
         gvrView.setRenderer(this);
-        gvrView.setTransitionViewEnabled(true);
+        // The transition view used to prompt the user to place their phone into a GVR viewer.
+//        gvrView.setTransitionViewEnabled(true);
+
         gvrView.setOnCardboardBackButtonListener(
                 new Runnable() {
                     @Override
@@ -70,23 +77,6 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         setGvrView(gvrView);
 
         head = new Head(this);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (objModel != null) {
-            objModel.destroy();
-        }
-        if (markerDialog != null) {
-            markerDialog.destroy();
-        }
-        if (earth != null) {
-            earth.destroy();
-        }
-        if (ray != null) {
-            ray.destroy();
-        }
     }
 
     private Intersection getIntersection() {
@@ -117,6 +107,19 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
 
     @Override
     public void onCardboardTrigger() {
+        long thisTime = System.currentTimeMillis();
+        if (thisTime - lastTimeOnCardboardTrigger < TIME_DELTA_DOUBLE_CLICK) {
+            // no interpupillary distance will be applied to the eye transformations
+            // automatic distortion correction will not take place
+            // field of view and perspective may look off especially if the view is not set to fullscreen
+            gvrView.setVRModeEnabled(!gvrView.getVRMode());
+
+            lastTimeOnCardboardTrigger = 0;
+            return;
+        } else {
+            lastTimeOnCardboardTrigger = thisTime;
+        }
+
         if (objModel != null && objModel.isCreated()) {
             objModel.destroy();
             objModel = null;
@@ -253,6 +256,9 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
 
     @Override
     public void onSurfaceCreated(EGLConfig eglConfig) {
+        // Dark background so text shows up well.
+        GLES20.glClearColor(0.1f, 0.1f, 0.1f, 0.5f);
+
         ray = new Ray(this);
         ray.create();
 
@@ -298,6 +304,27 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         super.onPause();
         if (head != null) {
             head.onPause();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (objModel != null) {
+            objModel.destroy();
+        }
+        if (markerDialog != null) {
+            markerDialog.destroy();
+        }
+        if (earth != null) {
+            earth.destroy();
+        }
+        if (ray != null) {
+            ray.destroy();
+        }
+
+        if (gvrView != null) {
+            gvrView.shutdown();
         }
     }
 }
