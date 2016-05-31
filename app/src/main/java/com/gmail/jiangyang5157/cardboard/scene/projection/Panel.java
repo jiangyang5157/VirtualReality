@@ -71,12 +71,8 @@ public abstract class Panel extends Rectangle {
         float[] q = new float[]{-quaternion[0], -quaternion[1], -quaternion[2], quaternion[3]};
         Matrix.multiplyMM(rotation, 0, Head.getQquaternionMatrix(q), 0, rotation, 0);
 
-        // mark corners' vector, it's for intersect calculation
-        buildCorners(up, right);
-        tlVec = new Vector3d(tlVec.plus(positionVec));
-        blVec = new Vector3d(blVec.plus(positionVec));
-        trVec = new Vector3d(trVec.plus(positionVec));
-        brVec = new Vector3d(brVec.plus(positionVec));
+        // build corners' vector, they are for intersect calculation
+        buildCorners(up, right, positionVec);
     }
 
     @Override
@@ -145,6 +141,14 @@ public abstract class Panel extends Rectangle {
         blVec = upVec.negate().plus(rightVec.negate());
         trVec = upVec.plus(rightVec);
         brVec = upVec.negate().plus(rightVec);
+    }
+
+    protected void buildCorners(float[] up, float[] right, Vector posVec) {
+        buildCorners(up, right);
+        tlVec = tlVec.plus(posVec);
+        blVec = blVec.plus(posVec);
+        trVec = trVec.plus(posVec);
+        brVec = brVec.plus(posVec);
     }
 
     @Override
