@@ -63,6 +63,23 @@ public class ObjModel extends GLModel {
         setVisible(true);
     }
 
+    public void createStep1() {
+        setColor(AppUtils.getColor(context, COLOR_NORMAL_RES_ID));
+        setScale(10f);
+        buildArrays();
+    }
+
+    public void createStep2() {
+        initializeProgram();
+        bindBuffers();
+    }
+
+    public void createStep3() {
+        isCreated = true;
+
+        setVisible(true);
+    }
+
     public void setPosition(float[] cameraPos, float[] forward, float[] quaternion) {
         com.gmail.jiangyang5157.tookit.math.Vector cameraPosVec = new Vector3d(cameraPos[0], cameraPos[1], cameraPos[2]);
         com.gmail.jiangyang5157.tookit.math.Vector forwardVec = new Vector3d(forward[0], forward[1], forward[2]).times(DISTANCE);

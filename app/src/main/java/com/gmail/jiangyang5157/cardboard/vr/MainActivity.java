@@ -2,6 +2,7 @@ package com.gmail.jiangyang5157.cardboard.vr;
 
 import android.opengl.GLES20;
 import android.opengl.Matrix;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -168,13 +169,52 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
 
             if (objModel != null) {
                 if (!objModel.isCreated()) {
-                    objModel.create();
-                    objModel.setPosition(head.getCamera().getPosition(), head.forward, head.quaternion);
+//                    objModel.create();
+//                    objModel.setPosition(head.getCamera().getPosition(), head.forward, head.quaternion);
+
+                    if (testObjModelCreator != null && testObjModelCreator.getStatus() == AsyncTask.Status.FINISHED) {
+                        testObjModelCreator.cancel(true);
+                    } else {
+                        testObjModelCreator = new TestObjModelCreator(objModel);
+                        testObjModelCreator.execute();
+                    }
                 }
             }
         }
 
         ray.setIntersection(getIntersection());
+    }
+
+    private TestObjModelCreator testObjModelCreator;
+    class TestObjModelCreator extends AsyncTask<Void, Void, Void> {
+        ObjModel objModel;
+
+        public TestObjModelCreator(ObjModel objModel) {
+            this.objModel = objModel;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            objModel.createStep1();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            objModel.createStep2();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            objModel.createStep3();
+            objModel.setPosition(head.getCamera().getPosition(), head.forward, head.quaternion);
+        }
+
+        @Override
+        protected void onCancelled() {
+            objModel.destroy();
+            objModel = null;
+        }
     }
 
     @Override
