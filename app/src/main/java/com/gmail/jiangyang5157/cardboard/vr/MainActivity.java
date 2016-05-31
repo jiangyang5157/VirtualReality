@@ -151,22 +151,20 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
     public void onNewFrame(HeadTransform headTransform) {
         headTransform.getHeadView(head.headView, 0);
         headTransform.getForwardVector(head.forward, 0);
-        headTransform.getEulerAngles(head.eulerAngles, 0);
         headTransform.getUpVector(head.up, 0);
         headTransform.getRightVector(head.right, 0);
         headTransform.getQuaternion(head.quaternion, 0);
-        headTransform.getTranslation(head.translation, 0);
 
         head.adjustPosition(earth);
 
         if (markerDialog != null) {
             if (!markerDialog.isCreated()) {
-                markerDialog.create(head.getCamera().getPosition(), head.forward, head.up, head.right, head.eulerAngles, head.quaternion);
+                markerDialog.create(head.getCamera().getPosition(), head.forward, head.up, head.right, head.quaternion);
             }
 
             if (objModel != null) {
                 if (!objModel.isCreated()) {
-                    objModel.create(head.getCamera().getPosition(), head.forward, head.up, head.right, head.eulerAngles, head.quaternion);
+                    objModel.create(head.getCamera().getPosition(), head.forward, head.up, head.right, head.quaternion);
                 }
             }
         }
