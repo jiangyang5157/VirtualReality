@@ -10,8 +10,8 @@ import com.gmail.jiangyang5157.cardboard.scene.Intersection;
  */
 public abstract class Rectangle extends GLModel implements Intersection.Intersectable {
 
-    protected static final float[] INITIAL_UP = new float[]{0.0f, 1.0f, 0.0f};
-    protected static final float[] INITIAL_RIGHT = new float[]{1.0f, 0.0f, 0.0f};
+    protected static final float[] UP = new float[]{0.0f, 1.0f, 0.0f};
+    protected static final float[] RIGHT = new float[]{1.0f, 0.0f, 0.0f};
 
     protected float width;
     protected float height;
