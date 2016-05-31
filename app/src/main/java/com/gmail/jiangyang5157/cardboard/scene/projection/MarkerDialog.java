@@ -36,11 +36,11 @@ public class MarkerDialog extends Dialog {
         super.destroy();
     }
 
-    public void create(float[] cameraPos, float[] forward, float[] up, float[] right, float[] eulerAngles) {
+    public void create(float[] cameraPos, float[] forward, float[] up, float[] right, float[] eulerAngles, float[] quaternion) {
         createContent();
         adjustBounds();
         create(width, height, AppUtils.getColor(context, COLOR_BACKGROUND_RES_ID));
-        setPosition(cameraPos, forward, up, right, eulerAngles);
+        setPosition(cameraPos, forward, up, right, eulerAngles, quaternion);
     }
 
     private void createContent() {
@@ -87,8 +87,8 @@ public class MarkerDialog extends Dialog {
     }
 
     @Override
-    protected void setPosition(float[] cameraPos, float[] forward, float[] up, float[] right, float[] eulerAngles) {
-        super.setPosition(cameraPos, forward, up, right, eulerAngles);
+    protected void setPosition(float[] cameraPos, float[] forward, float[] up, float[] right, float[] eulerAngles, float[] quaternion) {
+        super.setPosition(cameraPos, forward, up, right, eulerAngles, quaternion);
 
         //
         cameraPos[0] -= forward[0] * PADDING_LAYER;
@@ -109,7 +109,7 @@ public class MarkerDialog extends Dialog {
             cameraPos[1] -= up[1] * panel.height / 2;
             cameraPos[2] -= up[2] * panel.height / 2;
 
-            panel.setPosition(cameraPos, forward, up, right, eulerAngles);
+            panel.setPosition(cameraPos, forward, up, right, eulerAngles, quaternion);
 
             cameraPos[0] -= up[0] * panel.height / 2;
             cameraPos[1] -= up[1] * panel.height / 2;

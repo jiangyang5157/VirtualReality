@@ -99,7 +99,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
         if (markerDialog != null) {
             if (!markerDialog.isCreated()) {
-                markerDialog.create(head.getCamera().getPosition(), head.forward, head.up, head.right, head.eulerAngles);
+                markerDialog.create(head.getCamera().getPosition(), head.forward, head.up, head.right, head.eulerAngles, head.quaternion);
             }
 
             if (objModel != null) {

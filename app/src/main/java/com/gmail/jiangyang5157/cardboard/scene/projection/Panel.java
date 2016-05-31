@@ -57,7 +57,7 @@ public abstract class Panel extends Rectangle {
         setVisible(true);
     }
 
-    protected void setPosition(float[] cameraPos, float[] forward, float[] up, float[] right, float[] eulerAngles) {
+    protected void setPosition(float[] cameraPos, float[] forward, float[] up, float[] right, float[] eulerAngles, float[] quaternion) {
         Vector cameraPosVec = new Vector3d(cameraPos[0], cameraPos[1], cameraPos[2]);
         Vector forwardVec = new Vector3d(forward[0], forward[1], forward[2]).times(DISTANCE);
         Vector positionVec = cameraPosVec.plus(forwardVec);
@@ -71,14 +71,64 @@ public abstract class Panel extends Rectangle {
         double[] positionVecData = positionVec.getData();
         Matrix.setIdentityM(translation, 0);
         Matrix.translateM(translation, 0, (float) positionVecData[0], (float) positionVecData[1], (float) positionVecData[2]);
-        float eulerAnglesDegree0 = (float) Math.toDegrees(eulerAngles[0]);
-        float eulerAnglesDegree1 = (float) Math.toDegrees(eulerAngles[1]);
-        float eulerAnglesDegree2 = (float) Math.toDegrees(eulerAngles[2]);
 
-        Matrix.setIdentityM(rotation, 0);
-        Matrix.rotateM(rotation, 0, eulerAnglesDegree1, 0, 1f, 0);
-        Matrix.rotateM(rotation, 0, eulerAnglesDegree0, 1f, 0, 0);
-        Matrix.rotateM(rotation, 0, eulerAnglesDegree2, 0, 0f, 1f);
+//        Matrix.setIdentityM(rotation, 0);
+//        float eulerAnglesDegree0 = (float) Math.toDegrees(eulerAngles[0]);
+//        float eulerAnglesDegree1 = (float) Math.toDegrees(eulerAngles[1]);
+//        float eulerAnglesDegree2 = (float) Math.toDegrees(eulerAngles[2]);
+//        Matrix.rotateM(rotation, 0, eulerAnglesDegree1, 0, 1f, 0);
+//        Matrix.rotateM(rotation, 0, eulerAnglesDegree0, 1f, 0, 0);
+//        Matrix.rotateM(rotation, 0, eulerAnglesDegree2, 0, 0f, 1f);
+        float[] r = new float[16];
+        setQquaternionRotatMatrix(r, quaternion);
+        Matrix.multiplyMM(rotation, 0, r, 0, rotation, 0);
+    }
+
+    public void setQquaternionRotatMatrix(float[] rm, float[] quaternion) {
+        float x = quaternion[0];
+        float y = quaternion[1];
+        float z = quaternion[2];
+        float w = quaternion[3];
+
+        float xx = x * x;
+        float xy = x * y;
+        float xz = x * z;
+        float xw = x * w;
+        float yy = y * y;
+        float yz = y * z;
+        float yw = y * w;
+        float zz = z * z;
+        float zw = z * w;
+
+        float xx2 = xx * 2.0f;
+        float xy2 = xy * 2.0f;
+        float xz2 = xz * 2.0f;
+        float xw2 = xw * 2.0f;
+        float yy2 = yy * 2.0f;
+        float yz2 = yz * 2.0f;
+        float yw2 = yw * 2.0f;
+        float zz2 = zz * 2.0f;
+        float zw2 = zw * 2.0f;
+
+        rm[0] = 1.0f - yy2 - zz2;
+        rm[1] = xy2 - zw2;
+        rm[2] = xz2 + yw2;
+        rm[3] = 0.0f;
+
+        rm[4] = xy2 + zw2;
+        rm[5] = 1.0f - xx2 - zz2;
+        rm[6] = yz2 - xw2;
+        rm[7] = 0.0f;
+
+        rm[8] = xz2 - yw2;
+        rm[9] = yz2 + xw2;
+        rm[10] = 1.0f - xx2 - yy2;
+        rm[11] = 0.0f;
+
+        rm[12] = 0.0f;
+        rm[13] = 0.0f;
+        rm[14] = 0.0f;
+        rm[15] = 1.0f;
     }
 
     @Override
