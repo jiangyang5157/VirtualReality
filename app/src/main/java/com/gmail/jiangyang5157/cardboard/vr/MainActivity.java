@@ -18,13 +18,12 @@ import com.gmail.jiangyang5157.cardboard.scene.projection.Marker;
 import com.gmail.jiangyang5157.cardboard.scene.Lighting;
 import com.gmail.jiangyang5157.cardboard.scene.projection.GLModel;
 import com.gmail.jiangyang5157.cardboard.scene.projection.MarkerDialog;
-import com.gmail.jiangyang5157.cardboard.ui.CardboardOverlayView;
 import com.gmail.jiangyang5157.tookit.app.DeviceUtils;
-import com.google.vrtoolkit.cardboard.CardboardActivity;
-import com.google.vrtoolkit.cardboard.CardboardView;
-import com.google.vrtoolkit.cardboard.Eye;
-import com.google.vrtoolkit.cardboard.HeadTransform;
-import com.google.vrtoolkit.cardboard.Viewport;
+import com.google.vr.sdk.base.Eye;
+import com.google.vr.sdk.base.GvrView;
+import com.google.vr.sdk.base.GvrActivity;
+import com.google.vr.sdk.base.HeadTransform;
+import com.google.vr.sdk.base.Viewport;
 
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -32,7 +31,7 @@ import java.io.IOException;
 
 import javax.microedition.khronos.egl.EGLConfig;
 
-public class MainActivity extends CardboardActivity implements CardboardView.StereoRenderer {
+public class MainActivity extends GvrActivity implements GvrView.StereoRenderer {
 
     private static final String TAG = "MainActivity ####";
 
@@ -46,8 +45,6 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     private MarkerDialog markerDialog;
     private ObjModel objModel;
 
-    private CardboardOverlayView overlayView;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,12 +55,19 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
         setContentView(R.layout.activity_main);
 
-        CardboardView cardboardView = (CardboardView) findViewById(R.id.cardboard_view);
-        cardboardView.setRestoreGLStateEnabled(false);
-        cardboardView.setRenderer(this);
-        setCardboardView(cardboardView);
+        GvrView gvrView = (GvrView) findViewById(R.id.gvr_view);
+        gvrView.setEGLConfigChooser(8, 8, 8, 8, 16, 8);
 
-        overlayView = (CardboardOverlayView) findViewById(R.id.cardboard_overlay_view);
+        gvrView.setRenderer(this);
+        gvrView.setTransitionViewEnabled(true);
+        gvrView.setOnCardboardBackButtonListener(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        onBackPressed();
+                    }
+                });
+        setGvrView(gvrView);
 
         head = new Head(this);
     }
@@ -85,37 +89,6 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         }
     }
 
-    @Override
-    public void onNewFrame(HeadTransform headTransform) {
-        headTransform.getHeadView(head.headView, 0);
-        headTransform.getForwardVector(head.forward, 0);
-        headTransform.getEulerAngles(head.eulerAngles, 0);
-        headTransform.getUpVector(head.up, 0);
-        headTransform.getRightVector(head.right, 0);
-        headTransform.getQuaternion(head.quaternion, 0);
-        headTransform.getTranslation(head.translation, 0);
-
-        head.adjustPosition(earth);
-
-        if (markerDialog != null) {
-            if (!markerDialog.isCreated()) {
-                markerDialog.create(head.getCamera().getPosition(), head.forward, head.up, head.right, head.eulerAngles, head.quaternion);
-            }
-
-            if (objModel != null) {
-                if (!objModel.isCreated()) {
-                    objModel.create(head.getCamera().getPosition(), head.forward, head.up, head.right, head.eulerAngles, head.quaternion);
-                }
-            }
-        }
-
-        ray.setIntersection(getIntersection());
-    }
-
-    @Override
-    public void onFinishFrame(Viewport viewport) {
-    }
-
     private Intersection getIntersection() {
         Intersection ret = null;
 
@@ -125,8 +98,10 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
                 if (markerDialog.isCreated()) {
                     markerDialog.destroy();
                     markerDialog = null;
-                    objModel.destroy();
-                    objModel = null;
+                    if (objModel != null) {
+                        objModel.destroy();
+                        objModel = null;
+                    }
                 }
             }
         }
@@ -173,6 +148,33 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     };
 
     @Override
+    public void onNewFrame(HeadTransform headTransform) {
+        headTransform.getHeadView(head.headView, 0);
+        headTransform.getForwardVector(head.forward, 0);
+        headTransform.getEulerAngles(head.eulerAngles, 0);
+        headTransform.getUpVector(head.up, 0);
+        headTransform.getRightVector(head.right, 0);
+        headTransform.getQuaternion(head.quaternion, 0);
+        headTransform.getTranslation(head.translation, 0);
+
+        head.adjustPosition(earth);
+
+        if (markerDialog != null) {
+            if (!markerDialog.isCreated()) {
+                markerDialog.create(head.getCamera().getPosition(), head.forward, head.up, head.right, head.eulerAngles, head.quaternion);
+            }
+
+            if (objModel != null) {
+                if (!objModel.isCreated()) {
+                    objModel.create(head.getCamera().getPosition(), head.forward, head.up, head.right, head.eulerAngles, head.quaternion);
+                }
+            }
+        }
+
+        ray.setIntersection(getIntersection());
+    }
+
+    @Override
     public void onDrawEye(Eye eye) {
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 
@@ -187,6 +189,11 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
         updateScene(head.getCamera().view, perspective);
         drawScene();
+    }
+
+    @Override
+    public void onFinishFrame(Viewport viewport) {
+
     }
 
     private void updateScene(float[] view, float[] perspective) {
@@ -283,12 +290,16 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     @Override
     protected void onResume() {
         super.onResume();
-        head.onResume();
+        if (head != null) {
+            head.onResume();
+        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        head.onPause();
+        if (head != null) {
+            head.onPause();
+        }
     }
 }

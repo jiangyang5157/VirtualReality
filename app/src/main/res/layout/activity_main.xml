@@ -3,14 +3,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.google.vrtoolkit.cardboard.CardboardView
-        android:id="@+id/cardboard_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-    <com.gmail.jiangyang5157.cardboard.ui.CardboardOverlayView
-        android:id="@+id/cardboard_overlay_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+    <com.google.vr.sdk.base.GvrView
+        android:id="@+id/gvr_view"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true" />
 
 </RelativeLayout>
