@@ -87,7 +87,7 @@ public class Icosphere extends Sphere {
 
     @Override
     public void draw() {
-        if (!isVisible || !isCreated()) {
+        if (!isCreated() || !isVisible()) {
             return;
         }
 

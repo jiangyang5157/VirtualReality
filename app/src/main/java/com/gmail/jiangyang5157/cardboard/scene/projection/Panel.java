@@ -52,8 +52,8 @@ public abstract class Panel extends Rectangle {
 
         initializeProgram();
         bindBuffers();
-        isCreated = true;
 
+        setCreated(true);
         setVisible(true);
     }
 
@@ -77,7 +77,7 @@ public abstract class Panel extends Rectangle {
 
     @Override
     public Intersection onIntersect(Head head) {
-        if (!isVisible || !isCreated()) {
+        if (!isCreated() || !isVisible()) {
             return null;
         }
 
@@ -220,7 +220,7 @@ public abstract class Panel extends Rectangle {
 
     @Override
     public void draw() {
-        if (!isVisible || !isCreated()) {
+        if (!isCreated() || !isVisible()) {
             return;
         }
 

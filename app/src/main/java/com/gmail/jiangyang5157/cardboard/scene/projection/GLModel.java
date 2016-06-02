@@ -23,7 +23,6 @@ public abstract class GLModel extends Model {
     protected static final String TEXTURE_ID_HANDLE = "u_TexId";
     protected static final String COLOR_HANDLE = "u_Color";
     protected static final String POINT_SIZE_HANDLE = "u_PointSize";
-    protected static final String RADIUS_HANDLE = "u_Radius";
     protected static final String LIGHT_POSITION_HANDLE = "u_LightPos";
     protected static final String VERTEX_HANDLE = "a_Position";
     protected static final String NORMAL_HANDLE = "a_Normal";
@@ -45,7 +44,6 @@ public abstract class GLModel extends Model {
     protected int indicesBuffHandle;
     protected int texturesBuffHandle;
 
-    protected boolean isCreated = false;
     protected int program;
     protected int indicesBufferCapacity;
     protected float[] color;
@@ -157,15 +155,5 @@ public abstract class GLModel extends Model {
         int g = (int) (color[1] * 255);
         int b = (int) (color[2] * 255);
         return Color.argb(a, r, g, b);
-    }
-
-    @Override
-    public void destroy() {
-        setVisible(false);
-        isCreated = false;
-    }
-
-    public boolean isCreated() {
-        return isCreated;
     }
 }

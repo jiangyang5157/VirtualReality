@@ -58,8 +58,8 @@ public class ObjModel extends GLModel {
 
         initializeProgram();
         bindBuffers();
-        isCreated = true;
 
+        setCreated(true);
         setVisible(true);
     }
 
@@ -75,8 +75,7 @@ public class ObjModel extends GLModel {
     }
 
     public void createStep3() {
-        isCreated = true;
-
+        setCreated(true);
         setVisible(true);
     }
 
@@ -345,7 +344,7 @@ public class ObjModel extends GLModel {
 
     @Override
     public void draw() {
-        if (!isVisible || !isCreated()) {
+        if (!isCreated() || !isVisible()) {
             return;
         }
 

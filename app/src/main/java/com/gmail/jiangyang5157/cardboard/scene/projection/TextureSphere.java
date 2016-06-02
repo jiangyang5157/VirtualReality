@@ -5,37 +5,26 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
-import android.util.Log;
-
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
-import java.nio.ShortBuffer;
 
 /**
  * @author Yang
  * @since 4/12/2016.
  */
-public class TextureSphere extends Sphere {
+public abstract class TextureSphere extends Sphere {
 
     private int stacks;
     private int slices;
-    private int textureDrawableResource;
 
     protected float[] vertices;
     protected float[] normals;
     protected short[] indices;
     protected float[] textures;
 
-    private final int[] buffers = new int[4];
-    private final int[] texBuffers = new int[1];
-
     public TextureSphere(Context context, int vertexShaderRawResource, int fragmentShaderRawResource) {
         super(context, vertexShaderRawResource, fragmentShaderRawResource);
     }
 
-    protected void create(float radius, int textureDrawableResource, int stacks, int slices) {
-        this.textureDrawableResource = textureDrawableResource;
+    protected void create(float radius, int stacks, int slices) {
         this.stacks = stacks;
         this.slices = slices;
 
@@ -99,51 +88,7 @@ public class TextureSphere extends Sphere {
         normals = vertices.clone();
     }
 
-    @Override
-    protected void bindBuffers() {
-        FloatBuffer verticesBuffer = ByteBuffer.allocateDirect(vertices.length * BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
-        verticesBuffer.put(vertices).position(0);
-        vertices = null;
-
-        ShortBuffer indicesBuffer = ByteBuffer.allocateDirect(indices.length * BYTES_PER_SHORT).order(ByteOrder.nativeOrder()).asShortBuffer();
-        indicesBuffer.put(indices).position(0);
-        indices = null;
-        indicesBufferCapacity = indicesBuffer.capacity();
-
-        FloatBuffer normalsBuffer = ByteBuffer.allocateDirect(normals.length * BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
-        normalsBuffer.put(normals).position(0);
-        normals = null;
-
-        FloatBuffer texturesBuffer = ByteBuffer.allocateDirect(textures.length * BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
-        texturesBuffer.put(textures).position(0);
-        textures = null;
-
-        GLES20.glGenBuffers(buffers.length, buffers, 0);
-        verticesBuffHandle = buffers[0];
-        indicesBuffHandle = buffers[1];
-        normalsBuffHandle = buffers[2];
-        texturesBuffHandle = buffers[3];
-
-        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, verticesBuffHandle);
-        GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, verticesBuffer.capacity() * BYTES_PER_FLOAT, verticesBuffer, GLES20.GL_STATIC_DRAW);
-        verticesBuffer.limit(0);
-
-        GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, indicesBuffHandle);
-        GLES20.glBufferData(GLES20.GL_ELEMENT_ARRAY_BUFFER, indicesBuffer.capacity() * BYTES_PER_SHORT, indicesBuffer, GLES20.GL_STATIC_DRAW);
-        indicesBuffer.limit(0);
-
-        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, normalsBuffHandle);
-        GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, normalsBuffer.capacity() * BYTES_PER_FLOAT, normalsBuffer, GLES20.GL_STATIC_DRAW);
-        normalsBuffer.limit(0);
-
-        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, texturesBuffHandle);
-        GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, texturesBuffer.capacity() * BYTES_PER_FLOAT, texturesBuffer, GLES20.GL_STATIC_DRAW);
-        texturesBuffer.limit(0);
-
-        texBuffers[0] = loadTexture(context, textureDrawableResource);
-    }
-
-    private static int loadTexture(final Context context, final int resId) {
+    protected static int loadTexture(final Context context, final int resId) {
         final int[] textureHandle = new int[1];
         GLES20.glGenTextures(1, textureHandle, 0);
 
@@ -162,66 +107,5 @@ public class TextureSphere extends Sphere {
             bitmap.recycle();
         }
         return textureHandle[0];
-    }
-
-    @Override
-    protected void bindHandles() {
-        mvMatrixHandle = GLES20.glGetUniformLocation(program, MODEL_VIEW_HANDLE);
-        mvpMatrixHandle = GLES20.glGetUniformLocation(program, MODEL_VIEW_PROJECTION_HANDLE);
-        texIdHandle = GLES20.glGetUniformLocation(program, TEXTURE_ID_HANDLE);
-        lightPosHandle = GLES20.glGetUniformLocation(program, LIGHT_POSITION_HANDLE);
-
-        vertexHandle = GLES20.glGetAttribLocation(program, VERTEX_HANDLE);
-        normalHandle = GLES20.glGetAttribLocation(program, NORMAL_HANDLE);
-        texCoordHandle = GLES20.glGetAttribLocation(program, TEXTURE_COORDS_HANDLE);
-    }
-
-    @Override
-    public void draw() {
-        if (!isVisible || !isCreated()) {
-            return;
-        }
-
-        GLES20.glUseProgram(program);
-        GLES20.glEnableVertexAttribArray(vertexHandle);
-        GLES20.glEnableVertexAttribArray(normalHandle);
-        GLES20.glEnableVertexAttribArray(texCoordHandle);
-
-        GLES20.glUniformMatrix4fv(mvMatrixHandle, 1, false, modelView, 0);
-        GLES20.glUniformMatrix4fv(mvpMatrixHandle, 1, false, modelViewProjection, 0);
-        if (lighting != null) {
-            GLES20.glUniform3fv(lightPosHandle, 1, lighting.getLightPosInCameraSpace(), 0);
-        }
-
-        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, verticesBuffHandle);
-        GLES20.glVertexAttribPointer(vertexHandle, 3, GLES20.GL_FLOAT, false, 0, 0);
-
-        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, normalsBuffHandle);
-        GLES20.glVertexAttribPointer(normalHandle, 3, GLES20.GL_FLOAT, false, 0, 0);
-
-        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, texturesBuffHandle);
-        GLES20.glVertexAttribPointer(texCoordHandle, 2, GLES20.GL_FLOAT, false, 0, 0);
-
-        GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
-        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texBuffers[0]);
-        GLES20.glUniform1i(texIdHandle, 0);
-
-        GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, indicesBuffHandle);
-        GLES20.glDrawElements(GLES20.GL_TRIANGLES, indicesBufferCapacity, GLES20.GL_UNSIGNED_SHORT, 0);
-
-        GLES20.glDisableVertexAttribArray(vertexHandle);
-        GLES20.glDisableVertexAttribArray(normalHandle);
-        GLES20.glDisableVertexAttribArray(texCoordHandle);
-        GLES20.glUseProgram(0);
-
-        checkGlEsError("TextureSphere - draw end");
-    }
-
-    @Override
-    public void destroy() {
-        super.destroy();
-        Log.d("TextureSphere", "destroy");
-        GLES20.glDeleteBuffers(buffers.length, buffers, 0);
-        GLES20.glDeleteTextures(texBuffers.length, texBuffers, 0);
     }
 }
