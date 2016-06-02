@@ -63,7 +63,6 @@ public abstract class Dialog extends Panel {
         for (Panel panel : panels) {
             panel.draw();
         }
-
         super.draw();
     }
 
@@ -82,7 +81,7 @@ public abstract class Dialog extends Panel {
 
     @Override
     public Intersection onIntersect(Head head) {
-        if (!isVisible || !isCreated()) {
+        if (!isCreated() || !isVisible()) {
             return null;
         }
         Intersection ret;
