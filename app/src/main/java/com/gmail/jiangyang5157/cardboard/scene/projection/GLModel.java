@@ -3,6 +3,7 @@ package com.gmail.jiangyang5157.cardboard.scene.projection;
 import android.content.Context;
 import android.graphics.Color;
 import android.opengl.GLES20;
+import android.opengl.Matrix;
 import android.util.Log;
 
 import com.gmail.jiangyang5157.cardboard.scene.Lighting;
@@ -16,6 +17,9 @@ import java.io.InputStream;
  */
 public abstract class GLModel extends Model {
     public static final int GLES_VERSION_REQUIRED = 0x00020000;
+
+    protected static final int BYTES_PER_FLOAT = 4;
+    protected static final int BYTES_PER_SHORT = 2;
 
     protected static final String MODEL_HANDLE = "u_ModelMatrix";
     protected static final String MODEL_VIEW_HANDLE = "u_MVMatrix";
@@ -85,7 +89,7 @@ public abstract class GLModel extends Model {
         int[] linkStatus = new int[1];
         GLES20.glGetProgramiv(program, GLES20.GL_LINK_STATUS, linkStatus, 0);
         if (linkStatus[0] != GLES20.GL_TRUE) {
-            Log.e("GlEsError", "Could not link program - " + GLES20.glGetProgramInfoLog(program));
+            Log.e("Gl Error", "Could not link program - " + GLES20.glGetProgramInfoLog(program));
             GLES20.glDeleteProgram(program);
             program = 0;
         }
@@ -100,12 +104,12 @@ public abstract class GLModel extends Model {
         final int[] compileStatus = new int[1];
         GLES20.glGetShaderiv(shader, GLES20.GL_COMPILE_STATUS, compileStatus, 0);
         if (compileStatus[0] == 0) {
-            Log.e("GlEsError", "Unable to compile shader - " + GLES20.glGetShaderInfoLog(shader));
+            Log.e("Gl Error", "Unable to compile shader - " + GLES20.glGetShaderInfoLog(shader));
             GLES20.glDeleteShader(shader);
             shader = 0;
         }
         if (shader == 0) {
-            throw new RuntimeException("GlEsError - Unable to create shader:\n" + code);
+            throw new RuntimeException("Gl Error - Unable to create shader:\n" + code);
         }
         return shader;
     }
@@ -117,8 +121,19 @@ public abstract class GLModel extends Model {
 
     public static void checkGlEsError(String label) {
         for (int error; (error = GLES20.glGetError()) != GLES20.GL_NO_ERROR; ) {
-            Log.e("GlEsError", error + " - " + label);
+            Log.e("Gl Error", error + " - " + label);
         }
+    }
+
+    public void update(float[] view, float[] perspective) {
+        Matrix.setIdentityM(model, 0);
+
+        Matrix.multiplyMM(model, 0, rotation, 0, model, 0);
+        Matrix.scaleM(model, 0, scale[0], scale[1], scale[2]);
+        Matrix.multiplyMM(model, 0, translation, 0, model, 0);
+
+        Matrix.multiplyMM(modelView, 0, view, 0, model, 0);
+        Matrix.multiplyMM(modelViewProjection, 0, perspective, 0, modelView, 0);
     }
 
     protected abstract void buildArrays();
@@ -155,5 +170,13 @@ public abstract class GLModel extends Model {
         int g = (int) (color[1] * 255);
         int b = (int) (color[2] * 255);
         return Color.argb(a, r, g, b);
+    }
+
+    @Override
+    public void destroy() {
+        super.destroy();
+        if (program != 0){
+            GLES20.glDeleteProgram(program);
+        }
     }
 }

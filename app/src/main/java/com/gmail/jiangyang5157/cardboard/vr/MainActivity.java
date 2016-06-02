@@ -187,7 +187,6 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         // Set the position of the light
         Matrix.multiplyMV(lightPosInCameraSpace, 0, head.getCamera().view, 0, LIGHT_POS_IN_WORLD_SPACE, 0);
 
-        // Build the ModelView and ModelViewProjection matrices for calculating different object's position
         float[] perspective = eye.getPerspective(Camera.Z_NEAR, Camera.Z_FAR);
 
         updateScene(head.getCamera().view, perspective);

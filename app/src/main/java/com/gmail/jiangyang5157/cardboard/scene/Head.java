@@ -18,11 +18,11 @@ public class Head implements SensorEventListener {
 
     private Camera camera;
 
-    public float[] headView = new float[16];
-    public float[] forward = new float[3];
-    public float[] up = new float[3];
-    public float[] right = new float[3];
-    public float[] quaternion = new float[4];
+    public float[] headView;
+    public float[] forward;
+    public float[] up;
+    public float[] right;
+    public float[] quaternion;
 
     private SensorManager sensorManager;
     private Sensor stepDetector;
@@ -31,6 +31,11 @@ public class Head implements SensorEventListener {
     private float[] velocity;
 
     public Head(Context context) {
+        headView = new float[16];
+        forward = new float[3];
+        up = new float[3];
+        right = new float[3];
+        quaternion = new float[4];
 
         camera = new Camera();
         velocity = new float[3];

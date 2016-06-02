@@ -8,48 +8,47 @@ import android.opengl.Matrix;
  */
 public abstract class Model {
 
-    protected static final int BYTES_PER_FLOAT = 4;
-    protected static final int BYTES_PER_SHORT = 2;
-
-    public float[] rotation = new float[16];
-    public float scale;
-    public float[] translation = new float[16];
-    public float[] model = new float[16];
-    public float[] modelView = new float[16];
-    public float[] modelViewProjection = new float[16];
+    protected float[] rotation;
+    protected float[] scale;
+    protected float[] translation;
+    protected float[] model;
+    protected float[] modelView;
+    protected float[] modelViewProjection;
 
     private boolean isCreated;
     private boolean isVisible;
 
-    public abstract void draw();
-
     public Model() {
-        setScale(1.0f);
+        rotation = new float[16];
+        scale = new float[3];
+        translation = new float[16];
+        model = new float[16];
+        modelView = new float[16];
+        modelViewProjection = new float[16];
 
         Matrix.setIdentityM(rotation, 0);
+        setScale(1, 1, 1);
         Matrix.setIdentityM(translation, 0);
         Matrix.setIdentityM(model, 0);
         Matrix.setIdentityM(modelView, 0);
         Matrix.setIdentityM(modelViewProjection, 0);
     }
 
-    public void update(float[] view, float[] perspective) {
-        Matrix.setIdentityM(model, 0);
+    public abstract void draw();
 
-        Matrix.multiplyMM(model, 0, rotation, 0, model, 0);
-        Matrix.scaleM(model, 0, scale, scale, scale);
-        Matrix.multiplyMM(model, 0, translation, 0, model, 0);
-
-        Matrix.multiplyMM(modelView, 0, view, 0, model, 0);
-        Matrix.multiplyMM(modelViewProjection, 0, perspective, 0, modelView, 0);
-    }
-
-    public float[] getPosition() {
-        return new float[]{translation[12], translation[13], translation[14]};
+    public void destroy() {
+        setVisible(false);
+        setCreated(false);
     }
 
     public void setScale(float scale) {
-        this.scale = scale;
+        setScale(scale, scale, scale);
+    }
+
+    public void setScale(float x, float y, float z) {
+        scale[0] = x;
+        scale[1] = y;
+        scale[2] = z;
     }
 
     public void setCreated(boolean created) {
@@ -68,8 +67,32 @@ public abstract class Model {
         return isVisible;
     }
 
-    public void destroy() {
-        setVisible(false);
-        setCreated(false);
+    public float[] getPosition() {
+        return new float[]{translation[12], translation[13], translation[14]};
+    }
+
+    public float[] getRotation() {
+        return rotation;
+    }
+
+    public float[] getScale() {
+        return scale;
+    }
+
+    public float[] getTranslation() {
+        return translation;
+    }
+
+    public float[] getModel() {
+        return model;
+    }
+
+    public float[] getModelView() {
+        return modelView;
+    }
+
+    public float[] getModelViewProjection() {
+        return modelViewProjection;
     }
 }
+
