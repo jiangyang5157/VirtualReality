@@ -165,7 +165,7 @@ public class TextureSphere extends Sphere {
     }
 
     @Override
-    protected void initializeHandle() {
+    protected void bindHandles() {
         mvMatrixHandle = GLES20.glGetUniformLocation(program, MODEL_VIEW_HANDLE);
         mvpMatrixHandle = GLES20.glGetUniformLocation(program, MODEL_VIEW_PROJECTION_HANDLE);
         texIdHandle = GLES20.glGetUniformLocation(program, TEXTURE_ID_HANDLE);

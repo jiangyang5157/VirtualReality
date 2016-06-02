@@ -64,12 +64,35 @@ public abstract class GLModel extends Model {
     }
 
     protected void initializeProgram() {
-        program = GLES20.glCreateProgram();
-        GLES20.glAttachShader(program, compileShader(GLES20.GL_VERTEX_SHADER, vertexShaderRawResource));
-        GLES20.glAttachShader(program, compileShader(GLES20.GL_FRAGMENT_SHADER, fragmentShaderRawResource));
-        GLES20.glLinkProgram(program);
+        createProgram();
+        bindHandles();
+    }
 
-        initializeHandle();
+    private int createProgram(){
+        int vertexShader = compileShader(GLES20.GL_VERTEX_SHADER, vertexShaderRawResource);
+        if (vertexShader == 0) {
+            return 0;
+        }
+
+        int fragmentShader = compileShader(GLES20.GL_FRAGMENT_SHADER, fragmentShaderRawResource);
+        if (fragmentShader == 0) {
+            return 0;
+        }
+
+        program = GLES20.glCreateProgram();
+        checkGlEsError("glCreateProgram");
+        GLES20.glAttachShader(program, vertexShader);
+        GLES20.glAttachShader(program, fragmentShader);
+        GLES20.glLinkProgram(program);
+        int[] linkStatus = new int[1];
+        GLES20.glGetProgramiv(program, GLES20.GL_LINK_STATUS, linkStatus, 0);
+        if (linkStatus[0] != GLES20.GL_TRUE) {
+            Log.e("GlEsError", "Could not link program - " + GLES20.glGetProgramInfoLog(program));
+            GLES20.glDeleteProgram(program);
+            program = 0;
+        }
+
+        return program;
     }
 
     private int compileShader(int type, String code) {
@@ -100,15 +123,15 @@ public abstract class GLModel extends Model {
         }
     }
 
-    protected abstract void initializeHandle();
+    protected abstract void buildArrays();
+
+    protected abstract void bindHandles();
+
+    protected abstract void bindBuffers();
 
     public void setLighting(Lighting lighting) {
         this.lighting = lighting;
     }
-
-    protected abstract void buildArrays();
-
-    protected abstract void bindBuffers();
 
     public void setColor(String hex) {
         setColor(Color.parseColor(hex));

@@ -115,7 +115,7 @@ public abstract class Panel extends Rectangle {
     }
 
     @Override
-    protected void initializeHandle() {
+    protected void bindHandles() {
         mvpMatrixHandle = GLES20.glGetUniformLocation(program, MODEL_VIEW_PROJECTION_HANDLE);
         texIdHandle = GLES20.glGetUniformLocation(program, TEXTURE_ID_HANDLE);
 
