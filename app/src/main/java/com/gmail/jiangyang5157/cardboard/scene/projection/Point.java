@@ -30,13 +30,13 @@ public class Point extends GLModel {
 
         initializeProgram();
         bindBuffers();
-        isCreated = true;
 
+        setCreated(true);
         setVisible(true);
     }
 
     @Override
-    protected void initializeHandle() {
+    protected void bindHandles() {
         mvpMatrixHandle = GLES20.glGetUniformLocation(program, MODEL_VIEW_PROJECTION_HANDLE);
         colorHandle = GLES20.glGetUniformLocation(program, COLOR_HANDLE);
         pointSizeHandle = GLES20.glGetUniformLocation(program, POINT_SIZE_HANDLE);
@@ -65,7 +65,7 @@ public class Point extends GLModel {
 
     @Override
     public void draw() {
-        if (!isVisible || !isCreated()) {
+        if (!isCreated() || !isVisible()) {
             return;
         }
 

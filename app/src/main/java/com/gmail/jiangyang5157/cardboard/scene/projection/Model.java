@@ -18,7 +18,8 @@ public abstract class Model {
     public float[] modelView = new float[16];
     public float[] modelViewProjection = new float[16];
 
-    protected boolean isVisible;
+    private boolean isCreated;
+    private boolean isVisible;
 
     public abstract void draw();
 
@@ -43,6 +44,22 @@ public abstract class Model {
         Matrix.multiplyMM(modelViewProjection, 0, perspective, 0, modelView, 0);
     }
 
+    public float[] getPosition() {
+        return new float[]{translation[12], translation[13], translation[14]};
+    }
+
+    public void setScale(float scale) {
+        this.scale = scale;
+    }
+
+    public void setCreated(boolean created) {
+        isCreated = created;
+    }
+
+    public boolean isCreated() {
+        return isCreated;
+    }
+
     public void setVisible(boolean visible) {
         this.isVisible = visible;
     }
@@ -51,13 +68,8 @@ public abstract class Model {
         return isVisible;
     }
 
-    public abstract void destroy();
-
-    public float[] getPosition() {
-        return new float[]{translation[12], translation[13], translation[14]};
-    }
-
-    public void setScale(float scale) {
-        this.scale = scale;
+    public void destroy() {
+        setVisible(false);
+        setCreated(false);
     }
 }

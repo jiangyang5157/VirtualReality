@@ -26,18 +26,14 @@ public abstract class Sphere extends GLModel implements Intersection.Intersectab
 
         initializeProgram();
         bindBuffers();
-        isCreated = true;
 
+        setCreated(true);
         setVisible(true);
-    }
-
-    public float getRadius() {
-        return radius;
     }
 
     @Override
     public Intersection onIntersect(Head head) {
-        if (!isVisible || !isCreated()) {
+        if (!isCreated() || !isVisible()) {
             return null;
         }
 

@@ -58,8 +58,24 @@ public class ObjModel extends GLModel {
 
         initializeProgram();
         bindBuffers();
-        isCreated = true;
 
+        setCreated(true);
+        setVisible(true);
+    }
+
+    public void createStep1() {
+        setColor(AppUtils.getColor(context, COLOR_NORMAL_RES_ID));
+        setScale(10f);
+        buildArrays();
+    }
+
+    public void createStep2() {
+        initializeProgram();
+        bindBuffers();
+    }
+
+    public void createStep3() {
+        setCreated(true);
         setVisible(true);
     }
 
@@ -316,7 +332,7 @@ public class ObjModel extends GLModel {
     }
 
     @Override
-    protected void initializeHandle() {
+    protected void bindHandles() {
         mvMatrixHandle = GLES20.glGetUniformLocation(program, MODEL_VIEW_HANDLE);
         mvpMatrixHandle = GLES20.glGetUniformLocation(program, MODEL_VIEW_PROJECTION_HANDLE);
         colorHandle = GLES20.glGetUniformLocation(program, COLOR_HANDLE);
@@ -328,7 +344,7 @@ public class ObjModel extends GLModel {
 
     @Override
     public void draw() {
-        if (!isVisible || !isCreated()) {
+        if (!isCreated() || !isVisible()) {
             return;
         }
 
