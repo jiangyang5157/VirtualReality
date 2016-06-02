@@ -8,13 +8,13 @@ import com.gmail.jiangyang5157.cardboard.kml.KmlPlacemark;
 import com.gmail.jiangyang5157.cardboard.scene.Intersection;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
 import com.gmail.jiangyang5157.cardboard.vr.R;
+import com.gmail.jiangyang5157.tookit.data.buffer.BufferUtils;
 import com.gmail.jiangyang5157.tookit.math.Vector;
 import com.gmail.jiangyang5157.tookit.math.Vector3d;
+import com.gmail.jiangyang5157.tookit.opengl.GlUtils;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
 import java.util.ArrayList;
@@ -56,16 +56,16 @@ public class Earth extends TextureSphere {
 
     @Override
     protected void bindBuffers() {
-        FloatBuffer verticesBuffer = ByteBuffer.allocateDirect(vertices.length * BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
+        FloatBuffer verticesBuffer = BufferUtils.buildFloatBuffer(vertices);
         verticesBuffer.put(vertices).position(0);
         vertices = null;
 
-        ShortBuffer indicesBuffer = ByteBuffer.allocateDirect(indices.length * BYTES_PER_SHORT).order(ByteOrder.nativeOrder()).asShortBuffer();
+        ShortBuffer indicesBuffer = BufferUtils.buildShortBuffer(indices);
         indicesBuffer.put(indices).position(0);
         indices = null;
         indicesBufferCapacity = indicesBuffer.capacity();
 
-        FloatBuffer texturesBuffer = ByteBuffer.allocateDirect(textures.length * BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
+        FloatBuffer texturesBuffer = BufferUtils.buildFloatBuffer(textures);
         texturesBuffer.put(textures).position(0);
         textures = null;
 
@@ -140,7 +140,7 @@ public class Earth extends TextureSphere {
         GLES20.glDisableVertexAttribArray(texCoordHandle);
         GLES20.glUseProgram(0);
 
-        checkGlEsError("TextureSphere - draw end");
+        GlUtils.printGlError("TextureSphere - draw end");
     }
 
     @Override

@@ -8,8 +8,10 @@ import android.util.Log;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
 import com.gmail.jiangyang5157.cardboard.vr.R;
 import com.gmail.jiangyang5157.tookit.app.AppUtils;
+import com.gmail.jiangyang5157.tookit.data.buffer.BufferUtils;
 import com.gmail.jiangyang5157.tookit.data.text.IoUtils;
 import com.gmail.jiangyang5157.tookit.math.Vector3d;
+import com.gmail.jiangyang5157.tookit.opengl.GlUtils;
 
 import java.io.InputStream;
 import java.nio.ByteBuffer;
@@ -63,22 +65,6 @@ public class ObjModel extends GLModel {
         setVisible(true);
     }
 
-    public void createStep1() {
-        setColor(AppUtils.getColor(context, COLOR_NORMAL_RES_ID));
-        setScale(10f);
-        buildArrays();
-    }
-
-    public void createStep2() {
-        initializeProgram();
-        bindBuffers();
-    }
-
-    public void createStep3() {
-        setCreated(true);
-        setVisible(true);
-    }
-
     public void setPosition(float[] cameraPos, float[] forward, float[] quaternion) {
         com.gmail.jiangyang5157.tookit.math.Vector cameraPosVec = new Vector3d(cameraPos[0], cameraPos[1], cameraPos[2]);
         com.gmail.jiangyang5157.tookit.math.Vector forwardVec = new Vector3d(forward[0], forward[1], forward[2]).times(DISTANCE);
@@ -95,15 +81,15 @@ public class ObjModel extends GLModel {
 
     @Override
     protected void bindBuffers() {
+        FloatBuffer verticesBuffer = BufferUtils.buildFloatBuffer(v);
         int size = v.size();
-        FloatBuffer verticesBuffer = ByteBuffer.allocateDirect(size * BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
         for (int i = 0; i < size; i++) {
             verticesBuffer.put(v.get(i));
         }
         verticesBuffer.position(0);
 
+        ShortBuffer indicesBuffer = BufferUtils.buildShortBuffer(fv);
         size = fv.size();
-        ShortBuffer indicesBuffer = ByteBuffer.allocateDirect(size * BYTES_PER_SHORT).order(ByteOrder.nativeOrder()).asShortBuffer();
         for (int i = 0; i < size; i++) {
             indicesBuffer.put(fv.get(i));
         }
@@ -115,9 +101,9 @@ public class ObjModel extends GLModel {
             // TODO: 6/1/2016
             // use v as the normal
             vn.addAll(v);
-            size = vn.size();
         }
-        FloatBuffer normalsBuffer = ByteBuffer.allocateDirect(size * BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
+        FloatBuffer normalsBuffer = BufferUtils.buildFloatBuffer(vn);
+        size = vn.size();
         for (int i = 0; i < size; i++) {
             normalsBuffer.put(vn.get(i));
         }
@@ -372,7 +358,7 @@ public class ObjModel extends GLModel {
         GLES20.glDisableVertexAttribArray(normalHandle);
         GLES20.glUseProgram(0);
 
-        checkGlEsError("ObjModel - draw end");
+        GlUtils.printGlError("ObjModel - draw end");
     }
 
     public String getTitle() {

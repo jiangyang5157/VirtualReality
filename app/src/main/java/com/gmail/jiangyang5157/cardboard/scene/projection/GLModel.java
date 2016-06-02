@@ -7,9 +7,8 @@ import android.opengl.Matrix;
 import android.util.Log;
 
 import com.gmail.jiangyang5157.cardboard.scene.Lighting;
-import com.gmail.jiangyang5157.tookit.data.text.IoUtils;
-
-import java.io.InputStream;
+import com.gmail.jiangyang5157.tookit.opengl.Model;
+import com.gmail.jiangyang5157.tookit.opengl.GlUtils;
 
 /**
  * @author Yang
@@ -70,19 +69,19 @@ public abstract class GLModel extends Model {
         bindHandles();
     }
 
-    private int createProgram(){
-        int vertexShader = compileShader(GLES20.GL_VERTEX_SHADER, vertexShaderRawResource);
+    private int createProgram() {
+        int vertexShader = GlUtils.compileShader(context, GLES20.GL_VERTEX_SHADER, vertexShaderRawResource);
         if (vertexShader == 0) {
             return 0;
         }
 
-        int fragmentShader = compileShader(GLES20.GL_FRAGMENT_SHADER, fragmentShaderRawResource);
+        int fragmentShader = GlUtils.compileShader(context, GLES20.GL_FRAGMENT_SHADER, fragmentShaderRawResource);
         if (fragmentShader == 0) {
             return 0;
         }
 
         program = GLES20.glCreateProgram();
-        checkGlEsError("glCreateProgram");
+        GlUtils.printGlError("glCreateProgram");
         GLES20.glAttachShader(program, vertexShader);
         GLES20.glAttachShader(program, fragmentShader);
         GLES20.glLinkProgram(program);
@@ -95,34 +94,6 @@ public abstract class GLModel extends Model {
         }
 
         return program;
-    }
-
-    private int compileShader(int type, String code) {
-        int shader = GLES20.glCreateShader(type);
-        GLES20.glShaderSource(shader, code);
-        GLES20.glCompileShader(shader);
-        final int[] compileStatus = new int[1];
-        GLES20.glGetShaderiv(shader, GLES20.GL_COMPILE_STATUS, compileStatus, 0);
-        if (compileStatus[0] == 0) {
-            Log.e("Gl Error", "Unable to compile shader - " + GLES20.glGetShaderInfoLog(shader));
-            GLES20.glDeleteShader(shader);
-            shader = 0;
-        }
-        if (shader == 0) {
-            throw new RuntimeException("Gl Error - Unable to create shader:\n" + code);
-        }
-        return shader;
-    }
-
-    private int compileShader(int type, int resId) {
-        InputStream ins = context.getResources().openRawResource(resId);
-        return compileShader(type, IoUtils.read(ins));
-    }
-
-    public static void checkGlEsError(String label) {
-        for (int error; (error = GLES20.glGetError()) != GLES20.GL_NO_ERROR; ) {
-            Log.e("Gl Error", error + " - " + label);
-        }
     }
 
     public void update(float[] view, float[] perspective) {
@@ -175,7 +146,7 @@ public abstract class GLModel extends Model {
     @Override
     public void destroy() {
         super.destroy();
-        if (program != 0){
+        if (program != 0) {
             GLES20.glDeleteProgram(program);
         }
     }

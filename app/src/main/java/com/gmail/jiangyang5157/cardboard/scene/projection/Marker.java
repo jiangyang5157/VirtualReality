@@ -7,6 +7,7 @@ import com.gmail.jiangyang5157.cardboard.scene.Coordinate;
 import com.gmail.jiangyang5157.cardboard.scene.Intersection;
 import com.gmail.jiangyang5157.cardboard.vr.R;
 import com.gmail.jiangyang5157.tookit.app.AppUtils;
+import com.gmail.jiangyang5157.tookit.opengl.Model;
 import com.google.android.gms.maps.model.LatLng;
 
 /**
