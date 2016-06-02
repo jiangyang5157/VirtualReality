@@ -14,8 +14,6 @@ import com.gmail.jiangyang5157.tookit.math.Vector3d;
 import com.gmail.jiangyang5157.tookit.opengl.GlUtils;
 
 import java.io.InputStream;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
 import java.util.Vector;
@@ -24,7 +22,7 @@ import java.util.Vector;
  * @author Yang
  * @since 5/27/2016
  */
-public class ObjModel extends GLModel {
+public class ObjModel extends GlModel {
     private static final String TAG = "ObjModel ####";
 
     private static final int VERTEX_SHADER_RAW_RESOURCE = R.raw.obj_color_vertex_shader;

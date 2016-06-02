@@ -13,7 +13,7 @@ import java.nio.FloatBuffer;
  * @author Yang
  * @since 5/1/2016
  */
-public class Point extends GLModel {
+public class Point extends GlModel {
 
     protected float pointSize;
 

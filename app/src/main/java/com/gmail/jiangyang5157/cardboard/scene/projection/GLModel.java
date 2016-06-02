@@ -14,7 +14,7 @@ import com.gmail.jiangyang5157.tookit.opengl.GlUtils;
  * @author Yang
  * @since 4/30/2016
  */
-public abstract class GLModel extends Model {
+public abstract class GlModel extends Model {
     public static final int GLES_VERSION_REQUIRED = 0x00020000;
 
     protected static final int BYTES_PER_FLOAT = 4;
@@ -57,7 +57,7 @@ public abstract class GLModel extends Model {
     private final int vertexShaderRawResource;
     private final int fragmentShaderRawResource;
 
-    protected GLModel(Context context, int vertexShaderRawResource, int fragmentShaderRawResource) {
+    protected GlModel(Context context, int vertexShaderRawResource, int fragmentShaderRawResource) {
         super();
         this.context = context;
         this.vertexShaderRawResource = vertexShaderRawResource;
