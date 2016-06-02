@@ -4,15 +4,16 @@ import android.content.Context;
 import android.opengl.GLES20;
 import android.util.Log;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
+import com.gmail.jiangyang5157.tookit.data.buffer.BufferUtils;
+import com.gmail.jiangyang5157.tookit.opengl.GlUtils;
+
 import java.nio.FloatBuffer;
 
 /**
  * @author Yang
  * @since 5/1/2016
  */
-public class Point extends GLModel {
+public class Point extends GlModel {
 
     protected float pointSize;
 
@@ -51,7 +52,7 @@ public class Point extends GLModel {
 
     @Override
     protected void bindBuffers() {
-        FloatBuffer verticesBuffer = ByteBuffer.allocateDirect(vertices.length * BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
+        FloatBuffer verticesBuffer = BufferUtils.buildFloatBuffer(vertices);
         verticesBuffer.put(vertices).position(0);
         vertices = null;
 
@@ -87,7 +88,7 @@ public class Point extends GLModel {
         GLES20.glDisableVertexAttribArray(vertexHandle);
         GLES20.glUseProgram(0);
 
-        checkGlEsError("Point - draw end");
+        GlUtils.printGlError("Point - draw end");
     }
 
     @Override

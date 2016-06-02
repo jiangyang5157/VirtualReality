@@ -14,6 +14,7 @@ import android.util.TypedValue;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
 import com.gmail.jiangyang5157.cardboard.scene.Intersection;
 import com.gmail.jiangyang5157.tookit.app.AppUtils;
+import com.gmail.jiangyang5157.tookit.opengl.Model;
 
 /**
  * @author Yang

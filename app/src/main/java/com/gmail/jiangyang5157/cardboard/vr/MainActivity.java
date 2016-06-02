@@ -10,15 +10,15 @@ import com.gmail.jiangyang5157.cardboard.kml.KmlLayer;
 import com.gmail.jiangyang5157.cardboard.scene.Camera;
 import com.gmail.jiangyang5157.cardboard.scene.Intersection;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
-import com.gmail.jiangyang5157.cardboard.scene.projection.Model;
 import com.gmail.jiangyang5157.cardboard.scene.projection.ObjModel;
 import com.gmail.jiangyang5157.cardboard.scene.projection.Ray;
 import com.gmail.jiangyang5157.cardboard.scene.projection.Earth;
 import com.gmail.jiangyang5157.cardboard.scene.projection.Marker;
 import com.gmail.jiangyang5157.cardboard.scene.Lighting;
-import com.gmail.jiangyang5157.cardboard.scene.projection.GLModel;
+import com.gmail.jiangyang5157.cardboard.scene.projection.GlModel;
 import com.gmail.jiangyang5157.cardboard.scene.projection.MarkerDialog;
 import com.gmail.jiangyang5157.tookit.app.DeviceUtils;
+import com.gmail.jiangyang5157.tookit.opengl.Model;
 import com.google.vr.sdk.base.Eye;
 import com.google.vr.sdk.base.GvrView;
 import com.google.vr.sdk.base.GvrActivity;
@@ -53,7 +53,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (!DeviceUtils.glesValidate(this, GLModel.GLES_VERSION_REQUIRED)) {
+        if (!DeviceUtils.glesValidate(this, GlModel.GLES_VERSION_REQUIRED)) {
             Toast.makeText(this, getString(R.string.error_gles_version_not_supported), Toast.LENGTH_SHORT).show();
             finish();
         }
@@ -187,7 +187,6 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         // Set the position of the light
         Matrix.multiplyMV(lightPosInCameraSpace, 0, head.getCamera().view, 0, LIGHT_POS_IN_WORLD_SPACE, 0);
 
-        // Build the ModelView and ModelViewProjection matrices for calculating different object's position
         float[] perspective = eye.getPerspective(Camera.Z_NEAR, Camera.Z_FAR);
 
         updateScene(head.getCamera().view, perspective);
