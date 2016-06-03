@@ -34,7 +34,7 @@ import javax.microedition.khronos.egl.EGLConfig;
 public class MainActivity extends GvrActivity implements GvrView.StereoRenderer {
 
     private static final String TAG = "MainActivity ####";
-    private final int DEBUG = 1;
+    private final int DEBUG = 0;
 
     private Head head;
 
