@@ -13,12 +13,18 @@ v 1 -1 -1
 v 1 1 -1
 
 # normals
+# front
 vn  0.0  0.0  1.0
+# back
 vn  0.0  0.0 -1.0
+# top
 vn  0.0  1.0  0.0
+# bottom
 vn  0.0 -1.0  0.0
-vn  1.0  0.0  0.0
-vn -1.0  0.0  0.0
+# left
+vn  -1.0  0.0  0.0
+# right
+vn 1.0  0.0  0.0
 
 # faces v//vn
 # front face

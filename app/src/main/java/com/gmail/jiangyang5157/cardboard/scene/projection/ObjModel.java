@@ -81,32 +81,32 @@ public class ObjModel extends GlModel {
 
     @Override
     protected void bindBuffers() {
-        int size = v.size();
-        FloatBuffer verticesBuffer = ByteBuffer.allocateDirect(size * BufferUtils.BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
-        for (int i = 0; i < size; i++) {
-            verticesBuffer.put(v.get(i));
-        }
-        verticesBuffer.position(0);
-
-        size = fv.size();
-        ShortBuffer indicesBuffer = ByteBuffer.allocateDirect(size * BufferUtils.BYTES_PER_SHORT).order(ByteOrder.nativeOrder()).asShortBuffer();
-        for (int i = 0; i < size; i++) {
-            indicesBuffer.put(fv.get(i));
-        }
-        indicesBuffer.position(0);
-        indicesBufferCapacity = indicesBuffer.capacity();
-        Log.i("####", "indicesBufferCapacity: " + indicesBufferCapacity);
-
-        size = fvn.size();
-        FloatBuffer normalsBuffer = ByteBuffer.allocateDirect(size * 3 * BufferUtils.BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
-        for (int i = 0; i < size; i++) {
+        int fvSize = fv.size();
+        int vSize = fvSize * 3;
+        int nSize = vSize;
+        int iSize = fvSize;
+        FloatBuffer verticesBuffer = ByteBuffer.allocateDirect(vSize * BufferUtils.BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
+        FloatBuffer normalsBuffer = ByteBuffer.allocateDirect(nSize * BufferUtils.BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
+        ShortBuffer indicesBuffer = ByteBuffer.allocateDirect(iSize * BufferUtils.BYTES_PER_SHORT).order(ByteOrder.nativeOrder()).asShortBuffer();
+        for (int i = 0; i < fvSize; i++) {
+            short vIndex = fv.get(i);
             short vnIndex = fvn.get(i);
+
+            verticesBuffer.put(v.get(vIndex * 3));
+            verticesBuffer.put(v.get(vIndex * 3 + 1));
+            verticesBuffer.put(v.get(vIndex * 3 + 2));
+
             normalsBuffer.put(vn.get(vnIndex * 3));
             normalsBuffer.put(vn.get(vnIndex * 3 + 1));
             normalsBuffer.put(vn.get(vnIndex * 3 + 2));
-            Log.i("####", "" + vn.get(vnIndex * 3) + "," + vn.get(vnIndex * 3 + 1) + "," + vn.get(vnIndex * 3 + 2));
+
+            indicesBuffer.put((short)i);
         }
+
+        verticesBuffer.position(0);
         normalsBuffer.position(0);
+        indicesBuffer.position(0);
+        indicesBufferCapacity = indicesBuffer.capacity();
 
         v = null;
         vt = null;
