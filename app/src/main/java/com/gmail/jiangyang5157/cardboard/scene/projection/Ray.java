@@ -19,7 +19,7 @@ public class Ray extends Point {
 
     private static final float POINT_SIZE_NORMAL = 18f;
     private static final float POINT_SIZE_FOCUSED = 48f;
-    private static final float POINT_SIZE_GRAdiENT_UNIT = (POINT_SIZE_FOCUSED - POINT_SIZE_NORMAL) / 6;
+    private static final float POINT_SIZE_GRADIENT_UNIT = (POINT_SIZE_FOCUSED - POINT_SIZE_NORMAL) / 6;
 
     protected static final float SPACE = (float) (Math.PI * POINT_SIZE_NORMAL);
 
@@ -45,11 +45,11 @@ public class Ray extends Point {
 
         if (intersection.getModel() instanceof Intersection.Clickable) {
             if (pointSize < POINT_SIZE_FOCUSED){
-                pointSize += POINT_SIZE_GRAdiENT_UNIT;
+                pointSize += POINT_SIZE_GRADIENT_UNIT;
             }
         } else {
             if (pointSize > POINT_SIZE_NORMAL){
-                pointSize -= POINT_SIZE_GRAdiENT_UNIT;
+                pointSize -= POINT_SIZE_GRADIENT_UNIT;
             }
         }
 

@@ -16,13 +16,17 @@ public class Camera {
     public float[] matrix;
     public float[] view;
 
-    private float[] position = new float[]{0.0f, 0.0f, 0.0f};
-    private float[] lookAt = new float[]{0.0f, 0.0f, -1.0f};
-    private static final float[] UP = new float[]{0.0f, 1.0f, 0.0f};
+    private float[] position;
+    private float[] lookAt;
+    private final float[] UP;
 
     public Camera() {
         matrix = new float[16];
         view = new float[16];
+
+        position = new float[]{0.0f, 0.0f, 0.0f};
+        lookAt = new float[]{0.0f, 0.0f, -1.0f};
+        UP = new float[]{0.0f, 1.0f, 0.0f};
 
         Matrix.setLookAtM(matrix, 0,
                 position[0], position[1], position[2],

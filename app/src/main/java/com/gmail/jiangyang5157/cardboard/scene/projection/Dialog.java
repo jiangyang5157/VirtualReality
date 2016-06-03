@@ -23,7 +23,7 @@ public abstract class Dialog extends Panel {
     protected static final int COLOR_BACKGROUND_RES_ID = com.gmail.jiangyang5157.tookit.R.color.Teal;
 
     protected static final float PADDING_LAYER = 2.0f;
-    protected static final float PADDING_BOARD = 6.0f;
+    protected static final float PADDING_BOARD = 4.0f;
 
     public Dialog(Context context) {
         super(context);

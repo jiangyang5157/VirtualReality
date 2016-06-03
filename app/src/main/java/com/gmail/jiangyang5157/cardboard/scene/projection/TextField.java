@@ -22,11 +22,14 @@ import com.gmail.jiangyang5157.tookit.opengl.Model;
  */
 public class TextField extends Panel implements Intersection.Clickable {
 
-    private String text;
-
     private static final float ALPHA_BACKGROUND = 0.5f;
     private static final int COLOR_BACKGROUND_RES_ID = com.gmail.jiangyang5157.tookit.R.color.White;
     private static final int COLOR_TEXT_RES_ID = com.gmail.jiangyang5157.tookit.R.color.DeepOrange;
+
+    private static final float SCALE_NORMAL = 1.0f;
+    private static final float SCALE_FOCUSED = 0.9f;
+    private static final float SCALE_GRADIENT_UNIT = (SCALE_FOCUSED - SCALE_NORMAL) / 6;
+    private float xyzScale = 1.0f;
 
     private TextPaint textPaint;
 
@@ -44,7 +47,6 @@ public class TextField extends Panel implements Intersection.Clickable {
         if (texBuffers[0] == 0) {
             throw new RuntimeException("Error loading texture.");
         } else {
-            this.text = text;
             this.width = width;
 
             textPaint = new TextPaint();
@@ -85,11 +87,6 @@ public class TextField extends Panel implements Intersection.Clickable {
     }
 
     @Override
-    public Intersection onIntersect(Head head) {
-        return super.onIntersect(head);
-    }
-
-    @Override
     public void draw() {
         super.draw();
     }
@@ -105,7 +102,21 @@ public class TextField extends Panel implements Intersection.Clickable {
         this.onClickListener = onClickListener;
     }
 
-    public String getText() {
-        return text;
+    @Override
+    public Intersection onIntersect(Head head) {
+        Intersection ret = super.onIntersect(head);
+
+        if (ret == null) {
+            if (xyzScale < SCALE_NORMAL){
+                xyzScale -= SCALE_GRADIENT_UNIT;
+            }
+        } else {
+            if (xyzScale > SCALE_FOCUSED){
+                xyzScale += SCALE_GRADIENT_UNIT;
+            }
+        }
+        setScale(xyzScale);
+
+        return ret;
     }
 }

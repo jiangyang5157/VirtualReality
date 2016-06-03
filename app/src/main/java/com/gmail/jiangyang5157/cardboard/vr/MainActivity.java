@@ -34,6 +34,7 @@ import javax.microedition.khronos.egl.EGLConfig;
 public class MainActivity extends GvrActivity implements GvrView.StereoRenderer {
 
     private static final String TAG = "MainActivity ####";
+    private final int DEBUG = 0;
 
     private Head head;
 
@@ -64,8 +65,10 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         gvrView.setEGLConfigChooser(8, 8, 8, 8, 16, 8);
 
         gvrView.setRenderer(this);
-        // The transition view used to prompt the user to place their phone into a GVR viewer.
-//        gvrView.setTransitionViewEnabled(true);
+        if (DEBUG != 0) {
+            // The transition view used to prompt the user to place their phone into a GVR viewer.
+            gvrView.setTransitionViewEnabled(true);
+        }
 
         gvrView.setOnCardboardBackButtonListener(
                 new Runnable() {
