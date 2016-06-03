@@ -14,6 +14,7 @@ void main()
 
     float distance = length(u_LightPos - v_Position);
     diffuse = diffuse * (1.0 / (1.0 + (0.001 * distance * distance)));
+    diffuse = max(diffuse, 0.5);
 
     gl_FragColor = vec4(v_Color, 1.0) * diffuse;
 }

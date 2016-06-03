@@ -55,7 +55,7 @@ public class ObjModel extends GlModel {
 
     public void create() {
         setColor(AppUtils.getColor(context, COLOR_NORMAL_RES_ID));
-        setScale(0.5f);
+        setScale(10f);
         buildArrays();
 
         initializeProgram();
@@ -85,7 +85,7 @@ public class ObjModel extends GlModel {
         int vSize = fvSize * 3;
         int fvnSize = fvn.size();
         int vnSize = vn.size();
-        Log.i("####", "fvSize/vSize/fvnSize/vnSize: " + fvSize + "," + vSize + "," + fvnSize + "," + vnSize);
+        Log.d("####", "fvSize/vSize/fvnSize/vnSize: " + fvSize + "," + vSize + "," + fvnSize + "," + vnSize);
         FloatBuffer verticesBuffer = ByteBuffer.allocateDirect(vSize * BufferUtils.BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
         FloatBuffer normalsBuffer = ByteBuffer.allocateDirect(vSize * BufferUtils.BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
         ShortBuffer indicesBuffer = ByteBuffer.allocateDirect(fvSize * BufferUtils.BYTES_PER_SHORT).order(ByteOrder.nativeOrder()).asShortBuffer();
