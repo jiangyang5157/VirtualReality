@@ -47,6 +47,8 @@ public class ObjModel extends GlModel {
 
     protected final int[] buffers = new int[3];
 
+    private boolean isReadyToCreate;
+
     protected ObjModel(Context context, String title, String obj) {
         super(context, VERTEX_SHADER_RAW_RESOURCE, FRAGMENT_SHADER_RAW_RESOURCE);
         this.title = title;
@@ -58,6 +60,21 @@ public class ObjModel extends GlModel {
         setScale(10f);
         buildArrays();
 
+        initializeProgram();
+        bindBuffers();
+
+        setCreated(true);
+        setVisible(true);
+    }
+
+    public void create1() {
+        setColor(AppUtils.getColor(context, COLOR_NORMAL_RES_ID));
+        setScale(10f);
+        buildArrays();
+        setReadyToCreate(true);
+    }
+
+    public void create2() {
         initializeProgram();
         bindBuffers();
 
@@ -383,5 +400,13 @@ public class ObjModel extends GlModel {
         super.destroy();
         Log.d("ObjModel", "destroy");
         GLES20.glDeleteBuffers(buffers.length, buffers, 0);
+    }
+
+    public boolean isReadyToCreate() {
+        return isReadyToCreate;
+    }
+
+    public void setReadyToCreate(boolean readyToCreate) {
+        isReadyToCreate = readyToCreate;
     }
 }

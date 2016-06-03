@@ -2,7 +2,10 @@ package com.gmail.jiangyang5157.cardboard.vr;
 
 import android.opengl.GLES20;
 import android.opengl.Matrix;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -173,13 +176,39 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
 
             if (objModel != null) {
                 if (!objModel.isCreated()) {
-                    objModel.create();
-                    objModel.setPosition(head.getCamera().getPosition(), head.forward, head.quaternion);
+                    if (mHandlerThread == null){
+                        mHandlerThread = new HandlerThread("MainActivity");
+                        mHandlerThread.start();
+                        final Handler handler = new Handler(mHandlerThread.getLooper());
+                        handler.post(new MyRunable(1));
+                    } else if (objModel.isReadyToCreate()){
+                        objModel.create2();
+                        objModel.setPosition(head.getCamera().getPosition(), head.forward, head.quaternion);
+                        objModel.setReadyToCreate(false);
+                        mHandlerThread.quit();
+                        mHandlerThread = null;
+                    }
                 }
             }
         }
 
         ray.setIntersection(getIntersection());
+    }
+
+    HandlerThread mHandlerThread;
+    class MyRunable implements Runnable {
+        int pos;
+        public MyRunable(int pos) {
+            this.pos = pos;
+        }
+        @Override
+        public void run() {
+            if (pos == 1) {
+                if (!objModel.isReadyToCreate()) {
+                    objModel.create1();
+                }
+            }
+        }
     }
 
     @Override
@@ -322,6 +351,9 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (mHandlerThread != null) {
+            mHandlerThread.quit();
+        }
         if (objModel != null) {
             objModel.destroy();
         }
