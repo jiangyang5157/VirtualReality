@@ -82,6 +82,7 @@ public class ObjModel extends GlModel {
     @Override
     protected void bindBuffers() {
         int fvSize = fv.size();
+        int fvnSize = fvn.size();
         int vSize = fvSize * 3;
         int nSize = vSize;
         int iSize = fvSize;
@@ -90,17 +91,18 @@ public class ObjModel extends GlModel {
         ShortBuffer indicesBuffer = ByteBuffer.allocateDirect(iSize * BufferUtils.BYTES_PER_SHORT).order(ByteOrder.nativeOrder()).asShortBuffer();
         for (int i = 0; i < fvSize; i++) {
             short vIndex = fv.get(i);
-            short vnIndex = fvn.get(i);
-
             verticesBuffer.put(v.get(vIndex * 3));
             verticesBuffer.put(v.get(vIndex * 3 + 1));
             verticesBuffer.put(v.get(vIndex * 3 + 2));
 
-            normalsBuffer.put(vn.get(vnIndex * 3));
-            normalsBuffer.put(vn.get(vnIndex * 3 + 1));
-            normalsBuffer.put(vn.get(vnIndex * 3 + 2));
+            if (fvnSize == fvSize) {
+                short vnIndex = fvn.get(i);
+                normalsBuffer.put(vn.get(vnIndex * 3));
+                normalsBuffer.put(vn.get(vnIndex * 3 + 1));
+                normalsBuffer.put(vn.get(vnIndex * 3 + 2));
+            }
 
-            indicesBuffer.put((short)i);
+            indicesBuffer.put((short) i);
         }
 
         verticesBuffer.position(0);
