@@ -90,7 +90,7 @@ public class ObjModel extends GlModel {
 
         size = fv.size();
         Log.i("####", "fv: " + fv.toString());
-        ShortBuffer indicesBuffer = ByteBuffer.allocateDirect(size * BufferUtils.BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asShortBuffer();
+        ShortBuffer indicesBuffer = ByteBuffer.allocateDirect(size * BufferUtils.BYTES_PER_SHORT).order(ByteOrder.nativeOrder()).asShortBuffer();
         for (int i = 0; i < size; i++) {
             indicesBuffer.put(fv.get(i));
         }
