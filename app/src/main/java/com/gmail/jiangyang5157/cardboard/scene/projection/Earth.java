@@ -7,6 +7,7 @@ import android.util.Log;
 import com.gmail.jiangyang5157.cardboard.kml.KmlPlacemark;
 import com.gmail.jiangyang5157.cardboard.scene.Intersection;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
+import com.gmail.jiangyang5157.cardboard.scene.Lighting;
 import com.gmail.jiangyang5157.cardboard.vr.R;
 import com.gmail.jiangyang5157.tookit.data.buffer.BufferUtils;
 import com.gmail.jiangyang5157.tookit.math.Vector;
@@ -46,6 +47,9 @@ public class Earth extends TextureSphere {
 
     private final int[] buffers = new int[3];
     private final int[] texBuffers = new int[1];
+
+    protected Lighting markerLighting;
+    protected Lighting markerObjModelLighting;
 
     public Earth(Context context) {
         super(context, VERTEX_SHADER_RAW_RESOURCE, FRAGMENT_SHADER_RAW_RESOURCE);
@@ -173,14 +177,14 @@ public class Earth extends TextureSphere {
         marker.create(MARKER_RADIUS, latLng, MARKER_ALTITUDE);
         marker.setName(kmlPlacemark.getProperty("name"));
         marker.setDescription(kmlPlacemark.getProperty("description"));
-        marker.setLighting(lighting);
+        marker.setLighting(markerLighting);
 
         String objProperty = kmlPlacemark.getProperty("obj");
         if (objProperty != null) {
             ObjModel objModel = new ObjModel(context,
                     kmlPlacemark.getProperty("title"),
                     objProperty);
-            objModel.setLighting(lighting);
+            objModel.setLighting(markerObjModelLighting);
             marker.setObjModel(objModel);
         }
 
@@ -221,5 +225,13 @@ public class Earth extends TextureSphere {
 
     public void setOnMarkerClickListener(Intersection.Clickable onClickListener) {
         this.onMarkerClickListener = onClickListener;
+    }
+
+    public void setMarkerObjModelLighting(Lighting markerObjModelLighting) {
+        this.markerObjModelLighting = markerObjModelLighting;
+    }
+
+    public void setMarkerLighting(Lighting markerLighting) {
+        this.markerLighting = markerLighting;
     }
 }
