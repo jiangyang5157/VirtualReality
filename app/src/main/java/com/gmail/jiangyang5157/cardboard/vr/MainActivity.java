@@ -11,6 +11,7 @@ import com.gmail.jiangyang5157.cardboard.scene.Camera;
 import com.gmail.jiangyang5157.cardboard.scene.Intersection;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
 import com.gmail.jiangyang5157.cardboard.scene.projection.ObjModel;
+import com.gmail.jiangyang5157.cardboard.scene.projection.Panel;
 import com.gmail.jiangyang5157.cardboard.scene.projection.Ray;
 import com.gmail.jiangyang5157.cardboard.scene.projection.Earth;
 import com.gmail.jiangyang5157.cardboard.scene.projection.Marker;
@@ -38,7 +39,8 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
 
     private Head head;
 
-    public float[] lightPosInWorldSpace = new float[]{0.0f, 0.0f, 0.0f, 1.0f};
+    public final float[] LIGHT_POS_IN_CAMERA_SPACE = new float[]{0.0f, Panel.DISTANCE / 10, 0.0f, 1.0f};
+    public final float[] LIGHT_POS_IN_WORLD_SPACE = new float[]{0.0f, 0.0f, 0.0f, 1.0f};
     public float[] lightPosInCameraSpace = new float[4];
 
     private Earth earth;
@@ -187,8 +189,8 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         // Apply the eye transformation to the matrix.
         Matrix.multiplyMM(head.getCamera().view, 0, eye.getEyeView(), 0, head.getCamera().matrix, 0);
 
-//        // Set the position of the light
-        Matrix.multiplyMV(lightPosInCameraSpace, 0, head.getCamera().view, 0, lightPosInWorldSpace, 0);
+        // Set the position of the light
+        Matrix.multiplyMV(lightPosInCameraSpace, 0, head.getCamera().view, 0, LIGHT_POS_IN_WORLD_SPACE, 0);
 
         float[] perspective = eye.getPerspective(Camera.Z_NEAR, Camera.Z_FAR);
 
@@ -277,7 +279,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         earth.setMarkerObjModelLighting(new Lighting() {
             @Override
             public float[] getLightPosInCameraSpace() {
-                return new float[4];
+                return LIGHT_POS_IN_CAMERA_SPACE;
             }
         });
         earth.create();

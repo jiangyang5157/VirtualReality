@@ -40,7 +40,7 @@ public abstract class Panel extends Rectangle {
     private final int[] buffers = new int[3];
     private final int[] texBuffers = new int[1];
 
-    protected static final float DISTANCE = 400;
+    public static final float DISTANCE = 400;
 
     public Panel(Context context) {
         super(context, VERTEX_SHADER_RAW_RESOURCE, FRAGMENT_SHADER_RAW_RESOURCE);
