@@ -89,12 +89,14 @@ public class ObjModel extends GlModel {
         verticesBuffer.position(0);
 
         size = fv.size();
+        Log.i("####", "fv: " + fv.toString());
         ShortBuffer indicesBuffer = ByteBuffer.allocateDirect(size * BufferUtils.BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asShortBuffer();
         for (int i = 0; i < size; i++) {
             indicesBuffer.put(fv.get(i));
         }
         indicesBuffer.position(0);
         indicesBufferCapacity = indicesBuffer.capacity();
+        Log.i("####", "indicesBufferCapacity: " + indicesBufferCapacity);
 
         size = fvn.size();
         FloatBuffer normalsBuffer = ByteBuffer.allocateDirect(size * 3 * BufferUtils.BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
