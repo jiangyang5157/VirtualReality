@@ -14,6 +14,8 @@ import com.gmail.jiangyang5157.tookit.math.Vector3d;
 import com.gmail.jiangyang5157.tookit.opengl.GlUtils;
 
 import java.io.InputStream;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
 import java.util.Vector;
@@ -41,7 +43,7 @@ public class ObjModel extends GlModel {
     private Vector<Float> vn;
     private Vector<Short> fv;
     private Vector<Short> fvt; // unsupported
-    private Vector<Short> fvn; // unsupported
+    private Vector<Short> fvn;
 
     protected final int[] buffers = new int[3];
 
@@ -79,33 +81,34 @@ public class ObjModel extends GlModel {
 
     @Override
     protected void bindBuffers() {
-        FloatBuffer verticesBuffer = BufferUtils.buildFloatBuffer(v);
-        int size = v.size();
-        for (int i = 0; i < size; i++) {
-            verticesBuffer.put(v.get(i));
-        }
-        verticesBuffer.position(0);
+        int fvSize = fv.size();
+        int vSize = fvSize * 3;
+        int fvnSize = fvn.size();
+        int vnSize = vn.size();
+        Log.d("####", "fvSize/vSize/fvnSize/vnSize: " + fvSize + "," + vSize + "," + fvnSize + "," + vnSize);
+        FloatBuffer verticesBuffer = ByteBuffer.allocateDirect(vSize * BufferUtils.BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
+        FloatBuffer normalsBuffer = ByteBuffer.allocateDirect(vSize * BufferUtils.BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
+        ShortBuffer indicesBuffer = ByteBuffer.allocateDirect(fvSize * BufferUtils.BYTES_PER_SHORT).order(ByteOrder.nativeOrder()).asShortBuffer();
+        for (int i = 0; i < fvSize; i++) {
+            short vIndex = fv.get(i);
+            verticesBuffer.put(v.get(vIndex * 3));
+            verticesBuffer.put(v.get(vIndex * 3 + 1));
+            verticesBuffer.put(v.get(vIndex * 3 + 2));
 
-        ShortBuffer indicesBuffer = BufferUtils.buildShortBuffer(fv);
-        size = fv.size();
-        for (int i = 0; i < size; i++) {
-            indicesBuffer.put(fv.get(i));
+            if (fvnSize == fvSize) {
+                short vnIndex = fvn.get(i);
+                normalsBuffer.put(vn.get(vnIndex * 3));
+                normalsBuffer.put(vn.get(vnIndex * 3 + 1));
+                normalsBuffer.put(vn.get(vnIndex * 3 + 2));
+            }
+
+            indicesBuffer.put((short) i);
         }
+
+        verticesBuffer.position(0);
+        normalsBuffer.position(0);
         indicesBuffer.position(0);
         indicesBufferCapacity = indicesBuffer.capacity();
-
-        size = vn.size();
-        if (size == 0) {
-            // TODO: 6/1/2016
-            // use v as the normal
-            vn.addAll(v);
-        }
-        FloatBuffer normalsBuffer = BufferUtils.buildFloatBuffer(vn);
-        size = vn.size();
-        for (int i = 0; i < size; i++) {
-            normalsBuffer.put(vn.get(i));
-        }
-        normalsBuffer.position(0);
 
         v = null;
         vt = null;
@@ -120,15 +123,15 @@ public class ObjModel extends GlModel {
         normalsBuffHandle = buffers[2];
 
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, verticesBuffHandle);
-        GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, verticesBuffer.capacity() * BYTES_PER_FLOAT, verticesBuffer, GLES20.GL_STATIC_DRAW);
+        GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, verticesBuffer.capacity() * BufferUtils.BYTES_PER_FLOAT, verticesBuffer, GLES20.GL_STATIC_DRAW);
         verticesBuffer.limit(0);
 
         GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, indicesBuffHandle);
-        GLES20.glBufferData(GLES20.GL_ELEMENT_ARRAY_BUFFER, indicesBuffer.capacity() * BYTES_PER_SHORT, indicesBuffer, GLES20.GL_STATIC_DRAW);
+        GLES20.glBufferData(GLES20.GL_ELEMENT_ARRAY_BUFFER, indicesBuffer.capacity() * BufferUtils.BYTES_PER_SHORT, indicesBuffer, GLES20.GL_STATIC_DRAW);
         indicesBuffer.limit(0);
 
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, normalsBuffHandle);
-        GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, normalsBuffer.capacity() * BYTES_PER_FLOAT, normalsBuffer, GLES20.GL_STATIC_DRAW);
+        GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, normalsBuffer.capacity() * BufferUtils.BYTES_PER_FLOAT, normalsBuffer, GLES20.GL_STATIC_DRAW);
         normalsBuffer.limit(0);
     }
 
@@ -150,7 +153,9 @@ public class ObjModel extends GlModel {
                     return false;
                 } else {
                     // http://paulbourke.net/dataformats/obj/
-                    if (line.startsWith("v ")) {
+                    if (line.startsWith("#")) {
+                        parserComments(line);
+                    } else if (line.startsWith("v ")) {
                         parserGeometricVertices(line);
                     } else if (line.startsWith("vt ")) {
                         parserTextureVertices(line);
@@ -165,6 +170,10 @@ public class ObjModel extends GlModel {
                 }
             }
         });
+    }
+
+    private void parserComments(String line) {
+        Log.d(TAG, "parserComments: " + line);
     }
 
     private void parserGeometricVertices(String line) {

@@ -44,14 +44,6 @@
         <Placemark>
             <name>0/0</name>
             <description>descriptiondescription</description>
-            <ExtendedData>
-                <Data name="title">
-                   <value>cow obj model</value>
-                </Data>
-                <Data name="obj">
-                    <value>cow</value>
-                </Data>
-            </ExtendedData>
             <Point>
                 <coordinates>0,0</coordinates>
             </Point>
@@ -61,10 +53,10 @@
             <description>descriptiondescription</description>
             <ExtendedData>
                 <Data name="title">
-                   <value>teapot obj model</value>
+                   <value>sphere obj model</value>
                 </Data>
                 <Data name="obj">
-                    <value>teapot</value>
+                    <value>sphere</value>
                 </Data>
             </ExtendedData>
             <Point>

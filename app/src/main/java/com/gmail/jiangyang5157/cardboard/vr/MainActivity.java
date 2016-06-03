@@ -38,7 +38,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
 
     private Head head;
 
-    public static final float[] LIGHT_POS_IN_WORLD_SPACE = new float[]{0.0f, 0.0f, 0.0f, 1.0f};
+    public float[] lightPosInWorldSpace = new float[]{0.0f, 0.0f, 0.0f, 1.0f};
     public float[] lightPosInCameraSpace = new float[4];
 
     private Earth earth;
@@ -187,8 +187,8 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         // Apply the eye transformation to the matrix.
         Matrix.multiplyMM(head.getCamera().view, 0, eye.getEyeView(), 0, head.getCamera().matrix, 0);
 
-        // Set the position of the light
-        Matrix.multiplyMV(lightPosInCameraSpace, 0, head.getCamera().view, 0, LIGHT_POS_IN_WORLD_SPACE, 0);
+//        // Set the position of the light
+        Matrix.multiplyMV(lightPosInCameraSpace, 0, head.getCamera().view, 0, lightPosInWorldSpace, 0);
 
         float[] perspective = eye.getPerspective(Camera.Z_NEAR, Camera.Z_FAR);
 
@@ -268,10 +268,16 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
 
         earth = new Earth(this);
         earth.setOnMarkerClickListener(markerOnClickListener);
-        earth.setLighting(new Lighting() {
+        earth.setMarkerLighting(new Lighting() {
             @Override
             public float[] getLightPosInCameraSpace() {
                 return lightPosInCameraSpace;
+            }
+        });
+        earth.setMarkerObjModelLighting(new Lighting() {
+            @Override
+            public float[] getLightPosInCameraSpace() {
+                return new float[4];
             }
         });
         earth.create();

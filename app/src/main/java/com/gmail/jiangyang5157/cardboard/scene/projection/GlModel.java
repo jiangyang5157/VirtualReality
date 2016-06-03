@@ -17,9 +17,6 @@ import com.gmail.jiangyang5157.tookit.opengl.GlUtils;
 public abstract class GlModel extends Model {
     public static final int GLES_VERSION_REQUIRED = 0x00020000;
 
-    protected static final int BYTES_PER_FLOAT = 4;
-    protected static final int BYTES_PER_SHORT = 2;
-
     protected static final String MODEL_HANDLE = "u_ModelMatrix";
     protected static final String MODEL_VIEW_HANDLE = "u_MVMatrix";
     protected static final String MODEL_VIEW_PROJECTION_HANDLE = "u_MVPMatrix";
