@@ -55,7 +55,7 @@ public class ObjModel extends GlModel {
 
     public void create() {
         setColor(AppUtils.getColor(context, COLOR_NORMAL_RES_ID));
-        setScale(10f);
+        setScale(0.5f);
         buildArrays();
 
         initializeProgram();
@@ -82,13 +82,13 @@ public class ObjModel extends GlModel {
     @Override
     protected void bindBuffers() {
         int fvSize = fv.size();
-        int fvnSize = fvn.size();
         int vSize = fvSize * 3;
-        int nSize = vSize;
-        int iSize = fvSize;
+        int fvnSize = fvn.size();
+        int vnSize = vn.size();
+        Log.i("####", "fvSize/vSize/fvnSize/vnSize: " + fvSize + "," + vSize + "," + fvnSize + "," + vnSize);
         FloatBuffer verticesBuffer = ByteBuffer.allocateDirect(vSize * BufferUtils.BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
-        FloatBuffer normalsBuffer = ByteBuffer.allocateDirect(nSize * BufferUtils.BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
-        ShortBuffer indicesBuffer = ByteBuffer.allocateDirect(iSize * BufferUtils.BYTES_PER_SHORT).order(ByteOrder.nativeOrder()).asShortBuffer();
+        FloatBuffer normalsBuffer = ByteBuffer.allocateDirect(vSize * BufferUtils.BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
+        ShortBuffer indicesBuffer = ByteBuffer.allocateDirect(fvSize * BufferUtils.BYTES_PER_SHORT).order(ByteOrder.nativeOrder()).asShortBuffer();
         for (int i = 0; i < fvSize; i++) {
             short vIndex = fv.get(i);
             verticesBuffer.put(v.get(vIndex * 3));
