@@ -41,7 +41,7 @@ public class ObjModel extends GlModel {
     private Vector<Float> vn;
     private Vector<Short> fv;
     private Vector<Short> fvt; // unsupported
-    private Vector<Short> fvn; // unsupported
+    private Vector<Short> fvn; 
 
     protected final int[] buffers = new int[3];
 
@@ -150,7 +150,9 @@ public class ObjModel extends GlModel {
                     return false;
                 } else {
                     // http://paulbourke.net/dataformats/obj/
-                    if (line.startsWith("v ")) {
+                    if (line.startsWith("#")) {
+                        parserComments(line);
+                    } else if (line.startsWith("v ")) {
                         parserGeometricVertices(line);
                     } else if (line.startsWith("vt ")) {
                         parserTextureVertices(line);
@@ -165,6 +167,10 @@ public class ObjModel extends GlModel {
                 }
             }
         });
+    }
+
+    private void parserComments(String line) {
+        Log.d(TAG, "parserComments: " + line);
     }
 
     private void parserGeometricVertices(String line) {
