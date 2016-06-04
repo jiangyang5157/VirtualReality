@@ -68,7 +68,7 @@ public abstract class GlModel extends Model {
     public Handler getHandler() {
         Handler ret = null;
         if (handlerThread == null) {
-            handlerThread = new HandlerThread("safeThread");
+            handlerThread = new HandlerThread("GlModel");
             handlerThread.start();
             ret = new Handler(handlerThread.getLooper());
         } else if (handlerThread.getState() == Thread.State.NEW) {
@@ -78,7 +78,7 @@ public abstract class GlModel extends Model {
             ret = new Handler(handlerThread.getLooper());
         } else if (handlerThread.getState() == Thread.State.TERMINATED) {
             handlerThread = null;
-            handlerThread = new HandlerThread("safeThread");
+            handlerThread = new HandlerThread("GlModel");
             handlerThread.start();
             ret = new Handler(handlerThread.getLooper());
         }
