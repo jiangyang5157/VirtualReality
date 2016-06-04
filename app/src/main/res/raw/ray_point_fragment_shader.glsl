@@ -1,6 +1,6 @@
 precision mediump float;
 uniform vec3 u_Color;
-uniform int u_IsBusy;
+uniform int u_Busy;
 
 varying vec3 v_Color;
 varying float v_PointSize;
@@ -12,7 +12,7 @@ void main()
 
     float up = 0.5;
     float down = 0.0;
-    if (u_IsBusy == 0) {
+    if (u_Busy == 0) {
         down = 0.5 - 4.0f / v_PointSize;
     }
 

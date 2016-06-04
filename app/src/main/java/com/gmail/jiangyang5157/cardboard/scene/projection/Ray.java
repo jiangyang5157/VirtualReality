@@ -3,6 +3,7 @@ package com.gmail.jiangyang5157.cardboard.scene.projection;
 import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
+import android.util.Log;
 
 import com.gmail.jiangyang5157.cardboard.scene.Intersection;
 import com.gmail.jiangyang5157.cardboard.vr.R;
@@ -27,9 +28,9 @@ public class Ray extends Point {
 
     private static final int COLOR_RES_ID = com.gmail.jiangyang5157.tookit.R.color.DeepOrange;
 
-    protected static final String IS_BUSY_HANDLE = "u_IsBusy";
-    protected int isBusyHandle;
-    protected int isBusy = 1;
+    protected static final String BUSY_HANDLE = "u_Busy";
+    protected int busyHandle;
+    protected int busy = 0;
 
     private Intersection intersection;
 
@@ -50,11 +51,11 @@ public class Ray extends Point {
         }
 
         if (intersection.getModel() instanceof Intersection.Clickable) {
-            if (pointSize < POINT_SIZE_FOCUSED){
+            if (pointSize < POINT_SIZE_FOCUSED) {
                 pointSize += POINT_SIZE_GRADIENT_UNIT;
             }
         } else {
-            if (pointSize > POINT_SIZE_NORMAL){
+            if (pointSize > POINT_SIZE_NORMAL) {
                 pointSize -= POINT_SIZE_GRADIENT_UNIT;
             }
         }
@@ -75,7 +76,7 @@ public class Ray extends Point {
     @Override
     protected void bindHandles() {
         super.bindHandles();
-        isBusyHandle = GLES20.glGetUniformLocation(program, IS_BUSY_HANDLE);
+        busyHandle = GLES20.glGetUniformLocation(program, BUSY_HANDLE);
     }
 
     @Override
@@ -90,7 +91,7 @@ public class Ray extends Point {
         GLES20.glUniformMatrix4fv(mvpMatrixHandle, 1, false, modelViewProjection, 0);
         GLES20.glUniform3fv(colorHandle, 1, color, 0);
         GLES20.glUniform1f(pointSizeHandle, pointSize);
-        GLES20.glUniform1i(isBusyHandle, isBusy);
+        GLES20.glUniform1i(busyHandle, busy);
 
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, verticesBuffHandle);
         GLES20.glVertexAttribPointer(vertexHandle, 3, GLES20.GL_FLOAT, false, 0, 0);
@@ -103,7 +104,12 @@ public class Ray extends Point {
         GlUtils.printGlError("Point - draw end");
     }
 
-    public void setIsBusy(int isBusy) {
-        this.isBusy = isBusy;
+    public void addBusy() {
+        busy++;
+    }
+
+    public void subtractBusy() {
+        busy--;
+        busy = busy < 0 ? 0 : busy;
     }
 }

@@ -177,7 +177,9 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
                         objModel.getHandler().post(new Runnable() {
                             @Override
                             public void run() {
+                                ray.addBusy();
                                 objModel.prepare();
+                                ray.subtractBusy();
                             }
                         });
                     } else if (objModel.getCreationState() == ObjModel.STATE_BEFORE_CREATE) {
