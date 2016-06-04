@@ -74,7 +74,7 @@ public class ObjModel extends GlModel {
 
         setCreated(true);
         setVisible(true);
-        creationState = STATE_BEFORE_PREPARE;
+        creationState = STATE_BEFORE_CREATE;
     }
 
     public void setPosition(float[] cameraPos, float[] forward, float[] quaternion) {
@@ -122,12 +122,12 @@ public class ObjModel extends GlModel {
         indicesBuffer.position(0);
         indicesBufferCapacity = indicesBuffer.capacity();
 
-        v = null;
-        vt = null;
-        vn = null;
-        fv = null;
-        fvt = null;
-        fvn = null;
+//        v = null;
+//        vt = null;
+//        vn = null;
+//        fv = null;
+//        fvt = null;
+//        fvn = null;
 
         GLES20.glGenBuffers(buffers.length, buffers, 0);
         verticesBuffHandle = buffers[0];
@@ -152,7 +152,6 @@ public class ObjModel extends GlModel {
         v = new java.util.Vector<>();
         vt = new java.util.Vector<>();
         vn = new java.util.Vector<>();
-
         fv = new java.util.Vector<>();
         fvt = new java.util.Vector<>();
         fvn = new java.util.Vector<>();

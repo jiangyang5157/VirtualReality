@@ -1,10 +1,9 @@
 precision mediump float;
-
+uniform vec3 u_Color;
 uniform vec3 u_LightPos;
 
 varying vec3 v_Position;
 varying vec3 v_Normal;
-varying vec3 v_Color;
 
 void main()
 {
@@ -15,5 +14,5 @@ void main()
     float distance = length(u_LightPos - v_Position);
     diffuse = diffuse * (1.0 / (1.0 + (0.02 * distance * distance)));
 
-    gl_FragColor = vec4(v_Color, 1.0) * diffuse;
+    gl_FragColor = vec4(u_Color, 1.0) * diffuse;
 }

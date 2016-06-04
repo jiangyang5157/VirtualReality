@@ -24,7 +24,6 @@ public abstract class GlModel extends Model {
     protected static final String MODEL_VIEW_PROJECTION_HANDLE = "u_MVPMatrix";
     protected static final String TEXTURE_ID_HANDLE = "u_TexId";
     protected static final String COLOR_HANDLE = "u_Color";
-    protected static final String POINT_SIZE_HANDLE = "u_PointSize";
     protected static final String LIGHT_POSITION_HANDLE = "u_LightPos";
     protected static final String VERTEX_HANDLE = "a_Position";
     protected static final String NORMAL_HANDLE = "a_Normal";
@@ -35,7 +34,6 @@ public abstract class GlModel extends Model {
     protected int mvpMatrixHandle;
     protected int texIdHandle;
     protected int colorHandle;
-    protected int pointSizeHandle;
     protected int lightPosHandle;
     protected int vertexHandle;
     protected int normalHandle;
@@ -68,7 +66,7 @@ public abstract class GlModel extends Model {
     public Handler getHandler() {
         Handler ret = null;
         if (handlerThread == null) {
-            handlerThread = new HandlerThread("safeThread");
+            handlerThread = new HandlerThread("GlModel");
             handlerThread.start();
             ret = new Handler(handlerThread.getLooper());
         } else if (handlerThread.getState() == Thread.State.NEW) {
@@ -78,7 +76,7 @@ public abstract class GlModel extends Model {
             ret = new Handler(handlerThread.getLooper());
         } else if (handlerThread.getState() == Thread.State.TERMINATED) {
             handlerThread = null;
-            handlerThread = new HandlerThread("safeThread");
+            handlerThread = new HandlerThread("GlModel");
             handlerThread.start();
             ret = new Handler(handlerThread.getLooper());
         }

@@ -119,6 +119,14 @@
         </Placemark>
         <Placemark>
             <name>Beijing</name>
+            <ExtendedData>
+                <Data name="title">
+                   <value>teapot obj model</value>
+                </Data>
+                <Data name="obj">
+                    <value>teapot</value>
+                </Data>
+            </ExtendedData>
             <Point>
                 <coordinates>116.40739,39.90421</coordinates>
             </Point>

@@ -1,12 +1,15 @@
 package com.gmail.jiangyang5157.cardboard.scene.projection;
 
 import android.content.Context;
+import android.opengl.GLES20;
 import android.opengl.Matrix;
+import android.util.Log;
 
 import com.gmail.jiangyang5157.cardboard.scene.Intersection;
 import com.gmail.jiangyang5157.cardboard.vr.R;
 import com.gmail.jiangyang5157.tookit.app.AppUtils;
 import com.gmail.jiangyang5157.tookit.math.Vector;
+import com.gmail.jiangyang5157.tookit.opengl.GlUtils;
 
 /**
  * @author Yang
@@ -24,6 +27,10 @@ public class Ray extends Point {
     protected static final float SPACE = (float) (Math.PI * POINT_SIZE_NORMAL);
 
     private static final int COLOR_RES_ID = com.gmail.jiangyang5157.tookit.R.color.DeepOrange;
+
+    protected static final String BUSY_HANDLE = "u_Busy";
+    protected int busyHandle;
+    protected int busy = 0;
 
     private Intersection intersection;
 
@@ -44,11 +51,11 @@ public class Ray extends Point {
         }
 
         if (intersection.getModel() instanceof Intersection.Clickable) {
-            if (pointSize < POINT_SIZE_FOCUSED){
+            if (pointSize < POINT_SIZE_FOCUSED) {
                 pointSize += POINT_SIZE_GRADIENT_UNIT;
             }
         } else {
-            if (pointSize > POINT_SIZE_NORMAL){
+            if (pointSize > POINT_SIZE_NORMAL) {
                 pointSize -= POINT_SIZE_GRADIENT_UNIT;
             }
         }
@@ -64,5 +71,45 @@ public class Ray extends Point {
 
     public Intersection getIntersection() {
         return intersection;
+    }
+
+    @Override
+    protected void bindHandles() {
+        super.bindHandles();
+        busyHandle = GLES20.glGetUniformLocation(program, BUSY_HANDLE);
+    }
+
+    @Override
+    public void draw() {
+        if (!isCreated() || !isVisible()) {
+            return;
+        }
+
+        GLES20.glUseProgram(program);
+        GLES20.glEnableVertexAttribArray(vertexHandle);
+
+        GLES20.glUniformMatrix4fv(mvpMatrixHandle, 1, false, modelViewProjection, 0);
+        GLES20.glUniform3fv(colorHandle, 1, color, 0);
+        GLES20.glUniform1f(pointSizeHandle, pointSize);
+        GLES20.glUniform1i(busyHandle, busy);
+
+        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, verticesBuffHandle);
+        GLES20.glVertexAttribPointer(vertexHandle, 3, GLES20.GL_FLOAT, false, 0, 0);
+
+        GLES20.glDrawArrays(GLES20.GL_POINTS, 0, 1);
+
+        GLES20.glDisableVertexAttribArray(vertexHandle);
+        GLES20.glUseProgram(0);
+
+        GlUtils.printGlError("Point - draw end");
+    }
+
+    public void addBusy() {
+        busy++;
+    }
+
+    public void subtractBusy() {
+        busy--;
+        busy = busy < 0 ? 0 : busy;
     }
 }
