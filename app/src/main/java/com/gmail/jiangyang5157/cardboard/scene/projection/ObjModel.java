@@ -47,7 +47,11 @@ public class ObjModel extends GlModel {
 
     protected final int[] buffers = new int[3];
 
-    private boolean isReadyToCreate;
+    public static final int STATE_BEFORE_PREPARE = 0x00000001;
+    public static final int STATE_PREPARING = 0x00000010;
+    public static final int STATE_BEFORE_CREATE = 0x00000100;
+    public static final int STATE_CREATING = 0x00001000;
+    private int creationState = STATE_BEFORE_PREPARE;
 
     protected ObjModel(Context context, String title, String obj) {
         super(context, VERTEX_SHADER_RAW_RESOURCE, FRAGMENT_SHADER_RAW_RESOURCE);
@@ -55,31 +59,22 @@ public class ObjModel extends GlModel {
         this.obj = obj;
     }
 
+    public void prepare() {
+        creationState = STATE_PREPARING;
+        setColor(AppUtils.getColor(context, COLOR_NORMAL_RES_ID));
+        setScale(10f);
+        buildArrays();
+        creationState = STATE_BEFORE_CREATE;
+    }
+
     public void create() {
-        setColor(AppUtils.getColor(context, COLOR_NORMAL_RES_ID));
-        setScale(10f);
-        buildArrays();
-
+        creationState = STATE_CREATING;
         initializeProgram();
         bindBuffers();
 
         setCreated(true);
         setVisible(true);
-    }
-
-    public void create1() {
-        setColor(AppUtils.getColor(context, COLOR_NORMAL_RES_ID));
-        setScale(10f);
-        buildArrays();
-        setReadyToCreate(true);
-    }
-
-    public void create2() {
-        initializeProgram();
-        bindBuffers();
-
-        setCreated(true);
-        setVisible(true);
+        creationState = STATE_BEFORE_PREPARE;
     }
 
     public void setPosition(float[] cameraPos, float[] forward, float[] quaternion) {
@@ -402,11 +397,7 @@ public class ObjModel extends GlModel {
         GLES20.glDeleteBuffers(buffers.length, buffers, 0);
     }
 
-    public boolean isReadyToCreate() {
-        return isReadyToCreate;
-    }
-
-    public void setReadyToCreate(boolean readyToCreate) {
-        isReadyToCreate = readyToCreate;
+    public int getCreationState() {
+        return creationState;
     }
 }
