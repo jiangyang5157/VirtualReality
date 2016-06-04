@@ -4,6 +4,8 @@ import android.content.Context;
 import android.graphics.Color;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.util.Log;
 
 import com.gmail.jiangyang5157.cardboard.scene.Lighting;
@@ -54,11 +56,34 @@ public abstract class GlModel extends Model {
     private final int vertexShaderRawResource;
     private final int fragmentShaderRawResource;
 
+    protected HandlerThread handlerThread;
+
     protected GlModel(Context context, int vertexShaderRawResource, int fragmentShaderRawResource) {
         super();
         this.context = context;
         this.vertexShaderRawResource = vertexShaderRawResource;
         this.fragmentShaderRawResource = fragmentShaderRawResource;
+    }
+
+    public Handler getHandler() {
+        Handler ret = null;
+        if (handlerThread == null) {
+            handlerThread = new HandlerThread("safeThread");
+            handlerThread.start();
+            ret = new Handler(handlerThread.getLooper());
+        } else if (handlerThread.getState() == Thread.State.NEW) {
+            handlerThread.start();
+            ret = new Handler(handlerThread.getLooper());
+        } else if (handlerThread.getState() == Thread.State.WAITING) {
+            ret = new Handler(handlerThread.getLooper());
+        } else if (handlerThread.getState() == Thread.State.TERMINATED) {
+            handlerThread = null;
+            handlerThread = new HandlerThread("safeThread");
+            handlerThread.start();
+            ret = new Handler(handlerThread.getLooper());
+        }
+
+        return ret;
     }
 
     protected void initializeProgram() {
@@ -145,6 +170,10 @@ public abstract class GlModel extends Model {
         super.destroy();
         if (program != 0) {
             GLES20.glDeleteProgram(program);
+        }
+
+        if (handlerThread != null) {
+            handlerThread.quit();
         }
     }
 }
