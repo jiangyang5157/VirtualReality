@@ -8,6 +8,7 @@ import com.gmail.jiangyang5157.cardboard.kml.KmlPlacemark;
 import com.gmail.jiangyang5157.cardboard.scene.Intersection;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
 import com.gmail.jiangyang5157.cardboard.scene.Lighting;
+import com.gmail.jiangyang5157.cardboard.vr.Constant;
 import com.gmail.jiangyang5157.cardboard.vr.R;
 import com.gmail.jiangyang5157.tookit.data.buffer.BufferUtils;
 import com.gmail.jiangyang5157.tookit.math.Vector;
@@ -16,6 +17,8 @@ import com.gmail.jiangyang5157.tookit.opengl.GlUtils;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
@@ -29,7 +32,7 @@ import java.util.Collections;
  */
 public class Earth extends TextureSphere {
 
-    private static final int TEXTURE_DRAWABLE_RESOURCE = R.drawable.no_clouds_2k;
+    private static final String TEXTURE_URL = Constant.getResourceUrl("world_map.jpg");
     private static final int VERTEX_SHADER_RAW_RESOURCE = R.raw.earth_texture_vertex_shader;
     private static final int FRAGMENT_SHADER_RAW_RESOURCE = R.raw.earth_texture_fragment_shader;
 
@@ -92,7 +95,25 @@ public class Earth extends TextureSphere {
         GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, texturesBuffer.capacity() * BufferUtils.BYTES_PER_FLOAT, texturesBuffer, GLES20.GL_STATIC_DRAW);
         texturesBuffer.limit(0);
 
-        texBuffers[0] = loadTexture(context, TEXTURE_DRAWABLE_RESOURCE);
+
+        String texturePath = Constant.getPath(TEXTURE_URL);
+
+
+        InputStream ins = null;
+        try {
+            ins = context.getAssets().open(texturePath);
+            texBuffers[0] = loadTexture(ins);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (ins != null) {
+                try {
+                    ins.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     @Override

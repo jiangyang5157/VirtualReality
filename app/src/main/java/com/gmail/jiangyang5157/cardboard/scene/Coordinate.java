@@ -2,10 +2,10 @@ package com.gmail.jiangyang5157.cardboard.scene;
 
 public class Coordinate {
 
-    public static final double WGS84_SEMI_MAJOR_AXIS = 6378137.0;
-    public static final double WGS84_FLATTENING = 1.0 / 298.257222101;
-    public static final double WGS84_ECCENTRICITY = Math.sqrt(1 - Math.pow((1 - WGS84_FLATTENING), 2));
-    public static final double DEFAULT_ECCENTRICITY = 0;
+    private static final double WGS84_SEMI_MAJOR_AXIS = 6378137.0;
+    private static final double WGS84_FLATTENING = 1.0 / 298.257222101;
+    private static final double WGS84_ECCENTRICITY = Math.sqrt(1 - Math.pow((1 - WGS84_FLATTENING), 2));
+    private static final double DEFAULT_ECCENTRICITY = 0;
 
     public final double latitude;
     public final double longitude;

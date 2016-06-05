@@ -6,6 +6,7 @@ import android.opengl.Matrix;
 import android.util.Log;
 
 import com.gmail.jiangyang5157.cardboard.scene.Head;
+import com.gmail.jiangyang5157.cardboard.vr.Constant;
 import com.gmail.jiangyang5157.cardboard.vr.R;
 import com.gmail.jiangyang5157.tookit.app.AppUtils;
 import com.gmail.jiangyang5157.tookit.data.buffer.BufferUtils;
@@ -13,6 +14,8 @@ import com.gmail.jiangyang5157.tookit.data.text.IoUtils;
 import com.gmail.jiangyang5157.tookit.math.Vector3d;
 import com.gmail.jiangyang5157.tookit.opengl.GlUtils;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -25,7 +28,7 @@ import java.util.Vector;
  * @since 5/27/2016
  */
 public class ObjModel extends GlModel {
-    private static final String TAG = "ObjModel ####";
+    private static final String TAG = "[ObjModel]";
 
     private static final int VERTEX_SHADER_RAW_RESOURCE = R.raw.obj_color_vertex_shader;
     private static final int FRAGMENT_SHADER_RAW_RESOURCE = R.raw.obj_color_fragment_shader;
@@ -36,7 +39,7 @@ public class ObjModel extends GlModel {
     private static final float TIME_DELTA_ROTATION = 0.3f;
 
     private String title;
-    private String obj;
+    private String url;
 
     private Vector<Float> v;
     private Vector<Float> vt; // unsupported
@@ -53,10 +56,10 @@ public class ObjModel extends GlModel {
     public static final int STATE_CREATING = 0x00001000;
     private int creationState = STATE_BEFORE_PREPARE;
 
-    protected ObjModel(Context context, String title, String obj) {
+    protected ObjModel(Context context, String title, String url) {
         super(context, VERTEX_SHADER_RAW_RESOURCE, FRAGMENT_SHADER_RAW_RESOURCE);
         this.title = title;
-        this.obj = obj;
+        this.url = url;
     }
 
     public void prepare() {
@@ -156,31 +159,47 @@ public class ObjModel extends GlModel {
         fvt = new java.util.Vector<>();
         fvn = new java.util.Vector<>();
 
-        InputStream ins = context.getResources().openRawResource(context.getResources().getIdentifier(obj, "raw", context.getPackageName()));
-        IoUtils.read(ins, new IoUtils.OnReadingListener() {
-            @Override
-            public boolean onReadLine(String line) {
-                if (line == null) {
-                    return false;
-                } else {
-                    // http://paulbourke.net/dataformats/obj/
-                    if (line.startsWith("#")) {
-                        parserComments(line);
-                    } else if (line.startsWith("v ")) {
-                        parserGeometricVertices(line);
-                    } else if (line.startsWith("vt ")) {
-                        parserTextureVertices(line);
-                    } else if (line.startsWith("vn ")) {
-                        parserVertexNormals(line);
-                    } else if (line.startsWith("f ")) {
-                        parserFace(line);
+
+        String objPath = Constant.getPath(url);
+
+        InputStream ins = null;
+        try {
+            ins = context.getAssets().open(Constant.getPath(objPath));
+            IoUtils.read(ins, new IoUtils.OnReadingListener() {
+                @Override
+                public boolean onReadLine(String line) {
+                    if (line == null) {
+                        return false;
                     } else {
-                        Log.w(TAG, "Unsupported regex: " + line);
+                        // http://paulbourke.net/dataformats/obj/
+                        if (line.startsWith("#")) {
+                            parserComments(line);
+                        } else if (line.startsWith("v ")) {
+                            parserGeometricVertices(line);
+                        } else if (line.startsWith("vt ")) {
+                            parserTextureVertices(line);
+                        } else if (line.startsWith("vn ")) {
+                            parserVertexNormals(line);
+                        } else if (line.startsWith("f ")) {
+                            parserFace(line);
+                        } else {
+                            Log.w(TAG, "Unsupported regex: " + line);
+                        }
+                        return true;
                     }
-                    return true;
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (ins != null) {
+                try {
+                    ins.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
-        });
+        }
     }
 
     private void parserComments(String line) {
@@ -238,7 +257,7 @@ public class ObjModel extends GlModel {
         } else if (tokens[1].matches("[0-9]+/[0-9]+")) { // f v/vt ...
             if (length == 4) { // f v/vt v/vt v/vt
                 for (int i = 1; i < length; i++) {
-                    String[] tokens2 = tokens[i].split("/");
+                    String[] tokens2 = tokens[i].split(File.separator);
                     Short s = Short.valueOf(tokens2[0]);
                     s--;
                     fv.add(s);
@@ -250,7 +269,7 @@ public class ObjModel extends GlModel {
                 Vector<Short> fv2 = new Vector<Short>();
                 Vector<Short> fvt2 = new Vector<Short>();
                 for (int i = 1; i < tokens.length; i++) {
-                    String[] tokens2 = tokens[i].split("/");
+                    String[] tokens2 = tokens[i].split(File.separator);
                     Short s = Short.valueOf(tokens2[0]);
                     s--;
                     fv2.add(s);
@@ -290,7 +309,7 @@ public class ObjModel extends GlModel {
         } else if (tokens[1].matches("[0-9]+/[0-9]+/[0-9]+")) { // f v/vt/vn ...
             if (length == 4) { // f v/vt/vn v/vt/vn v/vt/vn
                 for (int i = 1; i < length; i++) {
-                    String[] tokens2 = tokens[i].split("/");
+                    String[] tokens2 = tokens[i].split(File.separator);
                     Short s = Short.valueOf(tokens2[0]);
                     s--;
                     fv.add(s);
@@ -302,11 +321,11 @@ public class ObjModel extends GlModel {
                     fvn.add(s);
                 }
             } else { // f (triangulate)
-                Vector<Short> fv2 = new Vector<Short>();
-                Vector<Short> fvt2 = new Vector<Short>();
-                Vector<Short> fvn2 = new Vector<Short>();
+                Vector<Short> fv2 = new Vector<>();
+                Vector<Short> fvt2 = new Vector<>();
+                Vector<Short> fvn2 = new Vector<>();
                 for (int i = 1; i < tokens.length; i++) {
-                    String[] tokens2 = tokens[i].split("/");
+                    String[] tokens2 = tokens[i].split(File.separator);
                     Short s = Short.valueOf(tokens2[0]);
                     s--;
                     fv2.add(s);

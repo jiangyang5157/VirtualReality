@@ -28,9 +28,9 @@ public class Ray extends Point {
 
     private static final int COLOR_RES_ID = com.gmail.jiangyang5157.tookit.R.color.DeepOrange;
 
-    protected static final String BUSY_HANDLE = "u_Busy";
-    protected int busyHandle;
-    protected int busy = 0;
+    private static final String BUSY_HANDLE = "u_Busy";
+    private int busyHandle;
+    private int busy = 0;
 
     private Intersection intersection;
 
