@@ -39,7 +39,7 @@ public class ObjModel extends GlModel {
     private static final float TIME_DELTA_ROTATION = 0.3f;
 
     private String title;
-    private String obj;
+    private String url;
 
     private Vector<Float> v;
     private Vector<Float> vt; // unsupported
@@ -56,10 +56,10 @@ public class ObjModel extends GlModel {
     public static final int STATE_CREATING = 0x00001000;
     private int creationState = STATE_BEFORE_PREPARE;
 
-    protected ObjModel(Context context, String title, String obj) {
+    protected ObjModel(Context context, String title, String url) {
         super(context, VERTEX_SHADER_RAW_RESOURCE, FRAGMENT_SHADER_RAW_RESOURCE);
         this.title = title;
-        this.obj = obj;
+        this.url = url;
     }
 
     public void prepare() {
@@ -159,9 +159,12 @@ public class ObjModel extends GlModel {
         fvt = new java.util.Vector<>();
         fvn = new java.util.Vector<>();
 
+
+        String objPath = Constant.getPath(url);
+
         InputStream ins = null;
         try {
-            ins = context.getAssets().open(Constant.getModelFilePath(obj));
+            ins = context.getAssets().open(Constant.getPath(objPath));
             IoUtils.read(ins, new IoUtils.OnReadingListener() {
                 @Override
                 public boolean onReadLine(String line) {

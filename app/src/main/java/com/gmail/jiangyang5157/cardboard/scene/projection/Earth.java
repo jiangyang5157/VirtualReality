@@ -32,7 +32,7 @@ import java.util.Collections;
  */
 public class Earth extends TextureSphere {
 
-    private static final String TEXTURE_FILENAME = "world_map.jpg";
+    private static final String TEXTURE_URL = Constant.getResourceUrl("world_map.jpg");
     private static final int VERTEX_SHADER_RAW_RESOURCE = R.raw.earth_texture_vertex_shader;
     private static final int FRAGMENT_SHADER_RAW_RESOURCE = R.raw.earth_texture_fragment_shader;
 
@@ -95,9 +95,13 @@ public class Earth extends TextureSphere {
         GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, texturesBuffer.capacity() * BufferUtils.BYTES_PER_FLOAT, texturesBuffer, GLES20.GL_STATIC_DRAW);
         texturesBuffer.limit(0);
 
+
+        String texturePath = Constant.getPath(TEXTURE_URL);
+
+
         InputStream ins = null;
         try {
-            ins = context.getAssets().open(Constant.getResourceFilePath(TEXTURE_FILENAME));
+            ins = context.getAssets().open(texturePath);
             texBuffers[0] = loadTexture(ins);
         } catch (IOException e) {
             e.printStackTrace();

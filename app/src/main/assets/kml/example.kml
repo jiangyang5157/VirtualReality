@@ -10,10 +10,10 @@
             <description>descriptiondescription</description>
             <ExtendedData>
                 <Data name="title">
-                   <value>cube obj model</value>
+                   <value>cube 3d model</value>
                 </Data>
                 <Data name="obj">
-                    <value>cube.obj</value>
+                    <value>https://unimplemented/model/cube.obj</value>
                 </Data>
             </ExtendedData>
             <Point>
@@ -53,10 +53,10 @@
             <description>descriptiondescription</description>
             <ExtendedData>
                 <Data name="title">
-                   <value>sphere obj model</value>
+                   <value>sphere 3d model</value>
                 </Data>
                 <Data name="obj">
-                    <value>sphere.obj</value>
+                    <value>https://unimplemented/model/sphere.obj</value>
                 </Data>
             </ExtendedData>
             <Point>
@@ -121,10 +121,10 @@
             <name>Beijing</name>
             <ExtendedData>
                 <Data name="title">
-                   <value>teapot obj model</value>
+                   <value>teapot 3d model</value>
                 </Data>
                 <Data name="obj">
-                    <value>teapot.obj</value>
+                    <value>https://unimplemented/model/teapot.obj</value>
                 </Data>
             </ExtendedData>
             <Point>
