@@ -29,6 +29,7 @@ import com.google.vr.sdk.base.Viewport;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 import javax.microedition.khronos.egl.EGLConfig;
 
@@ -293,11 +294,21 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         });
         earth.create();
 
+        InputStream ins = null;
         try {
-            KmlLayer kmlLayer = new KmlLayer(earth, R.raw.example, getApplicationContext());
+            ins = getAssets().open(Constant.getKmlFilePath("example.kml"));
+            KmlLayer kmlLayer = new KmlLayer(earth, ins, this);
             kmlLayer.addLayerToMap();
         } catch (XmlPullParserException | IOException e) {
             e.printStackTrace();
+        } finally {
+            if (ins != null) {
+                try {
+                    ins.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 

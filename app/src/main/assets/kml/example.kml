@@ -13,7 +13,7 @@
                    <value>cube obj model</value>
                 </Data>
                 <Data name="obj">
-                    <value>cube</value>
+                    <value>cube.obj</value>
                 </Data>
             </ExtendedData>
             <Point>
@@ -56,7 +56,7 @@
                    <value>sphere obj model</value>
                 </Data>
                 <Data name="obj">
-                    <value>sphere</value>
+                    <value>sphere.obj</value>
                 </Data>
             </ExtendedData>
             <Point>
@@ -124,7 +124,7 @@
                    <value>teapot obj model</value>
                 </Data>
                 <Data name="obj">
-                    <value>teapot</value>
+                    <value>teapot.obj</value>
                 </Data>
             </ExtendedData>
             <Point>
