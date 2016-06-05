@@ -32,7 +32,7 @@ import java.util.Collections;
  */
 public class Earth extends TextureSphere {
 
-    private static final String TEXTURE_FILE_NAME = "world_map.jpg";
+    private static final String TEXTURE_FILENAME = "world_map.jpg";
     private static final int VERTEX_SHADER_RAW_RESOURCE = R.raw.earth_texture_vertex_shader;
     private static final int FRAGMENT_SHADER_RAW_RESOURCE = R.raw.earth_texture_fragment_shader;
 
@@ -97,7 +97,7 @@ public class Earth extends TextureSphere {
 
         InputStream ins = null;
         try {
-            ins = context.getAssets().open(Constant.getResourceFilePath(TEXTURE_FILE_NAME));
+            ins = context.getAssets().open(Constant.getResourceFilePath(TEXTURE_FILENAME));
             texBuffers[0] = loadTexture(ins);
         } catch (IOException e) {
             e.printStackTrace();

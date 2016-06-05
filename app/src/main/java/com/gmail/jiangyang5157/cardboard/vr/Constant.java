@@ -1,5 +1,8 @@
 package com.gmail.jiangyang5157.cardboard.vr;
 
+import android.content.Context;
+import android.preference.PreferenceManager;
+
 import java.io.File;
 
 /**
@@ -9,12 +12,19 @@ import java.io.File;
 public class Constant {
     public static final int DEBUG = 0;
 
+    private static final String KML_FILENAME_KEY = "KML_FILENAME_KEY";
+    private static final String KML_FILENAME_DEFAULT = "example.kml";
+
     // profile path:
     // /data/user/0/com.gmail.jiangyang5157.cardboard.vr
 
     public static final String DIRECTORY_KML = "kml";
     public static final String DIRECTORY_MODEL = "model";
     public static final String DIRECTORY_RESOURCE = "resource";
+
+    public static String getKmlFileName(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getString(KML_FILENAME_KEY, KML_FILENAME_DEFAULT);
+    }
 
     public static String getResourceFilePath(String fileName) {
         return DIRECTORY_RESOURCE + File.separator + fileName;
