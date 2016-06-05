@@ -25,7 +25,7 @@ import java.util.Vector;
  * @since 5/27/2016
  */
 public class ObjModel extends GlModel {
-    private static final String TAG = "ObjModel ####";
+    private static final String TAG = "[ObjModel]";
 
     private static final int VERTEX_SHADER_RAW_RESOURCE = R.raw.obj_color_vertex_shader;
     private static final int FRAGMENT_SHADER_RAW_RESOURCE = R.raw.obj_color_fragment_shader;

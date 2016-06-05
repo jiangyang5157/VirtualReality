@@ -84,8 +84,9 @@ public abstract class Panel extends Rectangle {
         }
 
         float[] cameraPos = head.getCamera().getPosition();
+        float[] forward = head.getForward();
         Vector cameraPosVec = new Vector(cameraPos[0], cameraPos[1], cameraPos[2]);
-        Vector forwardVec = new Vector(head.forward[0], head.forward[1], head.forward[2]);
+        Vector forwardVec = new Vector(forward[0], forward[1], forward[2]);
 
         Vector tl_tr = new Vector3d(trVec.minus(tlVec));
         Vector tl_bl = new Vector3d(blVec.minus(tlVec));

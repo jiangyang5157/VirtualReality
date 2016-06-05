@@ -33,15 +33,13 @@ import java.io.IOException;
 import javax.microedition.khronos.egl.EGLConfig;
 
 public class MainActivity extends GvrActivity implements GvrView.StereoRenderer {
-
-    private static final String TAG = "MainActivity ####";
-    private final int DEBUG = 0;
+    private static final String TAG = "[MainActivity]";
 
     private Head head;
 
-    public final float[] LIGHT_POS_IN_CAMERA_SPACE = new float[]{0.0f, Panel.DISTANCE / 10, 0.0f, 1.0f};
-    public final float[] LIGHT_POS_IN_WORLD_SPACE = new float[]{0.0f, 0.0f, 0.0f, 1.0f};
-    public float[] lightPosInCameraSpace = new float[4];
+    private final float[] LIGHT_POS_IN_CAMERA_SPACE = new float[]{0.0f, Panel.DISTANCE / 10, 0.0f, 1.0f};
+    private final float[] LIGHT_POS_IN_WORLD_SPACE = new float[]{0.0f, 0.0f, 0.0f, 1.0f};
+    private float[] lightPosInCameraSpace = new float[4];
 
     private Earth earth;
     private Ray ray;
@@ -67,7 +65,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         gvrView.setEGLConfigChooser(8, 8, 8, 8, 16, 8);
 
         gvrView.setRenderer(this);
-        if (DEBUG != 0) {
+        if (Constant.DEBUG != 0) {
             // The transition view used to prompt the user to place their phone into a GVR viewer.
             gvrView.setTransitionViewEnabled(true);
         }
@@ -157,18 +155,18 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
 
     @Override
     public void onNewFrame(HeadTransform headTransform) {
-        headTransform.getHeadView(head.headView, 0);
-        headTransform.getForwardVector(head.forward, 0);
-        headTransform.getUpVector(head.up, 0);
-        headTransform.getRightVector(head.right, 0);
-        headTransform.getQuaternion(head.quaternion, 0);
+        headTransform.getHeadView(head.getHeadView(), 0);
+        headTransform.getForwardVector(head.getForward(), 0);
+        headTransform.getUpVector(head.getUp(), 0);
+        headTransform.getRightVector(head.getRight(), 0);
+        headTransform.getQuaternion(head.getQuaternion(), 0);
 
         head.adjustPosition(earth);
 
         if (markerDialog != null) {
             if (!markerDialog.isCreated()) {
                 markerDialog.create();
-                markerDialog.setPosition(head.getCamera().getPosition(), head.forward, head.quaternion, head.up, head.right);
+                markerDialog.setPosition(head.getCamera().getPosition(), head.getForward(), head.getQuaternion(), head.getUp(), head.getRight());
             }
 
             if (objModel != null) {
@@ -184,7 +182,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
                         });
                     } else if (objModel.getCreationState() == ObjModel.STATE_BEFORE_CREATE) {
                         objModel.create();
-                        objModel.setPosition(head.getCamera().getPosition(), head.forward, head.quaternion);
+                        objModel.setPosition(head.getCamera().getPosition(), head.getForward(), head.getQuaternion());
                     }
                 }
             }
@@ -198,14 +196,14 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 
         // Apply the eye transformation to the matrix.
-        Matrix.multiplyMM(head.getCamera().view, 0, eye.getEyeView(), 0, head.getCamera().matrix, 0);
+        Matrix.multiplyMM(head.getCamera().getView(), 0, eye.getEyeView(), 0, head.getCamera().getMatrix(), 0);
 
         // Set the position of the light
-        Matrix.multiplyMV(lightPosInCameraSpace, 0, head.getCamera().view, 0, LIGHT_POS_IN_WORLD_SPACE, 0);
+        Matrix.multiplyMV(lightPosInCameraSpace, 0, head.getCamera().getView(), 0, LIGHT_POS_IN_WORLD_SPACE, 0);
 
         float[] perspective = eye.getPerspective(Camera.Z_NEAR, Camera.Z_FAR);
 
-        updateScene(head.getCamera().view, perspective);
+        updateScene(head.getCamera().getView(), perspective);
         drawScene();
     }
 
@@ -266,7 +264,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         float[] init = {0, 0, 0, 1.0f};
         float[] objPosition = new float[4];
         // Convert object space to matrix space. Use the headView from onNewFrame.
-        Matrix.multiplyMM(modelView, 0, head.headView, 0, model, 0);
+        Matrix.multiplyMM(modelView, 0, head.getHeadView(), 0, model, 0);
         Matrix.multiplyMV(objPosition, 0, modelView, 0, init, 0);
         return objPosition;
     }

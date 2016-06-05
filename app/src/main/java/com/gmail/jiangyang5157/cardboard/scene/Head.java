@@ -14,15 +14,13 @@ import com.gmail.jiangyang5157.cardboard.scene.projection.Earth;
  */
 public class Head implements SensorEventListener {
 
-    private static final String TAG = "Head ####";
-
     private Camera camera;
 
-    public float[] headView;
-    public float[] forward;
-    public float[] up;
-    public float[] right;
-    public float[] quaternion;
+    private float[] headView;
+    private float[] forward;
+    private float[] up;
+    private float[] right;
+    private float[] quaternion;
 
     private SensorManager sensorManager;
     private Sensor stepDetector;
@@ -147,5 +145,25 @@ public class Head implements SensorEventListener {
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
+    }
+
+    public float[] getHeadView() {
+        return headView;
+    }
+
+    public float[] getForward() {
+        return forward;
+    }
+
+    public float[] getUp() {
+        return up;
+    }
+
+    public float[] getRight() {
+        return right;
+    }
+
+    public float[] getQuaternion() {
+        return quaternion;
     }
 }

@@ -13,8 +13,8 @@ public class Camera {
     public static final float Z_NEAR = 0.1f;
     public static final float Z_FAR = Earth.RADIUS * 2;
 
-    public float[] matrix;
-    public float[] view;
+    private float[] matrix;
+    private float[] view;
 
     private float[] position;
     private float[] lookAt;
@@ -52,5 +52,13 @@ public class Camera {
         src[0] += dir[0];
         src[1] += dir[1];
         src[2] += dir[2];
+    }
+
+    public float[] getMatrix() {
+        return matrix;
+    }
+
+    public float[] getView() {
+        return view;
     }
 }
