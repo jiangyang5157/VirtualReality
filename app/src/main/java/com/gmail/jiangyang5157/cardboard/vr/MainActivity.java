@@ -299,31 +299,21 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         });
         earth.create();
 
-
-        InputStream ins = null;
         String kmlUrl = Constant.getLastKmlUrl(this);
         String kmlPath = Constant.getPath(kmlUrl);
-
-
-        String directoryPath = AppUtils.getProfilePath(this) + File.separator + kmlPath.substring(0, kmlPath.lastIndexOf(File.separator));
-        File directory = new File(directoryPath);
-        if (!directory.exists()){
-            Log.i("####", "1111");
-            directory.mkdirs();
-        }
-
         File file = new File(AppUtils.getProfilePath(this) + File.separator + kmlPath);
-        Log.i("####", "2222");
         if (!file.exists()){
             try {
-                Log.i("####", "3333");
+                Log.i("####", "mkdirs - copy");
+                file.getParentFile().mkdirs();
                 Constant.copy(getAssets().open(kmlPath), file, 1024);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+
+        InputStream ins = null;
         try {
-            Log.i("####", "4444");
             ins = new FileInputStream(file);
             KmlLayer kmlLayer = new KmlLayer(earth, ins, this);
             kmlLayer.addLayerToMap();
