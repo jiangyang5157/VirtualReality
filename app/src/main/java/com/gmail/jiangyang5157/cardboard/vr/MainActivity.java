@@ -32,7 +32,6 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -301,21 +300,20 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
 
         String kmlUrl = Constant.getLastKmlUrl(this);
 
-        String path = Constant.getPath(kmlUrl);
-        File file = new File(AppUtils.getProfilePath(this) + File.separator + path);
-
-        if (!file.exists()){
-            try {
-                Log.i("####", "copy");
-                Constant.write(getAssets().open(path), file);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
         InputStream ins = null;
         try {
+            String path = Constant.getPath(kmlUrl);
+            File file = new File(AppUtils.getProfilePath(this) + File.separator + path);
+            // TODO: 6/6/2016 from url?
+            if (!file.exists()) {
+                try {
+                    Constant.write(getAssets().open(path), file);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
             ins = new FileInputStream(file);
+
             KmlLayer kmlLayer = new KmlLayer(earth, ins, this);
             kmlLayer.addLayerToMap();
         } catch (XmlPullParserException | IOException e) {
@@ -339,7 +337,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
     @Override
     public void onRendererShutdown() {
         Log.d(TAG, "onRendererShutdown");
-        // TODO: 5/14/2016 WHY: this callback is never get called
+        // WHY: never get called
     }
 
     @Override

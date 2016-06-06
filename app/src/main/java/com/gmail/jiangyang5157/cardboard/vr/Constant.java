@@ -2,6 +2,7 @@ package com.gmail.jiangyang5157.cardboard.vr;
 
 import android.content.Context;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.gmail.jiangyang5157.tookit.app.DeviceUtils;
 
@@ -17,6 +18,7 @@ import java.io.OutputStream;
  * @since 6/5/2016
  */
 public class Constant {
+    private static final String TAG = "[Constant]";
     public static final int DEBUG = 0;
 
     public static final String URL_ = "https://unimplemented/";
@@ -32,6 +34,7 @@ public class Constant {
     private static final String DIRECTORY_RESOURCE = "resource";
 
     public static void write(InputStream ins, File dst) throws IOException {
+        Log.d(TAG, "write: " + dst.getAbsolutePath());
         dst.getParentFile().mkdirs();
         OutputStream outs = new FileOutputStream(dst);
         byte[] buffer = new byte[DeviceUtils.SIZE_UNIT];
@@ -44,6 +47,7 @@ public class Constant {
     }
 
     public static void copy(File src, File dst) throws IOException {
+        Log.d(TAG, "copy " + src.getAbsolutePath() + " to " + dst.getAbsolutePath());
         write(new FileInputStream(src), dst);
     }
 

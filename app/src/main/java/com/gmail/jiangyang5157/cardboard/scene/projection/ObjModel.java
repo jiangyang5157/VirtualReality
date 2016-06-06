@@ -159,12 +159,12 @@ public class ObjModel extends GlModel {
         fvt = new java.util.Vector<>();
         fvn = new java.util.Vector<>();
 
-
-        String objPath = Constant.getPath(url);
-
         InputStream ins = null;
         try {
-            ins = context.getAssets().open(Constant.getPath(objPath));
+            String path = Constant.getPath(url);
+            // TODO: 6/6/2016  
+            ins = context.getAssets().open(Constant.getPath(path));
+
             IoUtils.read(ins, new IoUtils.OnReadingListener() {
                 @Override
                 public boolean onReadLine(String line) {
