@@ -4,10 +4,13 @@ import android.content.Context;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.gmail.jiangyang5157.tookit.app.AppUtils;
 import com.gmail.jiangyang5157.tookit.app.DeviceUtils;
+import com.gmail.jiangyang5157.tookit.data.io.IoUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -32,6 +35,19 @@ public class Constant {
     private static final String DIRECTORY_KML = "kml";
     private static final String DIRECTORY_MODEL = "model";
     private static final String DIRECTORY_RESOURCE = "resource";
+
+    public static InputStream getInputStream(Context context, String url) throws IOException {
+        String path = Constant.getPath(url);
+        File file = new File(AppUtils.getProfilePath(context) + File.separator + path);
+
+        // TODO: 6/6/2016 from url?
+        if (!file.exists()) {
+            IoUtils.write(context.getAssets().open(path), file);
+        }
+
+        InputStream in = new FileInputStream(file);
+        return in;
+    }
 
     public static String getLastKmlUrl(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context).getString(KML_URL_KEY, KML_URL_DEFAULT);

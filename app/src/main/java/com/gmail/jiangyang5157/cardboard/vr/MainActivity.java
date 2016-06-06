@@ -298,22 +298,10 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         });
         earth.create();
 
-        String kmlUrl = Constant.getLastKmlUrl(this);
-
+        String url = Constant.getLastKmlUrl(this);
         InputStream in = null;
         try {
-            String path = Constant.getPath(kmlUrl);
-            File file = new File(AppUtils.getProfilePath(this) + File.separator + path);
-            // TODO: 6/6/2016 from url?
-            if (!file.exists()) {
-                try {
-                    IoUtils.write(getAssets().open(path), file);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            in = new FileInputStream(file);
-
+            in = Constant.getInputStream(this, url);
             KmlLayer kmlLayer = new KmlLayer(earth, in, this);
             kmlLayer.addLayerToMap();
         } catch (XmlPullParserException | IOException e) {

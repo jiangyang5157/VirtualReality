@@ -101,18 +101,7 @@ public class Earth extends TextureSphere {
 
         InputStream in = null;
         try {
-            String path = Constant.getPath(TEXTURE_URL);
-            File file = new File(AppUtils.getProfilePath(context) + File.separator + path);
-            // TODO: 6/6/2016 from url?
-            if (!file.exists()) {
-                try {
-                    IoUtils.write(context.getAssets().open(path), file);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            in = new FileInputStream(file);
-            
+            in = Constant.getInputStream(context, TEXTURE_URL);
             texBuffers[0] = loadTexture(in);
         } catch (IOException e) {
             e.printStackTrace();
