@@ -10,7 +10,7 @@ import com.gmail.jiangyang5157.cardboard.vr.Constant;
 import com.gmail.jiangyang5157.cardboard.vr.R;
 import com.gmail.jiangyang5157.tookit.app.AppUtils;
 import com.gmail.jiangyang5157.tookit.data.buffer.BufferUtils;
-import com.gmail.jiangyang5157.tookit.data.text.IoUtils;
+import com.gmail.jiangyang5157.tookit.data.io.IoUtils;
 import com.gmail.jiangyang5157.tookit.math.Vector3d;
 import com.gmail.jiangyang5157.tookit.opengl.GlUtils;
 
@@ -159,13 +159,13 @@ public class ObjModel extends GlModel {
         fvt = new java.util.Vector<>();
         fvn = new java.util.Vector<>();
 
-
-        String objPath = Constant.getPath(url);
-
-        InputStream ins = null;
+        InputStream in = null;
         try {
-            ins = context.getAssets().open(Constant.getPath(objPath));
-            IoUtils.read(ins, new IoUtils.OnReadingListener() {
+            String path = Constant.getPath(url);
+            // TODO: 6/6/2016  
+            in = context.getAssets().open(Constant.getPath(path));
+
+            IoUtils.read(in, new IoUtils.OnReadingListener() {
                 @Override
                 public boolean onReadLine(String line) {
                     if (line == null) {
@@ -192,9 +192,9 @@ public class ObjModel extends GlModel {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            if (ins != null) {
+            if (in != null) {
                 try {
-                    ins.close();
+                    in.close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

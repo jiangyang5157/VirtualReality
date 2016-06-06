@@ -18,7 +18,9 @@ import com.gmail.jiangyang5157.cardboard.scene.projection.Marker;
 import com.gmail.jiangyang5157.cardboard.scene.Lighting;
 import com.gmail.jiangyang5157.cardboard.scene.projection.GlModel;
 import com.gmail.jiangyang5157.cardboard.scene.projection.MarkerDialog;
+import com.gmail.jiangyang5157.tookit.app.AppUtils;
 import com.gmail.jiangyang5157.tookit.app.DeviceUtils;
+import com.gmail.jiangyang5157.tookit.data.io.IoUtils;
 import com.gmail.jiangyang5157.tookit.opengl.Model;
 import com.google.vr.sdk.base.Eye;
 import com.google.vr.sdk.base.GvrView;
@@ -28,6 +30,8 @@ import com.google.vr.sdk.base.Viewport;
 
 import org.xmlpull.v1.XmlPullParserException;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -294,22 +298,30 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         });
         earth.create();
 
-
         String kmlUrl = Constant.getLastKmlUrl(this);
-        String kmlPath = Constant.getPath(kmlUrl);
 
-
-        InputStream ins = null;
+        InputStream in = null;
         try {
-            ins = getAssets().open(kmlPath);
-            KmlLayer kmlLayer = new KmlLayer(earth, ins, this);
+            String path = Constant.getPath(kmlUrl);
+            File file = new File(AppUtils.getProfilePath(this) + File.separator + path);
+            // TODO: 6/6/2016 from url?
+            if (!file.exists()) {
+                try {
+                    IoUtils.write(getAssets().open(path), file);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            in = new FileInputStream(file);
+
+            KmlLayer kmlLayer = new KmlLayer(earth, in, this);
             kmlLayer.addLayerToMap();
         } catch (XmlPullParserException | IOException e) {
             e.printStackTrace();
         } finally {
-            if (ins != null) {
+            if (in != null) {
                 try {
-                    ins.close();
+                    in.close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -325,7 +337,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
     @Override
     public void onRendererShutdown() {
         Log.d(TAG, "onRendererShutdown");
-        // TODO: 5/14/2016 WHY: this callback is never get called
+        // WHY: never get called
     }
 
     @Override

@@ -2,14 +2,23 @@ package com.gmail.jiangyang5157.cardboard.vr;
 
 import android.content.Context;
 import android.preference.PreferenceManager;
+import android.util.Log;
+
+import com.gmail.jiangyang5157.tookit.app.DeviceUtils;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 /**
  * @author Yang
  * @since 6/5/2016
  */
 public class Constant {
+    private static final String TAG = "[Constant]";
     public static final int DEBUG = 0;
 
     public static final String URL_ = "https://unimplemented/";
