@@ -162,18 +162,7 @@ public class ObjModel extends GlModel {
 
         InputStream in = null;
         try {
-            String path = Constant.getPath(url);
-            File file = new File(AppUtils.getProfilePath(context) + File.separator + path);
-            // TODO: 6/6/2016 from url?
-            if (!file.exists()) {
-                try {
-                    IoUtils.write(context.getAssets().open(path), file);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            in = new FileInputStream(file);
-
+            in = Constant.getInputStream(context, url);
             IoUtils.read(in, new IoUtils.OnReadingListener() {
                 @Override
                 public boolean onReadLine(String line) {
