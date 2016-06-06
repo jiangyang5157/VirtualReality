@@ -1,5 +1,6 @@
 package com.gmail.jiangyang5157.cardboard.vr;
 
+import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import com.gmail.jiangyang5157.cardboard.scene.projection.Marker;
 import com.gmail.jiangyang5157.cardboard.scene.Lighting;
 import com.gmail.jiangyang5157.cardboard.scene.projection.GlModel;
 import com.gmail.jiangyang5157.cardboard.scene.projection.MarkerDialog;
+import com.gmail.jiangyang5157.tookit.app.AppUtils;
 import com.gmail.jiangyang5157.tookit.app.DeviceUtils;
 import com.gmail.jiangyang5157.tookit.opengl.Model;
 import com.google.vr.sdk.base.Eye;
@@ -28,6 +30,9 @@ import com.google.vr.sdk.base.Viewport;
 
 import org.xmlpull.v1.XmlPullParserException;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -295,13 +300,31 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         earth.create();
 
 
+        InputStream ins = null;
         String kmlUrl = Constant.getLastKmlUrl(this);
         String kmlPath = Constant.getPath(kmlUrl);
 
 
-        InputStream ins = null;
+        String directoryPath = AppUtils.getProfilePath(this) + File.separator + kmlPath.substring(0, kmlPath.lastIndexOf(File.separator));
+        File directory = new File(directoryPath);
+        if (!directory.exists()){
+            Log.i("####", "1111");
+            directory.mkdirs();
+        }
+
+        File file = new File(AppUtils.getProfilePath(this) + File.separator + kmlPath);
+        Log.i("####", "2222");
+        if (!file.exists()){
+            try {
+                Log.i("####", "3333");
+                Constant.copy(getAssets().open(kmlPath), file, 1024);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         try {
-            ins = getAssets().open(kmlPath);
+            Log.i("####", "4444");
+            ins = new FileInputStream(file);
             KmlLayer kmlLayer = new KmlLayer(earth, ins, this);
             kmlLayer.addLayerToMap();
         } catch (XmlPullParserException | IOException e) {
