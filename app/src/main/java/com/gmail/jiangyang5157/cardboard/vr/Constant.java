@@ -4,6 +4,11 @@ import android.content.Context;
 import android.preference.PreferenceManager;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 /**
  * @author Yang
@@ -23,6 +28,21 @@ public class Constant {
     private static final String DIRECTORY_KML = "kml";
     private static final String DIRECTORY_MODEL = "model";
     private static final String DIRECTORY_RESOURCE = "resource";
+
+    public static void copy(InputStream ins, File dst, final int bytesPerReading) throws IOException {
+        OutputStream outs = new FileOutputStream(dst);
+        byte[] buffer = new byte[bytesPerReading];
+        int length;
+        while ((length = ins.read(buffer)) > 0) {
+            outs.write(buffer, 0, length);
+        }
+        ins.close();
+        outs.close();
+    }
+
+    public static void copy(File src, File dst, final int bytesPerReading) throws IOException {
+        copy(new FileInputStream(src), dst, bytesPerReading);
+    }
 
     public static String getLastKmlUrl(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context).getString(KML_URL_KEY, KML_URL_DEFAULT);
