@@ -1,6 +1,5 @@
 package com.gmail.jiangyang5157.cardboard.vr;
 
-import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
 import android.os.Bundle;
@@ -21,6 +20,7 @@ import com.gmail.jiangyang5157.cardboard.scene.projection.GlModel;
 import com.gmail.jiangyang5157.cardboard.scene.projection.MarkerDialog;
 import com.gmail.jiangyang5157.tookit.app.AppUtils;
 import com.gmail.jiangyang5157.tookit.app.DeviceUtils;
+import com.gmail.jiangyang5157.tookit.data.io.IoUtils;
 import com.gmail.jiangyang5157.tookit.opengl.Model;
 import com.google.vr.sdk.base.Eye;
 import com.google.vr.sdk.base.GvrView;
@@ -300,28 +300,28 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
 
         String kmlUrl = Constant.getLastKmlUrl(this);
 
-        InputStream ins = null;
+        InputStream in = null;
         try {
             String path = Constant.getPath(kmlUrl);
             File file = new File(AppUtils.getProfilePath(this) + File.separator + path);
             // TODO: 6/6/2016 from url?
             if (!file.exists()) {
                 try {
-                    Constant.write(getAssets().open(path), file);
+                    IoUtils.write(getAssets().open(path), file);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
-            ins = new FileInputStream(file);
+            in = new FileInputStream(file);
 
-            KmlLayer kmlLayer = new KmlLayer(earth, ins, this);
+            KmlLayer kmlLayer = new KmlLayer(earth, in, this);
             kmlLayer.addLayerToMap();
         } catch (XmlPullParserException | IOException e) {
             e.printStackTrace();
         } finally {
-            if (ins != null) {
+            if (in != null) {
                 try {
-                    ins.close();
+                    in.close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

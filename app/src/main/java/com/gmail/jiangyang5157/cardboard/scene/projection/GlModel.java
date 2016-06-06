@@ -12,6 +12,8 @@ import com.gmail.jiangyang5157.cardboard.scene.Lighting;
 import com.gmail.jiangyang5157.tookit.opengl.Model;
 import com.gmail.jiangyang5157.tookit.opengl.GlUtils;
 
+import java.io.IOException;
+
 /**
  * @author Yang
  * @since 4/30/2016
@@ -91,13 +93,16 @@ public abstract class GlModel extends Model {
     }
 
     private int createProgram() {
-        int vertexShader = GlUtils.compileShader(context, GLES20.GL_VERTEX_SHADER, vertexShaderRawResource);
-        if (vertexShader == 0) {
-            return 0;
+        int vertexShader = 0;
+        int fragmentShader = 0;
+        try {
+            vertexShader = GlUtils.compileShader(context, GLES20.GL_VERTEX_SHADER, vertexShaderRawResource);
+            fragmentShader = GlUtils.compileShader(context, GLES20.GL_FRAGMENT_SHADER, fragmentShaderRawResource);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
-        int fragmentShader = GlUtils.compileShader(context, GLES20.GL_FRAGMENT_SHADER, fragmentShaderRawResource);
-        if (fragmentShader == 0) {
+        if (vertexShader == 0 || fragmentShader == 0) {
             return 0;
         }
 

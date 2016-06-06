@@ -33,24 +33,6 @@ public class Constant {
     private static final String DIRECTORY_MODEL = "model";
     private static final String DIRECTORY_RESOURCE = "resource";
 
-    public static void write(InputStream ins, File dst) throws IOException {
-        Log.d(TAG, "write: " + dst.getAbsolutePath());
-        dst.getParentFile().mkdirs();
-        OutputStream outs = new FileOutputStream(dst);
-        byte[] buffer = new byte[DeviceUtils.SIZE_UNIT];
-        int length;
-        while ((length = ins.read(buffer)) > 0) {
-            outs.write(buffer, 0, length);
-        }
-        ins.close();
-        outs.close();
-    }
-
-    public static void copy(File src, File dst) throws IOException {
-        Log.d(TAG, "copy " + src.getAbsolutePath() + " to " + dst.getAbsolutePath());
-        write(new FileInputStream(src), dst);
-    }
-
     public static String getLastKmlUrl(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context).getString(KML_URL_KEY, KML_URL_DEFAULT);
     }

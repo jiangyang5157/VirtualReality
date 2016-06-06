@@ -95,19 +95,19 @@ public class Earth extends TextureSphere {
         GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, texturesBuffer.capacity() * BufferUtils.BYTES_PER_FLOAT, texturesBuffer, GLES20.GL_STATIC_DRAW);
         texturesBuffer.limit(0);
 
-        InputStream ins = null;
+        InputStream in = null;
         try {
             String path = Constant.getPath(TEXTURE_URL);
             // TODO: 6/6/2016  
-            ins = context.getAssets().open(path);
+            in = context.getAssets().open(path);
             
-            texBuffers[0] = loadTexture(ins);
+            texBuffers[0] = loadTexture(in);
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            if (ins != null) {
+            if (in != null) {
                 try {
-                    ins.close();
+                    in.close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
