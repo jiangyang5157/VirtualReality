@@ -300,13 +300,14 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         earth.create();
 
         String kmlUrl = Constant.getLastKmlUrl(this);
-        String kmlPath = Constant.getPath(kmlUrl);
-        File file = new File(AppUtils.getProfilePath(this) + File.separator + kmlPath);
+
+        String path = Constant.getPath(kmlUrl);
+        File file = new File(AppUtils.getProfilePath(this) + File.separator + path);
+
         if (!file.exists()){
             try {
-                Log.i("####", "mkdirs - copy");
-                file.getParentFile().mkdirs();
-                Constant.copy(getAssets().open(kmlPath), file, 1024);
+                Log.i("####", "copy");
+                Constant.write(getAssets().open(path), file);
             } catch (IOException e) {
                 e.printStackTrace();
             }

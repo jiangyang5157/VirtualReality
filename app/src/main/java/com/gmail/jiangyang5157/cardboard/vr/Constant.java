@@ -3,6 +3,8 @@ package com.gmail.jiangyang5157.cardboard.vr;
 import android.content.Context;
 import android.preference.PreferenceManager;
 
+import com.gmail.jiangyang5157.tookit.app.DeviceUtils;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -29,9 +31,10 @@ public class Constant {
     private static final String DIRECTORY_MODEL = "model";
     private static final String DIRECTORY_RESOURCE = "resource";
 
-    public static void copy(InputStream ins, File dst, final int bytesPerReading) throws IOException {
+    public static void write(InputStream ins, File dst) throws IOException {
+        dst.getParentFile().mkdirs();
         OutputStream outs = new FileOutputStream(dst);
-        byte[] buffer = new byte[bytesPerReading];
+        byte[] buffer = new byte[DeviceUtils.SIZE_UNIT];
         int length;
         while ((length = ins.read(buffer)) > 0) {
             outs.write(buffer, 0, length);
@@ -40,8 +43,8 @@ public class Constant {
         outs.close();
     }
 
-    public static void copy(File src, File dst, final int bytesPerReading) throws IOException {
-        copy(new FileInputStream(src), dst, bytesPerReading);
+    public static void copy(File src, File dst) throws IOException {
+        write(new FileInputStream(src), dst);
     }
 
     public static String getLastKmlUrl(Context context) {
