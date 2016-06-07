@@ -53,10 +53,10 @@
             <description>descriptiondescription</description>
             <ExtendedData>
                 <Data name="title">
-                   <value>sphere 3d model</value>
+                   <value>oo 3d model</value>
                 </Data>
                 <Data name="obj">
-                    <value>https://unimplemented/model/sphere.obj</value>
+                    <value>https://unimplemented/model/oo.obj</value>
                 </Data>
             </ExtendedData>
             <Point>
@@ -121,10 +121,10 @@
             <name>Beijing</name>
             <ExtendedData>
                 <Data name="title">
-                   <value>teapot 3d model</value>
+                   <value>icosphere 3d model</value>
                 </Data>
                 <Data name="obj">
-                    <value>https://unimplemented/model/teapot.obj</value>
+                    <value>https://unimplemented/model/icosphere.obj</value>
                 </Data>
             </ExtendedData>
             <Point>
@@ -151,6 +151,14 @@
         </Placemark>
         <Placemark>
             <name>Seoul</name>
+            <ExtendedData>
+                <Data name="title">
+                   <value>monkey 3d model</value>
+                </Data>
+                <Data name="obj">
+                    <value>https://unimplemented/model/monkey.obj</value>
+                </Data>
+            </ExtendedData>
             <Point>
                 <coordinates>126.97796,37.56653</coordinates>
             </Point>
