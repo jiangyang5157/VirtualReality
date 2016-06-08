@@ -12,7 +12,7 @@ import java.io.InputStream;
  * @author Yang
  * @since 4/12/2016.
  */
-public abstract class TextureSphere extends Sphere {
+public abstract class UvSphere extends Sphere {
 
     private int stacks;
     private int slices;
@@ -22,7 +22,7 @@ public abstract class TextureSphere extends Sphere {
     protected short[] indices;
     protected float[] textures;
 
-    public TextureSphere(Context context, int vertexShaderRawResource, int fragmentShaderRawResource) {
+    public UvSphere(Context context, int vertexShaderRawResource, int fragmentShaderRawResource) {
         super(context, vertexShaderRawResource, fragmentShaderRawResource);
     }
 
