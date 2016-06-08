@@ -10,17 +10,13 @@ import com.gmail.jiangyang5157.cardboard.scene.Head;
 import com.gmail.jiangyang5157.cardboard.scene.Lighting;
 import com.gmail.jiangyang5157.cardboard.vr.Constant;
 import com.gmail.jiangyang5157.cardboard.vr.R;
-import com.gmail.jiangyang5157.tookit.app.AppUtils;
 import com.gmail.jiangyang5157.tookit.data.buffer.BufferUtils;
-import com.gmail.jiangyang5157.tookit.data.io.IoUtils;
 import com.gmail.jiangyang5157.tookit.math.Vector;
 import com.gmail.jiangyang5157.tookit.math.Vector3d;
 import com.gmail.jiangyang5157.tookit.opengl.GlUtils;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
@@ -34,11 +30,11 @@ import java.util.Collections;
  * @author Yang
  * @since 4/12/2016.
  */
-public class Earth extends TextureSphere {
+public class Earth extends UvSphere {
 
     private static final String TEXTURE_URL = Constant.getResourceUrl("world_map.jpg");
-    private static final int VERTEX_SHADER_RAW_RESOURCE = R.raw.earth_texture_vertex_shader;
-    private static final int FRAGMENT_SHADER_RAW_RESOURCE = R.raw.earth_texture_fragment_shader;
+    private static final int VERTEX_SHADER_RAW_RESOURCE = R.raw.earth_uv_vertex_shader;
+    private static final int FRAGMENT_SHADER_RAW_RESOURCE = R.raw.earth_uv_fragment_shader;
 
     public static final float RADIUS = 4000f;
     private static final int STACKS = 32;
@@ -167,12 +163,12 @@ public class Earth extends TextureSphere {
         GLES20.glDisableVertexAttribArray(texCoordHandle);
         GLES20.glUseProgram(0);
 
-        GlUtils.printGlError("TextureSphere - draw end");
+        GlUtils.printGlError("UvSphere - draw end");
     }
 
     @Override
     public void destroy() {
-        Log.d("TextureSphere", "destroy");
+        Log.d("UvSphere", "destroy");
         super.destroy();
         markers.clear();
         GLES20.glDeleteBuffers(buffers.length, buffers, 0);
