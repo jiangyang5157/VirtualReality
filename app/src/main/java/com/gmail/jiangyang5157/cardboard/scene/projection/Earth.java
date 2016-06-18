@@ -97,7 +97,7 @@ public class Earth extends UvSphere {
 
         InputStream in = null;
         try {
-            in = Constant.getInputStream(context, TEXTURE_URL);
+            in = Constant.getLocalInputStream(context, TEXTURE_URL);
             texBuffers[0] = loadTexture(in);
         } catch (IOException e) {
             e.printStackTrace();

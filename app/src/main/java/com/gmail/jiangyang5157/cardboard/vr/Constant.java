@@ -33,12 +33,11 @@ public class Constant {
     public static final String KML_URL_KEY = "KML_FILENAME_KEY";
     public static final String KML_URL_DEFAULT = getKmlUrl("example.kml");
 
-    public static InputStream getInputStream(Context context, String url) throws IOException {
+    public static InputStream getLocalInputStream(Context context, String url) throws IOException {
         String path = Constant.getPath(url);
         File file = new File(AppUtils.getProfilePath(context) + File.separator + path);
-        Log.d(TAG, "file.getAbsolutePath() = " + file.getAbsolutePath());
 
-        // TODO: 6/6/2016 from url?
+        // TODO: 6/6/2016 remove
         if (!file.exists()) {
             IoUtils.write(context.getAssets().open(path), file);
         }

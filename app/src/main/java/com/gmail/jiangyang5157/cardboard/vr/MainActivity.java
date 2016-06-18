@@ -124,7 +124,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
 
                         InputStream in2 = null;
                         try {
-                            in2 = Constant.getInputStream(getApplicationContext(), url1);
+                            in2 = Constant.getLocalInputStream(getApplicationContext(), url1);
                             IoUtils.read(in2, new IoUtils.OnReadingListener() {
                                 @Override
                                 public boolean onReadLine(String line) {
@@ -413,7 +413,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         String url = Constant.getLastKmlUrl(this);
         InputStream in = null;
         try {
-            in = Constant.getInputStream(this, url);
+            in = Constant.getLocalInputStream(this, url);
             KmlLayer kmlLayer = new KmlLayer(earth, in, this);
             kmlLayer.addLayerToMap();
         } catch (XmlPullParserException | IOException e) {
