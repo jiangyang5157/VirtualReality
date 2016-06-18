@@ -6,12 +6,12 @@ import android.util.Log;
 
 import com.gmail.jiangyang5157.cardboard.kml.KmlLayer;
 import com.gmail.jiangyang5157.cardboard.kml.KmlPlacemark;
+import com.gmail.jiangyang5157.cardboard.scene.Creation;
 import com.gmail.jiangyang5157.cardboard.scene.Intersection;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
 import com.gmail.jiangyang5157.cardboard.scene.Lighting;
 import com.gmail.jiangyang5157.cardboard.vr.Constant;
 import com.gmail.jiangyang5157.cardboard.vr.R;
-import com.gmail.jiangyang5157.tookit.app.AppUtils;
 import com.gmail.jiangyang5157.tookit.data.buffer.BufferUtils;
 import com.gmail.jiangyang5157.tookit.math.Vector;
 import com.gmail.jiangyang5157.tookit.math.Vector3d;
@@ -34,9 +34,11 @@ import java.util.Collections;
  * @author Yang
  * @since 4/12/2016.
  */
-public class Earth extends UvSphere {
+public class Earth extends UvSphere implements Creation {
 
-    private static final String TEXTURE_URL = Constant.getResourceUrl("world_map.jpg");
+    private String urlTexture;
+    private String urlKml;
+
     private static final int VERTEX_SHADER_RAW_RESOURCE = R.raw.earth_uv_vertex_shader;
     private static final int FRAGMENT_SHADER_RAW_RESOURCE = R.raw.earth_uv_fragment_shader;
 
@@ -58,11 +60,17 @@ public class Earth extends UvSphere {
     protected Lighting markerLighting;
     protected Lighting markerObjModelLighting;
 
+    protected int creationState = STATE_BEFORE_PREPARE;
+
     public Earth(Context context) {
         super(context, VERTEX_SHADER_RAW_RESOURCE, FRAGMENT_SHADER_RAW_RESOURCE);
         markers = new ArrayList<>();
+
+        urlKml = Constant.getLastKmlUrl(context);
+        urlTexture = Constant.getResourceUrl("world_map.jpg");
     }
 
+    @Override
     public void prepare(final Ray ray) {
         getHandler().post(new Runnable() {
             @Override
@@ -76,14 +84,14 @@ public class Earth extends UvSphere {
         });
     }
 
+    @Override
     public void create() {
         creationState = STATE_CREATING;
         create(RADIUS, STACKS, SLICES);
 
-        String url = Constant.getLastKmlUrl(context);
         InputStream in = null;
         try {
-            in = Constant.getLocalInputStream(context, url);
+            in = Constant.getLocalInputStream(context, urlKml);
             KmlLayer kmlLayer = new KmlLayer(this, in, context);
             kmlLayer.addLayerToMap();
         } catch (XmlPullParserException | IOException e) {
@@ -99,6 +107,11 @@ public class Earth extends UvSphere {
         }
 
         creationState = STATE_BEFORE_CREATE;
+    }
+
+    @Override
+    public int getCreationState() {
+        return creationState;
     }
 
     @Override
@@ -135,7 +148,7 @@ public class Earth extends UvSphere {
 
         InputStream in = null;
         try {
-            in = Constant.getLocalInputStream(context, TEXTURE_URL);
+            in = Constant.getLocalInputStream(context, urlTexture);
             texBuffers[0] = loadTexture(in);
         } catch (IOException e) {
             e.printStackTrace();

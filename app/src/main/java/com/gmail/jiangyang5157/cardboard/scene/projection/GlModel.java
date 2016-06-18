@@ -59,12 +59,6 @@ public abstract class GlModel extends Model {
 
     protected HandlerThread handlerThread;
 
-    public static final int STATE_BEFORE_PREPARE = 0x00000001;
-    public static final int STATE_PREPARING = 0x00000010;
-    public static final int STATE_BEFORE_CREATE = 0x00000100;
-    public static final int STATE_CREATING = 0x00001000;
-    protected int creationState = STATE_BEFORE_PREPARE;
-
     protected GlModel(Context context, int vertexShaderRawResource, int fragmentShaderRawResource) {
         super();
         this.context = context;
@@ -137,10 +131,6 @@ public abstract class GlModel extends Model {
 
         Matrix.multiplyMM(modelView, 0, view, 0, model, 0);
         Matrix.multiplyMM(modelViewProjection, 0, perspective, 0, modelView, 0);
-    }
-
-    public int getCreationState() {
-        return creationState;
     }
 
     protected abstract void buildArrays();

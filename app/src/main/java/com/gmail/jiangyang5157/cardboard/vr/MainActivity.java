@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import com.gmail.jiangyang5157.cardboard.net.InputStreamRequest;
 import com.gmail.jiangyang5157.cardboard.scene.Camera;
+import com.gmail.jiangyang5157.cardboard.scene.Creation;
 import com.gmail.jiangyang5157.cardboard.scene.Intersection;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
 import com.gmail.jiangyang5157.cardboard.scene.projection.ObjModel;
@@ -267,9 +268,9 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
 
         if (earth != null) {
             if (!earth.isCreated()) {
-                if (earth.getCreationState() == GlModel.STATE_BEFORE_PREPARE) {
+                if (earth.getCreationState() == Creation.STATE_BEFORE_PREPARE) {
                     earth.prepare(ray);
-                } else if (earth.getCreationState() == GlModel.STATE_BEFORE_CREATE) {
+                } else if (earth.getCreationState() == Creation.STATE_BEFORE_CREATE) {
                     earth.create();
                 }
             }
@@ -277,19 +278,15 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
 
         if (markerDialog != null) {
             if (!markerDialog.isCreated()) {
-                if (markerDialog.getCreationState() == GlModel.STATE_BEFORE_PREPARE) {
-                    markerDialog.prepare(ray);
-                } else if (markerDialog.getCreationState() == GlModel.STATE_BEFORE_CREATE) {
-                    markerDialog.create();
-                    markerDialog.setPosition(head.getCamera().getPosition(), head.getForward(), head.getQuaternion(), head.getUp(), head.getRight());
-                }
+                markerDialog.create();
+                markerDialog.setPosition(head.getCamera().getPosition(), head.getForward(), head.getQuaternion(), head.getUp(), head.getRight());
             }
 
             if (objModel != null) {
                 if (!objModel.isCreated()) {
-                    if (objModel.getCreationState() == GlModel.STATE_BEFORE_PREPARE) {
+                    if (objModel.getCreationState() == Creation.STATE_BEFORE_PREPARE) {
                         objModel.prepare(ray);
-                    } else if (objModel.getCreationState() == GlModel.STATE_BEFORE_CREATE) {
+                    } else if (objModel.getCreationState() == Creation.STATE_BEFORE_CREATE) {
                         objModel.create();
                         objModel.setPosition(head.getCamera().getPosition(), head.getForward(), head.getQuaternion());
                     }
