@@ -37,10 +37,25 @@ public class MarkerDialog extends Dialog {
         super.destroy();
     }
 
+    public void prepare(final Ray ray) {
+        getHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                creationState = STATE_PREPARING;
+                ray.addBusy();
+
+                ray.subtractBusy();
+                creationState = STATE_BEFORE_CREATE;
+            }
+        });
+    }
+
     public void create() {
+        creationState = STATE_CREATING;
         createContent();
         adjustBounds();
         create(width, height, AppUtils.getColor(context, COLOR_BACKGROUND_RES_ID));
+        creationState = STATE_BEFORE_CREATE;
     }
 
     private void createContent() {

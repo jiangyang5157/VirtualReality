@@ -4,18 +4,22 @@ import android.content.Context;
 import android.opengl.GLES20;
 import android.util.Log;
 
+import com.gmail.jiangyang5157.cardboard.kml.KmlLayer;
 import com.gmail.jiangyang5157.cardboard.kml.KmlPlacemark;
 import com.gmail.jiangyang5157.cardboard.scene.Intersection;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
 import com.gmail.jiangyang5157.cardboard.scene.Lighting;
 import com.gmail.jiangyang5157.cardboard.vr.Constant;
 import com.gmail.jiangyang5157.cardboard.vr.R;
+import com.gmail.jiangyang5157.tookit.app.AppUtils;
 import com.gmail.jiangyang5157.tookit.data.buffer.BufferUtils;
 import com.gmail.jiangyang5157.tookit.math.Vector;
 import com.gmail.jiangyang5157.tookit.math.Vector3d;
 import com.gmail.jiangyang5157.tookit.opengl.GlUtils;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -59,8 +63,42 @@ public class Earth extends UvSphere {
         markers = new ArrayList<>();
     }
 
+    public void prepare(final Ray ray) {
+        getHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                creationState = STATE_PREPARING;
+                ray.addBusy();
+
+                ray.subtractBusy();
+                creationState = STATE_BEFORE_CREATE;
+            }
+        });
+    }
+
     public void create() {
+        creationState = STATE_CREATING;
         create(RADIUS, STACKS, SLICES);
+
+        String url = Constant.getLastKmlUrl(context);
+        InputStream in = null;
+        try {
+            in = Constant.getLocalInputStream(context, url);
+            KmlLayer kmlLayer = new KmlLayer(this, in, context);
+            kmlLayer.addLayerToMap();
+        } catch (XmlPullParserException | IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        creationState = STATE_BEFORE_CREATE;
     }
 
     @Override

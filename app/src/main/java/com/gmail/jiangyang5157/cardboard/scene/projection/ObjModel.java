@@ -56,12 +56,21 @@ public class ObjModel extends GlModel {
         this.url = url;
     }
 
-    public void prepare() {
-        creationState = STATE_PREPARING;
-        setColor(AppUtils.getColor(context, COLOR_NORMAL_RES_ID));
-        setScale(10f);
-        buildArrays();
-        creationState = STATE_BEFORE_CREATE;
+    public void prepare(final Ray ray) {
+        getHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                creationState = STATE_PREPARING;
+                ray.addBusy();
+
+                setColor(AppUtils.getColor(context, COLOR_NORMAL_RES_ID));
+                setScale(10f);
+                buildArrays();
+
+                ray.subtractBusy();
+                creationState = STATE_BEFORE_CREATE;
+            }
+        });
     }
 
     public void create() {
@@ -404,9 +413,5 @@ public class ObjModel extends GlModel {
         super.destroy();
         Log.d("ObjModel", "destroy");
         GLES20.glDeleteBuffers(buffers.length, buffers, 0);
-    }
-
-    public int getCreationState() {
-        return creationState;
     }
 }

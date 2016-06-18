@@ -139,6 +139,10 @@ public abstract class GlModel extends Model {
         Matrix.multiplyMM(modelViewProjection, 0, perspective, 0, modelView, 0);
     }
 
+    public int getCreationState() {
+        return creationState;
+    }
+
     protected abstract void buildArrays();
 
     protected abstract void bindHandles();
