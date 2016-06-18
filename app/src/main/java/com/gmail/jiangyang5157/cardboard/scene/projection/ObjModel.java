@@ -50,12 +50,6 @@ public class ObjModel extends GlModel {
 
     protected final int[] buffers = new int[3];
 
-    public static final int STATE_BEFORE_PREPARE = 0x00000001;
-    public static final int STATE_PREPARING = 0x00000010;
-    public static final int STATE_BEFORE_CREATE = 0x00000100;
-    public static final int STATE_CREATING = 0x00001000;
-    private int creationState = STATE_BEFORE_PREPARE;
-
     protected ObjModel(Context context, String title, String url) {
         super(context, VERTEX_SHADER_RAW_RESOURCE, FRAGMENT_SHADER_RAW_RESOURCE);
         this.title = title;

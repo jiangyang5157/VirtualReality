@@ -288,7 +288,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
 
             if (objModel != null) {
                 if (!objModel.isCreated()) {
-                    if (objModel.getCreationState() == ObjModel.STATE_BEFORE_PREPARE) {
+                    if (objModel.getCreationState() == GlModel.STATE_BEFORE_PREPARE) {
                         objModel.getHandler().post(new Runnable() {
                             @Override
                             public void run() {
@@ -297,7 +297,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
                                 ray.subtractBusy();
                             }
                         });
-                    } else if (objModel.getCreationState() == ObjModel.STATE_BEFORE_CREATE) {
+                    } else if (objModel.getCreationState() == GlModel.STATE_BEFORE_CREATE) {
                         objModel.create();
                         objModel.setPosition(head.getCamera().getPosition(), head.getForward(), head.getQuaternion());
                     }
