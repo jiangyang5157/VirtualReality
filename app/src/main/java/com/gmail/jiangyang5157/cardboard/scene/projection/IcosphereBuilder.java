@@ -8,7 +8,7 @@ import android.util.Log;
  * @since 4/12/2016.
  */
 public class IcosphereBuilder {
-    private static final String TAG = "[IcosphereBuilder]";
+    private static final String TAG = IcosphereBuilder.class.getSimpleName();
 
     private volatile static IcosphereBuilder uniqueInstance;
 

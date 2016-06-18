@@ -13,7 +13,7 @@
                    <value>cube 3d model</value>
                 </Data>
                 <Data name="obj">
-                    <value>https://unimplemented/model/cube.obj</value>
+                    <value>http://192.168.1.68:8080/static/model/cube.obj</value>
                 </Data>
             </ExtendedData>
             <Point>
@@ -56,7 +56,7 @@
                    <value>oo 3d model</value>
                 </Data>
                 <Data name="obj">
-                    <value>https://unimplemented/model/oo.obj</value>
+                    <value>http://192.168.1.68:8080/static/model/oo.obj</value>
                 </Data>
             </ExtendedData>
             <Point>
@@ -124,7 +124,7 @@
                    <value>icosphere 3d model</value>
                 </Data>
                 <Data name="obj">
-                    <value>https://unimplemented/model/icosphere.obj</value>
+                    <value>http://192.168.1.68:8080/static/model/icosphere.obj</value>
                 </Data>
             </ExtendedData>
             <Point>
@@ -156,7 +156,7 @@
                    <value>monkey 3d model</value>
                 </Data>
                 <Data name="obj">
-                    <value>https://unimplemented/model/monkey.obj</value>
+                    <value>http://192.168.1.68:8080/static/model/monkey.obj</value>
                 </Data>
             </ExtendedData>
             <Point>

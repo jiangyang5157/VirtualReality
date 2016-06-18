@@ -5,40 +5,38 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.gmail.jiangyang5157.tookit.app.AppUtils;
-import com.gmail.jiangyang5157.tookit.app.DeviceUtils;
 import com.gmail.jiangyang5157.tookit.data.io.IoUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 
 /**
  * @author Yang
  * @since 6/5/2016
  */
 public class Constant {
-    private static final String TAG = "[Constant]";
+    private static final String TAG = Constant.class.getSimpleName();
     public static final int DEBUG = 0;
 
-    public static final String URL_ = "https://unimplemented/";
-
-    private static final String KML_URL_KEY = "KML_FILENAME_KEY";
-    private static final String KML_URL_DEFAULT = getKmlUrl("example.kml");
+    public static final String URL_ = "http://192.168.1.68:8080/";
 
     // profile path:
     // /data/user/0/com.gmail.jiangyang5157.cardboard.vr
 
-    private static final String DIRECTORY_KML = "kml";
-    private static final String DIRECTORY_MODEL = "model";
-    private static final String DIRECTORY_RESOURCE = "resource";
+    private static final String DIRECTORY_STATIC = "static";
+    private static final String DIRECTORY_KML = DIRECTORY_STATIC + File.separator + "kml";
+    private static final String DIRECTORY_MODEL = DIRECTORY_STATIC + File.separator + "model";
+    private static final String DIRECTORY_RESOURCE = DIRECTORY_STATIC + File.separator + "resource";
+
+    public static final String KML_URL_KEY = "KML_FILENAME_KEY";
+    public static final String KML_URL_DEFAULT = getKmlUrl("example.kml");
 
     public static InputStream getInputStream(Context context, String url) throws IOException {
         String path = Constant.getPath(url);
         File file = new File(AppUtils.getProfilePath(context) + File.separator + path);
+        Log.d(TAG, "file.getAbsolutePath() = " + file.getAbsolutePath());
 
         // TODO: 6/6/2016 from url?
         if (!file.exists()) {

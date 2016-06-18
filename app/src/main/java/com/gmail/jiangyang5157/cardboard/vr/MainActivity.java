@@ -6,7 +6,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.gmail.jiangyang5157.app.VolleyApplication;
 import com.gmail.jiangyang5157.cardboard.kml.KmlLayer;
+import com.gmail.jiangyang5157.cardboard.net.InputStreamRequest;
 import com.gmail.jiangyang5157.cardboard.scene.Camera;
 import com.gmail.jiangyang5157.cardboard.scene.Intersection;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
@@ -30,15 +35,16 @@ import com.google.vr.sdk.base.Viewport;
 
 import org.xmlpull.v1.XmlPullParserException;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 
 import javax.microedition.khronos.egl.EGLConfig;
 
 public class MainActivity extends GvrActivity implements GvrView.StereoRenderer {
-    private static final String TAG = "[MainActivity]";
+    private static final String TAG = MainActivity.class.getSimpleName();
 
     private Head head;
 
@@ -85,7 +91,113 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         setGvrView(gvrView);
 
         head = new Head(this);
+
+        final String url1 = "http://192.168.1.68:8080/static/asd.txt";
+        req1 = new InputStreamRequest(
+                Request.Method.GET,
+                url1,
+                new Response.Listener<byte[]>() {
+                    @Override
+                    public void onResponse(byte[] response) {
+                        Log.d(TAG, "req1 - Content-Type = " + req1.getResponseHeaders().get("Content-Type"));
+                        Log.d(TAG, "req1 - Last-Modified = " + req1.getResponseHeaders().get("Last-Modified"));
+                        Log.d(TAG, "req1 - onResponse = " + Arrays.toString(response));
+
+                        InputStream in = null;
+                        try {
+                            in = new ByteArrayInputStream(response);
+                            String path = AppUtils.getProfilePath(getApplicationContext()) + File.separator + Constant.getPath(url1);
+                            Log.d(TAG, "path = " + path);
+                            File file = new File(path);
+                            IoUtils.write(in, file);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } finally {
+                            if (in != null) {
+                                try {
+                                    in.close();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+
+                        InputStream in2 = null;
+                        try {
+                            in2 = Constant.getInputStream(getApplicationContext(), url1);
+                            IoUtils.read(in2, new IoUtils.OnReadingListener() {
+                                @Override
+                                public boolean onReadLine(String line) {
+                                    if (line == null) {
+                                        return false;
+                                    } else {
+                                        Log.d(TAG, "line: " + line);
+                                        return true;
+                                    }
+                                }
+                            });
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } finally {
+                            if (in2 != null) {
+                                try {
+                                    in.close();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                Log.d(TAG, "req1 - onErrorResponse = " + volleyError.toString());
+            }
+        });
+
+        final String url2 = "http://192.168.1.68:8080/static/asd.zip";
+        req2 = new InputStreamRequest(
+                Request.Method.GET,
+                url2,
+                new Response.Listener<byte[]>() {
+                    @Override
+                    public void onResponse(byte[] response) {
+                        Log.d(TAG, "req2 - Content-Type = " + req2.getResponseHeaders().get("Content-Type"));
+                        Log.d(TAG, "req2 - Last-Modified = " + req2.getResponseHeaders().get("Last-Modified"));
+                        Log.d(TAG, "req2 - onResponse = " + Arrays.toString(response));
+
+                        InputStream in = null;
+                        try {
+                            in = new ByteArrayInputStream(response);
+                            String path = AppUtils.getProfilePath(getApplicationContext()) + File.separator + Constant.getPath(url2);
+                            Log.d(TAG, "path = " + path);
+                            File file = new File(path);
+                            IoUtils.write(in, file);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } finally {
+                            if (in != null) {
+                                try {
+                                    in.close();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                Log.d(TAG, "req2 - onErrorResponse = " + volleyError.toString());
+            }
+        });
+
+        VolleyApplication.getInstance().addToRequestQueue(req1);
+        VolleyApplication.getInstance().addToRequestQueue(req2);
     }
+
+    InputStreamRequest req1;
+    InputStreamRequest req2;
 
     private Intersection getIntersection() {
         Intersection ret = null;
