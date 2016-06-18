@@ -155,7 +155,7 @@ public class ObjModel extends GlModel {
 
         InputStream in = null;
         try {
-            in = Constant.getInputStream(context, url);
+            in = Constant.getLocalInputStream(context, url);
             IoUtils.read(in, new IoUtils.OnReadingListener() {
                 @Override
                 public boolean onReadLine(String line) {
