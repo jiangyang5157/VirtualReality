@@ -4,7 +4,6 @@ import android.content.Context;
 import android.opengl.Matrix;
 
 import com.gmail.jiangyang5157.cardboard.scene.Coordinate;
-import com.gmail.jiangyang5157.cardboard.scene.Head;
 import com.gmail.jiangyang5157.cardboard.scene.Intersection;
 import com.gmail.jiangyang5157.cardboard.vr.R;
 import com.gmail.jiangyang5157.tookit.app.AppUtils;
@@ -44,13 +43,12 @@ public class Marker extends Icosphere implements Intersection.Clickable{
         this.earth = earth;
     }
 
-    public void create(float radius, LatLng latlng, float altitude) {
+    public void create() {
         create(radius, AppUtils.getColor(context, COLOR_NORMAL_RES_ID), DEFAULT_RECURSION_LEVEL);
-        setLocation(latlng, altitude);
     }
 
-    public void setLocation(LatLng latlng, float altitude) {
-        this.coordinate = new Coordinate(latlng.latitude, latlng.longitude, altitude, this.earth.radius);
+    public void setLocation(LatLng latLng, float altitude) {
+        this.coordinate = new Coordinate(latLng.latitude, latLng.longitude, altitude, this.earth.radius);
         Matrix.setIdentityM(translation, 0);
         Matrix.translateM(translation, 0,
                 (float) coordinate.ecef[0],

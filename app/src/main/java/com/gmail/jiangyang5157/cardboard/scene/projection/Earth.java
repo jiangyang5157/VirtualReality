@@ -4,13 +4,10 @@ import android.content.Context;
 import android.opengl.GLES20;
 import android.util.Log;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.gmail.jiangyang5157.cardboard.kml.KmlLayer;
 import com.gmail.jiangyang5157.cardboard.kml.KmlPlacemark;
 import com.gmail.jiangyang5157.cardboard.net.Downloader;
-import com.gmail.jiangyang5157.cardboard.net.InputStreamRequest;
 import com.gmail.jiangyang5157.cardboard.scene.Creation;
 import com.gmail.jiangyang5157.cardboard.scene.Intersection;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
@@ -19,16 +16,12 @@ import com.gmail.jiangyang5157.cardboard.vr.Constant;
 import com.gmail.jiangyang5157.cardboard.vr.R;
 import com.gmail.jiangyang5157.tookit.app.AppUtils;
 import com.gmail.jiangyang5157.tookit.data.buffer.BufferUtils;
-import com.gmail.jiangyang5157.tookit.data.io.IoUtils;
-import com.gmail.jiangyang5157.tookit.math.Vector;
-import com.gmail.jiangyang5157.tookit.math.Vector3d;
 import com.gmail.jiangyang5157.tookit.opengl.GlUtils;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.xmlpull.v1.XmlPullParserException;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -38,7 +31,6 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 
@@ -81,6 +73,7 @@ public class Earth extends UvSphere implements Creation {
 
         urlKml = Constant.getLastKmlUrl(context);
         urlTexture = Constant.getResourceUrl("world_map.jpg");
+        radius = RADIUS;
     }
 
     private boolean checkPreparation() {
@@ -98,10 +91,13 @@ public class Earth extends UvSphere implements Creation {
                 ray.addBusy();
 
                 if (checkPreparation()) {
+                    final File fileKml = new File(Constant.getAbsolutePath(context, Constant.getPath(urlKml)));
+                    prepareMarks(fileKml);
+
                     ray.subtractBusy();
                     creationState = STATE_BEFORE_CREATE;
                 } else {
-                    File fileKml = new File(Constant.getAbsolutePath(context, Constant.getPath(urlKml)));
+                    final File fileKml = new File(Constant.getAbsolutePath(context, Constant.getPath(urlKml)));
                     if (!fileKml.exists()) {
                         Log.d(TAG, fileKml.getAbsolutePath() + " not exist.");
                         new Downloader(urlKml, fileKml, new Downloader.ResponseListener() {
@@ -113,6 +109,8 @@ public class Earth extends UvSphere implements Creation {
 
                             @Override
                             public void onComplete() {
+                                prepareMarks(fileKml);
+
                                 if (checkPreparation()) {
                                     ray.subtractBusy();
                                     creationState = STATE_BEFORE_CREATE;
@@ -155,14 +153,10 @@ public class Earth extends UvSphere implements Creation {
         });
     }
 
-    @Override
-    public void create() {
-        creationState = STATE_CREATING;
-        create(RADIUS, STACKS, SLICES);
-
+    private void prepareMarks(File fileKml) {
         InputStream in = null;
         try {
-            in = new FileInputStream(new File(Constant.getAbsolutePath(context, Constant.getPath(urlKml))));
+            in = new FileInputStream(fileKml);
             KmlLayer kmlLayer = new KmlLayer(this, in, context);
             kmlLayer.addLayerToMap();
         } catch (XmlPullParserException | IOException e) {
@@ -175,6 +169,16 @@ public class Earth extends UvSphere implements Creation {
                     e.printStackTrace();
                 }
             }
+        }
+    }
+
+    @Override
+    public void create() {
+        creationState = STATE_CREATING;
+        create(radius, STACKS, SLICES);
+
+        for (Marker marker : markers) {
+            marker.create();
         }
 
         creationState = STATE_BEFORE_CREATE;
@@ -242,7 +246,6 @@ public class Earth extends UvSphere implements Creation {
         vertexHandle = GLES20.glGetAttribLocation(program, VERTEX_HANDLE);
         texCoordHandle = GLES20.glGetAttribLocation(program, TEXTURE_COORDS_HANDLE);
     }
-
 
     @Override
     public void update(float[] view, float[] perspective) {
@@ -312,8 +315,9 @@ public class Earth extends UvSphere implements Creation {
     public Marker addMarker(KmlPlacemark kmlPlacemark, MarkerOptions markerUrlStyle) {
         LatLng latLng = markerUrlStyle.getPosition();
         Marker marker = new Marker(context, this);
+        marker.setRadius(MARKER_RADIUS);
         marker.setOnClickListener(onMarkerClickListener);
-        marker.create(MARKER_RADIUS, latLng, MARKER_ALTITUDE);
+        marker.setLocation(latLng, MARKER_ALTITUDE);
         marker.setName(kmlPlacemark.getProperty("name"));
         marker.setDescription(kmlPlacemark.getProperty("description"));
         marker.setLighting(markerLighting);
@@ -332,10 +336,7 @@ public class Earth extends UvSphere implements Creation {
     }
 
     public boolean contain(float[] point) {
-        float[] position = getPosition();
-        Vector positionVec = new Vector3d(position[0], position[1], position[2]);
-        Vector pointVec = new Vector3d(point[0], point[1], point[2]);
-        return pointVec.minus(positionVec).length() < radius + CAMERA_ALTITUDE;
+        return contain(radius + CAMERA_ALTITUDE, getPosition(), point);
     }
 
     @Override
