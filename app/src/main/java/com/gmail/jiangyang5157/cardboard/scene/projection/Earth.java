@@ -21,6 +21,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.xmlpull.v1.XmlPullParserException;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
@@ -78,6 +80,8 @@ public class Earth extends UvSphere implements Creation {
                 creationState = STATE_PREPARING;
                 ray.addBusy();
 
+
+
                 ray.subtractBusy();
                 creationState = STATE_BEFORE_CREATE;
             }
@@ -91,7 +95,7 @@ public class Earth extends UvSphere implements Creation {
 
         InputStream in = null;
         try {
-            in = Constant.getLocalInputStream(context, urlKml);
+            in = new FileInputStream(new File(Constant.getAbsolutePath(context, Constant.getPath(urlKml))));
             KmlLayer kmlLayer = new KmlLayer(this, in, context);
             kmlLayer.addLayerToMap();
         } catch (XmlPullParserException | IOException e) {
@@ -148,7 +152,7 @@ public class Earth extends UvSphere implements Creation {
 
         InputStream in = null;
         try {
-            in = Constant.getLocalInputStream(context, urlTexture);
+            in = new FileInputStream(new File(Constant.getAbsolutePath(context, Constant.getPath(urlTexture))));
             texBuffers[0] = loadTexture(in);
         } catch (IOException e) {
             e.printStackTrace();

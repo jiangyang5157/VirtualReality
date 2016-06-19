@@ -33,19 +33,6 @@ public class Constant {
     public static final String KML_URL_KEY = "KML_FILENAME_KEY";
     public static final String KML_URL_DEFAULT = getKmlUrl("example.kml");
 
-    public static InputStream getLocalInputStream(Context context, String url) throws IOException {
-        String path = Constant.getPath(url);
-        File file = new File(AppUtils.getProfilePath(context) + File.separator + path);
-
-        // TODO: 6/6/2016 remove
-        if (!file.exists()) {
-            IoUtils.write(context.getAssets().open(path), file);
-        }
-
-        InputStream in = new FileInputStream(file);
-        return in;
-    }
-
     public static String getLastKmlUrl(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context).getString(KML_URL_KEY, KML_URL_DEFAULT);
     }
@@ -56,6 +43,10 @@ public class Constant {
 
     public static String getPath(String url) {
         return url.replaceFirst(URL_, "");
+    }
+
+    public static String getAbsolutePath(Context context, String path) {
+        return AppUtils.getProfilePath(context) + File.separator + path;
     }
 
     public static String getResourcePath(String fileName) {

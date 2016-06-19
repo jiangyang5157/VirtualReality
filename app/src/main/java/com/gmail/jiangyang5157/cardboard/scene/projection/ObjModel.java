@@ -16,6 +16,7 @@ import com.gmail.jiangyang5157.tookit.math.Vector3d;
 import com.gmail.jiangyang5157.tookit.opengl.GlUtils;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
@@ -169,7 +170,7 @@ public class ObjModel extends GlModel implements Creation {
 
         InputStream in = null;
         try {
-            in = Constant.getLocalInputStream(context, url);
+            in = new FileInputStream(new File(Constant.getAbsolutePath(context, Constant.getPath(url))));
             IoUtils.read(in, new IoUtils.OnReadingListener() {
                 @Override
                 public boolean onReadLine(String line) {
