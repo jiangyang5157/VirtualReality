@@ -27,7 +27,7 @@ public class Constant {
     private static final String TAG = "[Constant]";
     public static final int DEBUG = 0;
 
-    public static final String URL_ = "http://192.168.1.68:8080/";
+    public static final String URL_ = "http://192.168.1.68:8080/assets/";
 
     // profile path:
     // /data/user/0/com.gmail.jiangyang5157.cardboard.vr

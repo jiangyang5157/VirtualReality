@@ -3,6 +3,7 @@ package com.gmail.jiangyang5157.cardboard.scene.projection;
 import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
+import android.os.Handler;
 import android.util.Log;
 
 import com.android.volley.VolleyError;
@@ -70,52 +71,55 @@ public class ObjModel extends GlModel implements Creation {
 
     @Override
     public void prepare(final Ray ray) {
-        getHandler().post(new Runnable() {
-            @Override
-            public void run() {
-                creationState = STATE_PREPARING;
-                ray.addBusy();
+        Handler handle = getHandler();
+        if (handle != null) {
+            handle.post(new Runnable() {
+                @Override
+                public void run() {
+                    creationState = STATE_PREPARING;
+                    ray.addBusy();
 
-                setColor(AppUtils.getColor(context, COLOR_NORMAL_RES_ID));
-                setScale(10f);
+                    setColor(AppUtils.getColor(context, COLOR_NORMAL_RES_ID));
+                    setScale(10f);
 
-                if (checkPreparation()) {
-                    buildArrays();
+                    if (checkPreparation()) {
+                        buildArrays();
 
-                    ray.subtractBusy();
-                    creationState = STATE_BEFORE_CREATE;
-                } else {
-                    File file = new File(Constant.getAbsolutePath(context, Constant.getPath(url)));
-                    if (!file.exists()) {
-                        Log.d(TAG, file.getAbsolutePath() + " not exist.");
-                        new Downloader(url, file, new Downloader.ResponseListener() {
-                            @Override
-                            public boolean onStart(Map<String, String> headers) {
-                                Log.d(TAG, "Last-Modified = " + headers.get("Last-Modified"));
-                                return true;
-                            }
-
-                            @Override
-                            public void onComplete() {
-                                if (checkPreparation()) {
-                                    buildArrays();
-
-                                    ray.subtractBusy();
-                                    creationState = STATE_BEFORE_CREATE;
+                        ray.subtractBusy();
+                        creationState = STATE_BEFORE_CREATE;
+                    } else {
+                        File file = new File(Constant.getAbsolutePath(context, Constant.getPath(url)));
+                        if (!file.exists()) {
+                            Log.d(TAG, file.getAbsolutePath() + " not exist.");
+                            new Downloader(url, file, new Downloader.ResponseListener() {
+                                @Override
+                                public boolean onStart(Map<String, String> headers) {
+                                    Log.d(TAG, "Last-Modified = " + headers.get("Last-Modified"));
+                                    return true;
                                 }
-                            }
 
-                            @Override
-                            public void onError(VolleyError volleyError) {
-                                AppUtils.buildToast(context, volleyError.toString());
-                                ray.subtractBusy();
-                                creationState = STATE_BEFORE_PREPARE;
-                            }
-                        });
+                                @Override
+                                public void onComplete() {
+                                    if (checkPreparation()) {
+                                        buildArrays();
+
+                                        ray.subtractBusy();
+                                        creationState = STATE_BEFORE_CREATE;
+                                    }
+                                }
+
+                                @Override
+                                public void onError(VolleyError volleyError) {
+                                    AppUtils.buildToast(context, volleyError.toString());
+                                    ray.subtractBusy();
+                                    creationState = STATE_BEFORE_PREPARE;
+                                }
+                            });
+                        }
                     }
                 }
-            }
-        });
+            });
+        }
     }
 
     public void create() {
