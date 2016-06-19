@@ -2,6 +2,7 @@ package com.gmail.jiangyang5157.cardboard.scene.projection;
 
 import android.content.Context;
 import android.opengl.GLES20;
+import android.os.Handler;
 import android.util.Log;
 
 import com.android.volley.VolleyError;
@@ -84,77 +85,80 @@ public class Earth extends UvSphere implements Creation {
 
     @Override
     public void prepare(final Ray ray) {
-        getHandler().post(new Runnable() {
-            @Override
-            public void run() {
-                creationState = STATE_PREPARING;
-                ray.addBusy();
+        Handler handle = getHandler();
+        if (handle != null) {
+            handle.post(new Runnable() {
+                @Override
+                public void run() {
+                    creationState = STATE_PREPARING;
+                    ray.addBusy();
 
-                if (checkPreparation()) {
-                    final File fileKml = new File(Constant.getAbsolutePath(context, Constant.getPath(urlKml)));
-                    prepareMarks(fileKml);
+                    if (checkPreparation()) {
+                        final File fileKml = new File(Constant.getAbsolutePath(context, Constant.getPath(urlKml)));
+                        prepareMarks(fileKml);
 
-                    ray.subtractBusy();
-                    creationState = STATE_BEFORE_CREATE;
-                } else {
-                    final File fileKml = new File(Constant.getAbsolutePath(context, Constant.getPath(urlKml)));
-                    if (!fileKml.exists()) {
-                        Log.d(TAG, fileKml.getAbsolutePath() + " not exist.");
-                        new Downloader(urlKml, fileKml, new Downloader.ResponseListener() {
-                            @Override
-                            public boolean onStart(Map<String, String> headers) {
-                                Log.d(TAG, "Last-Modified = " + headers.get("Last-Modified"));
-                                return true;
-                            }
-
-                            @Override
-                            public void onComplete() {
-                                prepareMarks(fileKml);
-
-                                if (checkPreparation()) {
-                                    ray.subtractBusy();
-                                    creationState = STATE_BEFORE_CREATE;
+                        ray.subtractBusy();
+                        creationState = STATE_BEFORE_CREATE;
+                    } else {
+                        final File fileKml = new File(Constant.getAbsolutePath(context, Constant.getPath(urlKml)));
+                        if (!fileKml.exists()) {
+                            Log.d(TAG, fileKml.getAbsolutePath() + " not exist.");
+                            new Downloader(urlKml, fileKml, new Downloader.ResponseListener() {
+                                @Override
+                                public boolean onStart(Map<String, String> headers) {
+                                    Log.d(TAG, "Last-Modified = " + headers.get("Last-Modified"));
+                                    return true;
                                 }
-                            }
 
-                            @Override
-                            public void onError(VolleyError volleyError) {
-                                AppUtils.buildToast(context, volleyError.toString());
-                                ray.subtractBusy();
-                                creationState = STATE_BEFORE_PREPARE;
-                            }
-                        });
-                    }
+                                @Override
+                                public void onComplete() {
+                                    prepareMarks(fileKml);
 
-                    File fileTexture = new File(Constant.getAbsolutePath(context, Constant.getPath(urlTexture)));
-                    if (!fileTexture.exists()) {
-                        Log.d(TAG, fileTexture.getAbsolutePath() + " not exist.");
-                        new Downloader(urlTexture, fileTexture, new Downloader.ResponseListener() {
-                            @Override
-                            public boolean onStart(Map<String, String> headers) {
-                                Log.d(TAG, "Last-Modified = " + headers.get("Last-Modified"));
-                                return true;
-                            }
-
-                            @Override
-                            public void onComplete() {
-                                if (checkPreparation()) {
-                                    ray.subtractBusy();
-                                    creationState = STATE_BEFORE_CREATE;
+                                    if (checkPreparation()) {
+                                        ray.subtractBusy();
+                                        creationState = STATE_BEFORE_CREATE;
+                                    }
                                 }
-                            }
 
-                            @Override
-                            public void onError(VolleyError volleyError) {
-                                AppUtils.buildToast(context, volleyError.toString());
-                                ray.subtractBusy();
-                                creationState = STATE_BEFORE_PREPARE;
-                            }
-                        });
+                                @Override
+                                public void onError(VolleyError volleyError) {
+                                    AppUtils.buildToast(context, volleyError.toString());
+                                    ray.subtractBusy();
+                                    creationState = STATE_BEFORE_PREPARE;
+                                }
+                            });
+                        }
+
+                        File fileTexture = new File(Constant.getAbsolutePath(context, Constant.getPath(urlTexture)));
+                        if (!fileTexture.exists()) {
+                            Log.d(TAG, fileTexture.getAbsolutePath() + " not exist.");
+                            new Downloader(urlTexture, fileTexture, new Downloader.ResponseListener() {
+                                @Override
+                                public boolean onStart(Map<String, String> headers) {
+                                    Log.d(TAG, "Last-Modified = " + headers.get("Last-Modified"));
+                                    return true;
+                                }
+
+                                @Override
+                                public void onComplete() {
+                                    if (checkPreparation()) {
+                                        ray.subtractBusy();
+                                        creationState = STATE_BEFORE_CREATE;
+                                    }
+                                }
+
+                                @Override
+                                public void onError(VolleyError volleyError) {
+                                    AppUtils.buildToast(context, volleyError.toString());
+                                    ray.subtractBusy();
+                                    creationState = STATE_BEFORE_PREPARE;
+                                }
+                            });
+                        }
                     }
                 }
-            }
-        });
+            });
+        }
     }
 
     private void prepareMarks(File fileKml) {
