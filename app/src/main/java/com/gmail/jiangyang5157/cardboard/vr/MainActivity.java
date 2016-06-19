@@ -6,8 +6,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.gmail.jiangyang5157.cardboard.kml.KmlLayer;
 import com.gmail.jiangyang5157.cardboard.scene.Camera;
+import com.gmail.jiangyang5157.cardboard.scene.Creation;
 import com.gmail.jiangyang5157.cardboard.scene.Intersection;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
 import com.gmail.jiangyang5157.cardboard.scene.projection.ObjModel;
@@ -28,10 +28,7 @@ import com.google.vr.sdk.base.GvrActivity;
 import com.google.vr.sdk.base.HeadTransform;
 import com.google.vr.sdk.base.Viewport;
 
-import org.xmlpull.v1.XmlPullParserException;
-
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -46,8 +43,9 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
     private final float[] LIGHT_POS_IN_WORLD_SPACE = new float[]{0.0f, 0.0f, 0.0f, 1.0f};
     private float[] lightPosInCameraSpace = new float[4];
 
-    private Earth earth;
     private Ray ray;
+
+    private Earth earth;
     private MarkerDialog markerDialog;
     private ObjModel objModel;
 
@@ -62,6 +60,26 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         if (!DeviceUtils.glesValidate(this, GlModel.GLES_VERSION_REQUIRED)) {
             Toast.makeText(this, getString(R.string.error_gles_version_not_supported), Toast.LENGTH_SHORT).show();
             finish();
+        }
+
+        File file = new File(Constant.getAbsolutePath(this, Constant.DIRECTORY_STATIC));
+        if (!file.exists() || !file.isDirectory()) {
+            // no resource exists, uncompress the default zip file which bundled with the apk
+            InputStream in = null;
+            try {
+                in = getAssets().open("static.zip");
+                IoUtils.unzip(in, new File(AppUtils.getProfilePath(this)), true);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    if (in != null) {
+                        in.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
         setContentView(R.layout.activity_main);
@@ -168,6 +186,16 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
 
         head.adjustPosition(earth);
 
+        if (earth != null) {
+            if (!earth.isCreated()) {
+                if (earth.getCreationState() == Creation.STATE_BEFORE_PREPARE) {
+                    earth.prepare(ray);
+                } else if (earth.getCreationState() == Creation.STATE_BEFORE_CREATE) {
+                    earth.create();
+                }
+            }
+        }
+
         if (markerDialog != null) {
             if (!markerDialog.isCreated()) {
                 markerDialog.create();
@@ -176,16 +204,9 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
 
             if (objModel != null) {
                 if (!objModel.isCreated()) {
-                    if (objModel.getCreationState() == ObjModel.STATE_BEFORE_PREPARE) {
-                        objModel.getHandler().post(new Runnable() {
-                            @Override
-                            public void run() {
-                                ray.addBusy();
-                                objModel.prepare();
-                                ray.subtractBusy();
-                            }
-                        });
-                    } else if (objModel.getCreationState() == ObjModel.STATE_BEFORE_CREATE) {
+                    if (objModel.getCreationState() == Creation.STATE_BEFORE_PREPARE) {
+                        objModel.prepare(ray);
+                    } else if (objModel.getCreationState() == Creation.STATE_BEFORE_CREATE) {
                         objModel.create();
                         objModel.setPosition(head.getCamera().getPosition(), head.getForward(), head.getQuaternion());
                     }
@@ -296,25 +317,6 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
                 return LIGHT_POS_IN_CAMERA_SPACE;
             }
         });
-        earth.create();
-
-        String url = Constant.getLastKmlUrl(this);
-        InputStream in = null;
-        try {
-            in = Constant.getInputStream(this, url);
-            KmlLayer kmlLayer = new KmlLayer(earth, in, this);
-            kmlLayer.addLayerToMap();
-        } catch (XmlPullParserException | IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (in != null) {
-                try {
-                    in.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
     }
 
     @Override

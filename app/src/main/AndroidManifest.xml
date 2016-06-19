@@ -21,8 +21,9 @@
         android:required="true" />
 
     <application
-        android:hardwareAccelerated="true"
+        android:name="com.gmail.jiangyang5157.app.VolleyApplication"
         android:allowBackup="true"
+        android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"

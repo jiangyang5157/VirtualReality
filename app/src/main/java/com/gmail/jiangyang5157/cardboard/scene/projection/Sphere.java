@@ -69,4 +69,14 @@ public abstract class Sphere extends GlModel implements Intersection.Intersectab
 
         return new Intersection(this, cameraPosVec, cameraPosVec.plus(forwardVec.times(t)), t);
     }
+
+    public static boolean contain(float radius, float[] center, float[] point) {
+        Vector positionVec = new Vector3d(center[0], center[1], center[2]);
+        Vector pointVec = new Vector3d(point[0], point[1], point[2]);
+        return pointVec.minus(positionVec).length() < radius;
+    }
+
+    public void setRadius(float radius) {
+        this.radius = radius;
+    }
 }

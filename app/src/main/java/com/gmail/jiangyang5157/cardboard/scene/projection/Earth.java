@@ -4,19 +4,26 @@ import android.content.Context;
 import android.opengl.GLES20;
 import android.util.Log;
 
+import com.android.volley.VolleyError;
+import com.gmail.jiangyang5157.cardboard.kml.KmlLayer;
 import com.gmail.jiangyang5157.cardboard.kml.KmlPlacemark;
+import com.gmail.jiangyang5157.cardboard.net.Downloader;
+import com.gmail.jiangyang5157.cardboard.scene.Creation;
 import com.gmail.jiangyang5157.cardboard.scene.Intersection;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
 import com.gmail.jiangyang5157.cardboard.scene.Lighting;
 import com.gmail.jiangyang5157.cardboard.vr.Constant;
 import com.gmail.jiangyang5157.cardboard.vr.R;
+import com.gmail.jiangyang5157.tookit.app.AppUtils;
 import com.gmail.jiangyang5157.tookit.data.buffer.BufferUtils;
-import com.gmail.jiangyang5157.tookit.math.Vector;
-import com.gmail.jiangyang5157.tookit.math.Vector3d;
 import com.gmail.jiangyang5157.tookit.opengl.GlUtils;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
@@ -25,14 +32,18 @@ import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Map;
 
 /**
  * @author Yang
  * @since 4/12/2016.
  */
-public class Earth extends UvSphere {
+public class Earth extends UvSphere implements Creation {
+    private static final String TAG = "[Earth]";
 
-    private static final String TEXTURE_URL = Constant.getResourceUrl("world_map.jpg");
+    private String urlTexture;
+    private String urlKml;
+
     private static final int VERTEX_SHADER_RAW_RESOURCE = R.raw.earth_uv_vertex_shader;
     private static final int FRAGMENT_SHADER_RAW_RESOURCE = R.raw.earth_uv_fragment_shader;
 
@@ -54,13 +65,133 @@ public class Earth extends UvSphere {
     protected Lighting markerLighting;
     protected Lighting markerObjModelLighting;
 
+    protected int creationState = STATE_BEFORE_PREPARE;
+
     public Earth(Context context) {
         super(context, VERTEX_SHADER_RAW_RESOURCE, FRAGMENT_SHADER_RAW_RESOURCE);
         markers = new ArrayList<>();
+
+        urlKml = Constant.getLastKmlUrl(context);
+        urlTexture = Constant.getResourceUrl("world_map.jpg");
+        radius = RADIUS;
     }
 
+    @Override
+    public boolean checkPreparation() {
+        File fileKml = new File(Constant.getAbsolutePath(context, Constant.getPath(urlKml)));
+        File fileTexture = new File(Constant.getAbsolutePath(context, Constant.getPath(urlTexture)));
+        return fileKml.exists() && fileTexture.exists();
+    }
+
+    @Override
+    public void prepare(final Ray ray) {
+        getHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                creationState = STATE_PREPARING;
+                ray.addBusy();
+
+                if (checkPreparation()) {
+                    final File fileKml = new File(Constant.getAbsolutePath(context, Constant.getPath(urlKml)));
+                    prepareMarks(fileKml);
+
+                    ray.subtractBusy();
+                    creationState = STATE_BEFORE_CREATE;
+                } else {
+                    final File fileKml = new File(Constant.getAbsolutePath(context, Constant.getPath(urlKml)));
+                    if (!fileKml.exists()) {
+                        Log.d(TAG, fileKml.getAbsolutePath() + " not exist.");
+                        new Downloader(urlKml, fileKml, new Downloader.ResponseListener() {
+                            @Override
+                            public boolean onStart(Map<String, String> headers) {
+                                Log.d(TAG, "Last-Modified = " + headers.get("Last-Modified"));
+                                return true;
+                            }
+
+                            @Override
+                            public void onComplete() {
+                                prepareMarks(fileKml);
+
+                                if (checkPreparation()) {
+                                    ray.subtractBusy();
+                                    creationState = STATE_BEFORE_CREATE;
+                                }
+                            }
+
+                            @Override
+                            public void onError(VolleyError volleyError) {
+                                AppUtils.buildToast(context, volleyError.toString());
+                                ray.subtractBusy();
+                                creationState = STATE_BEFORE_PREPARE;
+                            }
+                        });
+                    }
+
+                    File fileTexture = new File(Constant.getAbsolutePath(context, Constant.getPath(urlTexture)));
+                    if (!fileTexture.exists()) {
+                        Log.d(TAG, fileTexture.getAbsolutePath() + " not exist.");
+                        new Downloader(urlTexture, fileTexture, new Downloader.ResponseListener() {
+                            @Override
+                            public boolean onStart(Map<String, String> headers) {
+                                Log.d(TAG, "Last-Modified = " + headers.get("Last-Modified"));
+                                return true;
+                            }
+
+                            @Override
+                            public void onComplete() {
+                                if (checkPreparation()) {
+                                    ray.subtractBusy();
+                                    creationState = STATE_BEFORE_CREATE;
+                                }
+                            }
+
+                            @Override
+                            public void onError(VolleyError volleyError) {
+                                AppUtils.buildToast(context, volleyError.toString());
+                                ray.subtractBusy();
+                                creationState = STATE_BEFORE_PREPARE;
+                            }
+                        });
+                    }
+                }
+            }
+        });
+    }
+
+    private void prepareMarks(File fileKml) {
+        InputStream in = null;
+        try {
+            in = new FileInputStream(fileKml);
+            KmlLayer kmlLayer = new KmlLayer(this, in, context);
+            kmlLayer.addLayerToMap();
+        } catch (XmlPullParserException | IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    @Override
     public void create() {
-        create(RADIUS, STACKS, SLICES);
+        creationState = STATE_CREATING;
+        create(radius, STACKS, SLICES);
+
+        for (Marker marker : markers) {
+            marker.create();
+        }
+
+        creationState = STATE_BEFORE_CREATE;
+    }
+
+    @Override
+    public int getCreationState() {
+        return creationState;
     }
 
     @Override
@@ -97,7 +228,7 @@ public class Earth extends UvSphere {
 
         InputStream in = null;
         try {
-            in = Constant.getInputStream(context, TEXTURE_URL);
+            in = new FileInputStream(new File(Constant.getAbsolutePath(context, Constant.getPath(urlTexture))));
             texBuffers[0] = loadTexture(in);
         } catch (IOException e) {
             e.printStackTrace();
@@ -120,7 +251,6 @@ public class Earth extends UvSphere {
         vertexHandle = GLES20.glGetAttribLocation(program, VERTEX_HANDLE);
         texCoordHandle = GLES20.glGetAttribLocation(program, TEXTURE_COORDS_HANDLE);
     }
-
 
     @Override
     public void update(float[] view, float[] perspective) {
@@ -190,8 +320,9 @@ public class Earth extends UvSphere {
     public Marker addMarker(KmlPlacemark kmlPlacemark, MarkerOptions markerUrlStyle) {
         LatLng latLng = markerUrlStyle.getPosition();
         Marker marker = new Marker(context, this);
+        marker.setRadius(MARKER_RADIUS);
         marker.setOnClickListener(onMarkerClickListener);
-        marker.create(MARKER_RADIUS, latLng, MARKER_ALTITUDE);
+        marker.setLocation(latLng, MARKER_ALTITUDE);
         marker.setName(kmlPlacemark.getProperty("name"));
         marker.setDescription(kmlPlacemark.getProperty("description"));
         marker.setLighting(markerLighting);
@@ -210,10 +341,7 @@ public class Earth extends UvSphere {
     }
 
     public boolean contain(float[] point) {
-        float[] position = getPosition();
-        Vector positionVec = new Vector3d(position[0], position[1], position[2]);
-        Vector pointVec = new Vector3d(point[0], point[1], point[2]);
-        return pointVec.minus(positionVec).length() < radius + CAMERA_ALTITUDE;
+        return contain(radius + CAMERA_ALTITUDE, getPosition(), point);
     }
 
     @Override

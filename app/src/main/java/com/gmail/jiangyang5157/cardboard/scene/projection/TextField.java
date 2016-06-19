@@ -31,6 +31,11 @@ public class TextField extends Panel implements Intersection.Clickable {
     private static final float SCALE_GRADIENT_UNIT = (SCALE_FOCUSED - SCALE_NORMAL) / 6;
     private float xyzScale = 1.0f;
 
+    protected static final float TEXT_SIZE_LARGE = 12f;
+    protected static final float TEXT_SIZE_MEDIUM = 10f;
+    protected static final float TEXT_SIZE_SMALL = 8f;
+    protected static final float TEXT_SIZE_TINY = 6f;
+
     private TextPaint textPaint;
 
     private Intersection.Clickable onClickListener;

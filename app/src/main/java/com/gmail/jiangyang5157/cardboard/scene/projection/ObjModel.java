@@ -5,6 +5,9 @@ import android.opengl.GLES20;
 import android.opengl.Matrix;
 import android.util.Log;
 
+import com.android.volley.VolleyError;
+import com.gmail.jiangyang5157.cardboard.net.Downloader;
+import com.gmail.jiangyang5157.cardboard.scene.Creation;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
 import com.gmail.jiangyang5157.cardboard.vr.Constant;
 import com.gmail.jiangyang5157.cardboard.vr.R;
@@ -22,13 +25,14 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
+import java.util.Map;
 import java.util.Vector;
 
 /**
  * @author Yang
  * @since 5/27/2016
  */
-public class ObjModel extends GlModel {
+public class ObjModel extends GlModel implements Creation {
     private static final String TAG = "[ObjModel]";
 
     private static final int VERTEX_SHADER_RAW_RESOURCE = R.raw.obj_color_vertex_shader;
@@ -51,11 +55,7 @@ public class ObjModel extends GlModel {
 
     protected final int[] buffers = new int[3];
 
-    public static final int STATE_BEFORE_PREPARE = 0x00000001;
-    public static final int STATE_PREPARING = 0x00000010;
-    public static final int STATE_BEFORE_CREATE = 0x00000100;
-    public static final int STATE_CREATING = 0x00001000;
-    private int creationState = STATE_BEFORE_PREPARE;
+    protected int creationState = STATE_BEFORE_PREPARE;
 
     protected ObjModel(Context context, String title, String url) {
         super(context, VERTEX_SHADER_RAW_RESOURCE, FRAGMENT_SHADER_RAW_RESOURCE);
@@ -63,14 +63,63 @@ public class ObjModel extends GlModel {
         this.url = url;
     }
 
-    public void prepare() {
-        creationState = STATE_PREPARING;
-        setColor(AppUtils.getColor(context, COLOR_NORMAL_RES_ID));
-        setScale(10f);
-        buildArrays();
-        creationState = STATE_BEFORE_CREATE;
+    @Override
+    public boolean checkPreparation() {
+        File file = new File(Constant.getAbsolutePath(context, Constant.getPath(url)));
+        return file.exists();
     }
 
+    @Override
+    public void prepare(final Ray ray) {
+        getHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                creationState = STATE_PREPARING;
+                ray.addBusy();
+
+                setColor(AppUtils.getColor(context, COLOR_NORMAL_RES_ID));
+                setScale(10f);
+
+                if (checkPreparation()) {
+                    buildArrays();
+
+                    ray.subtractBusy();
+                    creationState = STATE_BEFORE_CREATE;
+                } else {
+                    File file = new File(Constant.getAbsolutePath(context, Constant.getPath(url)));
+                    if (!file.exists()) {
+                        Log.d(TAG, file.getAbsolutePath() + " not exist.");
+                        new Downloader(url, file, new Downloader.ResponseListener() {
+                            @Override
+                            public boolean onStart(Map<String, String> headers) {
+                                Log.d(TAG, "Last-Modified = " + headers.get("Last-Modified"));
+                                return true;
+                            }
+
+                            @Override
+                            public void onComplete() {
+                                if (checkPreparation()) {
+                                    buildArrays();
+
+                                    ray.subtractBusy();
+                                    creationState = STATE_BEFORE_CREATE;
+                                }
+                            }
+
+                            @Override
+                            public void onError(VolleyError volleyError) {
+                                AppUtils.buildToast(context, volleyError.toString());
+                                ray.subtractBusy();
+                                creationState = STATE_BEFORE_PREPARE;
+                            }
+                        });
+                    }
+                }
+            }
+        });
+    }
+
+    @Override
     public void create() {
         creationState = STATE_CREATING;
         initializeProgram();
@@ -101,7 +150,7 @@ public class ObjModel extends GlModel {
         int vSize = fvSize * 3;
         int fvnSize = fvn.size();
         int vnSize = vn.size();
-        Log.d("####", "fvSize/vSize/fvnSize/vnSize: " + fvSize + "," + vSize + "," + fvnSize + "," + vnSize);
+        Log.d(TAG, "fvSize/vSize/fvnSize/vnSize: " + fvSize + "," + vSize + "," + fvnSize + "," + vnSize);
         FloatBuffer verticesBuffer = ByteBuffer.allocateDirect(vSize * BufferUtils.BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
         FloatBuffer normalsBuffer = ByteBuffer.allocateDirect(vSize * BufferUtils.BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
         ShortBuffer indicesBuffer = ByteBuffer.allocateDirect(fvSize * BufferUtils.BYTES_PER_SHORT).order(ByteOrder.nativeOrder()).asShortBuffer();
@@ -162,7 +211,7 @@ public class ObjModel extends GlModel {
 
         InputStream in = null;
         try {
-            in = Constant.getInputStream(context, url);
+            in = new FileInputStream(new File(Constant.getAbsolutePath(context, Constant.getPath(url))));
             IoUtils.read(in, new IoUtils.OnReadingListener() {
                 @Override
                 public boolean onReadLine(String line) {
@@ -190,22 +239,22 @@ public class ObjModel extends GlModel {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            if (in != null) {
-                try {
+            try {
+                if (in != null) {
                     in.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
                 }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
 
     private void parserComments(String line) {
-        Log.d(TAG, "parserComments: " + line);
+//        Log.d(TAG, "parserComments: " + line);
     }
 
     private void parserGeometricVertices(String line) {
-        Log.d(TAG, "parserGeometricVertices: " + line);
+//        Log.d(TAG, "parserGeometricVertices: " + line);
         String[] tokens = line.split("[ ]+");
         int length = tokens.length;
         for (int i = 1; i < length; i++) {
@@ -214,7 +263,7 @@ public class ObjModel extends GlModel {
     }
 
     private void parserTextureVertices(String line) {
-        Log.d(TAG, "parserTextureVertices: " + line);
+//        Log.d(TAG, "parserTextureVertices: " + line);
         String[] tokens = line.split("[ ]+");
         int length = tokens.length;
         for (int i = 1; i < length; i++) {
@@ -223,7 +272,7 @@ public class ObjModel extends GlModel {
     }
 
     private void parserVertexNormals(String line) {
-        Log.d(TAG, "parserVertexNormals: " + line);
+//        Log.d(TAG, "parserVertexNormals: " + line);
         String[] tokens = line.split("[ ]+");
         int length = tokens.length;
         for (int i = 1; i < length; i++) {
@@ -232,7 +281,7 @@ public class ObjModel extends GlModel {
     }
 
     private void parserFace(String line) {
-        Log.d(TAG, "parserFace: " + line);
+//        Log.d(TAG, "parserFace: " + line);
         String[] tokens = line.split("[ ]+");
         int length = tokens.length;
 
@@ -413,6 +462,7 @@ public class ObjModel extends GlModel {
         GLES20.glDeleteBuffers(buffers.length, buffers, 0);
     }
 
+    @Override
     public int getCreationState() {
         return creationState;
     }
