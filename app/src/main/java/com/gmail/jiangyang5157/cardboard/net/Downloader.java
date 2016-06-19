@@ -19,7 +19,7 @@ import java.util.Map;
  * @since 6/19/2016
  */
 public class Downloader {
-    private static final String TAG = Downloader.class.getSimpleName();
+    private static final String TAG = "[Downloader]";
 
     private final InputStreamRequest request;
 
@@ -51,12 +51,12 @@ public class Downloader {
                         } catch (IOException e) {
                             e.printStackTrace();
                         } finally {
-                            if (in != null) {
-                                try {
+                            try {
+                                if (in != null) {
                                     in.close();
-                                } catch (IOException e) {
-                                    e.printStackTrace();
                                 }
+                            } catch (IOException e) {
+                                e.printStackTrace();
                             }
                         }
                         listener.onComplete();

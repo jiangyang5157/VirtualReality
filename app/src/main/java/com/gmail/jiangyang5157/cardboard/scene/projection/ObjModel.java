@@ -33,7 +33,7 @@ import java.util.Vector;
  * @since 5/27/2016
  */
 public class ObjModel extends GlModel implements Creation {
-    private static final String TAG = ObjModel.class.getSimpleName();
+    private static final String TAG = "[ObjModel]";
 
     private static final int VERTEX_SHADER_RAW_RESOURCE = R.raw.obj_color_vertex_shader;
     private static final int FRAGMENT_SHADER_RAW_RESOURCE = R.raw.obj_color_fragment_shader;
@@ -109,6 +109,8 @@ public class ObjModel extends GlModel implements Creation {
                             @Override
                             public void onError(VolleyError volleyError) {
                                 AppUtils.buildToast(context, volleyError.toString());
+                                ray.subtractBusy();
+                                creationState = STATE_BEFORE_PREPARE;
                             }
                         });
                     }
@@ -237,22 +239,22 @@ public class ObjModel extends GlModel implements Creation {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            if (in != null) {
-                try {
+            try {
+                if (in != null) {
                     in.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
                 }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
 
     private void parserComments(String line) {
-        Log.d(TAG, "parserComments: " + line);
+//        Log.d(TAG, "parserComments: " + line);
     }
 
     private void parserGeometricVertices(String line) {
-        Log.d(TAG, "parserGeometricVertices: " + line);
+//        Log.d(TAG, "parserGeometricVertices: " + line);
         String[] tokens = line.split("[ ]+");
         int length = tokens.length;
         for (int i = 1; i < length; i++) {
@@ -261,7 +263,7 @@ public class ObjModel extends GlModel implements Creation {
     }
 
     private void parserTextureVertices(String line) {
-        Log.d(TAG, "parserTextureVertices: " + line);
+//        Log.d(TAG, "parserTextureVertices: " + line);
         String[] tokens = line.split("[ ]+");
         int length = tokens.length;
         for (int i = 1; i < length; i++) {
@@ -270,7 +272,7 @@ public class ObjModel extends GlModel implements Creation {
     }
 
     private void parserVertexNormals(String line) {
-        Log.d(TAG, "parserVertexNormals: " + line);
+//        Log.d(TAG, "parserVertexNormals: " + line);
         String[] tokens = line.split("[ ]+");
         int length = tokens.length;
         for (int i = 1; i < length; i++) {
@@ -279,7 +281,7 @@ public class ObjModel extends GlModel implements Creation {
     }
 
     private void parserFace(String line) {
-        Log.d(TAG, "parserFace: " + line);
+//        Log.d(TAG, "parserFace: " + line);
         String[] tokens = line.split("[ ]+");
         int length = tokens.length;
 

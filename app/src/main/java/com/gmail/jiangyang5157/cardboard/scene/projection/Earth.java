@@ -39,7 +39,7 @@ import java.util.Map;
  * @since 4/12/2016.
  */
 public class Earth extends UvSphere implements Creation {
-    private static final String TAG = Earth.class.getSimpleName();
+    private static final String TAG = "[Earth]";
 
     private String urlTexture;
     private String urlKml;
@@ -121,6 +121,8 @@ public class Earth extends UvSphere implements Creation {
                             @Override
                             public void onError(VolleyError volleyError) {
                                 AppUtils.buildToast(context, volleyError.toString());
+                                ray.subtractBusy();
+                                creationState = STATE_BEFORE_PREPARE;
                             }
                         });
                     }
@@ -146,6 +148,8 @@ public class Earth extends UvSphere implements Creation {
                             @Override
                             public void onError(VolleyError volleyError) {
                                 AppUtils.buildToast(context, volleyError.toString());
+                                ray.subtractBusy();
+                                creationState = STATE_BEFORE_PREPARE;
                             }
                         });
                     }

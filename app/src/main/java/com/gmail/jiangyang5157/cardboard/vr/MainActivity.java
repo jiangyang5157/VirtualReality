@@ -3,7 +3,6 @@ package com.gmail.jiangyang5157.cardboard.vr;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -19,7 +18,9 @@ import com.gmail.jiangyang5157.cardboard.scene.projection.Marker;
 import com.gmail.jiangyang5157.cardboard.scene.Lighting;
 import com.gmail.jiangyang5157.cardboard.scene.projection.GlModel;
 import com.gmail.jiangyang5157.cardboard.scene.projection.MarkerDialog;
+import com.gmail.jiangyang5157.tookit.app.AppUtils;
 import com.gmail.jiangyang5157.tookit.app.DeviceUtils;
+import com.gmail.jiangyang5157.tookit.data.io.IoUtils;
 import com.gmail.jiangyang5157.tookit.opengl.Model;
 import com.google.vr.sdk.base.Eye;
 import com.google.vr.sdk.base.GvrView;
@@ -28,11 +29,13 @@ import com.google.vr.sdk.base.HeadTransform;
 import com.google.vr.sdk.base.Viewport;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 
 import javax.microedition.khronos.egl.EGLConfig;
 
 public class MainActivity extends GvrActivity implements GvrView.StereoRenderer {
-    private static final String TAG = MainActivity.class.getSimpleName();
+    private static final String TAG = "[MainActivity]";
 
     private Head head;
 
@@ -61,8 +64,22 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
 
         File file = new File(Constant.getAbsolutePath(this, Constant.DIRECTORY_STATIC));
         if (!file.exists() || !file.isDirectory()) {
-            // no resource exists, uncompress the default zip file
-
+            // no resource exists, uncompress the default zip file which bundled with the apk
+            InputStream in = null;
+            try {
+                in = getAssets().open("static.zip");
+                IoUtils.unzip(in, new File(AppUtils.getProfilePath(this)), true);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    if (in != null) {
+                        in.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
         setContentView(R.layout.activity_main);
