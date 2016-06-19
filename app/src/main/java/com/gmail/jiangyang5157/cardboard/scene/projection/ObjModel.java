@@ -63,7 +63,8 @@ public class ObjModel extends GlModel implements Creation {
         this.url = url;
     }
 
-    private boolean checkPreparation() {
+    @Override
+    public boolean checkPreparation() {
         File file = new File(Constant.getAbsolutePath(context, Constant.getPath(url)));
         return file.exists();
     }

@@ -13,6 +13,7 @@ public interface Creation {
     public static final int STATE_CREATING = 0x00001000;
 
     public void prepare(final Ray ray);
+    public boolean checkPreparation();
     public void create();
     public int getCreationState();
 }

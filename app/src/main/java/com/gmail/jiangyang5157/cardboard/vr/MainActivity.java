@@ -61,7 +61,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
 
         File file = new File(Constant.getAbsolutePath(this, Constant.DIRECTORY_STATIC));
         if (!file.exists() || !file.isDirectory()) {
-            // no resource exists, uncompress the default kmz file
+            // no resource exists, uncompress the default zip file
 
         }
 
