@@ -76,7 +76,6 @@ public class Earth extends UvSphere implements Creation {
         radius = RADIUS;
     }
 
-    @Override
     public boolean checkPreparation() {
         File fileKml = new File(Constant.getAbsolutePath(context, Constant.getPath(urlKml)));
         File fileTexture = new File(Constant.getAbsolutePath(context, Constant.getPath(urlTexture)));
@@ -177,7 +176,6 @@ public class Earth extends UvSphere implements Creation {
         }
     }
 
-    @Override
     public void create() {
         creationState = STATE_CREATING;
         create(radius, STACKS, SLICES);
