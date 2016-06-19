@@ -3,6 +3,7 @@ package com.gmail.jiangyang5157.cardboard.vr;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -25,6 +26,8 @@ import com.google.vr.sdk.base.GvrView;
 import com.google.vr.sdk.base.GvrActivity;
 import com.google.vr.sdk.base.HeadTransform;
 import com.google.vr.sdk.base.Viewport;
+
+import java.io.File;
 
 import javax.microedition.khronos.egl.EGLConfig;
 
@@ -54,6 +57,12 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         if (!DeviceUtils.glesValidate(this, GlModel.GLES_VERSION_REQUIRED)) {
             Toast.makeText(this, getString(R.string.error_gles_version_not_supported), Toast.LENGTH_SHORT).show();
             finish();
+        }
+
+        File file = new File(Constant.getAbsolutePath(this, Constant.DIRECTORY_STATIC));
+        if (!file.exists() || !file.isDirectory()) {
+            // no resource exists, uncompress the default kmz file
+
         }
 
         setContentView(R.layout.activity_main);

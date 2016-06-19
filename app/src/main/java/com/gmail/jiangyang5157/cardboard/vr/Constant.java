@@ -2,15 +2,10 @@ package com.gmail.jiangyang5157.cardboard.vr;
 
 import android.content.Context;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import com.gmail.jiangyang5157.tookit.app.AppUtils;
-import com.gmail.jiangyang5157.tookit.data.io.IoUtils;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 
 /**
  * @author Yang
@@ -25,10 +20,10 @@ public class Constant {
     // profile path:
     // /data/user/0/com.gmail.jiangyang5157.cardboard.vr
 
-    private static final String DIRECTORY_STATIC = "static";
-    private static final String DIRECTORY_KML = DIRECTORY_STATIC + File.separator + "kml";
-    private static final String DIRECTORY_MODEL = DIRECTORY_STATIC + File.separator + "model";
-    private static final String DIRECTORY_RESOURCE = DIRECTORY_STATIC + File.separator + "resource";
+    public static final String DIRECTORY_STATIC = "static";
+    public static final String DIRECTORY_KML = DIRECTORY_STATIC + File.separator + "kml";
+    public static final String DIRECTORY_MODEL = DIRECTORY_STATIC + File.separator + "model";
+    public static final String DIRECTORY_RESOURCE = DIRECTORY_STATIC + File.separator + "resource";
 
     public static final String KML_URL_KEY = "KML_FILENAME_KEY";
     public static final String KML_URL_DEFAULT = getKmlUrl("example.kml");
