@@ -5,6 +5,8 @@ import android.opengl.GLES20;
 import android.opengl.Matrix;
 import android.util.Log;
 
+import com.android.volley.VolleyError;
+import com.gmail.jiangyang5157.cardboard.net.Downloader;
 import com.gmail.jiangyang5157.cardboard.scene.Creation;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
 import com.gmail.jiangyang5157.cardboard.vr.Constant;
@@ -23,6 +25,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
+import java.util.Map;
 import java.util.Vector;
 
 /**
@@ -60,6 +63,11 @@ public class ObjModel extends GlModel implements Creation {
         this.url = url;
     }
 
+    private boolean checkPreparation() {
+        File file = new File(Constant.getAbsolutePath(context, Constant.getPath(url)));
+        return file.exists();
+    }
+
     @Override
     public void prepare(final Ray ray) {
         getHandler().post(new Runnable() {
@@ -70,10 +78,40 @@ public class ObjModel extends GlModel implements Creation {
 
                 setColor(AppUtils.getColor(context, COLOR_NORMAL_RES_ID));
                 setScale(10f);
-                buildArrays();
 
-                ray.subtractBusy();
-                creationState = STATE_BEFORE_CREATE;
+                if (checkPreparation()) {
+                    buildArrays();
+
+                    ray.subtractBusy();
+                    creationState = STATE_BEFORE_CREATE;
+                } else {
+                    File file = new File(Constant.getAbsolutePath(context, Constant.getPath(url)));
+                    if (!file.exists()) {
+                        Log.d(TAG, file.getAbsolutePath() + " not exist.");
+                        new Downloader(url, file, new Downloader.ResponseListener() {
+                            @Override
+                            public boolean onStart(Map<String, String> headers) {
+                                Log.d(TAG, "Last-Modified = " + headers.get("Last-Modified"));
+                                return true;
+                            }
+
+                            @Override
+                            public void onComplete() {
+                                if (checkPreparation()) {
+                                    buildArrays();
+
+                                    ray.subtractBusy();
+                                    creationState = STATE_BEFORE_CREATE;
+                                }
+                            }
+
+                            @Override
+                            public void onError(VolleyError volleyError) {
+                                AppUtils.buildToast(context, volleyError.toString());
+                            }
+                        });
+                    }
+                }
             }
         });
     }
@@ -109,7 +147,7 @@ public class ObjModel extends GlModel implements Creation {
         int vSize = fvSize * 3;
         int fvnSize = fvn.size();
         int vnSize = vn.size();
-        Log.d("####", "fvSize/vSize/fvnSize/vnSize: " + fvSize + "," + vSize + "," + fvnSize + "," + vnSize);
+        Log.d(TAG, "fvSize/vSize/fvnSize/vnSize: " + fvSize + "," + vSize + "," + fvnSize + "," + vnSize);
         FloatBuffer verticesBuffer = ByteBuffer.allocateDirect(vSize * BufferUtils.BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
         FloatBuffer normalsBuffer = ByteBuffer.allocateDirect(vSize * BufferUtils.BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
         ShortBuffer indicesBuffer = ByteBuffer.allocateDirect(fvSize * BufferUtils.BYTES_PER_SHORT).order(ByteOrder.nativeOrder()).asShortBuffer();

@@ -4,15 +4,22 @@ import android.content.Context;
 import android.opengl.GLES20;
 import android.util.Log;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.gmail.jiangyang5157.cardboard.kml.KmlLayer;
 import com.gmail.jiangyang5157.cardboard.kml.KmlPlacemark;
+import com.gmail.jiangyang5157.cardboard.net.Downloader;
+import com.gmail.jiangyang5157.cardboard.net.InputStreamRequest;
 import com.gmail.jiangyang5157.cardboard.scene.Creation;
 import com.gmail.jiangyang5157.cardboard.scene.Intersection;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
 import com.gmail.jiangyang5157.cardboard.scene.Lighting;
 import com.gmail.jiangyang5157.cardboard.vr.Constant;
 import com.gmail.jiangyang5157.cardboard.vr.R;
+import com.gmail.jiangyang5157.tookit.app.AppUtils;
 import com.gmail.jiangyang5157.tookit.data.buffer.BufferUtils;
+import com.gmail.jiangyang5157.tookit.data.io.IoUtils;
 import com.gmail.jiangyang5157.tookit.math.Vector;
 import com.gmail.jiangyang5157.tookit.math.Vector3d;
 import com.gmail.jiangyang5157.tookit.opengl.GlUtils;
@@ -21,6 +28,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.xmlpull.v1.XmlPullParserException;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -30,13 +38,16 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.Map;
 
 /**
  * @author Yang
  * @since 4/12/2016.
  */
 public class Earth extends UvSphere implements Creation {
+    private static final String TAG = Earth.class.getSimpleName();
 
     private String urlTexture;
     private String urlKml;
@@ -72,6 +83,12 @@ public class Earth extends UvSphere implements Creation {
         urlTexture = Constant.getResourceUrl("world_map.jpg");
     }
 
+    private boolean checkPreparation() {
+        File fileKml = new File(Constant.getAbsolutePath(context, Constant.getPath(urlKml)));
+        File fileTexture = new File(Constant.getAbsolutePath(context, Constant.getPath(urlTexture)));
+        return fileKml.exists() && fileTexture.exists();
+    }
+
     @Override
     public void prepare(final Ray ray) {
         getHandler().post(new Runnable() {
@@ -80,10 +97,60 @@ public class Earth extends UvSphere implements Creation {
                 creationState = STATE_PREPARING;
                 ray.addBusy();
 
+                if (checkPreparation()) {
+                    ray.subtractBusy();
+                    creationState = STATE_BEFORE_CREATE;
+                } else {
+                    File fileKml = new File(Constant.getAbsolutePath(context, Constant.getPath(urlKml)));
+                    if (!fileKml.exists()) {
+                        Log.d(TAG, fileKml.getAbsolutePath() + " not exist.");
+                        new Downloader(urlKml, fileKml, new Downloader.ResponseListener() {
+                            @Override
+                            public boolean onStart(Map<String, String> headers) {
+                                Log.d(TAG, "Last-Modified = " + headers.get("Last-Modified"));
+                                return true;
+                            }
 
+                            @Override
+                            public void onComplete() {
+                                if (checkPreparation()) {
+                                    ray.subtractBusy();
+                                    creationState = STATE_BEFORE_CREATE;
+                                }
+                            }
 
-                ray.subtractBusy();
-                creationState = STATE_BEFORE_CREATE;
+                            @Override
+                            public void onError(VolleyError volleyError) {
+                                AppUtils.buildToast(context, volleyError.toString());
+                            }
+                        });
+                    }
+
+                    File fileTexture = new File(Constant.getAbsolutePath(context, Constant.getPath(urlTexture)));
+                    if (!fileTexture.exists()) {
+                        Log.d(TAG, fileTexture.getAbsolutePath() + " not exist.");
+                        new Downloader(urlTexture, fileTexture, new Downloader.ResponseListener() {
+                            @Override
+                            public boolean onStart(Map<String, String> headers) {
+                                Log.d(TAG, "Last-Modified = " + headers.get("Last-Modified"));
+                                return true;
+                            }
+
+                            @Override
+                            public void onComplete() {
+                                if (checkPreparation()) {
+                                    ray.subtractBusy();
+                                    creationState = STATE_BEFORE_CREATE;
+                                }
+                            }
+
+                            @Override
+                            public void onError(VolleyError volleyError) {
+                                AppUtils.buildToast(context, volleyError.toString());
+                            }
+                        });
+                    }
+                }
             }
         });
     }
