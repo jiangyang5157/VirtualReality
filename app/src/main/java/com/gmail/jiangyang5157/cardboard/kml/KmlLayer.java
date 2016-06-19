@@ -3,6 +3,7 @@ package com.gmail.jiangyang5157.cardboard.kml;
 import android.content.Context;
 
 import com.gmail.jiangyang5157.cardboard.scene.projection.Earth;
+import com.google.android.gms.maps.MapsInitializer;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -13,7 +14,7 @@ import java.io.InputStream;
 
 /**
  * Document class allows for users to input their KML data and output it onto the map
- *
+ * <p/>
  * Reference https://github.com/googlemaps/android-maps-utils/tree/master/library/src/com/google/maps/android/kml
  * Get rid of GoogleMap dependence
  */
@@ -46,6 +47,11 @@ public class KmlLayer {
         if (stream == null) {
             throw new IllegalArgumentException("KML InputStream cannot be null");
         }
+        if (context == null) {
+            throw new IllegalArgumentException("KML Context cannot be null");
+        }
+        MapsInitializer.initialize(context);
+
         mRenderer = new KmlRenderer(map, context);
         XmlPullParser xmlPullParser = createXmlParser(stream);
         KmlParser parser = new KmlParser(xmlPullParser);
