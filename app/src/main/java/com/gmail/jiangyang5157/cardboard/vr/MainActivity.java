@@ -67,7 +67,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
             // no resource exists, uncompress the default zip file which bundled with the apk
             InputStream in = null;
             try {
-                in = getAssets().open("static.zip");
+                in = getAssets().open(Constant.FILE_PATCH);
                 IoUtils.unzip(in, new File(AppUtils.getProfilePath(this)), true);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -81,6 +81,10 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
                 }
             }
         }
+
+        // TODO: 6/19/2016 testing begin
+        //Last-Modified: Tue, 15 Nov 1994 12:45:26 GMT
+        // TODO: 6/19/2016 testing end
 
         setContentView(R.layout.activity_main);
 

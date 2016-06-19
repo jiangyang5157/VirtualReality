@@ -37,6 +37,8 @@ public class Constant {
     public static final String DIRECTORY_MODEL = DIRECTORY_STATIC + File.separator + "model";
     public static final String DIRECTORY_RESOURCE = DIRECTORY_STATIC + File.separator + "resource";
 
+    public static final String FILE_PATCH = "static.zip";
+
     public static final String KML_URL_KEY = "KML_FILENAME_KEY";
     public static final String KML_URL_DEFAULT = getKmlUrl("example.kml");
 
