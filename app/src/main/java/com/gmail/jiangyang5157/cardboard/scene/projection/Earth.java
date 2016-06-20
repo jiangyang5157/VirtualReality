@@ -68,12 +68,11 @@ public class Earth extends UvSphere implements Creation {
 
     protected int creationState = STATE_BEFORE_PREPARE;
 
-    public Earth(Context context) {
+    public Earth(Context context, String urlKml, String urlTexture) {
         super(context, VERTEX_SHADER_RAW_RESOURCE, FRAGMENT_SHADER_RAW_RESOURCE);
         markers = new ArrayList<>();
-
-        urlKml = Constant.getLastKmlUrl(context);
-        urlTexture = Constant.getResourceUrl("world_map.jpg");
+        this.urlKml = urlKml;
+        this.urlTexture = urlTexture;
         radius = RADIUS;
     }
 
@@ -106,12 +105,11 @@ public class Earth extends UvSphere implements Creation {
                             new Downloader(urlKml, fileKml, new Downloader.ResponseListener() {
                                 @Override
                                 public boolean onStart(Map<String, String> headers) {
-                                    Log.d(TAG, "Last-Modified = " + headers.get("Last-Modified"));
                                     return true;
                                 }
 
                                 @Override
-                                public void onComplete() {
+                                public void onComplete(Map<String, String> headers) {
                                     prepareMarks(fileKml);
 
                                     if (checkPreparation()) {
@@ -121,8 +119,8 @@ public class Earth extends UvSphere implements Creation {
                                 }
 
                                 @Override
-                                public void onError(VolleyError volleyError) {
-                                    AppUtils.buildToast(context, volleyError.toString());
+                                public void onError(String url, VolleyError volleyError) {
+                                    AppUtils.buildToast(context, url + " " + volleyError.toString());
                                     ray.subtractBusy();
                                     creationState = STATE_BEFORE_PREPARE;
                                 }
@@ -135,12 +133,11 @@ public class Earth extends UvSphere implements Creation {
                             new Downloader(urlTexture, fileTexture, new Downloader.ResponseListener() {
                                 @Override
                                 public boolean onStart(Map<String, String> headers) {
-                                    Log.d(TAG, "Last-Modified = " + headers.get("Last-Modified"));
                                     return true;
                                 }
 
                                 @Override
-                                public void onComplete() {
+                                public void onComplete(Map<String, String> headers) {
                                     if (checkPreparation()) {
                                         ray.subtractBusy();
                                         creationState = STATE_BEFORE_CREATE;
@@ -148,8 +145,8 @@ public class Earth extends UvSphere implements Creation {
                                 }
 
                                 @Override
-                                public void onError(VolleyError volleyError) {
-                                    AppUtils.buildToast(context, volleyError.toString());
+                                public void onError(String url, VolleyError volleyError) {
+                                    AppUtils.buildToast(context, url + " " + volleyError.toString());
                                     ray.subtractBusy();
                                     creationState = STATE_BEFORE_PREPARE;
                                 }

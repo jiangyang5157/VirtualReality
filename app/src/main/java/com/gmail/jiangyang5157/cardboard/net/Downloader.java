@@ -26,9 +26,9 @@ public class Downloader {
     public interface ResponseListener {
         boolean onStart(Map<String, String> headers);
 
-        void onComplete();
+        void onComplete(Map<String, String> headers);
 
-        void onError(VolleyError volleyError);
+        void onError(String url, VolleyError volleyError);
     }
 
     public Downloader(final String url, final File file, final ResponseListener listener) {
@@ -59,12 +59,12 @@ public class Downloader {
                                 e.printStackTrace();
                             }
                         }
-                        listener.onComplete();
+                        listener.onComplete(request.getResponseHeaders());
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                listener.onError(volleyError);
+                listener.onError(url, volleyError);
             }
         });
 

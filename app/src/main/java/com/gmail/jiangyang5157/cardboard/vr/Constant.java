@@ -1,11 +1,13 @@
 package com.gmail.jiangyang5157.cardboard.vr;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.gmail.jiangyang5157.tookit.app.AppUtils;
 import com.gmail.jiangyang5157.tookit.app.DeviceUtils;
+import com.gmail.jiangyang5157.tookit.app.RegularExpression;
 import com.gmail.jiangyang5157.tookit.data.io.IoUtils;
 
 import java.io.BufferedInputStream;
@@ -16,6 +18,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -37,13 +41,30 @@ public class Constant {
     public static final String DIRECTORY_MODEL = DIRECTORY_STATIC + File.separator + "model";
     public static final String DIRECTORY_RESOURCE = DIRECTORY_STATIC + File.separator + "resource";
 
-    public static final String FILE_PATCH = "static.zip";
+    public static final String KML_FILE_NAME_KEY = "KML_FILE_NAME_KEY";
+    public static final String KML_FILE_NAME_DEFAULT = "example.kml";
 
-    public static final String KML_URL_KEY = "KML_FILENAME_KEY";
-    public static final String KML_URL_DEFAULT = getKmlUrl("example.kml");
+    public static final String PATCH_FILE_NAME = "static.zip";
 
-    public static String getLastKmlUrl(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context).getString(KML_URL_KEY, KML_URL_DEFAULT);
+    public static final String PATCH_LAST_MODIFIED_TIME_KEY = "PATCH_LAST_MODIFIED_KEY";
+    public static final long PATCH_LAST_MODIFIED_TIME_DEFAULT = 0;
+
+    public static final String EARTH_TEXTURE_FILE_NAME = "world_map.jpg";
+
+    public static boolean setLastKmlFileName(Context context, String fileName) {
+        return PreferenceManager.getDefaultSharedPreferences(context).edit().putString(KML_FILE_NAME_KEY, fileName).commit();
+    }
+
+    public static String getLastKmlFileName(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getString(KML_FILE_NAME_KEY, KML_FILE_NAME_DEFAULT);
+    }
+
+    public static boolean setLastPatchLastModifiedTime(Context context, long time) {
+        return PreferenceManager.getDefaultSharedPreferences(context).edit().putLong(PATCH_LAST_MODIFIED_TIME_KEY, time).commit();
+    }
+
+    public static long getLastPatchLastModifiedTime(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getLong(PATCH_LAST_MODIFIED_TIME_KEY, PATCH_LAST_MODIFIED_TIME_DEFAULT);
     }
 
     public static String getUrl(String path) {
@@ -80,5 +101,18 @@ public class Constant {
 
     public static String getKmlUrl(String fileName) {
         return getUrl(getKmlPath(fileName));
+    }
+
+    public static String getPatchPath() {
+        return PATCH_FILE_NAME;
+    }
+
+    public static String getPatchUrl() {
+        return getUrl(getPatchPath());
+    }
+
+    public static long getHttpDateTime(String httpDate) throws ParseException {
+        SimpleDateFormat format = new SimpleDateFormat(RegularExpression.DATE_TEMPLATE_HTTP_DATE);
+        return format.parse(httpDate).getTime();
     }
 }
