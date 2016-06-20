@@ -94,12 +94,11 @@ public class ObjModel extends GlModel implements Creation {
                             new Downloader(url, file, new Downloader.ResponseListener() {
                                 @Override
                                 public boolean onStart(Map<String, String> headers) {
-                                    Log.d(TAG, "Last-Modified = " + headers.get("Last-Modified"));
                                     return true;
                                 }
 
                                 @Override
-                                public void onComplete() {
+                                public void onComplete(Map<String, String> headers) {
                                     if (checkPreparation()) {
                                         buildArrays();
 
@@ -109,8 +108,8 @@ public class ObjModel extends GlModel implements Creation {
                                 }
 
                                 @Override
-                                public void onError(VolleyError volleyError) {
-                                    AppUtils.buildToast(context, volleyError.toString());
+                                public void onError(String url, VolleyError volleyError) {
+                                    AppUtils.buildToast(context, url + " " + volleyError.toString());
                                     ray.subtractBusy();
                                     creationState = STATE_BEFORE_PREPARE;
                                 }

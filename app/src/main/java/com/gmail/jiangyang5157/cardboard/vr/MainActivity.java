@@ -6,6 +6,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.android.volley.VolleyError;
+import com.gmail.jiangyang5157.app.VolleyApplication;
+import com.gmail.jiangyang5157.cardboard.net.Downloader;
 import com.gmail.jiangyang5157.cardboard.scene.Camera;
 import com.gmail.jiangyang5157.cardboard.scene.Creation;
 import com.gmail.jiangyang5157.cardboard.scene.Intersection;
@@ -29,8 +32,12 @@ import com.google.vr.sdk.base.HeadTransform;
 import com.google.vr.sdk.base.Viewport;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.ParseException;
+import java.util.Map;
 
 import javax.microedition.khronos.egl.EGLConfig;
 
@@ -57,31 +64,6 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (!DeviceUtils.glesValidate(this, GlModel.GLES_VERSION_REQUIRED)) {
-            Toast.makeText(this, getString(R.string.error_gles_version_not_supported), Toast.LENGTH_SHORT).show();
-            finish();
-        }
-
-        File file = new File(Constant.getAbsolutePath(this, Constant.DIRECTORY_STATIC));
-        if (!file.exists() || !file.isDirectory()) {
-            // no resource exists, uncompress the default zip file which bundled with the apk
-            InputStream in = null;
-            try {
-                in = getAssets().open("static.zip");
-                IoUtils.unzip(in, new File(AppUtils.getProfilePath(this)), true);
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                try {
-                    if (in != null) {
-                        in.close();
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
         setContentView(R.layout.activity_main);
 
         gvrView = (GvrView) findViewById(R.id.gvr_view);
@@ -102,7 +84,84 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
                 });
         setGvrView(gvrView);
 
-        head = new Head(this);
+        head = new Head(getApplicationContext());
+    }
+
+    /**
+     * To check if there is a new patch in the server, download if yes.
+     */
+    private void checkPatch() {
+        final File patchFile = new File(Constant.getAbsolutePath(getApplicationContext(), Constant.getPatchPath()));
+        new Downloader(Constant.getPatchUrl(), patchFile, new Downloader.ResponseListener() {
+            @Override
+            public boolean onStart(Map<String, String> headers) {
+                try {
+                    long lastModifiedTime = Constant.getLastPatchLastModifiedTime(getApplicationContext());
+                    long httpDateTime = Constant.getHttpDateTime(headers.get("Last-Modified"));
+                    Log.d(TAG, "lastModifiedTime/httpDateTime: " + lastModifiedTime + "," + httpDateTime);
+                    if (lastModifiedTime < httpDateTime) {
+                        return true;
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                return false;
+            }
+
+            @Override
+            public void onComplete(Map<String, String> headers) {
+                InputStream in = null;
+                try {
+                    Constant.setLastPatchLastModifiedTime(getApplicationContext(), Constant.getHttpDateTime(headers.get("Last-Modified")));
+                    in = new FileInputStream(patchFile);
+                    IoUtils.unzip(in, new File(AppUtils.getProfilePath(getApplicationContext())), true);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                    try {
+                        if (in != null) {
+                            in.close();
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onError(String url, VolleyError volleyError) {
+                Log.d(TAG, "onError:" + url + " " + volleyError.toString());
+            }
+        });
+    }
+
+    /**
+     * To check if there is no exist resource, uncompress the default zip file which bundled with the apk
+     * Usually this is only execute in the first time app launch
+     */
+    private void checkResource() {
+        File directory = new File(Constant.getAbsolutePath(getApplicationContext(), Constant.DIRECTORY_STATIC));
+        if (!directory.exists() || !directory.isDirectory()) {
+            InputStream in = null;
+            try {
+                in = getAssets().open(Constant.getPatchPath());
+                IoUtils.unzip(in, new File(AppUtils.getProfilePath(getApplicationContext())), true);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    if (in != null) {
+                        in.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     private Intersection getIntersection() {
@@ -300,10 +359,10 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         // Dark background so text shows up well.
         GLES20.glClearColor(0.1f, 0.1f, 0.1f, 0.5f);
 
-        ray = new Ray(this);
+        ray = new Ray(getApplicationContext());
         ray.create();
 
-        earth = new Earth(this);
+        earth = new Earth(getApplicationContext(), Constant.getKmlUrl(Constant.getLastKmlFileName(getApplicationContext())), Constant.getResourceUrl(Constant.EARTH_TEXTURE_FILE_NAME));
         earth.setOnMarkerClickListener(markerOnClickListener);
         earth.setMarkerLighting(new Lighting() {
             @Override
@@ -331,6 +390,17 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        if (!DeviceUtils.glesValidate(getApplicationContext(), GlModel.GLES_VERSION_REQUIRED)) {
+            Toast.makeText(getApplicationContext(), getString(R.string.error_gles_version_not_supported), Toast.LENGTH_SHORT).show();
+            finish();
+        }
+        checkResource();
+        checkPatch();
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         if (head != null) {
@@ -349,6 +419,8 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        VolleyApplication.getInstance().cancelPendingRequests();
+
         if (objModel != null) {
             objModel.destroy();
         }

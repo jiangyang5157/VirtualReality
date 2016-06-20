@@ -63,11 +63,6 @@ public class MarkerDialog extends Dialog {
                 }
             });
         }
-
-        TextField tfTest = new TextField(context);
-        tfTest.create("3rdasdfghjklqasd\nasdas\ndasdasdsnadasdasdasdasdhj5h9348huigne-9asd80435tasunnzxbwe]]t,rtyrdyrtybsgpoweir/das/[asd]]1234567890'",
-                WIDTH - PADDING_BOARD * 2, TextField.TEXT_SIZE_TINY, Layout.Alignment.ALIGN_NORMAL);
-        addPanel(tfTest);
     }
 
     private void adjustBounds() {

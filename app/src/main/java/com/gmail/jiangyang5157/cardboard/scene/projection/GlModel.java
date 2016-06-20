@@ -19,6 +19,7 @@ import java.io.IOException;
  * @since 4/30/2016
  */
 public abstract class GlModel extends Model {
+    private static final String TAG = "[GlModel]";
 
     public static final int GLES_VERSION_REQUIRED = 0x00020000;
 
@@ -82,6 +83,8 @@ public abstract class GlModel extends Model {
             handlerThread = new HandlerThread("GlModel");
             handlerThread.start();
             ret = new Handler(handlerThread.getLooper());
+        } else {
+            handlerThread.quit();
         }
 
         return ret;
