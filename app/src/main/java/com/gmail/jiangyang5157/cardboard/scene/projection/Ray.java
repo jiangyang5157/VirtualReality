@@ -46,6 +46,9 @@ public class Ray extends Point {
         this.intersection = intersection;
 
         if (intersection == null) {
+            if (pointSize > POINT_SIZE_NORMAL) {
+                pointSize -= POINT_SIZE_GRADIENT_UNIT;
+            }
             return;
         }
 
