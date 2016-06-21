@@ -30,8 +30,7 @@ public class Icosphere extends Sphere {
         super(context, vertexShaderRawResource, fragmentShaderRawResource);
     }
 
-    protected void create(float radius, int color, int recursionLevel) {
-        setColor(color);
+    protected void create(float radius, int recursionLevel) {
         this.recursionLevel = recursionLevel;
         create(radius);
     }

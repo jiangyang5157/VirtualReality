@@ -316,9 +316,13 @@ public class Earth extends UvSphere implements Creation {
         markers.add(marker);
     }
 
-    public Marker addMarker(KmlPlacemark kmlPlacemark, MarkerOptions markerUrlStyle) {
+    public Marker addMarker(KmlPlacemark kmlPlacemark, MarkerOptions markerUrlStyle, int markerColorInteger) {
         LatLng latLng = markerUrlStyle.getPosition();
         Marker marker = new Marker(context, this);
+        Log.d(TAG, "markerColorInteger: " + markerColorInteger);
+        if (markerColorInteger != 0) {
+            marker.setColor(markerColorInteger);
+        }
         marker.setRadius(MARKER_RADIUS);
         marker.setOnClickListener(onMarkerClickListener);
         marker.setLocation(latLng, MARKER_ALTITUDE);

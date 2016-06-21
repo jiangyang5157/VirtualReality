@@ -13,7 +13,7 @@ import java.util.Random;
 
 /**
  * Represents the defined styles in the KML document
- *
+ * <p/>
  * Reference https://github.com/googlemaps/android-maps-utils/tree/master/library/src/com/google/maps/android/kml
  */
 /* package */ class KmlStyle {
@@ -51,6 +51,7 @@ import java.util.Random;
     private boolean mPolyRandomColorMode;
 
     private float mMarkerColor;
+    private int mMarkerColorInteger;
 
     /**
      * Creates a new Style object
@@ -64,6 +65,7 @@ import java.util.Random;
         mStylesSet = new HashSet<String>();
         mScale = INITIAL_SCALE;
         mMarkerColor = 0;
+        mMarkerColorInteger = 0;
         mIconRandomColorMode = false;
         mLineRandomColorMode = false;
         mPolyRandomColorMode = false;
@@ -90,7 +92,7 @@ import java.util.Random;
     /**
      * Sets id for a style
      *
-     * @param styleId  Id for the style
+     * @param styleId Id for the style
      */
     /* package */ void setStyleId(String styleId) {
         mStyleId = styleId;
@@ -162,7 +164,7 @@ import java.util.Random;
     }
 
     /**
-     *  Sets whether the Polygon has an outline
+     * Sets whether the Polygon has an outline
      *
      * @param outline True if the polygon outline is set, false otherwise
      */
@@ -181,7 +183,7 @@ import java.util.Random;
     }
 
     /**
-     *  Sets the url for the marker icon
+     * Sets the url for the marker icon
      *
      * @param iconUrl Url for the marker icon
      */
@@ -211,7 +213,7 @@ import java.util.Random;
      * @param color Color for a marker
      */
     /* package */ void setMarkerColor(String color) {
-        int integerColor = Color.parseColor("#" + convertColor(color));
+        int integerColor = mMarkerColorInteger = Color.parseColor("#" + convertColor(color));
         mMarkerColor = getHueValue(integerColor);
         mMarkerOptions.icon(BitmapDescriptorFactory.defaultMarker(mMarkerColor));
         mStylesSet.add("markerColor");
@@ -223,7 +225,7 @@ import java.util.Random;
      * @param integerColor Integer representation of a color
      * @return Hue value from a color
      */
-    private static float getHueValue (int integerColor) {
+    private static float getHueValue(int integerColor) {
         float[] hsvValues = new float[HSV_VALUES];
         Color.colorToHSV(integerColor, hsvValues);
         return hsvValues[HUE_VALUE];
@@ -239,10 +241,10 @@ import java.util.Random;
         String newColor;
         if (color.length() > 6) {
             newColor = color.substring(0, 2) + color.substring(6, 8)
-                    + color.substring(4,6)+ color.substring(2, 4);
+                    + color.substring(4, 6) + color.substring(2, 4);
         } else {
-            newColor = color.substring(4,6) + color.substring(2,4) +
-                    color.substring(0,2);
+            newColor = color.substring(4, 6) + color.substring(2, 4) +
+                    color.substring(0, 2);
         }
         return newColor;
     }
@@ -395,10 +397,11 @@ import java.util.Random;
 
     /**
      * Creates a new PolylineOption from given properties of an existing PolylineOption
+     *
      * @param originalPolylineOption An existing PolylineOption instance
      * @return A new PolylineOption
      */
-    private static PolylineOptions createPolylineOptions (PolylineOptions originalPolylineOption) {
+    private static PolylineOptions createPolylineOptions(PolylineOptions originalPolylineOption) {
         PolylineOptions polylineOptions = new PolylineOptions();
         polylineOptions.color(originalPolylineOption.getColor());
         polylineOptions.width(originalPolylineOption.getWidth());
@@ -406,14 +409,15 @@ import java.util.Random;
     }
 
     /**
-     *Creates a new PolygonOption from given properties of an existing PolygonOption
+     * Creates a new PolygonOption from given properties of an existing PolygonOption
+     *
      * @param originalPolygonOption An existing PolygonOption instance
-     * @param isFill Whether the fill for a polygon is set
-     * @param isOutline Whether the outline for a polygon is set
-     * @return  A new PolygonOption
+     * @param isFill                Whether the fill for a polygon is set
+     * @param isOutline             Whether the outline for a polygon is set
+     * @return A new PolygonOption
      */
-    private static PolygonOptions createPolygonOptions (PolygonOptions originalPolygonOption,
-                                                        boolean isFill, boolean isOutline) {
+    private static PolygonOptions createPolygonOptions(PolygonOptions originalPolygonOption,
+                                                       boolean isFill, boolean isOutline) {
         PolygonOptions polygonOptions = new PolygonOptions();
         if (isFill) {
             polygonOptions.fillColor(originalPolygonOption.getFillColor());
@@ -428,7 +432,7 @@ import java.util.Random;
     /**
      * Gets a MarkerOption
      *
-     * @return  A new MarkerOption
+     * @return A new MarkerOption
      */
     /* package */ MarkerOptions getMarkerOptions() {
         return createMarkerOptions(mMarkerOptions, isIconRandomColorMode(), mMarkerColor);
@@ -459,7 +463,8 @@ import java.util.Random;
      * @param color Color represented as an integer
      * @return Integer representing a random color
      */
-    /* package */ static int computeRandomColor(int color) {
+    /* package */
+    static int computeRandomColor(int color) {
         Random random = new Random();
         int red = Color.red(color);
         int green = Color.green(color);
@@ -488,5 +493,9 @@ import java.util.Random;
         sb.append(",\n style id=").append(mStyleId);
         sb.append("\n}\n");
         return sb.toString();
+    }
+
+    public int getMarkerColorInteger() {
+        return mMarkerColorInteger;
     }
 }
