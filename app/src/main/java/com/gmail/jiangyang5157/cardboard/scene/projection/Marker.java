@@ -21,7 +21,7 @@ public class Marker extends Icosphere implements Intersection.Clickable{
 
     private static final int DEFAULT_RECURSION_LEVEL = 3;
 
-    private static final int COLOR_NORMAL_RES_ID = com.gmail.jiangyang5157.tookit.R.color.Green;
+    private static final int DEFAULT_COLOR_RES_ID = com.gmail.jiangyang5157.tookit.R.color.White;
 
     private final Earth earth;
 
@@ -44,7 +44,10 @@ public class Marker extends Icosphere implements Intersection.Clickable{
     }
 
     public void create() {
-        create(radius, AppUtils.getColor(context, COLOR_NORMAL_RES_ID), DEFAULT_RECURSION_LEVEL);
+        if (color == null){
+            setColor(AppUtils.getColor(context, DEFAULT_COLOR_RES_ID));
+        }
+        create(radius, DEFAULT_RECURSION_LEVEL);
     }
 
     public void setLocation(LatLng latLng, float altitude) {

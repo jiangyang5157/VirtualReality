@@ -17,6 +17,8 @@ import com.gmail.jiangyang5157.cardboard.vr.Constant;
 import com.gmail.jiangyang5157.cardboard.vr.R;
 import com.gmail.jiangyang5157.tookit.app.AppUtils;
 import com.gmail.jiangyang5157.tookit.data.buffer.BufferUtils;
+import com.gmail.jiangyang5157.tookit.math.Vector;
+import com.gmail.jiangyang5157.tookit.math.Vector3d;
 import com.gmail.jiangyang5157.tookit.opengl.GlUtils;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -316,9 +318,13 @@ public class Earth extends UvSphere implements Creation {
         markers.add(marker);
     }
 
-    public Marker addMarker(KmlPlacemark kmlPlacemark, MarkerOptions markerUrlStyle) {
+    public Marker addMarker(KmlPlacemark kmlPlacemark, MarkerOptions markerUrlStyle, int markerColorInteger) {
         LatLng latLng = markerUrlStyle.getPosition();
         Marker marker = new Marker(context, this);
+        Log.d(TAG, "markerColorInteger: " + markerColorInteger);
+        if (markerColorInteger != 0) {
+            marker.setColor(markerColorInteger);
+        }
         marker.setRadius(MARKER_RADIUS);
         marker.setOnClickListener(onMarkerClickListener);
         marker.setLocation(latLng, MARKER_ALTITUDE);

@@ -35,7 +35,7 @@ public class MarkerDialog extends Dialog {
     public void create() {
         createContent();
         adjustBounds();
-        create(width, height, AppUtils.getColor(context, COLOR_BACKGROUND_RES_ID));
+        create(width, height, AppUtils.getColor(context, DEFAULT_COLOR_RES_ID));
     }
 
     private void createContent() {

@@ -325,6 +325,6 @@ import java.util.HashMap;
     private Marker addPointToMap(KmlPlacemark placemark, KmlPoint point, KmlStyle style) {
         MarkerOptions markerUrlStyle = style.getMarkerOptions();
         markerUrlStyle.position(point.getGeometryObject());
-        return mMap.addMarker(placemark, markerUrlStyle);
+        return mMap.addMarker(placemark, markerUrlStyle, style.getMarkerColorInteger());
     }
 }

@@ -23,8 +23,8 @@ import com.gmail.jiangyang5157.tookit.opengl.Model;
 public class TextField extends Panel implements Intersection.Clickable {
 
     private static final float ALPHA_BACKGROUND = 0.5f;
-    private static final int COLOR_BACKGROUND_RES_ID = com.gmail.jiangyang5157.tookit.R.color.White;
-    private static final int COLOR_TEXT_RES_ID = com.gmail.jiangyang5157.tookit.R.color.DeepOrange;
+    private static final int DEFAULT_COLOR_BACKGROUND_RES_ID = com.gmail.jiangyang5157.tookit.R.color.White;
+    private static final int DEFAULT_COLOR_TEXT_RES_ID = com.gmail.jiangyang5157.tookit.R.color.DeepOrange;
 
     private static final float SCALE_NORMAL = 1.0f;
     private static final float SCALE_FOCUSED = 0.9f;
@@ -58,13 +58,13 @@ public class TextField extends Panel implements Intersection.Clickable {
             float textSizePixels = dp2px(context, textSize);
             textPaint.setTextSize(textSizePixels);
             textPaint.setAntiAlias(true);
-            textPaint.setColor(AppUtils.getColor(context, COLOR_TEXT_RES_ID));
+            textPaint.setColor(AppUtils.getColor(context, DEFAULT_COLOR_TEXT_RES_ID));
 
             StaticLayout staticLayout = new StaticLayout(text, textPaint, (int) width, align, 1.0f, 0.0f, false);
             int lines = staticLayout.getLineCount();
             Paint.FontMetrics fm = textPaint.getFontMetrics();
             height = fm.descent + lines * (textSizePixels + fm.bottom);
-            create(width, height, AppUtils.getColor(context, COLOR_BACKGROUND_RES_ID));
+            create(width, height, AppUtils.getColor(context, DEFAULT_COLOR_BACKGROUND_RES_ID));
 
             Bitmap bitmap = Bitmap.createBitmap((int) width, (int) height, Bitmap.Config.ARGB_4444);
             Canvas canvas = new Canvas(bitmap);

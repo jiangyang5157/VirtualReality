@@ -20,8 +20,7 @@ public abstract class Sphere extends GlModel implements Intersection.Intersectab
     }
 
     protected void create(float radius) {
-        this.radius = radius;
-        setScale(radius);
+        setRadius(radius);
         buildArrays();
 
         initializeProgram();
@@ -78,5 +77,6 @@ public abstract class Sphere extends GlModel implements Intersection.Intersectab
 
     public void setRadius(float radius) {
         this.radius = radius;
+        setScale(radius);
     }
 }
