@@ -252,8 +252,6 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
                 } else if (earth.getCreationState() == Creation.STATE_BEFORE_CREATE) {
                     earth.create();
                 }
-            } else {
-                earth.adjustMarkerRadius(head.getCamera().getPosition());
             }
         }
 

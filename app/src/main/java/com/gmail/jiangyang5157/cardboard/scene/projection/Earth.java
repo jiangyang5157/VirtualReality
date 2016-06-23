@@ -190,19 +190,6 @@ public class Earth extends UvSphere implements Creation {
         creationState = STATE_BEFORE_CREATE;
     }
 
-    public void adjustMarkerRadius(float[] cameraPos) {
-        final Vector cameraPosVec = new Vector3d(cameraPos[0], cameraPos[1], cameraPos[2]);
-        for (Marker marker : markers) {
-            float[] pos = marker.getPosition();
-            Vector posVec = new Vector3d(pos[0], pos[1], pos[2]);
-            double distance = cameraPosVec.plus(posVec).length();
-            float r = (float) (distance * 0.01);
-            r *= r;
-            Log.d("####", "distance / r = " +  + distance + ", " + r);
-//            marker.setRadius(r);
-        }
-    }
-
     @Override
     public int getCreationState() {
         return creationState;
