@@ -194,6 +194,8 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
     public void onCardboardTrigger() {
         long thisTime = System.currentTimeMillis();
         if (thisTime - lastTimeOnCardboardTrigger < TIME_DELTA_DOUBLE_CLICK) {
+            lastTimeOnCardboardTrigger = 0;
+
             // no interpupillary distance will be applied to the eye transformations
             // automatic distortion correction will not take place
             // field of view and perspective may look off especially if the view is not set to fullscreen
@@ -208,7 +210,6 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
             }
             createEarth(Constant.getKmlUrl(Constant.getLastKmlFileName(getApplicationContext())));
 
-            lastTimeOnCardboardTrigger = 0;
             return;
         } else {
             lastTimeOnCardboardTrigger = thisTime;
