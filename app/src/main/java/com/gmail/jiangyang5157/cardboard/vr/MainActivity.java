@@ -197,7 +197,16 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
             // no interpupillary distance will be applied to the eye transformations
             // automatic distortion correction will not take place
             // field of view and perspective may look off especially if the view is not set to fullscreen
-            gvrView.setVRModeEnabled(!gvrView.getVRMode());
+//            gvrView.setVRModeEnabled(!gvrView.getVRMode());
+
+            // TODO: 6/24/2016 change kml test
+            String kmlFileName = Constant.getLastKmlFileName(getApplicationContext());
+            if (kmlFileName.equals("example.kml")) {
+                Constant.setLastKmlFileName(getApplicationContext(), "example2.kml");
+            } else {
+                Constant.setLastKmlFileName(getApplicationContext(), "example.kml");
+            }
+            createEarth(Constant.getKmlUrl(Constant.getLastKmlFileName(getApplicationContext())));
 
             lastTimeOnCardboardTrigger = 0;
             return;
@@ -362,7 +371,14 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         ray = new Ray(getApplicationContext());
         ray.create();
 
-        earth = new Earth(getApplicationContext(), Constant.getKmlUrl(Constant.getLastKmlFileName(getApplicationContext())), Constant.getResourceUrl(Constant.EARTH_TEXTURE_FILE_NAME));
+        createEarth(Constant.getKmlUrl(Constant.getLastKmlFileName(getApplicationContext())));
+    }
+
+    private void createEarth(String urlKml) {
+        destoryEarth();
+
+        earth = new Earth(getApplicationContext(), urlKml,
+                Constant.getResourceUrl(Constant.EARTH_TEXTURE_FILE_NAME));
         earth.setOnMarkerClickListener(markerOnClickListener);
         earth.setMarkerLighting(new Lighting() {
             @Override
@@ -416,26 +432,35 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         }
     }
 
+    private void destoryEarth() {
+        if (objModel != null) {
+            objModel.destroy();
+            objModel = null;
+        }
+        if (markerDialog != null) {
+            markerDialog.destroy();
+            markerDialog = null;
+        }
+        if (earth != null) {
+            earth.destroy();
+            earth = null;
+        }
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         VolleyApplication.getInstance().cancelPendingRequests();
 
-        if (objModel != null) {
-            objModel.destroy();
-        }
-        if (markerDialog != null) {
-            markerDialog.destroy();
-        }
-        if (earth != null) {
-            earth.destroy();
-        }
-        if (ray != null) {
-            ray.destroy();
-        }
-
         if (gvrView != null) {
             gvrView.shutdown();
         }
+
+        if (ray != null) {
+            ray.destroy();
+            ray = null;
+        }
+
+        destoryEarth();
     }
 }

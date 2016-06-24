@@ -17,8 +17,6 @@ import com.gmail.jiangyang5157.cardboard.vr.Constant;
 import com.gmail.jiangyang5157.cardboard.vr.R;
 import com.gmail.jiangyang5157.tookit.app.AppUtils;
 import com.gmail.jiangyang5157.tookit.data.buffer.BufferUtils;
-import com.gmail.jiangyang5157.tookit.math.Vector;
-import com.gmail.jiangyang5157.tookit.math.Vector3d;
 import com.gmail.jiangyang5157.tookit.opengl.GlUtils;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -96,7 +94,7 @@ public class Earth extends UvSphere implements Creation {
 
                     if (checkPreparation()) {
                         final File fileKml = new File(Constant.getAbsolutePath(context, Constant.getPath(urlKml)));
-                        prepareMarks(fileKml);
+                        prepareKml(fileKml);
 
                         ray.subtractBusy();
                         creationState = STATE_BEFORE_CREATE;
@@ -112,7 +110,7 @@ public class Earth extends UvSphere implements Creation {
 
                                 @Override
                                 public void onComplete(Map<String, String> headers) {
-                                    prepareMarks(fileKml);
+                                    prepareKml(fileKml);
 
                                     if (checkPreparation()) {
                                         ray.subtractBusy();
@@ -160,7 +158,7 @@ public class Earth extends UvSphere implements Creation {
         }
     }
 
-    private void prepareMarks(File fileKml) {
+    private void prepareKml(File fileKml) {
         InputStream in = null;
         try {
             in = new FileInputStream(fileKml);
