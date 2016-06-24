@@ -39,8 +39,6 @@ public class ObjModel extends GlModel implements Creation {
     private static final int VERTEX_SHADER_RAW_RESOURCE = R.raw.obj_color_vertex_shader;
     private static final int FRAGMENT_SHADER_RAW_RESOURCE = R.raw.obj_color_fragment_shader;
 
-    private static final int DEFAULT_COLOR_RES_ID = com.gmail.jiangyang5157.tookit.R.color.DeepOrange;
-
     private static final float DISTANCE = 100;
     private static final float TIME_DELTA_ROTATION = 0.3f;
 
@@ -79,7 +77,7 @@ public class ObjModel extends GlModel implements Creation {
                     creationState = STATE_PREPARING;
                     ray.addBusy();
 
-                    setColor(AppUtils.getColor(context, DEFAULT_COLOR_RES_ID));
+                    setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.DeepOrange));
                     setScale(10f);
 
                     if (checkPreparation()) {

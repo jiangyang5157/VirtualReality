@@ -181,7 +181,7 @@ public class Earth extends UvSphere implements Creation {
         creationState = STATE_CREATING;
         create(radius, STACKS, SLICES);
 
-        for (Marker marker : markers) {
+        for (final Marker marker : markers) {
             marker.create();
         }
 
@@ -253,7 +253,7 @@ public class Earth extends UvSphere implements Creation {
 
     @Override
     public void update(float[] view, float[] perspective) {
-        for (Marker marker : markers) {
+        for (final Marker marker : markers) {
             marker.update(view, perspective);
         }
         super.update(view, perspective);
@@ -261,7 +261,7 @@ public class Earth extends UvSphere implements Creation {
 
     @Override
     public void draw() {
-        for (Marker marker : markers) {
+        for (final Marker marker : markers) {
             marker.draw();
         }
 
@@ -303,7 +303,7 @@ public class Earth extends UvSphere implements Creation {
         GLES20.glDeleteBuffers(buffers.length, buffers, 0);
         GLES20.glDeleteTextures(texBuffers.length, texBuffers, 0);
 
-        for (Marker marker : markers) {
+        for (final Marker marker : markers) {
             marker.destroy();
         }
     }

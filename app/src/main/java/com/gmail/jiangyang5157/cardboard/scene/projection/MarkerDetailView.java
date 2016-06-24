@@ -11,7 +11,7 @@ import com.gmail.jiangyang5157.tookit.opengl.Model;
  * @author Yang
  * @since 5/13/2016
  */
-public class MarkerDialog extends Dialog {
+public class MarkerDetailView extends Dialog {
 
     private Event eventListener;
     public interface Event {
@@ -22,7 +22,7 @@ public class MarkerDialog extends Dialog {
 
     private Marker marker;
 
-    public MarkerDialog(Context context, Marker marker) {
+    public MarkerDetailView(Context context, Marker marker) {
         super(context);
         this.marker = marker;
     }
@@ -32,10 +32,10 @@ public class MarkerDialog extends Dialog {
         super.destroy();
     }
 
-    public void create() {
+    public void create(int color) {
         createContent();
         adjustBounds();
-        create(width, height, AppUtils.getColor(context, DEFAULT_COLOR_RES_ID));
+        create(width, height, color);
     }
 
     private void createContent() {

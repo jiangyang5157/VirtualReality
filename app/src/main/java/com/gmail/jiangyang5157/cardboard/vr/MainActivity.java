@@ -20,7 +20,7 @@ import com.gmail.jiangyang5157.cardboard.scene.projection.Earth;
 import com.gmail.jiangyang5157.cardboard.scene.projection.Marker;
 import com.gmail.jiangyang5157.cardboard.scene.Lighting;
 import com.gmail.jiangyang5157.cardboard.scene.projection.GlModel;
-import com.gmail.jiangyang5157.cardboard.scene.projection.MarkerDialog;
+import com.gmail.jiangyang5157.cardboard.scene.projection.MarkerDetailView;
 import com.gmail.jiangyang5157.tookit.app.AppUtils;
 import com.gmail.jiangyang5157.tookit.app.DeviceUtils;
 import com.gmail.jiangyang5157.tookit.data.io.IoUtils;
@@ -53,7 +53,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
     private Ray ray;
 
     private Earth earth;
-    private MarkerDialog markerDialog;
+    private MarkerDetailView markerDetailView;
     private ObjModel objModel;
 
     private GvrView gvrView;
@@ -167,12 +167,12 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
     private Intersection getIntersection() {
         Intersection ret = null;
 
-        if (markerDialog != null) {
-            ret = markerDialog.onIntersect(head);
+        if (markerDetailView != null) {
+            ret = markerDetailView.onIntersect(head);
             if (ret == null) {
-                if (markerDialog.isCreated()) {
-                    markerDialog.destroy();
-                    markerDialog = null;
+                if (markerDetailView.isCreated()) {
+                    markerDetailView.destroy();
+                    markerDetailView = null;
                     if (objModel != null) {
                         objModel.destroy();
                         objModel = null;
@@ -233,12 +233,12 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
 
         @Override
         public void onClick(Model model) {
-            markerDialog = new MarkerDialog(getApplicationContext(), (Marker) model);
-            markerDialog.setEventListener(markerDialogEventListener);
+            markerDetailView = new MarkerDetailView(getApplicationContext(), (Marker) model);
+            markerDetailView.setEventListener(markerDialogEventListener);
         }
     };
 
-    private MarkerDialog.Event markerDialogEventListener = new MarkerDialog.Event() {
+    private MarkerDetailView.Event markerDialogEventListener = new MarkerDetailView.Event() {
         @Override
         public void showObjModel(ObjModel model) {
             objModel = model;
@@ -265,10 +265,10 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
             }
         }
 
-        if (markerDialog != null) {
-            if (!markerDialog.isCreated()) {
-                markerDialog.create();
-                markerDialog.setPosition(head.getCamera().getPosition(), head.getForward(), head.getQuaternion(), head.getUp(), head.getRight());
+        if (markerDetailView != null) {
+            if (!markerDetailView.isCreated()) {
+                markerDetailView.create(AppUtils.getColor(getApplicationContext(), com.gmail.jiangyang5157.tookit.R.color.Teal));
+                markerDetailView.setPosition(head.getCamera().getPosition(), head.getForward(), head.getQuaternion(), head.getUp(), head.getRight());
             }
 
             if (objModel != null) {
@@ -314,8 +314,8 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         if (earth != null) {
             earth.update(view, perspective);
         }
-        if (markerDialog != null) {
-            markerDialog.update(view, perspective);
+        if (markerDetailView != null) {
+            markerDetailView.update(view, perspective);
         }
         if (objModel != null) {
             objModel.update(view, perspective);
@@ -336,12 +336,12 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
             earth.draw();
         }
 
-        if (markerDialog != null) {
+        if (markerDetailView != null) {
             GLES20.glDisable(GLES20.GL_CULL_FACE);
 
             GLES20.glEnable(GLES20.GL_BLEND);
             GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
-            markerDialog.draw();
+            markerDetailView.draw();
             GLES20.glDisable(GLES20.GL_BLEND);
 
             GLES20.glEnable(GLES20.GL_CULL_FACE);
@@ -438,9 +438,9 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
             objModel.destroy();
             objModel = null;
         }
-        if (markerDialog != null) {
-            markerDialog.destroy();
-            markerDialog = null;
+        if (markerDetailView != null) {
+            markerDetailView.destroy();
+            markerDetailView = null;
         }
         if (earth != null) {
             earth.destroy();
