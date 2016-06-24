@@ -13,6 +13,7 @@ import com.gmail.jiangyang5157.cardboard.scene.Camera;
 import com.gmail.jiangyang5157.cardboard.scene.Creation;
 import com.gmail.jiangyang5157.cardboard.scene.Intersection;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
+import com.gmail.jiangyang5157.cardboard.scene.projection.KmlChooserView;
 import com.gmail.jiangyang5157.cardboard.scene.projection.ObjModel;
 import com.gmail.jiangyang5157.cardboard.scene.projection.Panel;
 import com.gmail.jiangyang5157.cardboard.scene.projection.Ray;
@@ -53,6 +54,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
     private Ray ray;
 
     private Earth earth;
+    private KmlChooserView kmlChooserView;
     private MarkerDetailView markerDetailView;
     private ObjModel objModel;
 
