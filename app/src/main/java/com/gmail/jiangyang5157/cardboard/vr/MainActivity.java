@@ -13,6 +13,7 @@ import com.gmail.jiangyang5157.cardboard.scene.Camera;
 import com.gmail.jiangyang5157.cardboard.scene.Creation;
 import com.gmail.jiangyang5157.cardboard.scene.Intersection;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
+import com.gmail.jiangyang5157.cardboard.scene.projection.KmlChooserView;
 import com.gmail.jiangyang5157.cardboard.scene.projection.ObjModel;
 import com.gmail.jiangyang5157.cardboard.scene.projection.Panel;
 import com.gmail.jiangyang5157.cardboard.scene.projection.Ray;
@@ -20,7 +21,7 @@ import com.gmail.jiangyang5157.cardboard.scene.projection.Earth;
 import com.gmail.jiangyang5157.cardboard.scene.projection.Marker;
 import com.gmail.jiangyang5157.cardboard.scene.Lighting;
 import com.gmail.jiangyang5157.cardboard.scene.projection.GlModel;
-import com.gmail.jiangyang5157.cardboard.scene.projection.MarkerDialog;
+import com.gmail.jiangyang5157.cardboard.scene.projection.MarkerDetailView;
 import com.gmail.jiangyang5157.tookit.app.AppUtils;
 import com.gmail.jiangyang5157.tookit.app.DeviceUtils;
 import com.gmail.jiangyang5157.tookit.data.io.IoUtils;
@@ -53,7 +54,8 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
     private Ray ray;
 
     private Earth earth;
-    private MarkerDialog markerDialog;
+    private KmlChooserView kmlChooserView;
+    private MarkerDetailView markerDetailView;
     private ObjModel objModel;
 
     private GvrView gvrView;
@@ -167,12 +169,22 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
     private Intersection getIntersection() {
         Intersection ret = null;
 
-        if (markerDialog != null) {
-            ret = markerDialog.onIntersect(head);
+        if (kmlChooserView != null) {
+            ret = kmlChooserView.onIntersect(head);
             if (ret == null) {
-                if (markerDialog.isCreated()) {
-                    markerDialog.destroy();
-                    markerDialog = null;
+                if (kmlChooserView.isCreated()) {
+                    kmlChooserView.destroy();
+                    kmlChooserView = null;
+                }
+            }
+        }
+
+        if (markerDetailView != null) {
+            ret = markerDetailView.onIntersect(head);
+            if (ret == null) {
+                if (markerDetailView.isCreated()) {
+                    markerDetailView.destroy();
+                    markerDetailView = null;
                     if (objModel != null) {
                         objModel.destroy();
                         objModel = null;
@@ -190,24 +202,9 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         return ret;
     }
 
-    @Override
-    public void onCardboardTrigger() {
-        long thisTime = System.currentTimeMillis();
-        if (thisTime - lastTimeOnCardboardTrigger < TIME_DELTA_DOUBLE_CLICK) {
-            // no interpupillary distance will be applied to the eye transformations
-            // automatic distortion correction will not take place
-            // field of view and perspective may look off especially if the view is not set to fullscreen
-            gvrView.setVRModeEnabled(!gvrView.getVRMode());
-
-            lastTimeOnCardboardTrigger = 0;
-            return;
-        } else {
-            lastTimeOnCardboardTrigger = thisTime;
-        }
-
+    private void onCardboardClick(){
         if (objModel != null && objModel.isCreated()) {
-            objModel.destroy();
-            objModel = null;
+            destoryObjModel();
             return;
         }
 
@@ -219,19 +216,62 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         }
     }
 
+    private void onCardboardDoubleClick(){
+        if (objModel != null && objModel.isCreated()) {
+            destoryObjModel();
+        }
+        if (markerDetailView != null && markerDetailView.isCreated()) {
+            destoryMarkerDetailView();
+        }
+
+        if (kmlChooserView == null) {
+            kmlChooserView = new KmlChooserView(getApplicationContext());
+            kmlChooserView.setEventListener(kmlChooserEventListener);
+        } else if (kmlChooserView.isCreated()) {
+            destoryKmlChooserView();
+        }
+    }
+
+    @Override
+    public void onCardboardTrigger() {
+        long thisTime = System.currentTimeMillis();
+        if (thisTime - lastTimeOnCardboardTrigger < TIME_DELTA_DOUBLE_CLICK) {
+            lastTimeOnCardboardTrigger = 0;
+            onCardboardDoubleClick();
+            return;
+        } else {
+            lastTimeOnCardboardTrigger = thisTime;
+        }
+        onCardboardClick();
+    }
+
     private Intersection.Clickable markerOnClickListener = new Intersection.Clickable() {
 
         @Override
         public void onClick(Model model) {
-            markerDialog = new MarkerDialog(getApplicationContext(), (Marker) model);
-            markerDialog.setEventListener(markerDialogEventListener);
+            markerDetailView = new MarkerDetailView(getApplicationContext(), (Marker) model);
+            markerDetailView.setEventListener(markerDetailEventListener);
         }
     };
 
-    private MarkerDialog.Event markerDialogEventListener = new MarkerDialog.Event() {
+    private MarkerDetailView.Event markerDetailEventListener = new MarkerDetailView.Event() {
         @Override
         public void showObjModel(ObjModel model) {
             objModel = model;
+        }
+    };
+
+    private KmlChooserView.Event kmlChooserEventListener = new KmlChooserView.Event() {
+
+        @Override
+        public void onKmlSelected(String fileName) {
+            Log.d(TAG, "onKmlSelected: " + fileName);
+            if (fileName.equals(Constant.getLastKmlFileName(getApplicationContext()))) {
+                return;
+            }
+
+            Constant.setLastKmlFileName(getApplicationContext(), fileName);
+            createEarth(Constant.getKmlUrl(fileName));
         }
     };
 
@@ -255,10 +295,10 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
             }
         }
 
-        if (markerDialog != null) {
-            if (!markerDialog.isCreated()) {
-                markerDialog.create();
-                markerDialog.setPosition(head.getCamera().getPosition(), head.getForward(), head.getQuaternion(), head.getUp(), head.getRight());
+        if (markerDetailView != null) {
+            if (!markerDetailView.isCreated()) {
+                markerDetailView.create(AppUtils.getColor(getApplicationContext(), com.gmail.jiangyang5157.tookit.R.color.Teal));
+                markerDetailView.setPosition(head.getCamera().getPosition(), head.getForward(), head.getQuaternion(), head.getUp(), head.getRight());
             }
 
             if (objModel != null) {
@@ -270,6 +310,13 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
                         objModel.setPosition(head.getCamera().getPosition(), head.getForward(), head.getQuaternion());
                     }
                 }
+            }
+        }
+
+        if (kmlChooserView != null) {
+            if (!kmlChooserView.isCreated()) {
+                kmlChooserView.create(AppUtils.getColor(getApplicationContext(), com.gmail.jiangyang5157.tookit.R.color.Red));
+                kmlChooserView.setPosition(head.getCamera().getPosition(), head.getForward(), head.getQuaternion(), head.getUp(), head.getRight());
             }
         }
 
@@ -304,11 +351,14 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         if (earth != null) {
             earth.update(view, perspective);
         }
-        if (markerDialog != null) {
-            markerDialog.update(view, perspective);
+        if (markerDetailView != null) {
+            markerDetailView.update(view, perspective);
         }
         if (objModel != null) {
             objModel.update(view, perspective);
+        }
+        if (kmlChooserView != null) {
+            kmlChooserView.update(view, perspective);
         }
     }
 
@@ -326,12 +376,12 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
             earth.draw();
         }
 
-        if (markerDialog != null) {
+        if (markerDetailView != null) {
             GLES20.glDisable(GLES20.GL_CULL_FACE);
 
             GLES20.glEnable(GLES20.GL_BLEND);
             GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
-            markerDialog.draw();
+            markerDetailView.draw();
             GLES20.glDisable(GLES20.GL_BLEND);
 
             GLES20.glEnable(GLES20.GL_CULL_FACE);
@@ -339,6 +389,17 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
 
         if (objModel != null) {
             objModel.draw();
+        }
+
+        if (kmlChooserView != null) {
+            GLES20.glDisable(GLES20.GL_CULL_FACE);
+
+            GLES20.glEnable(GLES20.GL_BLEND);
+            GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
+            kmlChooserView.draw();
+            GLES20.glDisable(GLES20.GL_BLEND);
+
+            GLES20.glEnable(GLES20.GL_CULL_FACE);
         }
 
         GLES20.glDisable(GLES20.GL_DEPTH_TEST);
@@ -362,7 +423,14 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         ray = new Ray(getApplicationContext());
         ray.create();
 
-        earth = new Earth(getApplicationContext(), Constant.getKmlUrl(Constant.getLastKmlFileName(getApplicationContext())), Constant.getResourceUrl(Constant.EARTH_TEXTURE_FILE_NAME));
+        createEarth(Constant.getKmlUrl(Constant.getLastKmlFileName(getApplicationContext())));
+    }
+
+    private void createEarth(String urlKml) {
+        destoryScene();
+
+        earth = new Earth(getApplicationContext(), urlKml,
+                Constant.getResourceUrl(Constant.EARTH_TEXTURE_FILE_NAME));
         earth.setOnMarkerClickListener(markerOnClickListener);
         earth.setMarkerLighting(new Lighting() {
             @Override
@@ -416,26 +484,54 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         }
     }
 
+    private void destoryKmlChooserView() {
+        if (kmlChooserView != null) {
+            kmlChooserView.destroy();
+            kmlChooserView = null;
+        }
+    }
+    private void destoryObjModel() {
+        if (objModel != null) {
+            objModel.destroy();
+            objModel = null;
+        }
+    }
+    private void destoryMarkerDetailView() {
+        if (markerDetailView != null) {
+            markerDetailView.destroy();
+            markerDetailView = null;
+        }
+    }
+    private void destoryEarth() {
+        if (earth != null) {
+            earth.destroy();
+            earth = null;
+        }
+    }
+    private void destoryRay() {
+        if (ray != null) {
+            ray.destroy();
+            ray = null;
+        }
+    }
+
+    private void destoryScene() {
+        destoryKmlChooserView();
+        destoryObjModel();
+        destoryMarkerDetailView();
+        destoryEarth();
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         VolleyApplication.getInstance().cancelPendingRequests();
 
-        if (objModel != null) {
-            objModel.destroy();
-        }
-        if (markerDialog != null) {
-            markerDialog.destroy();
-        }
-        if (earth != null) {
-            earth.destroy();
-        }
-        if (ray != null) {
-            ray.destroy();
-        }
-
         if (gvrView != null) {
             gvrView.shutdown();
         }
+
+        destoryScene();
+        destoryRay();
     }
 }

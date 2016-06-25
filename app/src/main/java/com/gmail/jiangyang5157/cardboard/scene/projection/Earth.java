@@ -17,8 +17,6 @@ import com.gmail.jiangyang5157.cardboard.vr.Constant;
 import com.gmail.jiangyang5157.cardboard.vr.R;
 import com.gmail.jiangyang5157.tookit.app.AppUtils;
 import com.gmail.jiangyang5157.tookit.data.buffer.BufferUtils;
-import com.gmail.jiangyang5157.tookit.math.Vector;
-import com.gmail.jiangyang5157.tookit.math.Vector3d;
 import com.gmail.jiangyang5157.tookit.opengl.GlUtils;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -96,7 +94,7 @@ public class Earth extends UvSphere implements Creation {
 
                     if (checkPreparation()) {
                         final File fileKml = new File(Constant.getAbsolutePath(context, Constant.getPath(urlKml)));
-                        prepareMarks(fileKml);
+                        prepareKml(fileKml);
 
                         ray.subtractBusy();
                         creationState = STATE_BEFORE_CREATE;
@@ -112,7 +110,7 @@ public class Earth extends UvSphere implements Creation {
 
                                 @Override
                                 public void onComplete(Map<String, String> headers) {
-                                    prepareMarks(fileKml);
+                                    prepareKml(fileKml);
 
                                     if (checkPreparation()) {
                                         ray.subtractBusy();
@@ -160,7 +158,7 @@ public class Earth extends UvSphere implements Creation {
         }
     }
 
-    private void prepareMarks(File fileKml) {
+    private void prepareKml(File fileKml) {
         InputStream in = null;
         try {
             in = new FileInputStream(fileKml);
@@ -183,7 +181,7 @@ public class Earth extends UvSphere implements Creation {
         creationState = STATE_CREATING;
         create(radius, STACKS, SLICES);
 
-        for (Marker marker : markers) {
+        for (final Marker marker : markers) {
             marker.create();
         }
 
@@ -255,7 +253,7 @@ public class Earth extends UvSphere implements Creation {
 
     @Override
     public void update(float[] view, float[] perspective) {
-        for (Marker marker : markers) {
+        for (final Marker marker : markers) {
             marker.update(view, perspective);
         }
         super.update(view, perspective);
@@ -263,7 +261,7 @@ public class Earth extends UvSphere implements Creation {
 
     @Override
     public void draw() {
-        for (Marker marker : markers) {
+        for (final Marker marker : markers) {
             marker.draw();
         }
 
@@ -305,7 +303,7 @@ public class Earth extends UvSphere implements Creation {
         GLES20.glDeleteBuffers(buffers.length, buffers, 0);
         GLES20.glDeleteTextures(texBuffers.length, texBuffers, 0);
 
-        for (Marker marker : markers) {
+        for (final Marker marker : markers) {
             marker.destroy();
         }
     }
@@ -321,7 +319,7 @@ public class Earth extends UvSphere implements Creation {
     public Marker addMarker(KmlPlacemark kmlPlacemark, MarkerOptions markerUrlStyle, int markerColorInteger) {
         LatLng latLng = markerUrlStyle.getPosition();
         Marker marker = new Marker(context, this);
-        Log.d(TAG, "markerColorInteger: " + markerColorInteger);
+//        Log.d(TAG, "markerColorInteger: " + markerColorInteger);
         if (markerColorInteger != 0) {
             marker.setColor(markerColorInteger);
         }
