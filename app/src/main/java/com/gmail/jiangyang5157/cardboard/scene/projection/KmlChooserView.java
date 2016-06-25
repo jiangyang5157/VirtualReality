@@ -43,8 +43,7 @@ public class KmlChooserView extends Dialog {
 
         for (final String fileName : fileNames) {
             TextField tf = new TextField(context);
-            tf.create(fileName, WIDTH - PADDING_BOARD * 2, TextField.TEXT_SIZE_SMALL, Layout.Alignment.ALIGN_CENTER);
-            addPanel(tf);
+            tf.create(fileName, WIDTH, TextField.TEXT_SIZE_TINY, Layout.Alignment.ALIGN_NORMAL);
             tf.setOnClickListener(new Intersection.Clickable() {
                 @Override
                 public void onClick(Model model) {
@@ -53,6 +52,7 @@ public class KmlChooserView extends Dialog {
                     }
                 }
             });
+            addPanel(tf);
         }
     }
 

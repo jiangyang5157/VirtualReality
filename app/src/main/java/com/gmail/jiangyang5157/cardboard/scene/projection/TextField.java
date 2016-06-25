@@ -24,11 +24,6 @@ public class TextField extends Panel implements Intersection.Clickable {
 
     private static final float ALPHA_BACKGROUND = 0.5f;
 
-    private static final float SCALE_NORMAL = 1.0f;
-    private static final float SCALE_FOCUSED = 0.9f;
-    private static final float SCALE_GRADIENT_UNIT = (SCALE_FOCUSED - SCALE_NORMAL) / 6;
-    private float xyzScale = 1.0f;
-
     protected static final float TEXT_SIZE_LARGE = 12f;
     protected static final float TEXT_SIZE_MEDIUM = 10f;
     protected static final float TEXT_SIZE_SMALL = 8f;
@@ -40,13 +35,17 @@ public class TextField extends Panel implements Intersection.Clickable {
 
     private final int[] texBuffers = new int[1];
 
+    private static float scaleNormal = 1.0f;
+    private static float scaleFocused = scaleNormal * 0.92f;
+    private static float scaleGradient = (scaleFocused - scaleNormal) / 8;
+    private float xyzScale = scaleNormal;
+
     public TextField(Context context) {
         super(context);
     }
 
     protected void create(String text, float width, float textSize, Layout.Alignment align) {
         GLES20.glGenTextures(1, texBuffers, 0);
-
         if (texBuffers[0] == 0) {
             throw new RuntimeException("Error loading texture.");
         } else {
@@ -110,12 +109,12 @@ public class TextField extends Panel implements Intersection.Clickable {
         Intersection ret = super.onIntersect(head);
 
         if (ret == null) {
-            if (xyzScale < SCALE_NORMAL){
-                xyzScale -= SCALE_GRADIENT_UNIT;
+            if (xyzScale < scaleNormal) {
+                xyzScale -= scaleGradient;
             }
         } else {
-            if (xyzScale > SCALE_FOCUSED){
-                xyzScale += SCALE_GRADIENT_UNIT;
+            if (xyzScale > scaleFocused) {
+                xyzScale += scaleGradient;
             }
         }
         setScale(xyzScale);

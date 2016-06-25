@@ -297,7 +297,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
 
         if (markerDetailView != null) {
             if (!markerDetailView.isCreated()) {
-                markerDetailView.create(Dialog.WIDTH, AppUtils.getColor(getApplicationContext(), com.gmail.jiangyang5157.tookit.R.color.Teal));
+                markerDetailView.create();
                 markerDetailView.setPosition(head.getCamera().getPosition(), head.getForward(), Dialog.DISTANCE, head.getQuaternion(), head.getUp(), head.getRight());
             }
 
@@ -307,7 +307,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
                         objModel.prepare(ray);
                     } else if (objModel.getCreationState() == Creation.STATE_BEFORE_CREATE) {
                         objModel.create();
-                        objModel.setPosition(head.getCamera().getPosition(), head.getForward(), head.getQuaternion());
+                        objModel.setPosition(head.getCamera().getPosition(), head.getForward(), Dialog.DISTANCE, head.getQuaternion(), head.getUp(), head.getRight());
                     }
                 }
             }
@@ -315,7 +315,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
 
         if (kmlChooserView != null) {
             if (!kmlChooserView.isCreated()) {
-                kmlChooserView.create(Dialog.WIDTH, AppUtils.getColor(getApplicationContext(), com.gmail.jiangyang5157.tookit.R.color.Red));
+                kmlChooserView.create();
                 kmlChooserView.setPosition(head.getCamera().getPosition(), head.getForward(), Dialog.DISTANCE, head.getQuaternion(), head.getUp(), head.getRight());
             }
         }
