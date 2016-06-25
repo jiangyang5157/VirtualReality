@@ -299,13 +299,17 @@ public class Earth extends UvSphere implements Creation {
     public void destroy() {
         Log.d("UvSphere", "destroy");
         super.destroy();
-        markers.clear();
         GLES20.glDeleteBuffers(buffers.length, buffers, 0);
         GLES20.glDeleteTextures(texBuffers.length, texBuffers, 0);
 
+        destoryMarks();
+    }
+
+    public void destoryMarks(){
         for (final Marker marker : markers) {
             marker.destroy();
         }
+        markers.clear();
     }
 
     public void removeMarker(Marker marker) {

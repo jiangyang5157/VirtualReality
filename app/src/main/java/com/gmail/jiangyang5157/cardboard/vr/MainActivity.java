@@ -271,7 +271,10 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
             }
 
             Constant.setLastKmlFileName(getApplicationContext(), fileName);
-            createEarth(Constant.getKmlUrl(fileName));
+
+
+            earth.destoryMarks();
+            newEarth(Constant.getKmlUrl(fileName));
         }
     };
 
@@ -423,11 +426,14 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         ray = new Ray(getApplicationContext());
         ray.create();
 
-        createEarth(Constant.getKmlUrl(Constant.getLastKmlFileName(getApplicationContext())));
+        newEarth(Constant.getKmlUrl(Constant.getLastKmlFileName(getApplicationContext())));
     }
 
-    private void createEarth(String urlKml) {
-        destoryScene();
+    private void newEarth(String urlKml) {
+        destoryKmlChooserView();
+        destoryObjModel();
+        destoryMarkerDetailView();
+        destoryEarth();
 
         earth = new Earth(getApplicationContext(), urlKml,
                 Constant.getResourceUrl(Constant.EARTH_TEXTURE_FILE_NAME));
@@ -515,13 +521,6 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         }
     }
 
-    private void destoryScene() {
-        destoryKmlChooserView();
-        destoryObjModel();
-        destoryMarkerDetailView();
-        destoryEarth();
-    }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -531,7 +530,10 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
             gvrView.shutdown();
         }
 
-        destoryScene();
+        destoryKmlChooserView();
+        destoryObjModel();
+        destoryMarkerDetailView();
+        destoryEarth();
         destoryRay();
     }
 }
