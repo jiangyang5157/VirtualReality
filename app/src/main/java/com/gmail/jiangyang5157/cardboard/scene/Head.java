@@ -14,6 +14,8 @@ import com.gmail.jiangyang5157.cardboard.scene.projection.Earth;
  */
 public class Head implements SensorEventListener {
 
+    private final float MOVEMENT_UNIT = 80;
+
     private Camera camera;
 
     private float[] headView;
@@ -73,7 +75,6 @@ public class Head implements SensorEventListener {
                 velocity[1] * D + a[1],
                 velocity[2] * D + a[2]
         };
-        final float MOVEMENT_UNIT = 80;
         float[] offset = new float[]{
                 newVelocity[0] * MOVEMENT_UNIT,
                 newVelocity[1] * MOVEMENT_UNIT,
