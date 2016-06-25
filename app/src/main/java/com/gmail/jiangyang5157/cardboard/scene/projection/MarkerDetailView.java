@@ -34,12 +34,12 @@ public class MarkerDetailView extends Dialog {
         }
         if (marker.getDescription() != null) {
             TextField tf2 = new TextField(context);
-            tf2.create(marker.getDescription(), WIDTH, TextField.TEXT_SIZE_SMALL, Layout.Alignment.ALIGN_NORMAL);
+            tf2.create(marker.getDescription(), WIDTH, TextField.TEXT_SIZE_TINY, Layout.Alignment.ALIGN_NORMAL);
             addPanel(tf2);
         }
         if (marker.getObjModel() != null) {
             TextField tf3 = new TextField(context);
-            tf3.create(marker.getObjModel().getTitle(), WIDTH, TextField.TEXT_SIZE_SMALL, Layout.Alignment.ALIGN_NORMAL);
+            tf3.create(marker.getObjModel().getTitle(), WIDTH, TextField.TEXT_SIZE_TINY, Layout.Alignment.ALIGN_NORMAL);
             tf3.setOnClickListener(new Intersection.Clickable() {
                 @Override
                 public void onClick(Model model) {
