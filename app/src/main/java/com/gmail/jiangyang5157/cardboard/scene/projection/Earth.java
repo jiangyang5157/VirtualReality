@@ -33,6 +33,8 @@ import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -54,9 +56,9 @@ public class Earth extends UvSphere implements Creation {
 
     private static final float MARKER_RADIUS = RADIUS / 50;
     private static final float MARKER_ALTITUDE = -1 * MARKER_RADIUS;
-    private static final float CAMERA_ALTITUDE = (Math.abs(MARKER_ALTITUDE) + MARKER_RADIUS + Panel.DISTANCE + Ray.SPACE) * (MARKER_ALTITUDE > 0 ? 1 : -1);
+    private static final float CAMERA_ALTITUDE = (Math.abs(MARKER_ALTITUDE) + MARKER_RADIUS + Dialog.DISTANCE) * (MARKER_ALTITUDE > 0 ? 1 : -1);
 
-    private ArrayList<Marker> markers;
+    private List<Marker> markers;
 
     private Intersection.Clickable onMarkerClickListener;
 
@@ -181,7 +183,8 @@ public class Earth extends UvSphere implements Creation {
         creationState = STATE_CREATING;
         create(radius, STACKS, SLICES);
 
-        for (final Marker marker : markers) {
+        for (Iterator<Marker> it = markers.iterator(); it.hasNext(); ) {
+            Marker marker = it.next();
             marker.create();
         }
 
@@ -253,7 +256,8 @@ public class Earth extends UvSphere implements Creation {
 
     @Override
     public void update(float[] view, float[] perspective) {
-        for (final Marker marker : markers) {
+        for (Iterator<Marker> it = markers.iterator(); it.hasNext(); ) {
+            Marker marker = it.next();
             marker.update(view, perspective);
         }
         super.update(view, perspective);
@@ -261,7 +265,8 @@ public class Earth extends UvSphere implements Creation {
 
     @Override
     public void draw() {
-        for (final Marker marker : markers) {
+        for (Iterator<Marker> it = markers.iterator(); it.hasNext(); ) {
+            Marker marker = it.next();
             marker.draw();
         }
 
@@ -305,8 +310,9 @@ public class Earth extends UvSphere implements Creation {
         destoryMarks();
     }
 
-    public void destoryMarks(){
-        for (final Marker marker : markers) {
+    public void destoryMarks() {
+        for (Iterator<Marker> it = markers.iterator(); it.hasNext(); ) {
+            Marker marker = it.next();
             marker.destroy();
         }
         markers.clear();
@@ -359,8 +365,9 @@ public class Earth extends UvSphere implements Creation {
         Intersection ret;
 
         ArrayList<Intersection> intersections = new ArrayList<Intersection>();
-        for (final Marker mark : markers) {
-            Intersection intersection = mark.onIntersect(head);
+        for (Iterator<Marker> it = markers.iterator(); it.hasNext(); ) {
+            Marker marker = it.next();
+            Intersection intersection = marker.onIntersect(head);
             if (intersection != null) {
                 intersections.add(intersection);
             }

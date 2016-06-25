@@ -18,8 +18,6 @@ public class MarkerDetailView extends Dialog {
         void showObjModel(ObjModel model);
     }
 
-    private static final float WIDTH = 400f;
-
     private Marker marker;
 
     public MarkerDetailView(Context context, Marker marker) {
@@ -27,27 +25,21 @@ public class MarkerDetailView extends Dialog {
         this.marker = marker;
     }
 
-    public void create(int color) {
-        super.create(WIDTH, color);
-    }
-
     @Override
     protected void createPanels() {
         if (marker.getName() != null) {
             TextField tf1 = new TextField(context);
-            tf1.create(marker.getName(), WIDTH - PADDING_BOARD * 2, TextField.TEXT_SIZE_LARGE, Layout.Alignment.ALIGN_CENTER);
+            tf1.create(marker.getName(), WIDTH, TextField.TEXT_SIZE_LARGE, Layout.Alignment.ALIGN_CENTER);
             addPanel(tf1);
         }
         if (marker.getDescription() != null) {
             TextField tf2 = new TextField(context);
-            tf2.create(marker.getDescription(), WIDTH - PADDING_BOARD * 2, TextField.TEXT_SIZE_SMALL, Layout.Alignment.ALIGN_NORMAL);
+            tf2.create(marker.getDescription(), WIDTH, TextField.TEXT_SIZE_SMALL, Layout.Alignment.ALIGN_NORMAL);
             addPanel(tf2);
         }
         if (marker.getObjModel() != null) {
             TextField tf3 = new TextField(context);
-            tf3.create(marker.getObjModel().getTitle(), WIDTH - PADDING_BOARD * 2, TextField.TEXT_SIZE_SMALL, Layout.Alignment.ALIGN_NORMAL);
-            addPanel(tf3);
-
+            tf3.create(marker.getObjModel().getTitle(), WIDTH, TextField.TEXT_SIZE_SMALL, Layout.Alignment.ALIGN_NORMAL);
             tf3.setOnClickListener(new Intersection.Clickable() {
                 @Override
                 public void onClick(Model model) {
@@ -56,6 +48,7 @@ public class MarkerDetailView extends Dialog {
                     }
                 }
             });
+            addPanel(tf3);
         }
     }
 

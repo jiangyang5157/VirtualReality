@@ -7,9 +7,12 @@ import android.opengl.GLUtils;
 
 import com.gmail.jiangyang5157.cardboard.scene.Intersection;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
+import com.gmail.jiangyang5157.tookit.app.AppUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * @author Yang
@@ -17,12 +20,14 @@ import java.util.Collections;
  */
 public abstract class Dialog extends Panel {
 
-    protected static final float ALPHA_BACKGROUND = 0.5f;
+    protected static final float ALPHA_BACKGROUND = 0.0f;
 
-    protected static final float PADDING_LAYER = 2.0f;
-    protected static final float PADDING_BOARD = 4.0f;
+    protected static final float PADDING_LAYER = 1.0f;
 
-    protected ArrayList<Panel> panels;
+    public static final float WIDTH = 400f;
+    public static final float DISTANCE = 400f;
+
+    protected List<Panel> panels;
 
     public Dialog(Context context) {
         super(context);
@@ -31,23 +36,21 @@ public abstract class Dialog extends Panel {
 
     protected abstract void createPanels();
 
-    public void create(float width, int color) {
+    public void create() {
         createPanels();
         adjustBounds(width);
-        create(width, height, color);
+        create(WIDTH, height, AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.Red));
     }
 
     @Override
     protected int createTexture() {
         final int[] textureHandle = new int[1];
         GLES20.glGenTextures(1, textureHandle, 0);
-
         if (textureHandle[0] == 0) {
             throw new RuntimeException("Error loading texture.");
         } else {
             Bitmap bitmap = Bitmap.createBitmap((int) width, (int) height, Bitmap.Config.ARGB_4444);
             bitmap.eraseColor(getColorWithAlpha(ALPHA_BACKGROUND));
-
             GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureHandle[0]);
             GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
             GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_NEAREST);
@@ -59,7 +62,8 @@ public abstract class Dialog extends Panel {
 
     @Override
     public void update(float[] view, float[] perspective) {
-        for (Panel panel : panels) {
+        for (Iterator<Panel> it = panels.iterator(); it.hasNext(); ) {
+            Panel panel = it.next();
             panel.update(view, perspective);
         }
         super.update(view, perspective);
@@ -67,7 +71,8 @@ public abstract class Dialog extends Panel {
 
     @Override
     public void draw() {
-        for (Panel panel : panels) {
+        for (Iterator<Panel> it = panels.iterator(); it.hasNext(); ) {
+            Panel panel = it.next();
             panel.draw();
         }
         super.draw();
@@ -75,7 +80,8 @@ public abstract class Dialog extends Panel {
 
     @Override
     public void destroy() {
-        for (Panel panel : panels) {
+        for (Iterator<Panel> it = panels.iterator(); it.hasNext(); ) {
+            Panel panel = it.next();
             panel.destroy();
         }
         panels.clear();
@@ -94,7 +100,8 @@ public abstract class Dialog extends Panel {
         Intersection ret;
 
         ArrayList<Intersection> intersections = new ArrayList<Intersection>();
-        for (final Panel panel : panels) {
+        for (Iterator<Panel> it = panels.iterator(); it.hasNext(); ) {
+            Panel panel = it.next();
             Intersection intersection = panel.onIntersect(head);
             if (intersection != null) {
                 intersections.add(intersection);
@@ -112,18 +119,17 @@ public abstract class Dialog extends Panel {
 
     protected void adjustBounds(float width) {
         float h = 0;
-        h += PADDING_BOARD;
-        for (Panel panel : panels) {
+        for (Iterator<Panel> it = panels.iterator(); it.hasNext(); ) {
+            Panel panel = it.next();
             h += panel.height;
-            h += PADDING_BOARD;
         }
         this.width = width;
         height = h;
     }
 
     @Override
-    public void setPosition(float[] cameraPos, float[] forward, float[] quaternion, float[] up, float[] right) {
-        super.setPosition(cameraPos, forward, quaternion, up, right);
+    public void setPosition(float[] cameraPos, float[] forward, float distance, float[] quaternion, float[] up, float[] right) {
+        super.setPosition(cameraPos, forward, distance, quaternion, up, right);
 
         //
         cameraPos[0] -= forward[0] * PADDING_LAYER;
@@ -135,24 +141,17 @@ public abstract class Dialog extends Panel {
         cameraPos[1] += up[1] * height / 2;
         cameraPos[2] += up[2] * height / 2;
 
-        cameraPos[0] -= up[0] * PADDING_BOARD;
-        cameraPos[1] -= up[1] * PADDING_BOARD;
-        cameraPos[2] -= up[2] * PADDING_BOARD;
-
-        for (Panel panel : panels) {
+        for (Iterator<Panel> it = panels.iterator(); it.hasNext(); ) {
+            Panel panel = it.next();
             cameraPos[0] -= up[0] * panel.height / 2;
             cameraPos[1] -= up[1] * panel.height / 2;
             cameraPos[2] -= up[2] * panel.height / 2;
 
-            panel.setPosition(cameraPos, forward, quaternion, up, right);
+            panel.setPosition(cameraPos, forward, distance, quaternion, up, right);
 
             cameraPos[0] -= up[0] * panel.height / 2;
             cameraPos[1] -= up[1] * panel.height / 2;
             cameraPos[2] -= up[2] * panel.height / 2;
-
-            cameraPos[0] -= up[0] * PADDING_BOARD;
-            cameraPos[1] -= up[1] * PADDING_BOARD;
-            cameraPos[2] -= up[2] * PADDING_BOARD;
         }
     }
 }
