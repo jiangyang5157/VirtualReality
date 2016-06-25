@@ -20,7 +20,7 @@ import java.util.List;
  */
 public abstract class Dialog extends Panel {
 
-    protected static final float ALPHA_BACKGROUND = 0.5f;
+    protected static final float ALPHA_BACKGROUND = 0.0f;
 
     protected static final float PADDING_LAYER = 1.0f;
 
@@ -153,6 +153,5 @@ public abstract class Dialog extends Panel {
             cameraPos[1] -= up[1] * panel.height / 2;
             cameraPos[2] -= up[2] * panel.height / 2;
         }
-
     }
 }

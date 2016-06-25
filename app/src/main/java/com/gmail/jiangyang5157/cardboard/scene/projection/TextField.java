@@ -22,7 +22,7 @@ import com.gmail.jiangyang5157.tookit.opengl.Model;
  */
 public class TextField extends Panel implements Intersection.Clickable {
 
-    private static final float ALPHA_BACKGROUND = 0.5f;
+    private static final float ALPHA_BACKGROUND = 0.2f;
 
     protected static final float TEXT_SIZE_LARGE = 12f;
     protected static final float TEXT_SIZE_MEDIUM = 10f;
