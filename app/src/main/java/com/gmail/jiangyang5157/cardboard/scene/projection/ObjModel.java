@@ -40,7 +40,7 @@ public class ObjModel extends GlModel implements Creation {
     private static final int FRAGMENT_SHADER_RAW_RESOURCE = R.raw.obj_color_fragment_shader;
 
     private static final float DISTANCE = 100;
-    private static final float TIME_DELTA_ROTATION = 0.3f;
+    private static final float TIME_DELTA_ROTATION = 0.2f;
 
     private String title;
     private String url;
