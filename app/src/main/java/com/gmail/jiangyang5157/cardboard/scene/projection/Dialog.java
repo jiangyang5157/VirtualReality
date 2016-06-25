@@ -29,6 +29,14 @@ public abstract class Dialog extends Panel {
         panels = new ArrayList<>();
     }
 
+    protected abstract void createPanels();
+
+    public void create(float width, int color) {
+        createPanels();
+        adjustBounds(width);
+        create(width, height, color);
+    }
+
     @Override
     protected int createTexture() {
         final int[] textureHandle = new int[1];
@@ -100,5 +108,51 @@ public abstract class Dialog extends Panel {
         }
 
         return ret;
+    }
+
+    protected void adjustBounds(float width) {
+        float h = 0;
+        h += PADDING_BOARD;
+        for (Panel panel : panels) {
+            h += panel.height;
+            h += PADDING_BOARD;
+        }
+        this.width = width;
+        height = h;
+    }
+
+    @Override
+    public void setPosition(float[] cameraPos, float[] forward, float[] quaternion, float[] up, float[] right) {
+        super.setPosition(cameraPos, forward, quaternion, up, right);
+
+        //
+        cameraPos[0] -= forward[0] * PADDING_LAYER;
+        cameraPos[1] -= forward[1] * PADDING_LAYER;
+        cameraPos[2] -= forward[2] * PADDING_LAYER;
+
+        //
+        cameraPos[0] += up[0] * height / 2;
+        cameraPos[1] += up[1] * height / 2;
+        cameraPos[2] += up[2] * height / 2;
+
+        cameraPos[0] -= up[0] * PADDING_BOARD;
+        cameraPos[1] -= up[1] * PADDING_BOARD;
+        cameraPos[2] -= up[2] * PADDING_BOARD;
+
+        for (Panel panel : panels) {
+            cameraPos[0] -= up[0] * panel.height / 2;
+            cameraPos[1] -= up[1] * panel.height / 2;
+            cameraPos[2] -= up[2] * panel.height / 2;
+
+            panel.setPosition(cameraPos, forward, quaternion, up, right);
+
+            cameraPos[0] -= up[0] * panel.height / 2;
+            cameraPos[1] -= up[1] * panel.height / 2;
+            cameraPos[2] -= up[2] * panel.height / 2;
+
+            cameraPos[0] -= up[0] * PADDING_BOARD;
+            cameraPos[1] -= up[1] * PADDING_BOARD;
+            cameraPos[2] -= up[2] * PADDING_BOARD;
+        }
     }
 }
