@@ -11,6 +11,8 @@ import com.gmail.jiangyang5157.tookit.app.AppUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * @author Yang
@@ -25,7 +27,7 @@ public abstract class Dialog extends Panel {
     public static final float WIDTH = 400f;
     public static final float DISTANCE = 400f;
 
-    protected ArrayList<Panel> panels;
+    protected List<Panel> panels;
 
     public Dialog(Context context) {
         super(context);
@@ -60,7 +62,8 @@ public abstract class Dialog extends Panel {
 
     @Override
     public void update(float[] view, float[] perspective) {
-        for (Panel panel : panels) {
+        for (Iterator<Panel> it = panels.iterator(); it.hasNext(); ) {
+            Panel panel = it.next();
             panel.update(view, perspective);
         }
         super.update(view, perspective);
@@ -68,7 +71,8 @@ public abstract class Dialog extends Panel {
 
     @Override
     public void draw() {
-        for (Panel panel : panels) {
+        for (Iterator<Panel> it = panels.iterator(); it.hasNext(); ) {
+            Panel panel = it.next();
             panel.draw();
         }
         super.draw();
@@ -76,7 +80,8 @@ public abstract class Dialog extends Panel {
 
     @Override
     public void destroy() {
-        for (Panel panel : panels) {
+        for (Iterator<Panel> it = panels.iterator(); it.hasNext(); ) {
+            Panel panel = it.next();
             panel.destroy();
         }
         panels.clear();
@@ -95,7 +100,8 @@ public abstract class Dialog extends Panel {
         Intersection ret;
 
         ArrayList<Intersection> intersections = new ArrayList<Intersection>();
-        for (final Panel panel : panels) {
+        for (Iterator<Panel> it = panels.iterator(); it.hasNext(); ) {
+            Panel panel = it.next();
             Intersection intersection = panel.onIntersect(head);
             if (intersection != null) {
                 intersections.add(intersection);
@@ -113,7 +119,8 @@ public abstract class Dialog extends Panel {
 
     protected void adjustBounds(float width) {
         float h = 0;
-        for (Panel panel : panels) {
+        for (Iterator<Panel> it = panels.iterator(); it.hasNext(); ) {
+            Panel panel = it.next();
             h += panel.height;
         }
         this.width = width;
@@ -134,7 +141,8 @@ public abstract class Dialog extends Panel {
         cameraPos[1] += up[1] * height / 2;
         cameraPos[2] += up[2] * height / 2;
 
-        for (Panel panel : panels) {
+        for (Iterator<Panel> it = panels.iterator(); it.hasNext(); ) {
+            Panel panel = it.next();
             cameraPos[0] -= up[0] * panel.height / 2;
             cameraPos[1] -= up[1] * panel.height / 2;
             cameraPos[2] -= up[2] * panel.height / 2;
@@ -145,5 +153,6 @@ public abstract class Dialog extends Panel {
             cameraPos[1] -= up[1] * panel.height / 2;
             cameraPos[2] -= up[2] * panel.height / 2;
         }
+
     }
 }
