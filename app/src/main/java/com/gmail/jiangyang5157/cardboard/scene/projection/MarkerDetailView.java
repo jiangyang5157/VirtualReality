@@ -18,17 +18,11 @@ public class MarkerDetailView extends Dialog {
         void showObjModel(ObjModel model);
     }
 
-    private static final float WIDTH = 400f;
-
     private Marker marker;
 
     public MarkerDetailView(Context context, Marker marker) {
         super(context);
         this.marker = marker;
-    }
-
-    public void create(int color) {
-        super.create(WIDTH, color);
     }
 
     @Override

@@ -22,14 +22,8 @@ public class KmlChooserView extends Dialog {
         void onKmlSelected(String fileName);
     }
 
-    private static final float WIDTH = 400f;
-
     public KmlChooserView(Context context) {
         super(context);
-    }
-
-    public void create(int color) {
-        super.create(WIDTH, color);
     }
 
     @Override

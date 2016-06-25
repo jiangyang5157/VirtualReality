@@ -13,9 +13,9 @@ import com.gmail.jiangyang5157.cardboard.scene.Camera;
 import com.gmail.jiangyang5157.cardboard.scene.Creation;
 import com.gmail.jiangyang5157.cardboard.scene.Intersection;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
+import com.gmail.jiangyang5157.cardboard.scene.projection.Dialog;
 import com.gmail.jiangyang5157.cardboard.scene.projection.KmlChooserView;
 import com.gmail.jiangyang5157.cardboard.scene.projection.ObjModel;
-import com.gmail.jiangyang5157.cardboard.scene.projection.Panel;
 import com.gmail.jiangyang5157.cardboard.scene.projection.Ray;
 import com.gmail.jiangyang5157.cardboard.scene.projection.Earth;
 import com.gmail.jiangyang5157.cardboard.scene.projection.Marker;
@@ -47,7 +47,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
 
     private Head head;
 
-    private final float[] LIGHT_POS_IN_CAMERA_SPACE = new float[]{0.0f, Panel.DISTANCE / 10, 0.0f, 1.0f};
+    private final float[] LIGHT_POS_IN_CAMERA_SPACE = new float[]{0.0f, Dialog.DISTANCE / 10, 0.0f, 1.0f};
     private final float[] LIGHT_POS_IN_WORLD_SPACE = new float[]{0.0f, 0.0f, 0.0f, 1.0f};
     private float[] lightPosInCameraSpace = new float[4];
 
@@ -202,7 +202,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         return ret;
     }
 
-    private void onCardboardClick(){
+    private void onCardboardClick() {
         if (objModel != null && objModel.isCreated()) {
             destoryObjModel();
             return;
@@ -216,7 +216,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         }
     }
 
-    private void onCardboardDoubleClick(){
+    private void onCardboardDoubleClick() {
         if (objModel != null && objModel.isCreated()) {
             destoryObjModel();
         }
@@ -297,8 +297,8 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
 
         if (markerDetailView != null) {
             if (!markerDetailView.isCreated()) {
-                markerDetailView.create(AppUtils.getColor(getApplicationContext(), com.gmail.jiangyang5157.tookit.R.color.Teal));
-                markerDetailView.setPosition(head.getCamera().getPosition(), head.getForward(), head.getQuaternion(), head.getUp(), head.getRight());
+                markerDetailView.create(Dialog.WIDTH, AppUtils.getColor(getApplicationContext(), com.gmail.jiangyang5157.tookit.R.color.Teal));
+                markerDetailView.setPosition(head.getCamera().getPosition(), head.getForward(), Dialog.DISTANCE, head.getQuaternion(), head.getUp(), head.getRight());
             }
 
             if (objModel != null) {
@@ -315,8 +315,8 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
 
         if (kmlChooserView != null) {
             if (!kmlChooserView.isCreated()) {
-                kmlChooserView.create(AppUtils.getColor(getApplicationContext(), com.gmail.jiangyang5157.tookit.R.color.Red));
-                kmlChooserView.setPosition(head.getCamera().getPosition(), head.getForward(), head.getQuaternion(), head.getUp(), head.getRight());
+                kmlChooserView.create(Dialog.WIDTH, AppUtils.getColor(getApplicationContext(), com.gmail.jiangyang5157.tookit.R.color.Red));
+                kmlChooserView.setPosition(head.getCamera().getPosition(), head.getForward(), Dialog.DISTANCE, head.getQuaternion(), head.getUp(), head.getRight());
             }
         }
 
@@ -493,24 +493,28 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
             kmlChooserView = null;
         }
     }
+
     private void destoryObjModel() {
         if (objModel != null) {
             objModel.destroy();
             objModel = null;
         }
     }
+
     private void destoryMarkerDetailView() {
         if (markerDetailView != null) {
             markerDetailView.destroy();
             markerDetailView = null;
         }
     }
+
     private void destoryEarth() {
         if (earth != null) {
             earth.destroy();
             earth = null;
         }
     }
+
     private void destoryRay() {
         if (ray != null) {
             ray.destroy();

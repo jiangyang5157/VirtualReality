@@ -40,8 +40,6 @@ public abstract class Panel extends Rectangle {
     private final int[] buffers = new int[3];
     private final int[] texBuffers = new int[1];
 
-    public static final float DISTANCE = 400;
-
     public Panel(Context context) {
         super(context, VERTEX_SHADER_RAW_RESOURCE, FRAGMENT_SHADER_RAW_RESOURCE);
     }
@@ -59,9 +57,9 @@ public abstract class Panel extends Rectangle {
         setVisible(true);
     }
 
-    public void setPosition(float[] cameraPos, float[] forward, float[] quaternion, float[] up, float[] right) {
+    public void setPosition(float[] cameraPos, float[] forward, float distance, float[] quaternion, float[] up, float[] right) {
         Vector cameraPosVec = new Vector3d(cameraPos[0], cameraPos[1], cameraPos[2]);
-        Vector forwardVec = new Vector3d(forward[0], forward[1], forward[2]).times(DISTANCE);
+        Vector forwardVec = new Vector3d(forward[0], forward[1], forward[2]).times(distance);
         Vector positionVec = cameraPosVec.plus(forwardVec);
 
         double[] positionVecData = positionVec.getData();

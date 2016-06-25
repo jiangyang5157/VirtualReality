@@ -22,6 +22,9 @@ public abstract class Dialog extends Panel {
     protected static final float PADDING_LAYER = 2.0f;
     protected static final float PADDING_BOARD = 4.0f;
 
+    public static final float WIDTH = 400f;
+    public static final float DISTANCE = 400f;
+
     protected ArrayList<Panel> panels;
 
     public Dialog(Context context) {
@@ -122,8 +125,8 @@ public abstract class Dialog extends Panel {
     }
 
     @Override
-    public void setPosition(float[] cameraPos, float[] forward, float[] quaternion, float[] up, float[] right) {
-        super.setPosition(cameraPos, forward, quaternion, up, right);
+    public void setPosition(float[] cameraPos, float[] forward, float distance, float[] quaternion, float[] up, float[] right) {
+        super.setPosition(cameraPos, forward, distance, quaternion, up, right);
 
         //
         cameraPos[0] -= forward[0] * PADDING_LAYER;
@@ -144,7 +147,7 @@ public abstract class Dialog extends Panel {
             cameraPos[1] -= up[1] * panel.height / 2;
             cameraPos[2] -= up[2] * panel.height / 2;
 
-            panel.setPosition(cameraPos, forward, quaternion, up, right);
+            panel.setPosition(cameraPos, forward, distance, quaternion, up, right);
 
             cameraPos[0] -= up[0] * panel.height / 2;
             cameraPos[1] -= up[1] * panel.height / 2;
