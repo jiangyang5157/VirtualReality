@@ -269,11 +269,8 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
             if (fileName.equals(Constant.getLastKmlFileName(getApplicationContext()))) {
                 return;
             }
-
             Constant.setLastKmlFileName(getApplicationContext(), fileName);
 
-
-            earth.destoryMarks();
             newEarth(Constant.getKmlUrl(fileName));
         }
     };
