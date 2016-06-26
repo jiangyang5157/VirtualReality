@@ -56,8 +56,9 @@ public class ObjModel extends GlModel implements Creation {
 
     protected int creationState = STATE_BEFORE_PREPARE;
 
-    protected ObjModel(Context context, String title, String url) {
+    protected ObjModel(Context context, float scale, String title, String url) {
         super(context, VERTEX_SHADER_RAW_RESOURCE, FRAGMENT_SHADER_RAW_RESOURCE);
+        setScale(scale);
         this.title = title;
         this.url = url;
     }
@@ -78,7 +79,6 @@ public class ObjModel extends GlModel implements Creation {
                     ray.addBusy();
 
                     setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.DeepOrange));
-                    setScale(10f);
 
                     if (checkPreparation()) {
                         buildArrays();
