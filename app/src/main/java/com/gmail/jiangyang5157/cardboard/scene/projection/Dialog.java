@@ -126,12 +126,12 @@ public abstract class Dialog extends Panel {
         super.setPosition(cameraPos, forward, distance, quaternion, up, right);
 
         //
-        final float SCALED_HALF_HEIGHT = height / 2 * getXyzScale();
+        final float SCALED_HALF_HEIGHT = height / 2 * scale;
         cameraPos[0] += up[0] * SCALED_HALF_HEIGHT;
         cameraPos[1] += up[1] * SCALED_HALF_HEIGHT;
         cameraPos[2] += up[2] * SCALED_HALF_HEIGHT;
         for (Panel panel : panels) {
-            final float SCALED_PANEL_HALF_HEIGHT = panel.height / 2 * getXyzScale();
+            final float SCALED_PANEL_HALF_HEIGHT = panel.height / 2 * scale;
             cameraPos[0] -= up[0] * SCALED_PANEL_HALF_HEIGHT;
             cameraPos[1] -= up[1] * SCALED_PANEL_HALF_HEIGHT;
             cameraPos[2] -= up[2] * SCALED_PANEL_HALF_HEIGHT;
