@@ -35,21 +35,29 @@ public class TextField extends Panel implements Intersection.Clickable {
 
     private final int[] texBuffers = new int[1];
 
-    private static float scaleNormal = 1.0f;
-    private static float scaleFocused = scaleNormal * 0.92f;
-    private static float scaleGradient = (scaleFocused - scaleNormal) / 8;
-    private float xyzScale = scaleNormal;
+    private float scaleNormal;
+    private float scaleFocused;
+    private float scaleGradient;
+    private float scaleSelector;
 
     public TextField(Context context) {
         super(context);
     }
 
-    protected void create(String text, float width, float textSize, Layout.Alignment align) {
+    private void initScaleSelector(float normal) {
+        scaleNormal = normal;
+        scaleFocused = normal * 0.92f;
+        scaleGradient = (scaleFocused - scaleNormal) / 8;
+        scaleSelector = scaleNormal;
+    }
+
+    protected void create(String text, float width, float scale, float textSize, Layout.Alignment align) {
         GLES20.glGenTextures(1, texBuffers, 0);
         if (texBuffers[0] == 0) {
             throw new RuntimeException("Error loading texture.");
         } else {
             this.width = width;
+            initScaleSelector(scale);
 
             textPaint = new TextPaint();
             float textSizePixels = dp2px(context, textSize);
@@ -61,7 +69,7 @@ public class TextField extends Panel implements Intersection.Clickable {
             int lines = staticLayout.getLineCount();
             Paint.FontMetrics fm = textPaint.getFontMetrics();
             height = fm.descent + lines * (textSizePixels + fm.bottom);
-            create(width, height, AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.White));
+            create(width, height, scale, AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.White));
 
             Bitmap bitmap = Bitmap.createBitmap((int) width, (int) height, Bitmap.Config.ARGB_4444);
             Canvas canvas = new Canvas(bitmap);
@@ -109,15 +117,15 @@ public class TextField extends Panel implements Intersection.Clickable {
         Intersection ret = super.onIntersect(head);
 
         if (ret == null) {
-            if (xyzScale < scaleNormal) {
-                xyzScale -= scaleGradient;
+            if (scaleSelector < scaleNormal) {
+                scaleSelector -= scaleGradient;
             }
         } else {
-            if (xyzScale > scaleFocused) {
-                xyzScale += scaleGradient;
+            if (scaleSelector > scaleFocused) {
+                scaleSelector += scaleGradient;
             }
         }
-        setScale(xyzScale);
+        setScale(scaleSelector);
 
         return ret;
     }

@@ -25,7 +25,8 @@ public abstract class Dialog extends Panel {
     protected static final float PADDING_LAYER = 1.0f;
 
     public static final float WIDTH = 500f;
-    public static final float DISTANCE = 400f;
+    public static final float DISTANCE = 120f;
+    public static final float SCALE = 0.3f;
 
     protected List<Panel> panels;
 
@@ -39,7 +40,7 @@ public abstract class Dialog extends Panel {
     public void create() {
         createPanels();
         adjustBounds(width);
-        create(WIDTH, height, AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.Red));
+        create(WIDTH, height, SCALE, AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.Red));
     }
 
     @Override

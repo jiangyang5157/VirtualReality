@@ -44,9 +44,10 @@ public abstract class Panel extends Rectangle {
         super(context, VERTEX_SHADER_RAW_RESOURCE, FRAGMENT_SHADER_RAW_RESOURCE);
     }
 
-    protected void create(float width, float height, int color) {
+    protected void create(float width, float height, float scale, int color) {
         this.width = width;
         this.height = height;
+        setScale(scale);
         setColor(color);
         buildArrays();
 
