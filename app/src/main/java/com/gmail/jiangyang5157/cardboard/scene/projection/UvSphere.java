@@ -29,7 +29,6 @@ public abstract class UvSphere extends Sphere {
     protected void create(float radius, int stacks, int slices) {
         this.stacks = stacks;
         this.slices = slices;
-
         create(radius);
     }
 

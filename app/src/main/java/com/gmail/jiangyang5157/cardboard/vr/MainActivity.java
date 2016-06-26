@@ -307,7 +307,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
                         objModel.prepare(ray);
                     } else if (objModel.getCreationState() == Creation.STATE_BEFORE_CREATE) {
                         objModel.create();
-                        objModel.setPosition(head.getCamera().getPosition(), head.getForward(), Dialog.DISTANCE, head.getQuaternion(), head.getUp(), head.getRight());
+                        objModel.setPosition(head.getCamera().getPosition(), head.getForward(), ObjModel.DISTANCE, head.getQuaternion(), head.getUp(), head.getRight());
                     }
                 }
             }
@@ -372,6 +372,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         if (ray != null) {
             ray.draw();
         }
+
         if (earth != null) {
             earth.draw();
         }
@@ -434,6 +435,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
 
         earth = new Earth(getApplicationContext(), urlKml,
                 Constant.getResourceUrl(Constant.EARTH_TEXTURE_FILE_NAME));
+        earth.setRadius(Earth.RADIUS);
         earth.setOnMarkerClickListener(markerOnClickListener);
         earth.setMarkerLighting(new Lighting() {
             @Override

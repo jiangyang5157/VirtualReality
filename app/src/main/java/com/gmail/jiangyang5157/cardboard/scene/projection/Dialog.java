@@ -25,7 +25,8 @@ public abstract class Dialog extends Panel {
     protected static final float PADDING_LAYER = 1.0f;
 
     public static final float WIDTH = 500f;
-    public static final float DISTANCE = 400f;
+    public static final float DISTANCE = 120f;
+    public static final float SCALE = 0.3f;
 
     protected List<Panel> panels;
 
@@ -39,7 +40,7 @@ public abstract class Dialog extends Panel {
     public void create() {
         createPanels();
         adjustBounds(width);
-        create(WIDTH, height, AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.Red));
+        create(WIDTH, height, SCALE, AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.Red));
     }
 
     @Override
@@ -132,26 +133,23 @@ public abstract class Dialog extends Panel {
         super.setPosition(cameraPos, forward, distance, quaternion, up, right);
 
         //
-        cameraPos[0] -= forward[0] * PADDING_LAYER;
-        cameraPos[1] -= forward[1] * PADDING_LAYER;
-        cameraPos[2] -= forward[2] * PADDING_LAYER;
-
-        //
-        cameraPos[0] += up[0] * height / 2;
-        cameraPos[1] += up[1] * height / 2;
-        cameraPos[2] += up[2] * height / 2;
+        final float SCALED_HALF_HEIGHT = height / 2 * getXyzScale();
+        cameraPos[0] += up[0] * SCALED_HALF_HEIGHT;
+        cameraPos[1] += up[1] * SCALED_HALF_HEIGHT;
+        cameraPos[2] += up[2] * SCALED_HALF_HEIGHT;
 
         for (Iterator<Panel> it = panels.iterator(); it.hasNext(); ) {
             Panel panel = it.next();
-            cameraPos[0] -= up[0] * panel.height / 2;
-            cameraPos[1] -= up[1] * panel.height / 2;
-            cameraPos[2] -= up[2] * panel.height / 2;
+            final float SCALED_PANEL_HALF_HEIGHT = panel.height / 2 * getXyzScale();
+            cameraPos[0] -= up[0] * SCALED_PANEL_HALF_HEIGHT;
+            cameraPos[1] -= up[1] * SCALED_PANEL_HALF_HEIGHT;
+            cameraPos[2] -= up[2] * SCALED_PANEL_HALF_HEIGHT;
 
-            panel.setPosition(cameraPos, forward, distance, quaternion, up, right);
+            panel.setPosition(cameraPos, forward, distance - PADDING_LAYER, quaternion, up, right);
 
-            cameraPos[0] -= up[0] * panel.height / 2;
-            cameraPos[1] -= up[1] * panel.height / 2;
-            cameraPos[2] -= up[2] * panel.height / 2;
+            cameraPos[0] -= up[0] * SCALED_PANEL_HALF_HEIGHT;
+            cameraPos[1] -= up[1] * SCALED_PANEL_HALF_HEIGHT;
+            cameraPos[2] -= up[2] * SCALED_PANEL_HALF_HEIGHT;
         }
     }
 }

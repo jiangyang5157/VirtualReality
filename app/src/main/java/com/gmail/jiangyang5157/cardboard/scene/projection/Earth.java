@@ -50,13 +50,13 @@ public class Earth extends UvSphere implements Creation {
     private static final int VERTEX_SHADER_RAW_RESOURCE = R.raw.earth_uv_vertex_shader;
     private static final int FRAGMENT_SHADER_RAW_RESOURCE = R.raw.earth_uv_fragment_shader;
 
-    public static final float RADIUS = 4000f;
     private static final int STACKS = 32;
     private static final int SLICES = 32;
 
-    private static final float MARKER_RADIUS = RADIUS / 50;
+    public static final float RADIUS = 4000f;
+    private static final float MARKER_RADIUS = RADIUS / 80;
     private static final float MARKER_ALTITUDE = -1 * MARKER_RADIUS;
-    private static final float CAMERA_ALTITUDE = (Math.abs(MARKER_ALTITUDE) + MARKER_RADIUS + Dialog.DISTANCE) * (MARKER_ALTITUDE > 0 ? 1 : -1);
+    private static final float CAMERA_ALTITUDE = (Math.abs(MARKER_ALTITUDE) + MARKER_RADIUS + Dialog.DISTANCE + Ray.DISTANCE) * (MARKER_ALTITUDE > 0 ? 1 : -1);
 
     private List<Marker> markers;
 
@@ -75,7 +75,6 @@ public class Earth extends UvSphere implements Creation {
         markers = new ArrayList<>();
         this.urlKml = urlKml;
         this.urlTexture = urlTexture;
-        radius = RADIUS;
     }
 
     public boolean checkPreparation() {
@@ -329,11 +328,10 @@ public class Earth extends UvSphere implements Creation {
     public Marker addMarker(KmlPlacemark kmlPlacemark, MarkerOptions markerUrlStyle, int markerColorInteger) {
         LatLng latLng = markerUrlStyle.getPosition();
         Marker marker = new Marker(context, this);
-//        Log.d(TAG, "markerColorInteger: " + markerColorInteger);
+        marker.setRadius(MARKER_RADIUS);
         if (markerColorInteger != 0) {
             marker.setColor(markerColorInteger);
         }
-        marker.setRadius(MARKER_RADIUS);
         marker.setOnClickListener(onMarkerClickListener);
         marker.setLocation(latLng, MARKER_ALTITUDE);
         marker.setName(kmlPlacemark.getProperty("name"));
@@ -342,9 +340,7 @@ public class Earth extends UvSphere implements Creation {
 
         String objProperty = kmlPlacemark.getProperty("obj");
         if (objProperty != null) {
-            ObjModel objModel = new ObjModel(context,
-                    kmlPlacemark.getProperty("title"),
-                    objProperty);
+            ObjModel objModel = new ObjModel(context, kmlPlacemark.getProperty("title"), objProperty);
             objModel.setLighting(markerObjModelLighting);
             marker.setObjModel(objModel);
         }
