@@ -47,7 +47,7 @@ public abstract class Panel extends Rectangle {
     protected void create(float width, float height, float scale, int color) {
         this.width = width;
         this.height = height;
-        setScale(scale);
+        this.scale = scale;
         setColor(color);
         buildArrays();
 
@@ -144,17 +144,13 @@ public abstract class Panel extends Rectangle {
         brVec = upVec.negate().plus(rightVec);
     }
 
-    protected float getXyzScale(){
-        return scale[0];
-    }
-
     protected void buildCorners(float[] up, float[] right, Vector posVec) {
         buildCorners(up, right);
 
-        tlVec = tlVec.times(getXyzScale());
-        blVec = blVec.times(getXyzScale());
-        trVec = trVec.times(getXyzScale());
-        brVec = brVec.times(getXyzScale());
+        tlVec = tlVec.times(scale);
+        blVec = blVec.times(scale);
+        trVec = trVec.times(scale);
+        brVec = brVec.times(scale);
 
         tlVec = tlVec.plus(posVec);
         blVec = blVec.plus(posVec);
