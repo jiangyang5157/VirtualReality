@@ -39,7 +39,7 @@ public class ObjModel extends GlModel implements Creation {
     private static final int VERTEX_SHADER_RAW_RESOURCE = R.raw.obj_color_vertex_shader;
     private static final int FRAGMENT_SHADER_RAW_RESOURCE = R.raw.obj_color_fragment_shader;
 
-    private static final float DISTANCE = 100;
+    public static final float DISTANCE = 100;
     private static final float TIME_DELTA_ROTATION = 0.2f;
 
     private String title;
@@ -132,7 +132,7 @@ public class ObjModel extends GlModel implements Creation {
 
     public void setPosition(float[] cameraPos, float[] forward, float distance, float[] quaternion, float[] up, float[] right) {
         com.gmail.jiangyang5157.tookit.math.Vector cameraPosVec = new Vector3d(cameraPos[0], cameraPos[1], cameraPos[2]);
-        com.gmail.jiangyang5157.tookit.math.Vector forwardVec = new Vector3d(forward[0], forward[1], forward[2]).times(DISTANCE);
+        com.gmail.jiangyang5157.tookit.math.Vector forwardVec = new Vector3d(forward[0], forward[1], forward[2]).times(distance);
         com.gmail.jiangyang5157.tookit.math.Vector positionVec = cameraPosVec.plus(forwardVec);
         double[] positionVecData = positionVec.getData();
         Matrix.setIdentityM(translation, 0);

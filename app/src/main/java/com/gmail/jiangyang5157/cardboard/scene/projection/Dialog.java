@@ -132,26 +132,23 @@ public abstract class Dialog extends Panel {
         super.setPosition(cameraPos, forward, distance, quaternion, up, right);
 
         //
-        cameraPos[0] -= forward[0] * PADDING_LAYER;
-        cameraPos[1] -= forward[1] * PADDING_LAYER;
-        cameraPos[2] -= forward[2] * PADDING_LAYER;
-
-        //
-        cameraPos[0] += up[0] * height / 2;
-        cameraPos[1] += up[1] * height / 2;
-        cameraPos[2] += up[2] * height / 2;
+        final float SCALED_HALF_HEIGHT = height / 2 * getXyzScale();
+        cameraPos[0] += up[0] * SCALED_HALF_HEIGHT;
+        cameraPos[1] += up[1] * SCALED_HALF_HEIGHT;
+        cameraPos[2] += up[2] * SCALED_HALF_HEIGHT;
 
         for (Iterator<Panel> it = panels.iterator(); it.hasNext(); ) {
             Panel panel = it.next();
-            cameraPos[0] -= up[0] * panel.height / 2;
-            cameraPos[1] -= up[1] * panel.height / 2;
-            cameraPos[2] -= up[2] * panel.height / 2;
+            final float SCALED_PANEL_HALF_HEIGHT = panel.height / 2 * getXyzScale();
+            cameraPos[0] -= up[0] * SCALED_PANEL_HALF_HEIGHT;
+            cameraPos[1] -= up[1] * SCALED_PANEL_HALF_HEIGHT;
+            cameraPos[2] -= up[2] * SCALED_PANEL_HALF_HEIGHT;
 
-            panel.setPosition(cameraPos, forward, distance, quaternion, up, right);
+            panel.setPosition(cameraPos, forward, distance - PADDING_LAYER, quaternion, up, right);
 
-            cameraPos[0] -= up[0] * panel.height / 2;
-            cameraPos[1] -= up[1] * panel.height / 2;
-            cameraPos[2] -= up[2] * panel.height / 2;
+            cameraPos[0] -= up[0] * SCALED_PANEL_HALF_HEIGHT;
+            cameraPos[1] -= up[1] * SCALED_PANEL_HALF_HEIGHT;
+            cameraPos[2] -= up[2] * SCALED_PANEL_HALF_HEIGHT;
         }
     }
 }
