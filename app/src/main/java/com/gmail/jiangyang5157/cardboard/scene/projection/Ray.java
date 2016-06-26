@@ -4,6 +4,7 @@ import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
 
+import com.gmail.jiangyang5157.cardboard.scene.Camera;
 import com.gmail.jiangyang5157.cardboard.scene.Intersection;
 import com.gmail.jiangyang5157.cardboard.vr.R;
 import com.gmail.jiangyang5157.tookit.app.AppUtils;
@@ -20,8 +21,10 @@ public class Ray extends Point {
     private static final int FRAGMENT_SHADER_RAW_RESOURCE = R.raw.ray_point_fragment_shader;
 
     private static final float POINT_SIZE_NORMAL = 18f;
-    private static final float POINT_SIZE_FOCUSED = 48f;
-    private static final float POINT_SIZE_GRADIENT_UNIT = (POINT_SIZE_FOCUSED - POINT_SIZE_NORMAL) / 6;
+    private static final float POINT_SIZE_FOCUSED = 36f;
+    private static final float POINT_SIZE_GRADIENT_UNIT = (POINT_SIZE_FOCUSED - POINT_SIZE_NORMAL) / 8;
+
+    public static final float DISTANCE = Camera.Z_NEAR * 2;
 
     private static final String BUSY_HANDLE = "u_Busy";
     private int busyHandle;
@@ -58,9 +61,8 @@ public class Ray extends Point {
             }
         }
 
-        Vector i_camera = intersection.getCameraPosVec().minus(intersection.getIntersecttPosVec());
-
-        Vector rayPosVec = new Vector(intersection.getIntersecttPosVec().plus(i_camera.direction().times(pointSize)));
+        Vector camera_intersection = intersection.getIntersecttPosVec().minus(intersection.getCameraPosVec());
+        Vector rayPosVec = new Vector(intersection.getIntersecttPosVec().plus(camera_intersection.direction().times(DISTANCE)));
         double[] rayPosVecData = rayPosVec.getData();
 
         Matrix.setIdentityM(translation, 0);

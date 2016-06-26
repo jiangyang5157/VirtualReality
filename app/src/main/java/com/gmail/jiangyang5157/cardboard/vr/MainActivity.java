@@ -306,7 +306,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
                     if (objModel.getCreationState() == Creation.STATE_BEFORE_PREPARE) {
                         objModel.prepare(ray);
                     } else if (objModel.getCreationState() == Creation.STATE_BEFORE_CREATE) {
-                        objModel.create(10f);
+                        objModel.create();
                         objModel.setPosition(head.getCamera().getPosition(), head.getForward(), ObjModel.DISTANCE, head.getQuaternion(), head.getUp(), head.getRight());
                     }
                 }
@@ -372,6 +372,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         if (ray != null) {
             ray.draw();
         }
+
         if (earth != null) {
             earth.draw();
         }

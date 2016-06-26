@@ -56,7 +56,7 @@ public class Earth extends UvSphere implements Creation {
     public static final float RADIUS = 4000f;
     private static final float MARKER_RADIUS = RADIUS / 50;
     private static final float MARKER_ALTITUDE = -1 * MARKER_RADIUS;
-    private static final float CAMERA_ALTITUDE = (Math.abs(MARKER_ALTITUDE) + MARKER_RADIUS + Dialog.DISTANCE) * (MARKER_ALTITUDE > 0 ? 1 : -1);
+    private static final float CAMERA_ALTITUDE = (Math.abs(MARKER_ALTITUDE) + MARKER_RADIUS + Dialog.DISTANCE + Ray.DISTANCE) * (MARKER_ALTITUDE > 0 ? 1 : -1);
 
     private List<Marker> markers;
 
