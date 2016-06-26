@@ -32,10 +32,10 @@ public abstract class Panel extends Rectangle {
     protected short[] indices;
     protected float[] textures;
 
-    protected Vector tlVec;
-    protected Vector blVec;
-    protected Vector trVec;
-    protected Vector brVec;
+    private Vector tlVec;
+    private Vector blVec;
+    private Vector trVec;
+    private Vector brVec;
 
     private final int[] buffers = new int[3];
     private final int[] texBuffers = new int[1];
@@ -125,9 +125,6 @@ public abstract class Panel extends Rectangle {
     }
 
     protected void buildCorners(float[] up, float[] right) {
-        final float HALF_WIDTH = width / 2.0f;
-        final float HALF_HEIGHT = height / 2.0f;
-
         Vector upVec = new Vector(up[0], up[1], up[2]);
         Vector rightVec = new Vector(right[0], right[1], right[2]);
         double[] dNormals = (new Vector3d(rightVec)).cross(new Vector3d(upVec)).getData();
@@ -135,6 +132,8 @@ public abstract class Panel extends Rectangle {
                 (float) dNormals[0], (float) dNormals[1], (float) dNormals[2]
         };
 
+        final float HALF_WIDTH = width / 2.0f;
+        final float HALF_HEIGHT = height / 2.0f;
         upVec = upVec.times(HALF_HEIGHT);
         rightVec = rightVec.times(HALF_WIDTH);
 
