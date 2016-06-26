@@ -143,8 +143,18 @@ public abstract class Panel extends Rectangle {
         brVec = upVec.negate().plus(rightVec);
     }
 
+    protected float getXyzScale(){
+        return scale[0];
+    }
+
     protected void buildCorners(float[] up, float[] right, Vector posVec) {
         buildCorners(up, right);
+
+        tlVec = tlVec.times(getXyzScale());
+        blVec = blVec.times(getXyzScale());
+        trVec = trVec.times(getXyzScale());
+        brVec = brVec.times(getXyzScale());
+
         tlVec = tlVec.plus(posVec);
         blVec = blVec.plus(posVec);
         trVec = trVec.plus(posVec);
