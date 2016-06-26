@@ -75,7 +75,6 @@ public class Earth extends UvSphere implements Creation {
         markers = new ArrayList<>();
         this.urlKml = urlKml;
         this.urlTexture = urlTexture;
-        radius = RADIUS;
     }
 
     public boolean checkPreparation() {
@@ -329,10 +328,10 @@ public class Earth extends UvSphere implements Creation {
     public Marker addMarker(KmlPlacemark kmlPlacemark, MarkerOptions markerUrlStyle, int markerColorInteger) {
         LatLng latLng = markerUrlStyle.getPosition();
         Marker marker = new Marker(context, this);
+        marker.setRadius(MARKER_RADIUS);
         if (markerColorInteger != 0) {
             marker.setColor(markerColorInteger);
         }
-        marker.setRadius(MARKER_RADIUS);
         marker.setOnClickListener(onMarkerClickListener);
         marker.setLocation(latLng, MARKER_ALTITUDE);
         marker.setName(kmlPlacemark.getProperty("name"));
@@ -341,7 +340,7 @@ public class Earth extends UvSphere implements Creation {
 
         String objProperty = kmlPlacemark.getProperty("obj");
         if (objProperty != null) {
-            ObjModel objModel = new ObjModel(context, 10f, kmlPlacemark.getProperty("title"), objProperty);
+            ObjModel objModel = new ObjModel(context, kmlPlacemark.getProperty("title"), objProperty);
             objModel.setLighting(markerObjModelLighting);
             marker.setObjModel(objModel);
         }
