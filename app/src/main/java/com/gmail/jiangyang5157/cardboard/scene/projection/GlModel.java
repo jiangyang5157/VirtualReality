@@ -129,7 +129,7 @@ public abstract class GlModel extends Model {
         Matrix.setIdentityM(model, 0);
 
         Matrix.multiplyMM(model, 0, rotation, 0, model, 0);
-        Matrix.scaleM(model, 0, scale[0], scale[1], scale[2]);
+        Matrix.scaleM(model, 0, scale, scale, scale);
         Matrix.multiplyMM(model, 0, translation, 0, model, 0);
 
         Matrix.multiplyMM(modelView, 0, view, 0, model, 0);

@@ -125,7 +125,7 @@ public class TextField extends Panel implements Intersection.Clickable {
                 scaleSelector += scaleGradient;
             }
         }
-        setScale(scaleSelector);
+        this.scale = scaleSelector;
 
         return ret;
     }
