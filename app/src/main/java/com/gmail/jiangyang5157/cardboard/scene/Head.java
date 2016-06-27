@@ -38,6 +38,7 @@ public class Head implements SensorEventListener {
         quaternion = new float[4];
 
         camera = new Camera();
+
         velocity = new float[3];
 
         sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
