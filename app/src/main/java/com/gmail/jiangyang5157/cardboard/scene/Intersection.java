@@ -1,5 +1,7 @@
 package com.gmail.jiangyang5157.cardboard.scene;
 
+import android.support.annotation.NonNull;
+
 import com.gmail.jiangyang5157.tookit.math.Vector;
 import com.gmail.jiangyang5157.tookit.opengl.Model;
 
@@ -7,7 +9,7 @@ import com.gmail.jiangyang5157.tookit.opengl.Model;
  * @author Yang
  * @since 5/3/2016
  */
-public class Intersection implements Comparable {
+public class Intersection implements Comparable<Intersection> {
 
     public interface Intersectable {
         Intersection onIntersect(Head head);
@@ -42,9 +44,7 @@ public class Intersection implements Comparable {
     }
 
     @Override
-    public int compareTo(Object another) {
-        Intersection that = (Intersection) another;
-
+    public int compareTo(@NonNull Intersection that) {
         double ret = this.t - that.t;
         if (ret < 0) {
             return -1;

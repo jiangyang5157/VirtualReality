@@ -48,13 +48,13 @@ public class Earth extends UvSphere implements Creation {
     private static final int VERTEX_SHADER_RAW_RESOURCE = R.raw.earth_uv_vertex_shader;
     private static final int FRAGMENT_SHADER_RAW_RESOURCE = R.raw.earth_uv_fragment_shader;
 
-    private static final int STACKS = 32;
-    private static final int SLICES = 32;
+    private static final int STACKS = 180;
+    private static final int SLICES = 180;
 
     public static final float RADIUS = 4000f;
     private static final float MARKER_RADIUS = RADIUS / 80;
     private static final float MARKER_ALTITUDE = -1 * MARKER_RADIUS;
-    private static final float CAMERA_ALTITUDE = (Math.abs(MARKER_ALTITUDE) + MARKER_RADIUS + Dialog.DISTANCE + Ray.DISTANCE) * (MARKER_ALTITUDE > 0 ? 1 : -1);
+    private static final float CAMERA_ALTITUDE = -1 * (Math.abs(MARKER_ALTITUDE) + MARKER_RADIUS + Dialog.DISTANCE + Ray.DISTANCE);
 
     private ArrayList<Marker> markers;
 
@@ -354,7 +354,7 @@ public class Earth extends UvSphere implements Creation {
         }
         Intersection ret;
 
-        ArrayList<Intersection> intersections = new ArrayList<Intersection>();
+        ArrayList<Intersection> intersections = new ArrayList<>();
         for (Marker marker : markers) {
             Intersection intersection = marker.onIntersect(head);
             if (intersection != null) {
