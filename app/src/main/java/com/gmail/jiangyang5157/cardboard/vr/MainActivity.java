@@ -25,7 +25,6 @@ import com.gmail.jiangyang5157.cardboard.scene.projection.MarkerDetailView;
 import com.gmail.jiangyang5157.tookit.app.AppUtils;
 import com.gmail.jiangyang5157.tookit.app.DeviceUtils;
 import com.gmail.jiangyang5157.tookit.data.io.IoUtils;
-import com.gmail.jiangyang5157.tookit.opengl.FrameRate;
 import com.gmail.jiangyang5157.tookit.opengl.Model;
 import com.google.vr.sdk.base.Eye;
 import com.google.vr.sdk.base.GvrView;
@@ -51,8 +50,6 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
     private final float[] LIGHT_POS_IN_CAMERA_SPACE = new float[]{0.0f, Dialog.DISTANCE / 10, 0.0f, 1.0f};
     private final float[] LIGHT_POS_IN_WORLD_SPACE = new float[]{0.0f, 0.0f, 0.0f, 1.0f};
     private float[] lightPosInCameraSpace = new float[4];
-
-    private FrameRate frameRate;
 
     private Head head;
 
@@ -425,8 +422,6 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
     public void onSurfaceCreated(EGLConfig eglConfig) {
         // Dark background so text shows up well.
         GLES20.glClearColor(0.1f, 0.1f, 0.1f, 0.5f);
-
-//        frameRate = new FrameRate(0);
 
         ray = new Ray(getApplicationContext());
         ray.create();
