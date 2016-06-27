@@ -25,6 +25,7 @@ import com.gmail.jiangyang5157.cardboard.scene.projection.MarkerDetailView;
 import com.gmail.jiangyang5157.tookit.app.AppUtils;
 import com.gmail.jiangyang5157.tookit.app.DeviceUtils;
 import com.gmail.jiangyang5157.tookit.data.io.IoUtils;
+import com.gmail.jiangyang5157.tookit.opengl.FrameRate;
 import com.gmail.jiangyang5157.tookit.opengl.Model;
 import com.google.vr.sdk.base.Eye;
 import com.google.vr.sdk.base.GvrView;
@@ -45,11 +46,15 @@ import javax.microedition.khronos.egl.EGLConfig;
 public class MainActivity extends GvrActivity implements GvrView.StereoRenderer {
     private static final String TAG = "[MainActivity]";
 
-    private Head head;
+    private GvrView gvrView;
 
     private final float[] LIGHT_POS_IN_CAMERA_SPACE = new float[]{0.0f, Dialog.DISTANCE / 10, 0.0f, 1.0f};
     private final float[] LIGHT_POS_IN_WORLD_SPACE = new float[]{0.0f, 0.0f, 0.0f, 1.0f};
     private float[] lightPosInCameraSpace = new float[4];
+
+    private FrameRate frameRate;
+
+    private Head head;
 
     private Ray ray;
 
@@ -57,8 +62,6 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
     private KmlChooserView kmlChooserView;
     private MarkerDetailView markerDetailView;
     private ObjModel objModel;
-
-    private GvrView gvrView;
 
     private static final long TIME_DELTA_DOUBLE_CLICK = 200;
     private long lastTimeOnCardboardTrigger = 0;
@@ -277,6 +280,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
 
     @Override
     public void onNewFrame(HeadTransform headTransform) {
+//        Log.d(TAG, "onNewFrame");
         headTransform.getHeadView(head.getHeadView(), 0);
         headTransform.getForwardVector(head.getForward(), 0);
         headTransform.getUpVector(head.getUp(), 0);
@@ -325,6 +329,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
 
     @Override
     public void onDrawEye(Eye eye) {
+//        Log.d(TAG, "onDrawEye");
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 
         // Apply the eye transformation to the matrix.
@@ -341,7 +346,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
 
     @Override
     public void onFinishFrame(Viewport viewport) {
-
+//        Log.d(TAG, "onFinishFrame");
     }
 
     private void updateScene(float[] view, float[] perspective) {
@@ -420,6 +425,8 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
     public void onSurfaceCreated(EGLConfig eglConfig) {
         // Dark background so text shows up well.
         GLES20.glClearColor(0.1f, 0.1f, 0.1f, 0.5f);
+
+//        frameRate = new FrameRate(0);
 
         ray = new Ray(getApplicationContext());
         ray.create();
