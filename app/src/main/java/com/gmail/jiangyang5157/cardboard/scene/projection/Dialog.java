@@ -38,7 +38,7 @@ public abstract class Dialog extends Panel {
     public void create() {
         createPanels();
         adjustBounds(width);
-        create(WIDTH, height, SCALE, AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.Red));
+        create(WIDTH, height, SCALE, AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.Red, null));
     }
 
     @Override
@@ -95,7 +95,7 @@ public abstract class Dialog extends Panel {
         }
         Intersection ret;
 
-        ArrayList<Intersection> intersections = new ArrayList<Intersection>();
+        ArrayList<Intersection> intersections = new ArrayList<>();
         for (Panel panel : panels) {
             Intersection intersection = panel.onIntersect(head);
             if (intersection != null) {
