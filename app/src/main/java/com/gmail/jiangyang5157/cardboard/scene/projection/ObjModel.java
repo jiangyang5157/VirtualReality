@@ -123,7 +123,7 @@ public class ObjModel extends GlModel implements Creation {
     public void create(float scale) {
         creationState = STATE_CREATING;
         this.scale = scale;
-        setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.DeepOrange));
+        setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.DeepOrange, null));
 
         initializeProgram();
         bindBuffers();
@@ -296,7 +296,7 @@ public class ObjModel extends GlModel implements Creation {
                     fv.add(s);
                 }
             } else { // f (triangulate)
-                Vector<Short> fv2 = new Vector<Short>();
+                Vector<Short> fv2 = new Vector<>();
                 for (int i = 1; i < tokens.length; i++) {
                     Short s = Short.valueOf(tokens[i]);
                     s--;
@@ -316,8 +316,8 @@ public class ObjModel extends GlModel implements Creation {
                     fvt.add(s);
                 }
             } else { // f (triangulate)
-                Vector<Short> fv2 = new Vector<Short>();
-                Vector<Short> fvt2 = new Vector<Short>();
+                Vector<Short> fv2 = new Vector<>();
+                Vector<Short> fvt2 = new Vector<>();
                 for (int i = 1; i < tokens.length; i++) {
                     String[] tokens2 = tokens[i].split(File.separator);
                     Short s = Short.valueOf(tokens2[0]);
@@ -342,8 +342,8 @@ public class ObjModel extends GlModel implements Creation {
                     fvn.add(s);
                 }
             } else { // f (triangulate)
-                Vector<Short> fv2 = new Vector<Short>();
-                Vector<Short> fvn2 = new Vector<Short>();
+                Vector<Short> fv2 = new Vector<>();
+                Vector<Short> fvn2 = new Vector<>();
                 for (int i = 1; i < tokens.length; i++) {
                     String[] tokens2 = tokens[i].split("//");
                     Short s = Short.valueOf(tokens2[0]);
