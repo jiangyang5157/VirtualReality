@@ -33,20 +33,21 @@ public class IcosphereVertex implements Geometry {
 
         // create 12 vertices of a icosahedron - http://blog.andreaskahler.com/2009/06/creating-icosphere-mesh-in-code.html
         short vIndex = 0;
-        addVertex(-1, GOLDEN_RATIO, 0, vIndex++);
-        addVertex(1, GOLDEN_RATIO, 0, vIndex++);
-        addVertex(-1, -GOLDEN_RATIO, 0, vIndex++);
-        addVertex(1, -GOLDEN_RATIO, 0, vIndex++);
+        float ratio = (float) GOLDEN_RATIO;
+        addVertex(-1, ratio, 0, vIndex++);
+        addVertex(1, ratio, 0, vIndex++);
+        addVertex(-1, -ratio, 0, vIndex++);
+        addVertex(1, -ratio, 0, vIndex++);
 
-        addVertex(0, -1, GOLDEN_RATIO, vIndex++);
-        addVertex(0, 1, GOLDEN_RATIO, vIndex++);
-        addVertex(0, -1, -GOLDEN_RATIO, vIndex++);
-        addVertex(0, 1, -GOLDEN_RATIO, vIndex++);
+        addVertex(0, -1, ratio, vIndex++);
+        addVertex(0, 1, ratio, vIndex++);
+        addVertex(0, -1, -ratio, vIndex++);
+        addVertex(0, 1, -ratio, vIndex++);
 
-        addVertex(GOLDEN_RATIO, 0, -1, vIndex++);
-        addVertex(GOLDEN_RATIO, 0, 1, vIndex++);
-        addVertex(-GOLDEN_RATIO, 0, -1, vIndex++);
-        addVertex(-GOLDEN_RATIO, 0, 1, vIndex++);
+        addVertex(ratio, 0, -1, vIndex++);
+        addVertex(ratio, 0, 1, vIndex++);
+        addVertex(-ratio, 0, -1, vIndex++);
+        addVertex(-ratio, 0, 1, vIndex++);
 
         // GL_CCW
         indices = new short[]{

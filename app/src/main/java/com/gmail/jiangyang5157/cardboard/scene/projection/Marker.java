@@ -43,7 +43,7 @@ public class Marker extends Icosphere implements Intersection.Clickable{
 
     public void create() {
         if (color == null){
-            setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.White));
+            setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.White, null));
         }
         create(radius, DEFAULT_RECURSION_LEVEL);
     }

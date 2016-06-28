@@ -38,7 +38,7 @@ public class Ray extends Point {
     }
 
     public void create() {
-        create(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.DeepOrange));
+        create(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.DeepOrange, null));
     }
 
     public void setIntersection(Intersection intersection) {

@@ -63,13 +63,13 @@ public class TextField extends Panel implements Intersection.Clickable {
             float textSizePixels = dp2px(context, textSize);
             textPaint.setTextSize(textSizePixels);
             textPaint.setAntiAlias(true);
-            textPaint.setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.DeepOrange));
+            textPaint.setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.DeepOrange, null));
 
             StaticLayout staticLayout = new StaticLayout(text, textPaint, (int) width, align, 1.0f, 0.0f, false);
             int lines = staticLayout.getLineCount();
             Paint.FontMetrics fm = textPaint.getFontMetrics();
             height = fm.descent + lines * (textSizePixels + fm.bottom);
-            create(width, height, scale, AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.White));
+            create(width, height, scale, AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.White, null));
 
             Bitmap bitmap = Bitmap.createBitmap((int) width, (int) height, Bitmap.Config.ARGB_4444);
             Canvas canvas = new Canvas(bitmap);
