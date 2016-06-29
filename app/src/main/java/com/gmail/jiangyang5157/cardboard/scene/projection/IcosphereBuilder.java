@@ -10,19 +10,15 @@ import android.util.Log;
 public class IcosphereBuilder {
     private static final String TAG = "[IcosphereBuilder]";
 
-    private volatile static IcosphereBuilder uniqueInstance;
+    private static IcosphereBuilder instance;
 
     private ArrayMap<Integer, IcosphereVertex> icosphereVertices;
 
-    public static IcosphereBuilder getInstance() {
-        if (uniqueInstance == null) {
-            synchronized (IcosphereBuilder.class) {
-                if (uniqueInstance == null) {
-                    uniqueInstance = new IcosphereBuilder();
-                }
-            }
+    public static synchronized IcosphereBuilder getInstance() {
+        if (instance == null) {
+            instance = new IcosphereBuilder();
         }
-        return uniqueInstance;
+        return instance;
     }
 
     private IcosphereBuilder() {
