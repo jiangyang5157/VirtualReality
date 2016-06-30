@@ -58,6 +58,7 @@ public abstract class GlModel extends Model {
     private final int vertexShaderRawResource;
     private final int fragmentShaderRawResource;
 
+    protected Handler handler;
     protected HandlerThread handlerThread;
 
     protected GlModel(Context context, int vertexShaderRawResource, int fragmentShaderRawResource) {
@@ -68,26 +69,24 @@ public abstract class GlModel extends Model {
     }
 
     public Handler getHandler() {
-        Handler ret = null;
         if (handlerThread == null) {
-            handlerThread = new HandlerThread("GlModel");
+            handlerThread = new HandlerThread(TAG);
             handlerThread.start();
-            ret = new Handler(handlerThread.getLooper());
+            handler = new Handler(handlerThread.getLooper());
         } else if (handlerThread.getState() == Thread.State.NEW) {
             handlerThread.start();
-            ret = new Handler(handlerThread.getLooper());
+            handler = new Handler(handlerThread.getLooper());
         } else if (handlerThread.getState() == Thread.State.WAITING) {
-            ret = new Handler(handlerThread.getLooper());
+            handler = new Handler(handlerThread.getLooper());
         } else if (handlerThread.getState() == Thread.State.TERMINATED) {
             handlerThread = null;
-            handlerThread = new HandlerThread("GlModel");
+            handlerThread = new HandlerThread(TAG);
             handlerThread.start();
-            ret = new Handler(handlerThread.getLooper());
+            handler = new Handler(handlerThread.getLooper());
         } else {
-            handlerThread.quit();
         }
 
-        return ret;
+        return handler;
     }
 
     protected void initializeProgram() {
@@ -180,7 +179,7 @@ public abstract class GlModel extends Model {
         }
 
         if (handlerThread != null) {
-            handlerThread.quit();
+            handlerThread.quitSafely();
         }
     }
 }

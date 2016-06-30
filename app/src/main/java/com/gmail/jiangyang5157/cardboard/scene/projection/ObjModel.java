@@ -69,51 +69,48 @@ public class ObjModel extends GlModel implements Creation {
 
     @Override
     public void prepare(final Ray ray) {
-        Handler handle = getHandler();
-        if (handle != null) {
-            handle.post(new Runnable() {
-                @Override
-                public void run() {
-                    creationState = STATE_PREPARING;
-                    ray.addBusy();
+        getHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                creationState = STATE_PREPARING;
+                ray.addBusy();
 
-                    if (checkPreparation()) {
-                        buildArrays();
+                if (checkPreparation()) {
+                    buildArrays();
 
-                        ray.subtractBusy();
-                        creationState = STATE_BEFORE_CREATE;
-                    } else {
-                        File file = new File(Constant.getAbsolutePath(context, Constant.getPath(url)));
-                        if (!file.exists()) {
-                            Log.d(TAG, file.getAbsolutePath() + " not exist.");
-                            new Downloader(url, file, new Downloader.ResponseListener() {
-                                @Override
-                                public boolean onStart(Map<String, String> headers) {
-                                    return true;
-                                }
+                    ray.subtractBusy();
+                    creationState = STATE_BEFORE_CREATE;
+                } else {
+                    File file = new File(Constant.getAbsolutePath(context, Constant.getPath(url)));
+                    if (!file.exists()) {
+                        Log.d(TAG, file.getAbsolutePath() + " not exist.");
+                        new Downloader(url, file, new Downloader.ResponseListener() {
+                            @Override
+                            public boolean onStart(Map<String, String> headers) {
+                                return true;
+                            }
 
-                                @Override
-                                public void onComplete(Map<String, String> headers) {
-                                    if (checkPreparation()) {
-                                        buildArrays();
+                            @Override
+                            public void onComplete(Map<String, String> headers) {
+                                if (checkPreparation()) {
+                                    buildArrays();
 
-                                        ray.subtractBusy();
-                                        creationState = STATE_BEFORE_CREATE;
-                                    }
-                                }
-
-                                @Override
-                                public void onError(String url, VolleyError volleyError) {
-                                    AppUtils.buildToast(context, url + " " + volleyError.toString());
                                     ray.subtractBusy();
-                                    creationState = STATE_BEFORE_PREPARE;
+                                    creationState = STATE_BEFORE_CREATE;
                                 }
-                            });
-                        }
+                            }
+
+                            @Override
+                            public void onError(String url, VolleyError volleyError) {
+                                AppUtils.buildToast(context, url + " " + volleyError.toString());
+                                ray.subtractBusy();
+                                creationState = STATE_BEFORE_PREPARE;
+                            }
+                        });
                     }
                 }
-            });
-        }
+            }
+        });
     }
 
     public void create() {

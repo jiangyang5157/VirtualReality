@@ -83,78 +83,75 @@ public class Earth extends UvSphere implements Creation {
 
     @Override
     public void prepare(final Ray ray) {
-        Handler handle = getHandler();
-        if (handle != null) {
-            handle.post(new Runnable() {
-                @Override
-                public void run() {
-                    creationState = STATE_PREPARING;
-                    ray.addBusy();
+        getHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                creationState = STATE_PREPARING;
+                ray.addBusy();
 
-                    if (checkPreparation()) {
-                        final File fileKml = new File(Constant.getAbsolutePath(context, Constant.getPath(urlKml)));
-                        prepareKml(fileKml);
+                if (checkPreparation()) {
+                    final File fileKml = new File(Constant.getAbsolutePath(context, Constant.getPath(urlKml)));
+                    prepareKml(fileKml);
 
-                        ray.subtractBusy();
-                        creationState = STATE_BEFORE_CREATE;
-                    } else {
-                        final File fileKml = new File(Constant.getAbsolutePath(context, Constant.getPath(urlKml)));
-                        if (!fileKml.exists()) {
-                            Log.d(TAG, fileKml.getAbsolutePath() + " not exist.");
-                            new Downloader(urlKml, fileKml, new Downloader.ResponseListener() {
-                                @Override
-                                public boolean onStart(Map<String, String> headers) {
-                                    return true;
-                                }
+                    ray.subtractBusy();
+                    creationState = STATE_BEFORE_CREATE;
+                } else {
+                    final File fileKml = new File(Constant.getAbsolutePath(context, Constant.getPath(urlKml)));
+                    if (!fileKml.exists()) {
+                        Log.d(TAG, fileKml.getAbsolutePath() + " not exist.");
+                        new Downloader(urlKml, fileKml, new Downloader.ResponseListener() {
+                            @Override
+                            public boolean onStart(Map<String, String> headers) {
+                                return true;
+                            }
 
-                                @Override
-                                public void onComplete(Map<String, String> headers) {
-                                    prepareKml(fileKml);
+                            @Override
+                            public void onComplete(Map<String, String> headers) {
+                                prepareKml(fileKml);
 
-                                    if (checkPreparation()) {
-                                        ray.subtractBusy();
-                                        creationState = STATE_BEFORE_CREATE;
-                                    }
-                                }
-
-                                @Override
-                                public void onError(String url, VolleyError volleyError) {
-                                    AppUtils.buildToast(context, url + " " + volleyError.toString());
+                                if (checkPreparation()) {
                                     ray.subtractBusy();
-                                    creationState = STATE_BEFORE_PREPARE;
+                                    creationState = STATE_BEFORE_CREATE;
                                 }
-                            });
-                        }
+                            }
 
-                        File fileTexture = new File(Constant.getAbsolutePath(context, Constant.getPath(urlTexture)));
-                        if (!fileTexture.exists()) {
-                            Log.d(TAG, fileTexture.getAbsolutePath() + " not exist.");
-                            new Downloader(urlTexture, fileTexture, new Downloader.ResponseListener() {
-                                @Override
-                                public boolean onStart(Map<String, String> headers) {
-                                    return true;
-                                }
+                            @Override
+                            public void onError(String url, VolleyError volleyError) {
+                                AppUtils.buildToast(context, url + " " + volleyError.toString());
+                                ray.subtractBusy();
+                                creationState = STATE_BEFORE_PREPARE;
+                            }
+                        });
+                    }
 
-                                @Override
-                                public void onComplete(Map<String, String> headers) {
-                                    if (checkPreparation()) {
-                                        ray.subtractBusy();
-                                        creationState = STATE_BEFORE_CREATE;
-                                    }
-                                }
+                    File fileTexture = new File(Constant.getAbsolutePath(context, Constant.getPath(urlTexture)));
+                    if (!fileTexture.exists()) {
+                        Log.d(TAG, fileTexture.getAbsolutePath() + " not exist.");
+                        new Downloader(urlTexture, fileTexture, new Downloader.ResponseListener() {
+                            @Override
+                            public boolean onStart(Map<String, String> headers) {
+                                return true;
+                            }
 
-                                @Override
-                                public void onError(String url, VolleyError volleyError) {
-                                    AppUtils.buildToast(context, url + " " + volleyError.toString());
+                            @Override
+                            public void onComplete(Map<String, String> headers) {
+                                if (checkPreparation()) {
                                     ray.subtractBusy();
-                                    creationState = STATE_BEFORE_PREPARE;
+                                    creationState = STATE_BEFORE_CREATE;
                                 }
-                            });
-                        }
+                            }
+
+                            @Override
+                            public void onError(String url, VolleyError volleyError) {
+                                AppUtils.buildToast(context, url + " " + volleyError.toString());
+                                ray.subtractBusy();
+                                creationState = STATE_BEFORE_PREPARE;
+                            }
+                        });
                     }
                 }
-            });
-        }
+            }
+        });
     }
 
     private void prepareKml(File fileKml) {
