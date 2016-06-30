@@ -41,9 +41,16 @@ public class KmlChooserView extends Dialog {
             }
         });
 
+        String lastKmlFileName = Constant.getLastKmlFileName(context);
         for (final String fileName : fileNames) {
             TextField tf = new TextField(context);
-            tf.create(fileName, WIDTH, SCALE, TextField.TEXT_SIZE_TINY, Layout.Alignment.ALIGN_CENTER);
+            float textSize;
+            if (fileName.equals(lastKmlFileName)) {
+                textSize = TextField.TEXT_SIZE_MEDIUM;
+            } else {
+                textSize = TextField.TEXT_SIZE_TINY;
+            }
+            tf.create(fileName, WIDTH, SCALE, textSize, Layout.Alignment.ALIGN_CENTER);
             tf.setOnClickListener(new Intersection.Clickable() {
                 @Override
                 public void onClick(Model model) {

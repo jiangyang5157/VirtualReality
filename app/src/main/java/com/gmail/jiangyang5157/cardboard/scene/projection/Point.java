@@ -16,6 +16,7 @@ import java.nio.FloatBuffer;
  * @since 5/1/2016
  */
 public class Point extends GlModel {
+    private static final String TAG = "[Point]";
 
     protected static final String POINT_SIZE_HANDLE = "u_PointSize";
     protected int pointSizeHandle;
@@ -95,7 +96,7 @@ public class Point extends GlModel {
     @Override
     public void destroy() {
         super.destroy();
-        Log.d("Point", "destroy");
+        Log.d(TAG, "destroy");
         GLES20.glDeleteBuffers(buffers.length, buffers, 0);
     }
 }
