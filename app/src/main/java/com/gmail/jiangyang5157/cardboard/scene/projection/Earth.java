@@ -81,7 +81,6 @@ public class Earth extends UvSphere implements Creation {
         return fileKml.exists() && fileTexture.exists();
     }
 
-    @Override
     public void prepare(final Ray ray) {
         getHandler().post(new Runnable() {
             @Override
