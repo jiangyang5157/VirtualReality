@@ -130,4 +130,10 @@ public class Ray extends Point {
         busy--;
         busy = busy < 0 ? 0 : busy;
     }
+
+    @Override
+    public void destroy() {
+        super.destroy();
+        intersections.clear();
+    }
 }
