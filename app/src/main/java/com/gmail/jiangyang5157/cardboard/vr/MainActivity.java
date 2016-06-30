@@ -38,6 +38,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.ParseException;
+import java.util.Collections;
 import java.util.Map;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -167,39 +168,37 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
     }
 
     private Intersection getIntersection() {
-        Intersection ret = null;
-
+        Intersection intersection = null;
         if (kmlChooserView != null) {
-            ret = kmlChooserView.onIntersect(head);
-            if (ret == null) {
+            intersection = kmlChooserView.onIntersect(head);
+            if (intersection == null) {
                 if (kmlChooserView.isCreated()) {
                     kmlChooserView.destroy();
                     kmlChooserView = null;
                 }
             }
         }
-
-        if (markerDetailView != null) {
-            ret = markerDetailView.onIntersect(head);
-            if (ret == null) {
-                if (markerDetailView.isCreated()) {
-                    markerDetailView.destroy();
-                    markerDetailView = null;
-                    if (objModel != null) {
-                        objModel.destroy();
-                        objModel = null;
+        if (intersection == null) {
+            if (markerDetailView != null) {
+                intersection = markerDetailView.onIntersect(head);
+                if (intersection == null) {
+                    if (markerDetailView.isCreated()) {
+                        markerDetailView.destroy();
+                        markerDetailView = null;
+                        if (objModel != null) {
+                            objModel.destroy();
+                            objModel = null;
+                        }
                     }
                 }
             }
         }
-
-        if (ret == null) {
+        if (intersection == null) {
             if (earth != null) {
-                ret = earth.onIntersect(head);
+                intersection = earth.onIntersect(head);
             }
         }
-
-        return ret;
+        return intersection;
     }
 
     private void onCardboardClick() {
@@ -267,10 +266,10 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         public void onKmlSelected(String fileName) {
             Log.d(TAG, "onKmlSelected: " + fileName);
             if (fileName.equals(Constant.getLastKmlFileName(getApplicationContext()))) {
+                destoryKmlChooserView();
                 return;
             }
             Constant.setLastKmlFileName(getApplicationContext(), fileName);
-
             newEarth(Constant.getKmlUrl(fileName));
         }
     };
@@ -321,7 +320,10 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
             }
         }
 
-        ray.setIntersection(getIntersection());
+        ray.clearIntersections();
+        Intersection intersection = getIntersection();
+        ray.addIntersections(intersection);
+        ray.intersect(intersection);
     }
 
     @Override

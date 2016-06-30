@@ -68,7 +68,7 @@ public abstract class GlModel extends Model {
         this.fragmentShaderRawResource = fragmentShaderRawResource;
     }
 
-    public Handler getHandler() {
+    protected Handler getHandler() {
         if (handlerThread == null) {
             handlerThread = new HandlerThread(TAG);
             handlerThread.start();

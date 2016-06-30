@@ -11,6 +11,9 @@ import com.gmail.jiangyang5157.tookit.app.AppUtils;
 import com.gmail.jiangyang5157.tookit.math.Vector;
 import com.gmail.jiangyang5157.tookit.opengl.GlUtils;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 /**
  * @author Yang
  * @since 5/1/2016
@@ -30,20 +33,39 @@ public class Ray extends Point {
     private int busyHandle;
     private int busy = 0;
 
-    private Intersection intersection;
+    private ArrayList<Intersection> intersections;
 
     public Ray(Context context) {
         super(context, VERTEX_SHADER_RAW_RESOURCE, FRAGMENT_SHADER_RAW_RESOURCE);
         pointSize = POINT_SIZE_NORMAL;
+        intersections = new ArrayList<>();
     }
 
     public void create() {
         create(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.DeepOrange, null));
     }
 
-    public void setIntersection(Intersection intersection) {
-        this.intersection = intersection;
+    public void clearIntersections() {
+        intersections.clear();
+    }
 
+    public void addIntersections(Intersection intersection) {
+        if (intersection == null) {
+            return;
+        }
+        intersections.add(intersection);
+    }
+
+    public void sortIntersections() {
+        Collections.sort(intersections);
+    }
+
+    public Intersection getIntersection() {
+        Collections.sort(intersections);
+        return intersections.size() > 0 ? intersections.get(0) : null;
+    }
+
+    public void intersect(Intersection intersection) {
         if (intersection == null) {
             if (pointSize > POINT_SIZE_NORMAL) {
                 pointSize -= POINT_SIZE_GRADIENT_UNIT;
@@ -67,10 +89,6 @@ public class Ray extends Point {
 
         Matrix.setIdentityM(translation, 0);
         Matrix.translateM(translation, 0, (float) rayPosVecData[0], (float) rayPosVecData[1], (float) rayPosVecData[2]);
-    }
-
-    public Intersection getIntersection() {
-        return intersection;
     }
 
     @Override
