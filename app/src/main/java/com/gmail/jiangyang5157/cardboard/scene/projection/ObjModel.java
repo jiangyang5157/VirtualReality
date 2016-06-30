@@ -67,7 +67,6 @@ public class ObjModel extends GlModel implements Creation {
         return file.exists();
     }
 
-    @Override
     public void prepare(final Ray ray) {
         getHandler().post(new Runnable() {
             @Override
