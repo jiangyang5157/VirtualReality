@@ -458,7 +458,7 @@ public class ObjModel extends GlModel implements Creation {
     @Override
     public void destroy() {
         super.destroy();
-        Log.d("ObjModel", "destroy");
+        Log.d(TAG, "destroy");
         GLES20.glDeleteBuffers(buffers.length, buffers, 0);
     }
 
