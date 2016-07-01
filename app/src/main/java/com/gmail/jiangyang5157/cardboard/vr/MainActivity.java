@@ -38,7 +38,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.ParseException;
-import java.util.Collections;
 import java.util.Map;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -48,9 +47,10 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
 
     private GvrView gvrView;
 
-    private final float[] LIGHT_POS_IN_CAMERA_SPACE = new float[]{0.0f, Dialog.DISTANCE / 10, 0.0f, 1.0f};
     private final float[] LIGHT_POS_IN_WORLD_SPACE = new float[]{0.0f, 0.0f, 0.0f, 1.0f};
     private float[] lightPosInCameraSpace = new float[4];
+    private final float[] LIGHT_POS_IN_CAMERA_SPACE_TOP = new float[]{0.0f, Dialog.DISTANCE / 10, 0.0f, 1.0f};
+    private final float[] LIGHT_POS_IN_CAMERA_SPACE_CENTER = new float[]{0.0f, 0.0f, 0.0f, 1.0f};
 
     private Head head;
 
@@ -333,7 +333,6 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
 
         // Apply the eye transformation to the matrix.
         Matrix.multiplyMM(head.getCamera().getView(), 0, eye.getEyeView(), 0, head.getCamera().getMatrix(), 0);
-
         // Set the position of the light
         Matrix.multiplyMV(lightPosInCameraSpace, 0, head.getCamera().getView(), 0, LIGHT_POS_IN_WORLD_SPACE, 0);
 
@@ -444,13 +443,13 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         earth.setMarkerLighting(new Lighting() {
             @Override
             public float[] getLightPosInCameraSpace() {
-                return lightPosInCameraSpace;
+                return LIGHT_POS_IN_CAMERA_SPACE_CENTER;
             }
         });
         earth.setMarkerObjModelLighting(new Lighting() {
             @Override
             public float[] getLightPosInCameraSpace() {
-                return LIGHT_POS_IN_CAMERA_SPACE;
+                return LIGHT_POS_IN_CAMERA_SPACE_TOP;
             }
         });
     }
