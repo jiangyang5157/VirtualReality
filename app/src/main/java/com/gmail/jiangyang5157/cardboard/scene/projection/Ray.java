@@ -60,13 +60,16 @@ public class Ray extends Point {
         intersections.add(intersection);
     }
 
-    public void sortIntersections() {
-        Collections.sort(intersections);
-    }
-
     public Intersection getIntersection() {
-        Collections.sort(intersections);
-        return intersections.size() > 0 ? intersections.get(0) : null;
+        Intersection ret = null;
+        int size = intersections.size();
+        if (size > 0) {
+            if (size > 1) {
+                Collections.sort(intersections);
+            }
+            ret = intersections.get(0);
+        }
+        return ret;
     }
 
     public void intersect(Intersection intersection) {

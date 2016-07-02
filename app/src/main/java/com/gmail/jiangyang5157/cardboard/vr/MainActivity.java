@@ -16,6 +16,7 @@ import com.gmail.jiangyang5157.cardboard.scene.Intersection;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
 import com.gmail.jiangyang5157.cardboard.scene.projection.Dialog;
 import com.gmail.jiangyang5157.cardboard.scene.projection.KmlChooserView;
+import com.gmail.jiangyang5157.cardboard.scene.projection.Map;
 import com.gmail.jiangyang5157.cardboard.scene.projection.ObjModel;
 import com.gmail.jiangyang5157.cardboard.scene.projection.Ray;
 import com.gmail.jiangyang5157.cardboard.scene.projection.Earth;
@@ -38,7 +39,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.ParseException;
-import java.util.Map;
 
 import javax.microedition.khronos.egl.EGLConfig;
 
@@ -54,11 +54,11 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
     private Head head;
 
     private Ray ray;
-
     private Earth earth;
-    private KmlChooserView kmlChooserView;
     private MarkerDetailView markerDetailView;
     private ObjModel objModel;
+    private KmlChooserView kmlChooserView;
+    private Map map;
 
     private static final long TIME_DELTA_DOUBLE_CLICK = 200;
     private long lastTimeOnCardboardTrigger = 0;
@@ -96,7 +96,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         final File patchFile = new File(Constant.getAbsolutePath(getApplicationContext(), Constant.getPatchPath()));
         new Downloader(Constant.getPatchUrl(), patchFile, new Downloader.ResponseListener() {
             @Override
-            public boolean onStart(Map<String, String> headers) {
+            public boolean onStart(java.util.Map<String, String> headers) {
                 try {
                     long lastModifiedTime = Constant.getLastPatchLastModifiedTime(getApplicationContext());
                     long httpDateTime = Constant.getHttpDateTime(headers.get("Last-Modified"));
@@ -111,7 +111,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
             }
 
             @Override
-            public void onComplete(Map<String, String> headers) {
+            public void onComplete(java.util.Map<String, String> headers) {
                 InputStream in = null;
                 try {
                     Constant.setLastPatchLastModifiedTime(getApplicationContext(), Constant.getHttpDateTime(headers.get("Last-Modified")));
@@ -186,6 +186,11 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
                         }
                     }
                 }
+            }
+        }
+        if (intersection == null) {
+            if (map != null) {
+                intersection = map.onIntersect(head);
             }
         }
         if (intersection == null) {
@@ -265,7 +270,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
                 return;
             }
             Constant.setLastKmlFileName(getApplicationContext(), fileName);
-            newEarth(Constant.getKmlUrl(fileName));
+            loadKml(Constant.getKmlUrl(fileName));
         }
     };
 
@@ -289,6 +294,16 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
                     shaders.put(GLES20.GL_VERTEX_SHADER, R.raw.earth_uv_vertex_shader);
                     shaders.put(GLES20.GL_FRAGMENT_SHADER, R.raw.earth_uv_fragment_shader);
                     earth.create(shaders);
+                }
+            }
+        }
+
+        if (map != null) {
+            if (!map.isCreated()) {
+                if (map.getCreationState() == Creation.STATE_BEFORE_PREPARE) {
+                    map.prepare(ray);
+                } else if (map.getCreationState() == Creation.STATE_BEFORE_CREATE) {
+                    map.create();
                 }
             }
         }
@@ -358,6 +373,9 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         if (ray != null) {
             ray.update(view, perspective);
         }
+        if (map != null) {
+            map.update(view, perspective);
+        }
         if (earth != null) {
             earth.update(view, perspective);
         }
@@ -381,6 +399,10 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
 
         if (ray != null) {
             ray.draw();
+        }
+
+        if (map != null) {
+            map.draw();
         }
 
         if (earth != null) {
@@ -437,25 +459,26 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         shaders.put(GLES20.GL_FRAGMENT_SHADER, R.raw.ray_point_fragment_shader);
         ray.create(shaders);
 
-        newEarth(Constant.getKmlUrl(Constant.getLastKmlFileName(getApplicationContext())));
+        earth = new Earth(getApplicationContext(), Constant.getResourceUrl(Constant.EARTH_TEXTURE_FILE_NAME));
+
+        loadKml(Constant.getKmlUrl(Constant.getLastKmlFileName(getApplicationContext())));
     }
 
-    private void newEarth(String urlKml) {
+    private void loadKml(String urlKml) {
+        destoryMap();
         destoryKmlChooserView();
         destoryObjModel();
         destoryMarkerDetailView();
-        destoryEarth();
 
-        earth = new Earth(getApplicationContext(), urlKml,
-                Constant.getResourceUrl(Constant.EARTH_TEXTURE_FILE_NAME));
-        earth.setOnMarkerClickListener(markerOnClickListener);
-        earth.setMarkerLighting(new Lighting() {
+        map = new Map(getApplicationContext(), urlKml);
+        map.setOnMarkerClickListener(markerOnClickListener);
+        map.setMarkerLighting(new Lighting() {
             @Override
             public float[] getLightPosInCameraSpace() {
                 return lightPosInCameraSpace;
             }
         });
-        earth.setMarkerObjModelLighting(new Lighting() {
+        map.setMarkerObjModelLighting(new Lighting() {
             @Override
             public float[] getLightPosInCameraSpace() {
                 return LIGHT_POS_IN_CAMERA_SPACE_CENTER;
@@ -498,6 +521,13 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         super.onPause();
         if (head != null) {
             head.onPause();
+        }
+    }
+
+    private void destoryMap() {
+        if (map != null) {
+            map.destroy();
+            map = null;
         }
     }
 
@@ -545,6 +575,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
             gvrView.shutdown();
         }
 
+        destoryMap();
         destoryKmlChooserView();
         destoryObjModel();
         destoryMarkerDetailView();

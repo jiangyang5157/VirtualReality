@@ -3,6 +3,7 @@ package com.gmail.jiangyang5157.cardboard.kml;
 import android.content.Context;
 
 import com.gmail.jiangyang5157.cardboard.scene.projection.Earth;
+import com.gmail.jiangyang5157.cardboard.scene.projection.Map;
 import com.google.android.gms.maps.MapsInitializer;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -30,7 +31,7 @@ public class KmlLayer {
      * @param context    Context object
      * @throws XmlPullParserException if file cannot be parsed
      */
-    public KmlLayer(Earth map, int resourceId, Context context)
+    public KmlLayer(Map map, int resourceId, Context context)
             throws XmlPullParserException, IOException {
         this(map, context.getResources().openRawResource(resourceId), context);
     }
@@ -42,7 +43,7 @@ public class KmlLayer {
      * @param stream InputStream containing KML file
      * @throws XmlPullParserException if file cannot be parsed
      */
-    public KmlLayer(Earth map, InputStream stream, Context context)
+    public KmlLayer(Map map, InputStream stream, Context context)
             throws XmlPullParserException, IOException {
         if (stream == null) {
             throw new IllegalArgumentException("KML InputStream cannot be null");
@@ -131,7 +132,7 @@ public class KmlLayer {
      *
      * @return map
      */
-    public Earth getMap() {
+    public Map getMap() {
         return mRenderer.getMap();
     }
 
@@ -140,7 +141,7 @@ public class KmlLayer {
      *
      * @param map map to place placemark, container, style and ground overlays on
      */
-    public void setMap(Earth map) {
+    public void setMap(Map map) {
         mRenderer.setMap(map);
     }
 }

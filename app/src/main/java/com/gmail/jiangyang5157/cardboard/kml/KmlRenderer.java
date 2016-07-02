@@ -3,6 +3,7 @@ package com.gmail.jiangyang5157.cardboard.kml;
 import android.content.Context;
 
 import com.gmail.jiangyang5157.cardboard.scene.projection.Earth;
+import com.gmail.jiangyang5157.cardboard.scene.projection.Map;
 import com.gmail.jiangyang5157.cardboard.scene.projection.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -18,7 +19,7 @@ import java.util.HashMap;
  */
 /* package */ class KmlRenderer {
 
-    private Earth mMap;
+    private Map mMap;
 
     private HashMap<KmlPlacemark, Object> mPlacemarks;
 
@@ -34,7 +35,7 @@ import java.util.HashMap;
 
     private Context mContext;
 
-    /* package */ KmlRenderer(Earth map, Context context) {
+    /* package */ KmlRenderer(Map map, Context context) {
         mContext = context;
         mMap = map;
         mStylesRenderer = new HashMap<String, KmlStyle>();
@@ -148,7 +149,7 @@ import java.util.HashMap;
      *
      * @return map
      */
-    /* package */ Earth getMap() {
+    /* package */ Map getMap() {
         return mMap;
     }
 
@@ -157,7 +158,7 @@ import java.util.HashMap;
      *
      * @param map map to place placemark, container, style and ground overlays on
      */
-    /* package */ void setMap(Earth map) {
+    /* package */ void setMap(Map map) {
         removeLayerFromMap();
         mMap = map;
         addLayerToMap();
