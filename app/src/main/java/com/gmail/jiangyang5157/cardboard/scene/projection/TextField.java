@@ -9,10 +9,12 @@ import android.opengl.GLUtils;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
+import android.util.ArrayMap;
 import android.util.TypedValue;
 
 import com.gmail.jiangyang5157.cardboard.scene.Head;
 import com.gmail.jiangyang5157.cardboard.scene.Intersection;
+import com.gmail.jiangyang5157.cardboard.vr.R;
 import com.gmail.jiangyang5157.tookit.app.AppUtils;
 import com.gmail.jiangyang5157.tookit.opengl.Model;
 
@@ -29,8 +31,6 @@ public class TextField extends Panel implements Intersection.Clickable {
     protected static final float TEXT_SIZE_MEDIUM = 10f;
     protected static final float TEXT_SIZE_SMALL = 8f;
     protected static final float TEXT_SIZE_TINY = 6f;
-
-    private final int[] texBuffers = new int[1];
 
     private float scaleNormal;
     private float scaleFocused;
@@ -59,7 +59,11 @@ public class TextField extends Panel implements Intersection.Clickable {
     protected void create() {
         setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.White, null));
         initScaleSelector(scale);
+        super.create();
+    }
 
+    @Override
+    protected void genTextures() {
         GLES20.glGenTextures(1, texBuffers, 0);
         if (texBuffers[0] == 0) {
             throw new RuntimeException("Error loading texture.");
@@ -89,17 +93,10 @@ public class TextField extends Panel implements Intersection.Clickable {
             GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
             bitmap.recycle();
         }
-
-        super.create();
     }
 
     private float dp2px(Context context, float dp) {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.getResources().getDisplayMetrics());
-    }
-
-    @Override
-    protected int createTexture() {
-        return texBuffers[0];
     }
 
     @Override

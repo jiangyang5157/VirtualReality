@@ -19,7 +19,7 @@ import java.util.Collections;
 public abstract class Dialog extends Panel {
     private static final String TAG = "[Dialog]";
 
-    protected static final float ALPHA_BACKGROUND = 0.0f;
+    protected static final float ALPHA_BACKGROUND = 0.1f;
 
     protected static final float PADDING_LAYER = 1.0f;
 
@@ -45,21 +45,19 @@ public abstract class Dialog extends Panel {
     }
 
     @Override
-    protected int createTexture() {
-        final int[] textureHandle = new int[1];
-        GLES20.glGenTextures(1, textureHandle, 0);
-        if (textureHandle[0] == 0) {
-            throw new RuntimeException("Error loading texture.");
+    protected void genTextures() {
+        GLES20.glGenTextures(1, texBuffers, 0);
+        if (texBuffers[0] == 0) {
+            throw new RuntimeException("Gl Error - Unable to create texture.");
         } else {
             Bitmap bitmap = Bitmap.createBitmap((int) width, (int) height, Bitmap.Config.ARGB_4444);
             bitmap.eraseColor(getColorWithAlpha(ALPHA_BACKGROUND));
-            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureHandle[0]);
+            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texBuffers[0]);
             GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
             GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_NEAREST);
             GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
             bitmap.recycle();
         }
-        return textureHandle[0];
     }
 
     @Override

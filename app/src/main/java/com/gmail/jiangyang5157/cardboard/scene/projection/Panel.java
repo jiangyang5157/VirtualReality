@@ -36,14 +36,15 @@ public abstract class Panel extends Rectangle {
     private Vector trVec;
     private Vector brVec;
 
-    private final int[] buffers = new int[3];
-    private final int[] texBuffers = new int[1];
+    protected final int[] buffers = new int[3];
+    protected final int[] texBuffers = new int[1];
 
     protected Panel(Context context) {
         super(context);
     }
 
     protected void create() {
+        genTextures();
         buildData();
 
         ArrayMap<Integer, Integer> shaders = new ArrayMap<>();
@@ -218,11 +219,9 @@ public abstract class Panel extends Rectangle {
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, texturesBuffHandle);
         GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, texturesBuffer.capacity() * BufferUtils.BYTES_PER_FLOAT, texturesBuffer, GLES20.GL_STATIC_DRAW);
         texturesBuffer.limit(0);
-
-        texBuffers[0] = createTexture();
     }
 
-    protected abstract int createTexture();
+    protected abstract void genTextures();
 
     @Override
     public void draw() {

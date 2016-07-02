@@ -1,7 +1,10 @@
 package com.gmail.jiangyang5157.cardboard.scene.projection;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.opengl.GLES20;
+import android.opengl.GLUtils;
 import android.util.ArrayMap;
 import android.util.Log;
 
@@ -45,8 +48,8 @@ public class Earth extends UvSphere implements Creation {
 
     public static final float RADIUS = 4000f;
 
-    private final int[] buffers = new int[3];
-    private final int[] texBuffers = new int[1];
+    protected final int[] buffers = new int[3];
+    protected final int[] texBuffers = new int[1];
 
     private String urlTexture;
     private String urlKml;
@@ -167,6 +170,7 @@ public class Earth extends UvSphere implements Creation {
         creationState = STATE_CREATING;
         super.create();
 
+        genTextures();
         buildData();
 
         ArrayMap<Integer, Integer> shaders = new ArrayMap<>();
@@ -222,11 +226,27 @@ public class Earth extends UvSphere implements Creation {
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, texturesBuffHandle);
         GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, texturesBuffer.capacity() * BufferUtils.BYTES_PER_FLOAT, texturesBuffer, GLES20.GL_STATIC_DRAW);
         texturesBuffer.limit(0);
+    }
 
+    @Override
+    protected void genTextures() {
         InputStream in = null;
         try {
             in = new FileInputStream(new File(Constant.getAbsolutePath(context, Constant.getPath(urlTexture))));
-            texBuffers[0] = buildTexture(in);
+
+            GLES20.glGenTextures(1, texBuffers, 0);
+            if (texBuffers[0] == 0) {
+                throw new RuntimeException("Gl Error - Unable to create texture.");
+            } else {
+                final BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inScaled = false;
+                final Bitmap bitmap = BitmapFactory.decodeStream(in, null, options);
+                GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texBuffers[0]);
+                GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
+                GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_NEAREST);
+                GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
+                bitmap.recycle();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         } finally {

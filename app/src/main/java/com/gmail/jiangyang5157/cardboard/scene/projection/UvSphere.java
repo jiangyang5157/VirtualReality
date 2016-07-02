@@ -22,6 +22,8 @@ public abstract class UvSphere extends Sphere {
         this.slices = slices;
     }
 
+    protected abstract void genTextures();
+
     @Override
     protected void buildData() {
         vertices = new float[stacks * slices * 3];
