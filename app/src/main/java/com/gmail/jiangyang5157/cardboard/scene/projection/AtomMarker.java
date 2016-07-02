@@ -42,5 +42,4 @@ public class AtomMarker extends Marker {
 
         GlUtils.printGlError(TAG + " - draw end");
     }
-
 }

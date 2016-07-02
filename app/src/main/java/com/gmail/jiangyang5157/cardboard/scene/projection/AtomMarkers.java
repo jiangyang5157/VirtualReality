@@ -33,7 +33,7 @@ import java.util.Collections;
  * @author Yang
  * @since 7/2/2016
  */
-public class AtomMarkers extends Marker implements Creation, GlModel.IntersectListener {
+public class AtomMarkers extends Marker implements Creation {
     private static final String TAG = "[AtomMarkers]";
 
     protected int creationState = STATE_BEFORE_PREPARE;
