@@ -51,11 +51,6 @@ public class Marker extends Icosphere implements GlModel.ClickListener {
     }
 
     @Override
-    public void update(float[] view, float[] perspective) {
-        super.update(view, perspective);
-    }
-
-    @Override
     public void onClick(Model model) {
         if (onClickListener != null) {
             onClickListener.onClick(this);
