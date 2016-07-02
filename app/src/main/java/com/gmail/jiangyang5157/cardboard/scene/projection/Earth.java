@@ -226,7 +226,7 @@ public class Earth extends UvSphere implements Creation {
         InputStream in = null;
         try {
             in = new FileInputStream(new File(Constant.getAbsolutePath(context, Constant.getPath(urlTexture))));
-            texBuffers[0] = loadTexture(in);
+            texBuffers[0] = buildTexture(in);
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
