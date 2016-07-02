@@ -1,11 +1,8 @@
 package com.gmail.jiangyang5157.cardboard.scene.projection;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.opengl.GLES20;
-import android.opengl.GLUtils;
 import android.opengl.Matrix;
 import android.os.Handler;
 import android.os.HandlerThread;
