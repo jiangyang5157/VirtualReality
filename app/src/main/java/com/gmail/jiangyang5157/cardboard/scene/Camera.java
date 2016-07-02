@@ -2,13 +2,18 @@ package com.gmail.jiangyang5157.cardboard.scene;
 
 import android.opengl.Matrix;
 
+import com.gmail.jiangyang5157.cardboard.scene.projection.Dialog;
 import com.gmail.jiangyang5157.cardboard.scene.projection.Earth;
+import com.gmail.jiangyang5157.cardboard.scene.projection.Marker;
+import com.gmail.jiangyang5157.cardboard.scene.projection.Ray;
 
 /**
  * @author Yang
  * @since 5/2/2016
  */
 public class Camera {
+
+    public static final float ALTITUDE = -1 * (Math.abs(Marker.ALTITUDE) + Marker.RADIUS + Dialog.DISTANCE + Ray.DISTANCE);
 
     public static final float Z_NEAR = 0.1f;
     public static final float Z_FAR = Earth.RADIUS * 2;

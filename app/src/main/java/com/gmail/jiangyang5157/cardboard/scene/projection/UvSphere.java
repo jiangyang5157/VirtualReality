@@ -89,11 +89,11 @@ public abstract class UvSphere extends Sphere {
         normals = vertices.clone();
     }
 
-    protected static int loadTexture(final InputStream in) {
+    protected int loadTexture(final InputStream in) {
         final int[] textureHandle = new int[1];
         GLES20.glGenTextures(1, textureHandle, 0);
         if (textureHandle[0] == 0) {
-            throw new RuntimeException("Error loading texture.");
+            throw new RuntimeException("Gl Error - Unable to create texture.");
         } else {
             final BitmapFactory.Options options = new BitmapFactory.Options();
             options.inScaled = false;
@@ -111,7 +111,7 @@ public abstract class UvSphere extends Sphere {
         final int[] textureHandle = new int[1];
         GLES20.glGenTextures(1, textureHandle, 0);
         if (textureHandle[0] == 0) {
-            throw new RuntimeException("Error loading texture.");
+            throw new RuntimeException("Gl Error - Unable to create texture.");
         } else {
             final BitmapFactory.Options options = new BitmapFactory.Options();
             options.inScaled = false;

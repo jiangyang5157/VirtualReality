@@ -68,27 +68,6 @@ public abstract class GlModel extends Model {
         this.fragmentShaderRawResource = fragmentShaderRawResource;
     }
 
-    protected Handler getHandler() {
-        if (handlerThread == null) {
-            handlerThread = new HandlerThread(TAG);
-            handlerThread.start();
-            handler = new Handler(handlerThread.getLooper());
-        } else if (handlerThread.getState() == Thread.State.NEW) {
-            handlerThread.start();
-            handler = new Handler(handlerThread.getLooper());
-        } else if (handlerThread.getState() == Thread.State.WAITING) {
-            handler = new Handler(handlerThread.getLooper());
-        } else if (handlerThread.getState() == Thread.State.TERMINATED) {
-            handlerThread = null;
-            handlerThread = new HandlerThread(TAG);
-            handlerThread.start();
-            handler = new Handler(handlerThread.getLooper());
-        } else {
-        }
-
-        return handler;
-    }
-
     protected void initializeProgram() {
         createProgram();
         bindHandles();
@@ -169,6 +148,27 @@ public abstract class GlModel extends Model {
         int g = (int) (color[1] * 255);
         int b = (int) (color[2] * 255);
         return Color.argb(a, r, g, b);
+    }
+
+    protected Handler getHandler() {
+        if (handlerThread == null) {
+            handlerThread = new HandlerThread(TAG);
+            handlerThread.start();
+            handler = new Handler(handlerThread.getLooper());
+        } else if (handlerThread.getState() == Thread.State.NEW) {
+            handlerThread.start();
+            handler = new Handler(handlerThread.getLooper());
+        } else if (handlerThread.getState() == Thread.State.WAITING) {
+            handler = new Handler(handlerThread.getLooper());
+        } else if (handlerThread.getState() == Thread.State.TERMINATED) {
+            handlerThread = null;
+            handlerThread = new HandlerThread(TAG);
+            handlerThread.start();
+            handler = new Handler(handlerThread.getLooper());
+        } else {
+        }
+
+        return handler;
     }
 
     @Override

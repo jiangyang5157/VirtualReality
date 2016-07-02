@@ -63,6 +63,10 @@ public class Head implements SensorEventListener {
     }
 
     public void adjustPosition(Earth earth) {
+        if (earth == null){
+            return;
+        }
+
         float[] a = new float[]{
                 forward[0] * stepsCounter,
                 forward[1] * stepsCounter,

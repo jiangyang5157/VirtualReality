@@ -9,6 +9,7 @@ import com.android.volley.VolleyError;
 import com.gmail.jiangyang5157.cardboard.kml.KmlLayer;
 import com.gmail.jiangyang5157.cardboard.kml.KmlPlacemark;
 import com.gmail.jiangyang5157.cardboard.net.Downloader;
+import com.gmail.jiangyang5157.cardboard.scene.Camera;
 import com.gmail.jiangyang5157.cardboard.scene.Creation;
 import com.gmail.jiangyang5157.cardboard.scene.Intersection;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
@@ -42,34 +43,27 @@ import java.util.Map;
 public class Earth extends UvSphere implements Creation {
     private static final String TAG = "[Earth]";
 
-    private String urlTexture;
-    private String urlKml;
-
-    private static final int VERTEX_SHADER_RAW_RESOURCE = R.raw.earth_uv_vertex_shader;
-    private static final int FRAGMENT_SHADER_RAW_RESOURCE = R.raw.earth_uv_fragment_shader;
+    public static final float RADIUS = 4000f;
 
     private static final int STACKS = 180;
     private static final int SLICES = 180;
 
-    public static final float RADIUS = 4000f;
-    private static final float MARKER_RADIUS = RADIUS / 80;
-    private static final float MARKER_ALTITUDE = -1 * MARKER_RADIUS;
-    private static final float CAMERA_ALTITUDE = -1 * (Math.abs(MARKER_ALTITUDE) + MARKER_RADIUS + Dialog.DISTANCE + Ray.DISTANCE);
-
-    private ArrayList<Marker> markers;
-
-    private Intersection.Clickable onMarkerClickListener;
-
     private final int[] buffers = new int[3];
     private final int[] texBuffers = new int[1];
+
+    private String urlTexture;
+    private String urlKml;
+    private ArrayList<Marker> markers;
+
+    protected int creationState = STATE_BEFORE_PREPARE;
 
     protected Lighting markerLighting;
     protected Lighting markerObjModelLighting;
 
-    protected int creationState = STATE_BEFORE_PREPARE;
+    private Intersection.Clickable onMarkerClickListener;
 
     public Earth(Context context, String urlKml, String urlTexture) {
-        super(context, VERTEX_SHADER_RAW_RESOURCE, FRAGMENT_SHADER_RAW_RESOURCE);
+        super(context, R.raw.earth_uv_vertex_shader, R.raw.earth_uv_fragment_shader);
         markers = new ArrayList<>();
         this.urlKml = urlKml;
         this.urlTexture = urlTexture;
@@ -318,12 +312,12 @@ public class Earth extends UvSphere implements Creation {
     public Marker addMarker(KmlPlacemark kmlPlacemark, MarkerOptions markerUrlStyle, int markerColorInteger) {
         LatLng latLng = markerUrlStyle.getPosition();
         Marker marker = new Marker(context, this);
-        marker.setRadius(MARKER_RADIUS);
+        marker.setRadius(Marker.RADIUS);
         if (markerColorInteger != 0) {
             marker.setColor(markerColorInteger);
         }
         marker.setOnClickListener(onMarkerClickListener);
-        marker.setLocation(latLng, MARKER_ALTITUDE);
+        marker.setLocation(latLng, Marker.ALTITUDE);
         marker.setName(kmlPlacemark.getProperty("name"));
         marker.setDescription(kmlPlacemark.getProperty("description"));
         marker.setLighting(markerLighting);
@@ -340,7 +334,7 @@ public class Earth extends UvSphere implements Creation {
     }
 
     public boolean contain(float[] point) {
-        return contain(radius + CAMERA_ALTITUDE, getPosition(), point);
+        return contain(radius + Camera.ALTITUDE, getPosition(), point);
     }
 
     @Override

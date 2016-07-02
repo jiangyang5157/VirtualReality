@@ -16,19 +16,19 @@ import com.google.android.gms.maps.model.LatLng;
  */
 public class Marker extends Icosphere implements Intersection.Clickable{
 
+    public static final float RADIUS = Earth.RADIUS / 80;
+    public static final float ALTITUDE = -1 * RADIUS;
+
     private static final int VERTEX_SHADER_RAW_RESOURCE = R.raw.sphere_color_vertex_shader;
     private static final int FRAGMENT_SHADER_RAW_RESOURCE = R.raw.sphere_color_fragment_shader;
 
-    private static final int DEFAULT_RECURSION_LEVEL = 3;
+    private String name;
+    private String description;
+    private Coordinate coordinate;
 
     private final Earth earth;
 
-    private String name;
-    private String description;
-
     private ObjModel objModel;
-
-    private Coordinate coordinate;
 
     private Intersection.Clickable onClickListener;
 
@@ -45,7 +45,7 @@ public class Marker extends Icosphere implements Intersection.Clickable{
         if (color == null){
             setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.White, null));
         }
-        create(radius, DEFAULT_RECURSION_LEVEL);
+        create(radius, 3);
     }
 
     public void setLocation(LatLng latLng, float altitude) {

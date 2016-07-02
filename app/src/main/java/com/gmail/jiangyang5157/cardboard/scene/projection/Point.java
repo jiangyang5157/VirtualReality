@@ -42,17 +42,17 @@ public class Point extends GlModel {
     }
 
     @Override
+    protected void buildArrays() {
+        vertices = new float[0];
+    }
+
+    @Override
     protected void bindHandles() {
         mvpMatrixHandle = GLES20.glGetUniformLocation(program, MODEL_VIEW_PROJECTION_HANDLE);
         colorHandle = GLES20.glGetUniformLocation(program, COLOR_HANDLE);
         pointSizeHandle = GLES20.glGetUniformLocation(program, POINT_SIZE_HANDLE);
 
         vertexHandle = GLES20.glGetAttribLocation(program, VERTEX_HANDLE);
-    }
-
-    @Override
-    protected void buildArrays() {
-        vertices = new float[0];
     }
 
     @Override
