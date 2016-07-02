@@ -13,7 +13,6 @@ import com.gmail.jiangyang5157.cardboard.kml.KmlLayer;
 import com.gmail.jiangyang5157.cardboard.kml.KmlPlacemark;
 import com.gmail.jiangyang5157.cardboard.net.Downloader;
 import com.gmail.jiangyang5157.cardboard.scene.Camera;
-import com.gmail.jiangyang5157.cardboard.scene.Creation;
 import com.gmail.jiangyang5157.cardboard.scene.Intersection;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
 import com.gmail.jiangyang5157.cardboard.scene.Lighting;
@@ -43,7 +42,7 @@ import java.util.Map;
  * @author Yang
  * @since 4/12/2016.
  */
-public class Earth extends UvSphere implements Creation {
+public class Earth extends UvSphere implements GlModel.Creation {
     private static final String TAG = "[Earth]";
 
     public static final float RADIUS = 4000f;

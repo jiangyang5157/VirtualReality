@@ -30,6 +30,19 @@ public abstract class GlModel extends Model {
         void bindTexBuffers();
     }
 
+    public interface Creation {
+        int STATE_BEFORE_PREPARE = 0x00000001;
+        int STATE_PREPARING = 0x00000010;
+        int STATE_BEFORE_CREATE = 0x00000100;
+        int STATE_CREATING = 0x00001000;
+
+        int getCreationState();
+    }
+
+    public interface Preparation extends Creation {
+
+    }
+
     public static final int GLES_VERSION_REQUIRED = 0x00020000;
 
     protected static final String MODEL_HANDLE = "u_ModelMatrix";
@@ -81,6 +94,7 @@ public abstract class GlModel extends Model {
     protected void buildProgram(int program) {
         this.program = program;
     }
+
     protected abstract void bindHandles();
 
     protected abstract void buildData();
@@ -141,7 +155,6 @@ public abstract class GlModel extends Model {
             handlerThread = new HandlerThread(TAG);
             handlerThread.start();
             handler = new Handler(handlerThread.getLooper());
-        } else {
         }
 
         return handler;
