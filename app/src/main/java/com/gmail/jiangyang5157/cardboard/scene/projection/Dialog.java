@@ -38,9 +38,9 @@ public abstract class Dialog extends Panel {
     protected abstract void createPanels();
 
     public void create() {
+        setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.Red, null));
         createPanels();
         adjustBounds(WIDTH);
-        setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.Red, null));
         super.create();
     }
 

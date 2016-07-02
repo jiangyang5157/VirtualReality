@@ -5,6 +5,7 @@ import android.text.Layout;
 
 import com.gmail.jiangyang5157.cardboard.scene.Intersection;
 import com.gmail.jiangyang5157.cardboard.vr.Constant;
+import com.gmail.jiangyang5157.tookit.app.AppUtils;
 import com.gmail.jiangyang5157.tookit.opengl.Model;
 
 import java.io.File;
@@ -50,7 +51,12 @@ public class KmlChooserView extends Dialog {
             } else {
                 textSize = TextField.TEXT_SIZE_TINY;
             }
-            tf.create(fileName, WIDTH, SCALE, textSize, Layout.Alignment.ALIGN_CENTER);
+            tf.setText(fileName);
+            tf.width = WIDTH;
+            tf.setScale(SCALE);
+            tf.setTextSize(textSize);
+            tf.setAlignment(Layout.Alignment.ALIGN_CENTER);
+            tf.create();
             tf.setOnClickListener(new Intersection.Clickable() {
                 @Override
                 public void onClick(Model model) {

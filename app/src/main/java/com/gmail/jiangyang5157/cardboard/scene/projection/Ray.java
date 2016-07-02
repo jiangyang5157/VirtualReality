@@ -38,10 +38,10 @@ public class Ray extends Point {
         super(context);
         pointSize = POINT_SIZE_NORMAL;
         intersections = new ArrayList<>();
-        setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.DeepOrange, null));
     }
 
     public void create() {
+        setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.DeepOrange, null));
         buildArrays();
 
         ArrayMap<Integer, Integer> shaders = new ArrayMap<>();

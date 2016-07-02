@@ -30,16 +30,20 @@ public class TextField extends Panel implements Intersection.Clickable {
     protected static final float TEXT_SIZE_SMALL = 8f;
     protected static final float TEXT_SIZE_TINY = 6f;
 
-    private TextPaint textPaint;
-
-    private Intersection.Clickable onClickListener;
-
     private final int[] texBuffers = new int[1];
 
     private float scaleNormal;
     private float scaleFocused;
     private float scaleGradient;
     private float scaleSelector;
+
+    private String text;
+
+    private float textSize;
+
+    private Layout.Alignment alignment;
+
+    private Intersection.Clickable onClickListener;
 
     public TextField(Context context) {
         super(context);
@@ -52,27 +56,25 @@ public class TextField extends Panel implements Intersection.Clickable {
         scaleSelector = scaleNormal;
     }
 
-    protected void create(String text, float width, float scale, float textSize, Layout.Alignment align) {
+    protected void create() {
         GLES20.glGenTextures(1, texBuffers, 0);
         if (texBuffers[0] == 0) {
             throw new RuntimeException("Error loading texture.");
         } else {
-            this.width = width;
-            this.scale = scale;
+            setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.White, null));
             initScaleSelector(scale);
 
-            textPaint = new TextPaint();
+            TextPaint textPaint = new TextPaint();
             float textSizePixels = dp2px(context, textSize);
             textPaint.setTextSize(textSizePixels);
             textPaint.setAntiAlias(true);
             textPaint.setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.DeepOrange, null));
 
-            StaticLayout staticLayout = new StaticLayout(text, textPaint, (int) width, align, 1.0f, 0.0f, false);
+            StaticLayout staticLayout = new StaticLayout(text, textPaint, (int) width, alignment, 1.0f, 0.0f, false);
             int lines = staticLayout.getLineCount();
             Paint.FontMetrics fm = textPaint.getFontMetrics();
             height = fm.descent + lines * (textSizePixels + fm.bottom);
 
-            setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.White, null));
             super.create();
 
             Bitmap bitmap = Bitmap.createBitmap((int) width, (int) height, Bitmap.Config.ARGB_4444);
@@ -132,5 +134,29 @@ public class TextField extends Panel implements Intersection.Clickable {
         this.scale = scaleSelector;
 
         return ret;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public float getTextSize() {
+        return textSize;
+    }
+
+    public void setTextSize(float textSize) {
+        this.textSize = textSize;
+    }
+
+    public Layout.Alignment getAlignment() {
+        return alignment;
+    }
+
+    public void setAlignment(Layout.Alignment alignment) {
+        this.alignment = alignment;
     }
 }
