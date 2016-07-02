@@ -73,7 +73,7 @@ public class ObjModel extends GlModel implements Creation {
                 ray.addBusy();
 
                 if (checkPreparation()) {
-                    buildArrays();
+                    buildData();
                     ray.subtractBusy();
                     creationState = STATE_BEFORE_CREATE;
                 } else {
@@ -89,7 +89,7 @@ public class ObjModel extends GlModel implements Creation {
                             @Override
                             public void onComplete(Map<String, String> headers) {
                                 if (checkPreparation()) {
-                                    buildArrays();
+                                    buildData();
                                     ray.subtractBusy();
                                     creationState = STATE_BEFORE_CREATE;
                                 }
@@ -188,7 +188,7 @@ public class ObjModel extends GlModel implements Creation {
     }
 
     @Override
-    protected void buildArrays() {
+    protected void buildData() {
         v = new java.util.Vector<>();
         vt = new java.util.Vector<>();
         vn = new java.util.Vector<>();

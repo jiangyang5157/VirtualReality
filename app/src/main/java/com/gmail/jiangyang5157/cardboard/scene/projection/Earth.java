@@ -167,7 +167,7 @@ public class Earth extends UvSphere implements Creation {
         creationState = STATE_CREATING;
         super.create();
 
-        buildArrays();
+        buildData();
 
         ArrayMap<Integer, Integer> shaders = new ArrayMap<>();
         shaders.put(GLES20.GL_VERTEX_SHADER, R.raw.earth_uv_vertex_shader);

@@ -75,8 +75,6 @@ public class TextField extends Panel implements Intersection.Clickable {
             Paint.FontMetrics fm = textPaint.getFontMetrics();
             height = fm.descent + lines * (textSizePixels + fm.bottom);
 
-            super.create();
-
             Bitmap bitmap = Bitmap.createBitmap((int) width, (int) height, Bitmap.Config.ARGB_4444);
             Canvas canvas = new Canvas(bitmap);
             bitmap.eraseColor(getColorWithAlpha(ALPHA_BACKGROUND));
@@ -90,6 +88,8 @@ public class TextField extends Panel implements Intersection.Clickable {
             GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_NEAREST);
             GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
             bitmap.recycle();
+
+            super.create();
         }
     }
 

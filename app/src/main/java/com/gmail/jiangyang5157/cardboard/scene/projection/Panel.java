@@ -44,7 +44,7 @@ public abstract class Panel extends Rectangle {
     }
 
     protected void create() {
-        buildArrays();
+        buildData();
 
         ArrayMap<Integer, Integer> shaders = new ArrayMap<>();
         shaders.put(GLES20.GL_VERTEX_SHADER, R.raw.panel_vertex_shader);
@@ -158,7 +158,7 @@ public abstract class Panel extends Rectangle {
     }
 
     @Override
-    protected void buildArrays() {
+    protected void buildData() {
         buildCorners(UP, RIGHT);
 
         double[] tl = tlVec.getData();

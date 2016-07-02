@@ -76,7 +76,7 @@ public abstract class GlModel extends Model {
         this.program = program;
     }
 
-    protected abstract void buildArrays();
+    protected abstract void buildData();
 
     protected abstract void bindHandles();
 

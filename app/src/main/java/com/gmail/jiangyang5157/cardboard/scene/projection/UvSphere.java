@@ -23,7 +23,7 @@ public abstract class UvSphere extends Sphere {
     }
 
     @Override
-    protected void buildArrays() {
+    protected void buildData() {
         vertices = new float[stacks * slices * 3];
         indices = new short[stacks * slices * 6];
         textures = new float[stacks * slices * 2];

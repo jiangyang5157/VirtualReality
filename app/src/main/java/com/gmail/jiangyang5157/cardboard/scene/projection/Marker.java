@@ -43,7 +43,7 @@ public class Marker extends Icosphere implements Intersection.Clickable {
             setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.White, null));
         }
 
-        buildArrays();
+        buildData();
 
         ArrayMap<Integer, Integer> shaders = new ArrayMap<>();
         shaders.put(GLES20.GL_VERTEX_SHADER, R.raw.sphere_color_vertex_shader);

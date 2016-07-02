@@ -44,7 +44,7 @@ public abstract class Icosphere extends Sphere {
     }
 
     @Override
-    protected void buildArrays() {
+    protected void buildData() {
         IcosphereVertex icosphereVertex = IcosphereBuilder.getInstance().build(recursionLevel);
         vertices = icosphereVertex.getVertices();
         normals = vertices.clone();

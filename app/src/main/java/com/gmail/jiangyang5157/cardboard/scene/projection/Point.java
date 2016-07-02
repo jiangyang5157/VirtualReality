@@ -31,7 +31,7 @@ public abstract class Point extends GlModel {
     }
 
     @Override
-    protected void buildArrays() {
+    protected void buildData() {
         vertices = new float[0];
     }
 

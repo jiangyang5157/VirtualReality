@@ -42,7 +42,7 @@ public class Ray extends Point {
 
     public void create() {
         setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.DeepOrange, null));
-        buildArrays();
+        buildData();
 
         ArrayMap<Integer, Integer> shaders = new ArrayMap<>();
         shaders.put(GLES20.GL_VERTEX_SHADER, R.raw.ray_point_vertex_shader);
