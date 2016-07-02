@@ -96,9 +96,9 @@ public class Earth extends UvSphere implements Creation {
     }
 
     @Override
-    public void create(ArrayMap<Integer, Integer> shaders) {
+    public void create(int program) {
         creationState = STATE_CREATING;
-        super.create(shaders);
+        super.create(program);
 
         setCreated(true);
         setVisible(true);

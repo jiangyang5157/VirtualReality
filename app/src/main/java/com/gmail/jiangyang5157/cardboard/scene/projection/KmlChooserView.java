@@ -29,8 +29,8 @@ public class KmlChooserView extends Dialog {
     }
 
     @Override
-    public void create(ArrayMap<Integer, Integer> shaders) {
-        super.create(shaders);
+    public void create(int program) {
+        super.create(program);
 
         setCreated(true);
         setVisible(true);

@@ -82,18 +82,14 @@ public abstract class GlModel extends Model {
     }
 
     public void create(ArrayMap<Integer, Integer> shaders) {
-        buildProgram(shaders);
+        create(GlUtils.createProgram(context, shaders));
     }
 
     public void create(int program) {
-        buildProgram(program);
+        bindProgram(program);
     }
 
-    private void buildProgram(ArrayMap<Integer, Integer> shaders) {
-        buildProgram(GlUtils.createProgram(context, shaders));
-    }
-
-    private void buildProgram(int program) {
+    public void bindProgram(int program) {
         this.program = program;
     }
 

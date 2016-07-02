@@ -2,7 +2,6 @@ package com.gmail.jiangyang5157.cardboard.scene.projection;
 
 import android.content.Context;
 import android.opengl.GLES20;
-import android.util.ArrayMap;
 import android.util.Log;
 
 import com.gmail.jiangyang5157.tookit.data.buffer.BufferUtils;
@@ -34,10 +33,10 @@ public abstract class Icosphere extends Sphere {
     }
 
     @Override
-    public void create(ArrayMap<Integer, Integer> shaders) {
+    public void create(int program) {
         buildData();
 
-        super.create(shaders);
+        super.create(program);
         bindHandles();
         bindBuffers();
     }

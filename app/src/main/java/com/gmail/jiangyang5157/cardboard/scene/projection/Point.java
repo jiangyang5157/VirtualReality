@@ -32,10 +32,10 @@ public abstract class Point extends GlModel implements GlModel.BindingBuffers {
     }
 
     @Override
-    public void create(ArrayMap<Integer, Integer> shaders) {
+    public void create(int program) {
         buildData();
 
-        super.create(shaders);
+        super.create(program);
         bindHandles();
         bindBuffers();
     }

@@ -24,11 +24,11 @@ public abstract class UvSphere extends Sphere implements GlModel.BindingTexBuffe
     }
 
     @Override
-    public void create(ArrayMap<Integer, Integer> shaders) {
+    public void create(int program) {
         bindTexBuffers();
         buildData();
 
-        super.create(shaders);
+        super.create(program);
         bindHandles();
         bindBuffers();
     }

@@ -1,7 +1,6 @@
 package com.gmail.jiangyang5157.cardboard.scene.projection;
 
 import android.content.Context;
-import android.util.ArrayMap;
 
 import com.gmail.jiangyang5157.cardboard.scene.Intersection;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
@@ -18,11 +17,6 @@ public abstract class Sphere extends GlModel implements GlModel.BindingBuffers, 
 
     protected Sphere(Context context) {
         super(context);
-    }
-
-    @Override
-    public void create(ArrayMap<Integer, Integer> shaders) {
-        super.create(shaders);
     }
 
     @Override

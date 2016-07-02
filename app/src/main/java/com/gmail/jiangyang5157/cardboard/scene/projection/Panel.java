@@ -43,11 +43,11 @@ public abstract class Panel extends Rectangle implements GlModel.BindingBuffers,
     }
 
     @Override
-    public void create(ArrayMap<Integer, Integer> shaders) {
+    public void create(int program) {
         bindTexBuffers();
         buildData();
 
-        super.create(shaders);
+        super.create(program);
         bindHandles();
         bindBuffers();
     }

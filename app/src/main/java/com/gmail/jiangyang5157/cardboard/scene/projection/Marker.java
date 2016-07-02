@@ -32,11 +32,11 @@ public class Marker extends Icosphere implements GlModel.ClickListener {
     }
 
     @Override
-    public void create(ArrayMap<Integer, Integer> shaders) {
+    public void create(int program) {
         if (color == null) {
             setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.White, null));
         }
-        super.create(shaders);
+        super.create(program);
 
         setCreated(true);
         setVisible(true);

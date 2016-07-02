@@ -108,10 +108,10 @@ public class ObjModel extends GlModel implements GlModel.BindingBuffers, Creatio
     }
 
     @Override
-    public void create(ArrayMap<Integer, Integer> shaders) {
+    public void create(int program) {
         creationState = STATE_CREATING;
         setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.DeepOrange, null));
-        super.create(shaders);
+        super.create(program);
 
         bindHandles();
         bindBuffers();
