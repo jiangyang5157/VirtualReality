@@ -15,20 +15,14 @@ public abstract class Sphere extends GlModel implements Intersection.Intersectab
 
     protected float radius;
 
-    public Sphere(Context context, int vertexShaderRawResource, int fragmentShaderRawResource) {
-        super(context, vertexShaderRawResource, fragmentShaderRawResource);
+    protected Sphere(Context context) {
+        super(context);
     }
 
-    protected void create(float radius) {
-        setRadius(radius);
-        buildArrays();
-
-        createProgram();
-        bindHandles();
-        bindBuffers();
-
-        setCreated(true);
-        setVisible(true);
+    protected void create(){
+        if (radius <= 0){
+            throw new RuntimeException("Radius should greater than 0.");
+        }
     }
 
     @Override

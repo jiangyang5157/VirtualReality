@@ -3,6 +3,7 @@ package com.gmail.jiangyang5157.cardboard.scene.projection;
 import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
+import android.util.ArrayMap;
 import android.util.Log;
 
 import com.gmail.jiangyang5157.cardboard.scene.Intersection;
@@ -23,9 +24,7 @@ import java.nio.ShortBuffer;
  * @since 5/5/2016
  */
 public abstract class Panel extends Rectangle {
-
-    private static final int VERTEX_SHADER_RAW_RESOURCE = R.raw.panel_vertex_shader;
-    private static final int FRAGMENT_SHADER_RAW_RESOURCE = R.raw.panel_fragment_shader;
+    private static final String TAG = "[Panel]";
 
     protected float[] vertices;
     protected float[] normals;
@@ -40,18 +39,17 @@ public abstract class Panel extends Rectangle {
     private final int[] buffers = new int[3];
     private final int[] texBuffers = new int[1];
 
-    public Panel(Context context) {
-        super(context, VERTEX_SHADER_RAW_RESOURCE, FRAGMENT_SHADER_RAW_RESOURCE);
+    protected Panel(Context context) {
+        super(context);
     }
 
-    protected void create(float width, float height, float scale, int color) {
-        this.width = width;
-        this.height = height;
-        this.scale = scale;
-        setColor(color);
+    protected void create() {
         buildArrays();
 
-        createProgram();
+        ArrayMap<Integer, Integer> shaders = new ArrayMap<>();
+        shaders.put(GLES20.GL_VERTEX_SHADER, R.raw.panel_vertex_shader);
+        shaders.put(GLES20.GL_FRAGMENT_SHADER, R.raw.panel_fragment_shader);
+        buildProgram(shaders);
         bindHandles();
         bindBuffers();
 

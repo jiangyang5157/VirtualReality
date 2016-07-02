@@ -2,7 +2,7 @@ package com.gmail.jiangyang5157.cardboard.scene.projection;
 
 import android.content.Context;
 import android.opengl.GLES20;
-import android.os.Handler;
+import android.util.ArrayMap;
 import android.util.Log;
 
 import com.android.volley.VolleyError;
@@ -45,9 +45,6 @@ public class Earth extends UvSphere implements Creation {
 
     public static final float RADIUS = 4000f;
 
-    private static final int STACKS = 180;
-    private static final int SLICES = 180;
-
     private final int[] buffers = new int[3];
     private final int[] texBuffers = new int[1];
 
@@ -63,10 +60,11 @@ public class Earth extends UvSphere implements Creation {
     private Intersection.Clickable onMarkerClickListener;
 
     public Earth(Context context, String urlKml, String urlTexture) {
-        super(context, R.raw.earth_uv_vertex_shader, R.raw.earth_uv_fragment_shader);
-        markers = new ArrayList<>();
+        super(context, 180, 180);
         this.urlKml = urlKml;
         this.urlTexture = urlTexture;
+        markers = new ArrayList<>();
+        setRadius(RADIUS);
     }
 
     public boolean checkPreparation() {
@@ -85,7 +83,6 @@ public class Earth extends UvSphere implements Creation {
                 if (checkPreparation()) {
                     final File fileKml = new File(Constant.getAbsolutePath(context, Constant.getPath(urlKml)));
                     prepareKml(fileKml);
-
                     ray.subtractBusy();
                     creationState = STATE_BEFORE_CREATE;
                 } else {
@@ -168,7 +165,19 @@ public class Earth extends UvSphere implements Creation {
 
     public void create() {
         creationState = STATE_CREATING;
-        create(radius, STACKS, SLICES);
+        super.create();
+
+        buildArrays();
+
+        ArrayMap<Integer, Integer> shaders = new ArrayMap<>();
+        shaders.put(GLES20.GL_VERTEX_SHADER, R.raw.earth_uv_vertex_shader);
+        shaders.put(GLES20.GL_FRAGMENT_SHADER, R.raw.earth_uv_fragment_shader);
+        buildProgram(shaders);
+        bindHandles();
+        bindBuffers();
+
+        setCreated(true);
+        setVisible(true);
 
         for (Marker marker : markers) {
             marker.create();

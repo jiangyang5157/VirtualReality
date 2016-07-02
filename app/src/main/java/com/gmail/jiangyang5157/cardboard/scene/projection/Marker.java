@@ -1,7 +1,9 @@
 package com.gmail.jiangyang5157.cardboard.scene.projection;
 
 import android.content.Context;
+import android.opengl.GLES20;
 import android.opengl.Matrix;
+import android.util.ArrayMap;
 
 import com.gmail.jiangyang5157.cardboard.scene.Coordinate;
 import com.gmail.jiangyang5157.cardboard.scene.Intersection;
@@ -14,13 +16,10 @@ import com.google.android.gms.maps.model.LatLng;
  * @author Yang
  * @since 4/12/2016.
  */
-public class Marker extends Icosphere implements Intersection.Clickable{
+public class Marker extends Icosphere implements Intersection.Clickable {
 
     public static final float RADIUS = Earth.RADIUS / 80;
     public static final float ALTITUDE = -1 * RADIUS;
-
-    private static final int VERTEX_SHADER_RAW_RESOURCE = R.raw.sphere_color_vertex_shader;
-    private static final int FRAGMENT_SHADER_RAW_RESOURCE = R.raw.sphere_color_fragment_shader;
 
     private String name;
     private String description;
@@ -33,19 +32,28 @@ public class Marker extends Icosphere implements Intersection.Clickable{
     private Intersection.Clickable onClickListener;
 
     public Marker(Context context, Earth earth) {
-        this(context, earth, VERTEX_SHADER_RAW_RESOURCE, FRAGMENT_SHADER_RAW_RESOURCE);
-    }
-
-    private Marker(Context context, Earth earth, int vertexShaderRawResource, int fragmentShaderRawResource) {
-        super(context, vertexShaderRawResource, fragmentShaderRawResource);
+        super(context, 3);
         this.earth = earth;
+        setRadius(RADIUS);
     }
 
     public void create() {
-        if (color == null){
+        super.create();
+        if (color == null) {
             setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.White, null));
         }
-        create(radius, 3);
+
+        buildArrays();
+
+        ArrayMap<Integer, Integer> shaders = new ArrayMap<>();
+        shaders.put(GLES20.GL_VERTEX_SHADER, R.raw.sphere_color_vertex_shader);
+        shaders.put(GLES20.GL_FRAGMENT_SHADER, R.raw.sphere_color_fragment_shader);
+        buildProgram(shaders);
+        bindHandles();
+        bindBuffers();
+
+        setCreated(true);
+        setVisible(true);
     }
 
     public void setLocation(LatLng latLng, float altitude) {
@@ -68,7 +76,7 @@ public class Marker extends Icosphere implements Intersection.Clickable{
 
     @Override
     public void onClick(Model model) {
-        if (onClickListener != null){
+        if (onClickListener != null) {
             onClickListener.onClick(this);
         }
     }
@@ -76,6 +84,7 @@ public class Marker extends Icosphere implements Intersection.Clickable{
     public void setOnClickListener(Intersection.Clickable onClickListener) {
         this.onClickListener = onClickListener;
     }
+
     public String getName() {
         return name;
     }

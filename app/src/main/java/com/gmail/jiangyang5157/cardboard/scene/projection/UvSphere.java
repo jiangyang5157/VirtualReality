@@ -22,14 +22,10 @@ public abstract class UvSphere extends Sphere {
     protected short[] indices;
     protected float[] textures;
 
-    public UvSphere(Context context, int vertexShaderRawResource, int fragmentShaderRawResource) {
-        super(context, vertexShaderRawResource, fragmentShaderRawResource);
-    }
-
-    protected void create(float radius, int stacks, int slices) {
+    protected UvSphere(Context context, int stacks, int slices) {
+        super(context);
         this.stacks = stacks;
         this.slices = slices;
-        create(radius);
     }
 
     @Override

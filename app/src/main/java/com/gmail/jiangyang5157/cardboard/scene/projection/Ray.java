@@ -3,6 +3,7 @@ package com.gmail.jiangyang5157.cardboard.scene.projection;
 import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
+import android.util.ArrayMap;
 
 import com.gmail.jiangyang5157.cardboard.scene.Camera;
 import com.gmail.jiangyang5157.cardboard.scene.Intersection;
@@ -19,9 +20,7 @@ import java.util.Collections;
  * @since 5/1/2016
  */
 public class Ray extends Point {
-
-    private static final int VERTEX_SHADER_RAW_RESOURCE = R.raw.ray_point_vertex_shader;
-    private static final int FRAGMENT_SHADER_RAW_RESOURCE = R.raw.ray_point_fragment_shader;
+    private static final String TAG = "[Ray]";
 
     private static final float POINT_SIZE_NORMAL = 18f;
     private static final float POINT_SIZE_FOCUSED = 36f;
@@ -36,13 +35,24 @@ public class Ray extends Point {
     private ArrayList<Intersection> intersections;
 
     public Ray(Context context) {
-        super(context, VERTEX_SHADER_RAW_RESOURCE, FRAGMENT_SHADER_RAW_RESOURCE);
+        super(context);
         pointSize = POINT_SIZE_NORMAL;
         intersections = new ArrayList<>();
+        setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.DeepOrange, null));
     }
 
     public void create() {
-        create(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.DeepOrange, null));
+        buildArrays();
+
+        ArrayMap<Integer, Integer> shaders = new ArrayMap<>();
+        shaders.put(GLES20.GL_VERTEX_SHADER, R.raw.ray_point_vertex_shader);
+        shaders.put(GLES20.GL_FRAGMENT_SHADER, R.raw.ray_point_fragment_shader);
+        buildProgram(shaders);
+        bindHandles();
+        bindBuffers();
+
+        setCreated(true);
+        setVisible(true);
     }
 
     public void clearIntersections() {

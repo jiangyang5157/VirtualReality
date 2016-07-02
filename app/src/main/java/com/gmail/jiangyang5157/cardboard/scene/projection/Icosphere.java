@@ -16,7 +16,8 @@ import java.nio.ShortBuffer;
  * @author Yang
  * @since 4/12/2016.
  */
-public class Icosphere extends Sphere {
+public abstract class Icosphere extends Sphere {
+    private static final String TAG = "[Icosphere]";
 
     private int recursionLevel;
 
@@ -26,13 +27,9 @@ public class Icosphere extends Sphere {
 
     private final int[] buffers = new int[3];
 
-    public Icosphere(Context context, int vertexShaderRawResource, int fragmentShaderRawResource) {
-        super(context, vertexShaderRawResource, fragmentShaderRawResource);
-    }
-
-    protected void create(float radius, int recursionLevel) {
+    protected Icosphere(Context context, int recursionLevel) {
+        super(context);
         this.recursionLevel = recursionLevel;
-        create(radius);
     }
 
     @Override
@@ -123,7 +120,7 @@ public class Icosphere extends Sphere {
     @Override
     public void destroy() {
         super.destroy();
-        Log.d("Icosphere", "destroy");
+        Log.d(TAG, "destroy");
         GLES20.glDeleteBuffers(buffers.length, buffers, 0);
     }
 }

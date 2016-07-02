@@ -3,7 +3,7 @@ package com.gmail.jiangyang5157.cardboard.scene.projection;
 import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
-import android.os.Handler;
+import android.util.ArrayMap;
 import android.util.Log;
 
 import com.android.volley.VolleyError;
@@ -36,10 +36,8 @@ import java.util.Vector;
 public class ObjModel extends GlModel implements Creation {
     private static final String TAG = "[ObjModel]";
 
-    private static final int VERTEX_SHADER_RAW_RESOURCE = R.raw.obj_color_vertex_shader;
-    private static final int FRAGMENT_SHADER_RAW_RESOURCE = R.raw.obj_color_fragment_shader;
-
     public static final float DISTANCE = 10;
+
     private static final float TIME_DELTA_ROTATION = 0.2f;
 
     private String title;
@@ -57,7 +55,7 @@ public class ObjModel extends GlModel implements Creation {
     protected int creationState = STATE_BEFORE_PREPARE;
 
     protected ObjModel(Context context, String title, String url) {
-        super(context, VERTEX_SHADER_RAW_RESOURCE, FRAGMENT_SHADER_RAW_RESOURCE);
+        super(context);
         this.title = title;
         this.url = url;
     }
@@ -76,7 +74,6 @@ public class ObjModel extends GlModel implements Creation {
 
                 if (checkPreparation()) {
                     buildArrays();
-
                     ray.subtractBusy();
                     creationState = STATE_BEFORE_CREATE;
                 } else {
@@ -93,7 +90,6 @@ public class ObjModel extends GlModel implements Creation {
                             public void onComplete(Map<String, String> headers) {
                                 if (checkPreparation()) {
                                     buildArrays();
-
                                     ray.subtractBusy();
                                     creationState = STATE_BEFORE_CREATE;
                                 }
@@ -113,15 +109,13 @@ public class ObjModel extends GlModel implements Creation {
     }
 
     public void create() {
-        create(1.0f);
-    }
-
-    public void create(float scale) {
         creationState = STATE_CREATING;
-        this.scale = scale;
         setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.DeepOrange, null));
 
-        createProgram();
+        ArrayMap<Integer, Integer> shaders = new ArrayMap<>();
+        shaders.put(GLES20.GL_VERTEX_SHADER, R.raw.obj_color_vertex_shader);
+        shaders.put(GLES20.GL_FRAGMENT_SHADER, R.raw.obj_color_fragment_shader);
+        buildProgram(shaders);
         bindHandles();
         bindBuffers();
 
@@ -174,13 +168,6 @@ public class ObjModel extends GlModel implements Creation {
         normalsBuffer.position(0);
         indicesBuffer.position(0);
         indicesBufferCapacity = indicesBuffer.capacity();
-
-//        v = null;
-//        vt = null;
-//        vn = null;
-//        fv = null;
-//        fvt = null;
-//        fvn = null;
 
         GLES20.glGenBuffers(buffers.length, buffers, 0);
         verticesBuffHandle = buffers[0];

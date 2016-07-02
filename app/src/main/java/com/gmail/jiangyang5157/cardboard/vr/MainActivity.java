@@ -49,7 +49,6 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
 
     private final float[] LIGHT_POS_IN_WORLD_SPACE = new float[]{0.0f, 0.0f, 0.0f, 1.0f};
     private float[] lightPosInCameraSpace = new float[4];
-    private final float[] LIGHT_POS_IN_CAMERA_SPACE_TOP = new float[]{0.0f, Dialog.DISTANCE / 10, 0.0f, 1.0f};
     private final float[] LIGHT_POS_IN_CAMERA_SPACE_CENTER = new float[]{0.0f, 0.0f, 0.0f, 1.0f};
 
     private Head head;
@@ -443,13 +442,13 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         earth.setMarkerLighting(new Lighting() {
             @Override
             public float[] getLightPosInCameraSpace() {
-                return LIGHT_POS_IN_CAMERA_SPACE_CENTER;
+                return lightPosInCameraSpace;
             }
         });
         earth.setMarkerObjModelLighting(new Lighting() {
             @Override
             public float[] getLightPosInCameraSpace() {
-                return LIGHT_POS_IN_CAMERA_SPACE_TOP;
+                return LIGHT_POS_IN_CAMERA_SPACE_CENTER;
             }
         });
     }

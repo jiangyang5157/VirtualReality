@@ -17,6 +17,7 @@ import java.util.Collections;
  * @since 5/13/2016
  */
 public abstract class Dialog extends Panel {
+    private static final String TAG = "[Dialog]";
 
     protected static final float ALPHA_BACKGROUND = 0.0f;
 
@@ -30,6 +31,7 @@ public abstract class Dialog extends Panel {
 
     public Dialog(Context context) {
         super(context);
+        this.scale = SCALE;
         panels = new ArrayList<>();
     }
 
@@ -37,8 +39,9 @@ public abstract class Dialog extends Panel {
 
     public void create() {
         createPanels();
-        adjustBounds(width);
-        create(WIDTH, height, SCALE, AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.Red, null));
+        adjustBounds(WIDTH);
+        setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.Red, null));
+        super.create();
     }
 
     @Override
@@ -118,7 +121,7 @@ public abstract class Dialog extends Panel {
             h += panel.height;
         }
         this.width = width;
-        height = h;
+        this.height = h;
     }
 
     @Override

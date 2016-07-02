@@ -7,13 +7,10 @@ import android.opengl.Matrix;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.util.ArrayMap;
-import android.util.Log;
 
 import com.gmail.jiangyang5157.cardboard.scene.Lighting;
 import com.gmail.jiangyang5157.tookit.opengl.Model;
 import com.gmail.jiangyang5157.tookit.opengl.GlUtils;
-
-import java.io.IOException;
 
 /**
  * @author Yang
@@ -49,54 +46,21 @@ public abstract class GlModel extends Model {
     protected int indicesBuffHandle;
     protected int texturesBuffHandle;
 
-    protected int program;
     protected int indicesBufferCapacity;
     protected float[] color;
 
-    protected Context context;
-    protected Lighting lighting;
+    protected int program;
 
-    private final int vertexShaderRawResource;
-    private final int fragmentShaderRawResource;
+    protected Context context;
+
+    protected Lighting lighting;
 
     protected Handler handler;
     protected HandlerThread handlerThread;
 
-    protected GlModel(Context context, int vertexShaderRawResource, int fragmentShaderRawResource) {
+    protected GlModel(Context context) {
         super();
         this.context = context;
-        this.vertexShaderRawResource = vertexShaderRawResource;
-        this.fragmentShaderRawResource = fragmentShaderRawResource;
-    }
-
-    protected int createProgram() {
-        int vertexShader = 0;
-        int fragmentShader = 0;
-        try {
-            vertexShader = GlUtils.compileShader(context, GLES20.GL_VERTEX_SHADER, vertexShaderRawResource);
-            fragmentShader = GlUtils.compileShader(context, GLES20.GL_FRAGMENT_SHADER, fragmentShaderRawResource);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        if (vertexShader == 0 || fragmentShader == 0) {
-            return 0;
-        }
-
-        program = GLES20.glCreateProgram();
-        GlUtils.printGlError("glCreateProgram");
-        GLES20.glAttachShader(program, vertexShader);
-        GLES20.glAttachShader(program, fragmentShader);
-        GLES20.glLinkProgram(program);
-        int[] linkStatus = new int[1];
-        GLES20.glGetProgramiv(program, GLES20.GL_LINK_STATUS, linkStatus, 0);
-        if (linkStatus[0] != GLES20.GL_TRUE) {
-            Log.e("Gl Error", "Could not link program - " + GLES20.glGetProgramInfoLog(program));
-            GLES20.glDeleteProgram(program);
-            program = 0;
-        }
-
-        return program;
     }
 
     protected void buildProgram(ArrayMap<Integer, Integer> shaders) {

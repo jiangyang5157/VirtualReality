@@ -21,6 +21,7 @@ import com.gmail.jiangyang5157.tookit.opengl.Model;
  * @since 5/8/2016
  */
 public class TextField extends Panel implements Intersection.Clickable {
+    private static final String TAG = "[TextField]";
 
     private static final float ALPHA_BACKGROUND = 0.2f;
 
@@ -57,6 +58,7 @@ public class TextField extends Panel implements Intersection.Clickable {
             throw new RuntimeException("Error loading texture.");
         } else {
             this.width = width;
+            this.scale = scale;
             initScaleSelector(scale);
 
             textPaint = new TextPaint();
@@ -69,7 +71,9 @@ public class TextField extends Panel implements Intersection.Clickable {
             int lines = staticLayout.getLineCount();
             Paint.FontMetrics fm = textPaint.getFontMetrics();
             height = fm.descent + lines * (textSizePixels + fm.bottom);
-            create(width, height, scale, AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.White, null));
+
+            setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.White, null));
+            super.create();
 
             Bitmap bitmap = Bitmap.createBitmap((int) width, (int) height, Bitmap.Config.ARGB_4444);
             Canvas canvas = new Canvas(bitmap);

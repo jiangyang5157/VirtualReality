@@ -15,7 +15,7 @@ import java.nio.FloatBuffer;
  * @author Yang
  * @since 5/1/2016
  */
-public class Point extends GlModel {
+public abstract class Point extends GlModel {
     private static final String TAG = "[Point]";
 
     protected static final String POINT_SIZE_HANDLE = "u_PointSize";
@@ -26,20 +26,8 @@ public class Point extends GlModel {
 
     protected float[] vertices;
 
-    public Point(Context context, int vertexShaderRawResource, int fragmentShaderRawResource) {
-        super(context, vertexShaderRawResource, fragmentShaderRawResource);
-    }
-
-    protected void create(int color) {
-        setColor(color);
-        buildArrays();
-
-        createProgram();
-        bindHandles();
-        bindBuffers();
-
-        setCreated(true);
-        setVisible(true);
+    protected Point(Context context) {
+        super(context);
     }
 
     @Override

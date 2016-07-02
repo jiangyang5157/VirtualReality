@@ -16,8 +16,8 @@ public abstract class Rectangle extends GlModel implements Intersection.Intersec
     protected float width;
     protected float height;
 
-    protected Rectangle(Context context, int vertexShaderRawResource, int fragmentShaderRawResource) {
-        super(context, vertexShaderRawResource, fragmentShaderRawResource);
+    protected Rectangle(Context context) {
+        super(context);
         UP = new float[]{0.0f, 1.0f, 0.0f};
         RIGHT = new float[]{1.0f, 0.0f, 0.0f};
     }
