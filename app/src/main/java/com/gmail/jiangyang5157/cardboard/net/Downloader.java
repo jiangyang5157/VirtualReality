@@ -21,8 +21,6 @@ import java.util.Map;
 public class Downloader {
     private static final String TAG = "[Downloader]";
 
-    private final InputStreamRequest request;
-
     public interface ResponseListener {
         boolean onStart(Map<String, String> headers);
 
@@ -30,6 +28,8 @@ public class Downloader {
 
         void onError(String url, VolleyError volleyError);
     }
+
+    private final InputStreamRequest request;
 
     public Downloader(final String url, final File file, final ResponseListener listener) {
         request = new InputStreamRequest(

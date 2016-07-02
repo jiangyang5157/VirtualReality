@@ -22,6 +22,14 @@ import com.gmail.jiangyang5157.tookit.opengl.GlUtils;
 public abstract class GlModel extends Model {
     private static final String TAG = "[GlModel]";
 
+    protected interface BindingBuffers {
+        void bindBuffers();
+    }
+
+    protected interface BindingTexBuffers {
+        void bindTexBuffers();
+    }
+
     public static final int GLES_VERSION_REQUIRED = 0x00020000;
 
     protected static final String MODEL_HANDLE = "u_ModelMatrix";
@@ -60,14 +68,6 @@ public abstract class GlModel extends Model {
 
     protected Handler handler;
     protected HandlerThread handlerThread;
-
-    protected interface BindingBuffers {
-        void bindBuffers();
-    }
-
-    protected interface BindingTexBuffers {
-        void bindTexBuffers();
-    }
 
     protected GlModel(Context context) {
         super();

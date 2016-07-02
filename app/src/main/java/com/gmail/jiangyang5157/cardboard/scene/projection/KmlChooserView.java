@@ -17,11 +17,11 @@ import java.io.FilenameFilter;
  */
 public class KmlChooserView extends Dialog {
 
-    private Event eventListener;
-
     public interface Event {
         void onKmlSelected(String fileName);
     }
+
+    private Event eventListener;
 
     public KmlChooserView(Context context) {
         super(context);
