@@ -2,6 +2,7 @@ package com.gmail.jiangyang5157.cardboard.kml;
 
 import android.content.Context;
 
+import com.gmail.jiangyang5157.cardboard.scene.projection.AtomMap;
 import com.gmail.jiangyang5157.cardboard.scene.projection.AtomMarkers;
 import com.google.android.gms.maps.MapsInitializer;
 
@@ -30,7 +31,7 @@ public class KmlLayer {
      * @param context    Context object
      * @throws XmlPullParserException if file cannot be parsed
      */
-    public KmlLayer(AtomMarkers map, int resourceId, Context context)
+    public KmlLayer(AtomMap map, int resourceId, Context context)
             throws XmlPullParserException, IOException {
         this(map, context.getResources().openRawResource(resourceId), context);
     }
@@ -42,7 +43,7 @@ public class KmlLayer {
      * @param stream InputStream containing KML file
      * @throws XmlPullParserException if file cannot be parsed
      */
-    public KmlLayer(AtomMarkers map, InputStream stream, Context context)
+    public KmlLayer(AtomMap map, InputStream stream, Context context)
             throws XmlPullParserException, IOException {
         if (stream == null) {
             throw new IllegalArgumentException("KML InputStream cannot be null");
@@ -131,7 +132,7 @@ public class KmlLayer {
      *
      * @return map
      */
-    public AtomMarkers getMap() {
+    public AtomMap getMap() {
         return mRenderer.getMap();
     }
 
@@ -140,7 +141,7 @@ public class KmlLayer {
      *
      * @param map map to place placemark, container, style and ground overlays on
      */
-    public void setMap(AtomMarkers map) {
+    public void setMap(AtomMap map) {
         mRenderer.setMap(map);
     }
 }

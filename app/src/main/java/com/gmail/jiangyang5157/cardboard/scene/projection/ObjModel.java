@@ -441,8 +441,8 @@ public class ObjModel extends GlModel implements GlModel.BindingBuffers, Creatio
 
     @Override
     public void destroy() {
-        super.destroy();
         Log.d(TAG, "destroy");
+        super.destroy();
         GLES20.glDeleteBuffers(buffers.length, buffers, 0);
     }
 

@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
 import android.util.ArrayMap;
+import android.util.Log;
 
 import com.gmail.jiangyang5157.cardboard.scene.Intersection;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
@@ -80,6 +81,7 @@ public abstract class Dialog extends Panel {
 
     @Override
     public void destroy() {
+        Log.d(TAG, "destroy");
         for (Panel panel : panels) {
             panel.destroy();
         }

@@ -10,6 +10,7 @@ import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.util.ArrayMap;
+import android.util.Log;
 import android.util.TypedValue;
 
 import com.gmail.jiangyang5157.cardboard.scene.Head;
@@ -158,5 +159,11 @@ public class TextField extends Panel implements GlModel.ClickListener {
 
     public void setAlignment(Layout.Alignment alignment) {
         this.alignment = alignment;
+    }
+
+    @Override
+    public void destroy() {
+        Log.d(TAG, "destroy");
+        super.destroy();
     }
 }

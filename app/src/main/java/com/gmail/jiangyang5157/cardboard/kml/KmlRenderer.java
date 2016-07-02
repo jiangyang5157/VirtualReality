@@ -2,6 +2,7 @@ package com.gmail.jiangyang5157.cardboard.kml;
 
 import android.content.Context;
 
+import com.gmail.jiangyang5157.cardboard.scene.projection.AtomMap;
 import com.gmail.jiangyang5157.cardboard.scene.projection.AtomMarkers;
 import com.gmail.jiangyang5157.cardboard.scene.projection.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -18,7 +19,7 @@ import java.util.HashMap;
  */
 /* package */ class KmlRenderer {
 
-    private AtomMarkers mMap;
+    private AtomMap mMap;
 
     private HashMap<KmlPlacemark, Object> mPlacemarks;
 
@@ -34,10 +35,10 @@ import java.util.HashMap;
 
     private Context mContext;
 
-    /* package */ KmlRenderer(AtomMarkers map, Context context) {
+    /* package */ KmlRenderer(AtomMap map, Context context) {
         mContext = context;
         mMap = map;
-        mStylesRenderer = new HashMap<String, KmlStyle>();
+        mStylesRenderer = new HashMap<>();
         mLayerVisible = false;
     }
 
@@ -69,7 +70,7 @@ import java.util.HashMap;
         // Remove map object from the map
         for (Object mapObject : placemarks.values()) {
             if (mapObject instanceof Marker) {
-                mMap.removeMarker(((Marker) mapObject));
+                mMap.getMarkers().removeMarker(((Marker) mapObject));
             }
         }
     }
@@ -148,7 +149,7 @@ import java.util.HashMap;
      *
      * @return map
      */
-    /* package */ AtomMarkers getMap() {
+    /* package */ AtomMap getMap() {
         return mMap;
     }
 
@@ -157,7 +158,7 @@ import java.util.HashMap;
      *
      * @param map map to place placemark, container, style and ground overlays on
      */
-    /* package */ void setMap(AtomMarkers map) {
+    /* package */ void setMap(AtomMap map) {
         removeLayerFromMap();
         mMap = map;
         addLayerToMap();
@@ -325,6 +326,6 @@ import java.util.HashMap;
     private Marker addPointToMap(KmlPlacemark placemark, KmlPoint point, KmlStyle style) {
         MarkerOptions markerUrlStyle = style.getMarkerOptions();
         markerUrlStyle.position(point.getGeometryObject());
-        return mMap.addMarker(placemark, markerUrlStyle, style.getMarkerColorInteger());
+        return mMap.getMarkers().addMarker(placemark, markerUrlStyle, style.getMarkerColorInteger());
     }
 }

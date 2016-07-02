@@ -250,7 +250,6 @@ public abstract class Panel extends Rectangle implements GlModel.BindingBuffers,
     @Override
     public void destroy() {
         super.destroy();
-        Log.d("Panel", "destroy");
         GLES20.glDeleteBuffers(buffers.length, buffers, 0);
         GLES20.glDeleteTextures(texBuffers.length, texBuffers, 0);
     }

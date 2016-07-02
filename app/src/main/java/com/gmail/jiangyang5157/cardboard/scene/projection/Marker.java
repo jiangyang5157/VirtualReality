@@ -2,6 +2,7 @@ package com.gmail.jiangyang5157.cardboard.scene.projection;
 
 import android.content.Context;
 import android.opengl.Matrix;
+import android.util.Log;
 
 import com.gmail.jiangyang5157.cardboard.scene.Coordinate;
 import com.gmail.jiangyang5157.tookit.app.AppUtils;
@@ -13,6 +14,7 @@ import com.google.android.gms.maps.model.LatLng;
  * @since 4/12/2016.
  */
 public class Marker extends Icosphere implements GlModel.ClickListener {
+    private static final String TAG = "[Marker]";
 
     public static final float RADIUS = Earth.RADIUS / 80;
     public static final float ALTITUDE = -1 * RADIUS;
@@ -87,5 +89,11 @@ public class Marker extends Icosphere implements GlModel.ClickListener {
 
     public void setObjModel(ObjModel model) {
         this.objModel = model;
+    }
+
+    @Override
+    public void destroy() {
+        Log.d(TAG, "destroy");
+        super.destroy();
     }
 }

@@ -14,9 +14,9 @@ import com.gmail.jiangyang5157.cardboard.scene.Camera;
 import com.gmail.jiangyang5157.cardboard.scene.Creation;
 import com.gmail.jiangyang5157.cardboard.scene.Intersection;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
+import com.gmail.jiangyang5157.cardboard.scene.projection.AtomMap;
 import com.gmail.jiangyang5157.cardboard.scene.projection.Dialog;
 import com.gmail.jiangyang5157.cardboard.scene.projection.KmlChooserView;
-import com.gmail.jiangyang5157.cardboard.scene.projection.AtomMarkers;
 import com.gmail.jiangyang5157.cardboard.scene.projection.ObjModel;
 import com.gmail.jiangyang5157.cardboard.scene.projection.Ray;
 import com.gmail.jiangyang5157.cardboard.scene.projection.Earth;
@@ -57,7 +57,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
     private MarkerDetailView markerDetailView;
     private ObjModel objModel;
     private KmlChooserView kmlChooserView;
-    private AtomMarkers atomMarkers;
+    private AtomMap atomMap;
 
     private static final long TIME_DELTA_DOUBLE_CLICK = 200;
     private long lastTimeOnCardboardTrigger = 0;
@@ -188,8 +188,8 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
             }
         }
         if (intersection == null) {
-            if (atomMarkers != null) {
-                intersection = atomMarkers.onIntersect(head);
+            if (atomMap != null) {
+                intersection = atomMap.onIntersect(head);
             }
         }
         if (intersection == null) {
@@ -243,7 +243,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         onCardboardClick();
     }
 
-    private GlModel.ClickListener markerOnClickListener = new GlModel.ClickListener() {
+    private GlModel.ClickListener onMarkerClickListener = new GlModel.ClickListener() {
 
         @Override
         public void onClick(Model model) {
@@ -269,7 +269,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
                 return;
             }
             Constant.setLastKmlFileName(getApplicationContext(), fileName);
-            loadKml(Constant.getKmlUrl(fileName));
+            newMap(Constant.getKmlUrl(fileName));
         }
     };
 
@@ -297,15 +297,12 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
             }
         }
 
-        if (atomMarkers != null) {
-            if (!atomMarkers.isCreated()) {
-                if (atomMarkers.getCreationState() == Creation.STATE_BEFORE_PREPARE) {
-                    atomMarkers.prepare(ray);
-                } else if (atomMarkers.getCreationState() == Creation.STATE_BEFORE_CREATE) {
-                    ArrayMap<Integer, Integer> shaders = new ArrayMap<>();
-                    shaders.put(GLES20.GL_VERTEX_SHADER, R.raw.sphere_color_vertex_shader);
-                    shaders.put(GLES20.GL_FRAGMENT_SHADER, R.raw.sphere_color_fragment_shader);
-                    atomMarkers.create(shaders);
+        if (atomMap != null) {
+            if (!atomMap.isCreated()) {
+                if (atomMap.getCreationState() == Creation.STATE_BEFORE_PREPARE) {
+                    atomMap.prepare(ray);
+                } else if (atomMap.getCreationState() == Creation.STATE_BEFORE_CREATE) {
+                    atomMap.create();
                 }
             }
         }
@@ -375,8 +372,8 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         if (ray != null) {
             ray.update(view, perspective);
         }
-        if (atomMarkers != null) {
-            atomMarkers.update(view, perspective);
+        if (atomMap != null) {
+            atomMap.update(view, perspective);
         }
         if (earth != null) {
             earth.update(view, perspective);
@@ -403,8 +400,8 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
             ray.draw();
         }
 
-        if (atomMarkers != null) {
-            atomMarkers.draw();
+        if (atomMap != null) {
+            atomMap.draw();
         }
 
         if (earth != null) {
@@ -463,18 +460,18 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
 
         earth = new Earth(getApplicationContext(), Constant.getResourceUrl(Constant.EARTH_TEXTURE_FILE_NAME));
 
-        loadKml(Constant.getKmlUrl(Constant.getLastKmlFileName(getApplicationContext())));
+        newMap(Constant.getKmlUrl(Constant.getLastKmlFileName(getApplicationContext())));
     }
 
-    private void loadKml(String urlKml) {
+    private void newMap(String urlKml) {
         destoryMap();
         destoryKmlChooserView();
         destoryObjModel();
         destoryMarkerDetailView();
 
-        atomMarkers = new AtomMarkers(getApplicationContext(), urlKml);
-        atomMarkers.setOnClickListener(markerOnClickListener);
-        atomMarkers.setLighting(new Lighting() {
+        atomMap = new AtomMap(getApplicationContext(), urlKml);
+        atomMap.setOnMarkerClickListener(onMarkerClickListener);
+        atomMap.setMarkerLighting(new Lighting() {
             @Override
             public float[] getLightPosInCameraSpace() {
                 return lightPosInCameraSpace;
@@ -521,9 +518,9 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
     }
 
     private void destoryMap() {
-        if (atomMarkers != null) {
-            atomMarkers.destroy();
-            atomMarkers = null;
+        if (atomMap != null) {
+            atomMap.destroy();
+            atomMap = null;
         }
     }
 

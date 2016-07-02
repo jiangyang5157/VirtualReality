@@ -95,7 +95,6 @@ public abstract class Point extends GlModel implements GlModel.BindingBuffers {
     @Override
     public void destroy() {
         super.destroy();
-        Log.d(TAG, "destroy");
         GLES20.glDeleteBuffers(buffers.length, buffers, 0);
     }
 }

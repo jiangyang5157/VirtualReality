@@ -140,8 +140,8 @@ public class Ray extends Point {
 
     @Override
     public void destroy() {
-        super.destroy();
         Log.d(TAG, "destroy");
+        super.destroy();
         intersections.clear();
     }
 }
