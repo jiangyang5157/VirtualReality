@@ -33,7 +33,7 @@ import java.util.Collections;
  * @author Yang
  * @since 7/2/2016
  */
-public class Map extends GlModel implements Creation, GlModel.IntersectListener {
+public class Map extends Marker implements Creation, GlModel.IntersectListener {
     private static final String TAG = "[Map]";
 
     protected int creationState = STATE_BEFORE_PREPARE;
@@ -122,29 +122,24 @@ public class Map extends GlModel implements Creation, GlModel.IntersectListener 
         }
     }
 
-    public void create() {
+    @Override
+    public void create(int program) {
         creationState = STATE_CREATING;
+        if (color == null) {
+            setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.White, null));
+        }
+//        super.create(program);
 
         ArrayMap<Integer, Integer> markerShaders = new ArrayMap<>();
         markerShaders.put(GLES20.GL_VERTEX_SHADER, R.raw.sphere_color_vertex_shader);
         markerShaders.put(GLES20.GL_FRAGMENT_SHADER, R.raw.sphere_color_fragment_shader);
         for (Marker marker : markers) {
-            marker.create(markerShaders);
+            marker.create(program);
         }
 
         setCreated(true);
         setVisible(true);
         creationState = STATE_BEFORE_CREATE;
-    }
-
-    @Override
-    protected void bindHandles() {
-        //do nothing
-    }
-
-    @Override
-    protected void buildData() {
-        //do nothing
     }
 
     @Override
@@ -177,7 +172,7 @@ public class Map extends GlModel implements Creation, GlModel.IntersectListener 
 
     public Marker addMarker(KmlPlacemark kmlPlacemark, MarkerOptions markerUrlStyle, int markerColorInteger) {
         LatLng latLng = markerUrlStyle.getPosition();
-        Marker marker = new Marker(context);
+        AtomMarker marker = new AtomMarker(context);
         if (markerColorInteger != 0) {
             marker.setColor(markerColorInteger);
         }
@@ -248,5 +243,6 @@ public class Map extends GlModel implements Creation, GlModel.IntersectListener 
     public void destroy() {
         Log.d(TAG, "destroy");
         destoryMarks();
+        super.destroy();
     }
 }
