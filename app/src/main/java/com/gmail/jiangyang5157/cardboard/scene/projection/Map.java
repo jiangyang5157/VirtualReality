@@ -33,7 +33,7 @@ import java.util.Collections;
  * @author Yang
  * @since 7/2/2016
  */
-public class Map extends Marker implements Creation, GlModel.IntersectListener {
+public class Map extends GlModel implements Creation, GlModel.IntersectListener {
     private static final String TAG = "[Map]";
 
     protected int creationState = STATE_BEFORE_PREPARE;
@@ -122,24 +122,29 @@ public class Map extends Marker implements Creation, GlModel.IntersectListener {
         }
     }
 
-    @Override
-    public void create(int program) {
+    public void create() {
         creationState = STATE_CREATING;
-        if (color == null) {
-            setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.White, null));
-        }
-//        super.create(program);
 
-        ArrayMap<Integer, Integer> markerShaders = new ArrayMap<>();
-        markerShaders.put(GLES20.GL_VERTEX_SHADER, R.raw.sphere_color_vertex_shader);
-        markerShaders.put(GLES20.GL_FRAGMENT_SHADER, R.raw.sphere_color_fragment_shader);
+        ArrayMap<Integer, Integer> shaders = new ArrayMap<>();
+        shaders.put(GLES20.GL_VERTEX_SHADER, R.raw.sphere_color_vertex_shader);
+        shaders.put(GLES20.GL_FRAGMENT_SHADER, R.raw.sphere_color_fragment_shader);
         for (Marker marker : markers) {
-            marker.create(program);
+            marker.create(shaders);
         }
 
         setCreated(true);
         setVisible(true);
         creationState = STATE_BEFORE_CREATE;
+    }
+
+    @Override
+    protected void bindHandles() {
+
+    }
+
+    @Override
+    protected void buildData() {
+
     }
 
     @Override
