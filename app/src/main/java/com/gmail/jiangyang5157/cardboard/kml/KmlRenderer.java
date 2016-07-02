@@ -65,11 +65,11 @@ import java.util.HashMap;
      *
      * @param placemarks placemarks to remove
      */
-    private static void removePlacemarks(HashMap<KmlPlacemark, Object> placemarks) {
+    private void removePlacemarks(HashMap<KmlPlacemark, Object> placemarks) {
         // Remove map object from the map
         for (Object mapObject : placemarks.values()) {
             if (mapObject instanceof Marker) {
-                ((Marker) mapObject).remove();
+                mMap.removeMarker(((Marker) mapObject));
             }
         }
     }

@@ -22,15 +22,12 @@ public class Marker extends Icosphere implements GlModel.ClickListener {
     private String description;
     private Coordinate coordinate;
 
-    private final Earth earth;
-
     private ObjModel objModel;
 
     private GlModel.ClickListener onClickListener;
 
-    public Marker(Context context, Earth earth) {
+    public Marker(Context context) {
         super(context, 3);
-        this.earth = earth;
         setRadius(RADIUS);
     }
 
@@ -46,7 +43,7 @@ public class Marker extends Icosphere implements GlModel.ClickListener {
     }
 
     public void setLocation(LatLng latLng, float altitude) {
-        this.coordinate = new Coordinate(latLng.latitude, latLng.longitude, altitude, this.earth.radius);
+        this.coordinate = new Coordinate(latLng.latitude, latLng.longitude, altitude, Earth.RADIUS);
         Matrix.setIdentityM(translation, 0);
         Matrix.translateM(translation, 0,
                 (float) coordinate.ecef[0],
@@ -57,10 +54,6 @@ public class Marker extends Icosphere implements GlModel.ClickListener {
     @Override
     public void update(float[] view, float[] perspective) {
         super.update(view, perspective);
-    }
-
-    public void remove() {
-        earth.removeMarker(this);
     }
 
     @Override

@@ -448,7 +448,6 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
 
         earth = new Earth(getApplicationContext(), urlKml,
                 Constant.getResourceUrl(Constant.EARTH_TEXTURE_FILE_NAME));
-        earth.setRadius(Earth.RADIUS);
         earth.setOnMarkerClickListener(markerOnClickListener);
         earth.setMarkerLighting(new Lighting() {
             @Override
