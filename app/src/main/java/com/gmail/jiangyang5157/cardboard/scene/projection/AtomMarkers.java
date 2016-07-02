@@ -33,8 +33,8 @@ import java.util.Collections;
  * @author Yang
  * @since 7/2/2016
  */
-public class Map extends GlModel implements Creation, GlModel.IntersectListener {
-    private static final String TAG = "[Map]";
+public class AtomMarkers extends GlModel implements Creation, GlModel.IntersectListener {
+    private static final String TAG = "[AtomMarkers]";
 
     protected int creationState = STATE_BEFORE_PREPARE;
 
@@ -42,12 +42,9 @@ public class Map extends GlModel implements Creation, GlModel.IntersectListener 
 
     private ArrayList<Marker> markers;
 
-    protected Lighting markerLighting;
-    protected Lighting markerObjModelLighting;
+    private GlModel.ClickListener onClickListener;
 
-    private GlModel.ClickListener onMarkerClickListener;
-
-    public Map(Context context, String urlKml) {
+    public AtomMarkers(Context context, String urlKml) {
         super(context);
         this.urlKml = urlKml;
         markers = new ArrayList<>();
@@ -181,16 +178,21 @@ public class Map extends GlModel implements Creation, GlModel.IntersectListener 
         if (markerColorInteger != 0) {
             marker.setColor(markerColorInteger);
         }
-        marker.setOnClickListener(onMarkerClickListener);
+        marker.setOnClickListener(onClickListener);
         marker.setLocation(latLng, Marker.ALTITUDE);
         marker.setName(kmlPlacemark.getProperty("name"));
         marker.setDescription(kmlPlacemark.getProperty("description"));
-        marker.setLighting(markerLighting);
+        marker.setLighting(lighting);
 
         String objProperty = kmlPlacemark.getProperty("obj");
         if (objProperty != null) {
             ObjModel objModel = new ObjModel(context, kmlPlacemark.getProperty("title"), objProperty);
-            objModel.setLighting(markerObjModelLighting);
+            objModel.setLighting(new Lighting() {
+                @Override
+                public float[] getLightPosInCameraSpace() {
+                    return Lighting.LIGHT_POS_IN_CAMERA_SPACE_CENTER;
+                }
+            });
             marker.setObjModel(objModel);
         }
 
@@ -225,16 +227,8 @@ public class Map extends GlModel implements Creation, GlModel.IntersectListener 
         return creationState;
     }
 
-    public void setOnMarkerClickListener(GlModel.ClickListener onClickListener) {
-        this.onMarkerClickListener = onClickListener;
-    }
-
-    public void setMarkerObjModelLighting(Lighting markerObjModelLighting) {
-        this.markerObjModelLighting = markerObjModelLighting;
-    }
-
-    public void setMarkerLighting(Lighting markerLighting) {
-        this.markerLighting = markerLighting;
+    public void setOnClickListener(GlModel.ClickListener onClickListener) {
+        this.onClickListener = onClickListener;
     }
 
     public void destoryMarks() {

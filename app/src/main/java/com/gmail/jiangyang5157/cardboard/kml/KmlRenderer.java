@@ -2,8 +2,7 @@ package com.gmail.jiangyang5157.cardboard.kml;
 
 import android.content.Context;
 
-import com.gmail.jiangyang5157.cardboard.scene.projection.Earth;
-import com.gmail.jiangyang5157.cardboard.scene.projection.Map;
+import com.gmail.jiangyang5157.cardboard.scene.projection.AtomMarkers;
 import com.gmail.jiangyang5157.cardboard.scene.projection.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -19,7 +18,7 @@ import java.util.HashMap;
  */
 /* package */ class KmlRenderer {
 
-    private Map mMap;
+    private AtomMarkers mMap;
 
     private HashMap<KmlPlacemark, Object> mPlacemarks;
 
@@ -35,7 +34,7 @@ import java.util.HashMap;
 
     private Context mContext;
 
-    /* package */ KmlRenderer(Map map, Context context) {
+    /* package */ KmlRenderer(AtomMarkers map, Context context) {
         mContext = context;
         mMap = map;
         mStylesRenderer = new HashMap<String, KmlStyle>();
@@ -149,7 +148,7 @@ import java.util.HashMap;
      *
      * @return map
      */
-    /* package */ Map getMap() {
+    /* package */ AtomMarkers getMap() {
         return mMap;
     }
 
@@ -158,7 +157,7 @@ import java.util.HashMap;
      *
      * @param map map to place placemark, container, style and ground overlays on
      */
-    /* package */ void setMap(Map map) {
+    /* package */ void setMap(AtomMarkers map) {
         removeLayerFromMap();
         mMap = map;
         addLayerToMap();

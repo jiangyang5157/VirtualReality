@@ -16,7 +16,7 @@ import com.gmail.jiangyang5157.cardboard.scene.Intersection;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
 import com.gmail.jiangyang5157.cardboard.scene.projection.Dialog;
 import com.gmail.jiangyang5157.cardboard.scene.projection.KmlChooserView;
-import com.gmail.jiangyang5157.cardboard.scene.projection.Map;
+import com.gmail.jiangyang5157.cardboard.scene.projection.AtomMarkers;
 import com.gmail.jiangyang5157.cardboard.scene.projection.ObjModel;
 import com.gmail.jiangyang5157.cardboard.scene.projection.Ray;
 import com.gmail.jiangyang5157.cardboard.scene.projection.Earth;
@@ -49,7 +49,6 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
 
     private final float[] LIGHT_POS_IN_WORLD_SPACE = new float[]{0.0f, 0.0f, 0.0f, 1.0f};
     private float[] lightPosInCameraSpace = new float[4];
-    private final float[] LIGHT_POS_IN_CAMERA_SPACE_CENTER = new float[]{0.0f, 0.0f, 0.0f, 1.0f};
 
     private Head head;
 
@@ -58,7 +57,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
     private MarkerDetailView markerDetailView;
     private ObjModel objModel;
     private KmlChooserView kmlChooserView;
-    private Map map;
+    private AtomMarkers atomMarkers;
 
     private static final long TIME_DELTA_DOUBLE_CLICK = 200;
     private long lastTimeOnCardboardTrigger = 0;
@@ -189,8 +188,8 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
             }
         }
         if (intersection == null) {
-            if (map != null) {
-                intersection = map.onIntersect(head);
+            if (atomMarkers != null) {
+                intersection = atomMarkers.onIntersect(head);
             }
         }
         if (intersection == null) {
@@ -298,12 +297,12 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
             }
         }
 
-        if (map != null) {
-            if (!map.isCreated()) {
-                if (map.getCreationState() == Creation.STATE_BEFORE_PREPARE) {
-                    map.prepare(ray);
-                } else if (map.getCreationState() == Creation.STATE_BEFORE_CREATE) {
-                    map.create();
+        if (atomMarkers != null) {
+            if (!atomMarkers.isCreated()) {
+                if (atomMarkers.getCreationState() == Creation.STATE_BEFORE_PREPARE) {
+                    atomMarkers.prepare(ray);
+                } else if (atomMarkers.getCreationState() == Creation.STATE_BEFORE_CREATE) {
+                    atomMarkers.create();
                 }
             }
         }
@@ -373,8 +372,8 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         if (ray != null) {
             ray.update(view, perspective);
         }
-        if (map != null) {
-            map.update(view, perspective);
+        if (atomMarkers != null) {
+            atomMarkers.update(view, perspective);
         }
         if (earth != null) {
             earth.update(view, perspective);
@@ -401,8 +400,8 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
             ray.draw();
         }
 
-        if (map != null) {
-            map.draw();
+        if (atomMarkers != null) {
+            atomMarkers.draw();
         }
 
         if (earth != null) {
@@ -470,18 +469,12 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         destoryObjModel();
         destoryMarkerDetailView();
 
-        map = new Map(getApplicationContext(), urlKml);
-        map.setOnMarkerClickListener(markerOnClickListener);
-        map.setMarkerLighting(new Lighting() {
+        atomMarkers = new AtomMarkers(getApplicationContext(), urlKml);
+        atomMarkers.setOnClickListener(markerOnClickListener);
+        atomMarkers.setLighting(new Lighting() {
             @Override
             public float[] getLightPosInCameraSpace() {
                 return lightPosInCameraSpace;
-            }
-        });
-        map.setMarkerObjModelLighting(new Lighting() {
-            @Override
-            public float[] getLightPosInCameraSpace() {
-                return LIGHT_POS_IN_CAMERA_SPACE_CENTER;
             }
         });
     }
@@ -525,9 +518,9 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
     }
 
     private void destoryMap() {
-        if (map != null) {
-            map.destroy();
-            map = null;
+        if (atomMarkers != null) {
+            atomMarkers.destroy();
+            atomMarkers = null;
         }
     }
 
