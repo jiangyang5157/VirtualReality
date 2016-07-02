@@ -23,7 +23,7 @@ import java.nio.ShortBuffer;
  * @author Yang
  * @since 5/5/2016
  */
-public abstract class Panel extends Rectangle {
+public abstract class Panel extends Rectangle implements GlModel.BindingBuffers, GlModel.BindingTexBuffers{
     private static final String TAG = "[Panel]";
 
     protected float[] vertices;
@@ -44,7 +44,7 @@ public abstract class Panel extends Rectangle {
     }
 
     protected void create() {
-        genTextures();
+        bindTexBuffers();
         buildData();
 
         ArrayMap<Integer, Integer> shaders = new ArrayMap<>();
@@ -189,7 +189,7 @@ public abstract class Panel extends Rectangle {
     }
 
     @Override
-    protected void bindBuffers() {
+    public void bindBuffers() {
         FloatBuffer verticesBuffer = ByteBuffer.allocateDirect(vertices.length * BufferUtils.BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
         verticesBuffer.put(vertices).position(0);
         vertices = null;
@@ -220,8 +220,6 @@ public abstract class Panel extends Rectangle {
         GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, texturesBuffer.capacity() * BufferUtils.BYTES_PER_FLOAT, texturesBuffer, GLES20.GL_STATIC_DRAW);
         texturesBuffer.limit(0);
     }
-
-    protected abstract void genTextures();
 
     @Override
     public void draw() {

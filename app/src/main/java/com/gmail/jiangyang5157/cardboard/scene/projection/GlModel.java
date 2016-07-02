@@ -15,8 +15,6 @@ import com.gmail.jiangyang5157.cardboard.scene.Lighting;
 import com.gmail.jiangyang5157.tookit.opengl.Model;
 import com.gmail.jiangyang5157.tookit.opengl.GlUtils;
 
-import java.io.InputStream;
-
 /**
  * @author Yang
  * @since 4/30/2016
@@ -63,6 +61,14 @@ public abstract class GlModel extends Model {
     protected Handler handler;
     protected HandlerThread handlerThread;
 
+    protected interface BindingBuffers {
+        void bindBuffers();
+    }
+
+    protected interface BindingTexBuffers {
+        void bindTexBuffers();
+    }
+
     protected GlModel(Context context) {
         super();
         this.context = context;
@@ -74,14 +80,10 @@ public abstract class GlModel extends Model {
 
     protected void buildProgram(int program) {
         this.program = program;
-        bindHandles();
     }
-
-    protected abstract void buildData();
-
     protected abstract void bindHandles();
 
-    protected abstract void bindBuffers();
+    protected abstract void buildData();
 
     public void update(float[] view, float[] perspective) {
         Matrix.setIdentityM(model, 0);

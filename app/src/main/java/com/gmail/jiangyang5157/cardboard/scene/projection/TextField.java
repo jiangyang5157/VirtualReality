@@ -9,12 +9,10 @@ import android.opengl.GLUtils;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
-import android.util.ArrayMap;
 import android.util.TypedValue;
 
 import com.gmail.jiangyang5157.cardboard.scene.Head;
 import com.gmail.jiangyang5157.cardboard.scene.Intersection;
-import com.gmail.jiangyang5157.cardboard.vr.R;
 import com.gmail.jiangyang5157.tookit.app.AppUtils;
 import com.gmail.jiangyang5157.tookit.opengl.Model;
 
@@ -63,7 +61,7 @@ public class TextField extends Panel implements Intersection.Clickable {
     }
 
     @Override
-    protected void genTextures() {
+    public void bindTexBuffers() {
         GLES20.glGenTextures(1, texBuffers, 0);
         if (texBuffers[0] == 0) {
             throw new RuntimeException("Error loading texture.");

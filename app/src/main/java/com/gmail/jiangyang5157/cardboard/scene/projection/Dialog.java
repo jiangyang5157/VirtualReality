@@ -45,7 +45,7 @@ public abstract class Dialog extends Panel {
     }
 
     @Override
-    protected void genTextures() {
+    public void bindTexBuffers() {
         GLES20.glGenTextures(1, texBuffers, 0);
         if (texBuffers[0] == 0) {
             throw new RuntimeException("Gl Error - Unable to create texture.");

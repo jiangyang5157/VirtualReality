@@ -170,7 +170,7 @@ public class Earth extends UvSphere implements Creation {
         creationState = STATE_CREATING;
         super.create();
 
-        genTextures();
+        bindTexBuffers();
         buildData();
 
         ArrayMap<Integer, Integer> shaders = new ArrayMap<>();
@@ -196,7 +196,7 @@ public class Earth extends UvSphere implements Creation {
     }
 
     @Override
-    protected void bindBuffers() {
+    public void bindBuffers() {
         FloatBuffer verticesBuffer = ByteBuffer.allocateDirect(vertices.length * BufferUtils.BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
         verticesBuffer.put(vertices).position(0);
         vertices = null;
@@ -229,7 +229,7 @@ public class Earth extends UvSphere implements Creation {
     }
 
     @Override
-    protected void genTextures() {
+    public void bindTexBuffers() {
         InputStream in = null;
         try {
             in = new FileInputStream(new File(Constant.getAbsolutePath(context, Constant.getPath(urlTexture))));

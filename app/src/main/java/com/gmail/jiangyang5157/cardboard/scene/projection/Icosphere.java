@@ -52,7 +52,7 @@ public abstract class Icosphere extends Sphere {
     }
 
     @Override
-    protected void bindBuffers() {
+    public void bindBuffers() {
         FloatBuffer verticesBuffer = ByteBuffer.allocateDirect(vertices.length * BufferUtils.BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
         verticesBuffer.put(vertices).position(0);
         vertices = null;

@@ -15,7 +15,7 @@ import java.nio.FloatBuffer;
  * @author Yang
  * @since 5/1/2016
  */
-public abstract class Point extends GlModel {
+public abstract class Point extends GlModel implements GlModel.BindingBuffers {
     private static final String TAG = "[Point]";
 
     protected static final String POINT_SIZE_HANDLE = "u_PointSize";
@@ -45,7 +45,7 @@ public abstract class Point extends GlModel {
     }
 
     @Override
-    protected void bindBuffers() {
+    public void bindBuffers() {
         FloatBuffer verticesBuffer = ByteBuffer.allocateDirect(vertices.length * BufferUtils.BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
         verticesBuffer.put(vertices).position(0);
         vertices = null;

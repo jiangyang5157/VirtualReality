@@ -33,7 +33,7 @@ import java.util.Vector;
  * @author Yang
  * @since 5/27/2016
  */
-public class ObjModel extends GlModel implements Creation {
+public class ObjModel extends GlModel implements GlModel.BindingBuffers, Creation {
     private static final String TAG = "[ObjModel]";
 
     public static final float DISTANCE = 10;
@@ -139,7 +139,7 @@ public class ObjModel extends GlModel implements Creation {
     }
 
     @Override
-    protected void bindBuffers() {
+    public void bindBuffers() {
         int fvSize = fv.size();
         int vSize = fvSize * 3;
         int fvnSize = fvn.size();
