@@ -302,7 +302,10 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
                 if (atomMarkers.getCreationState() == Creation.STATE_BEFORE_PREPARE) {
                     atomMarkers.prepare(ray);
                 } else if (atomMarkers.getCreationState() == Creation.STATE_BEFORE_CREATE) {
-                    atomMarkers.create();
+                    ArrayMap<Integer, Integer> shaders = new ArrayMap<>();
+                    shaders.put(GLES20.GL_VERTEX_SHADER, R.raw.sphere_color_vertex_shader);
+                    shaders.put(GLES20.GL_FRAGMENT_SHADER, R.raw.sphere_color_fragment_shader);
+                    atomMarkers.create(shaders);
                 }
             }
         }

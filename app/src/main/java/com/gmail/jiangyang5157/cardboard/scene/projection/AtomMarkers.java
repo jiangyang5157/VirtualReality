@@ -33,7 +33,7 @@ import java.util.Collections;
  * @author Yang
  * @since 7/2/2016
  */
-public class AtomMarkers extends GlModel implements Creation, GlModel.IntersectListener {
+public class AtomMarkers extends Marker implements Creation, GlModel.IntersectListener {
     private static final String TAG = "[AtomMarkers]";
 
     protected int creationState = STATE_BEFORE_PREPARE;
@@ -41,8 +41,6 @@ public class AtomMarkers extends GlModel implements Creation, GlModel.IntersectL
     private String urlKml;
 
     private ArrayList<Marker> markers;
-
-    private GlModel.ClickListener onClickListener;
 
     public AtomMarkers(Context context, String urlKml) {
         super(context);
@@ -119,14 +117,17 @@ public class AtomMarkers extends GlModel implements Creation, GlModel.IntersectL
         }
     }
 
-    public void create() {
+    @Override
+    public void create(int program) {
         creationState = STATE_CREATING;
+        super.create(program);
 
-        ArrayMap<Integer, Integer> shaders = new ArrayMap<>();
-        shaders.put(GLES20.GL_VERTEX_SHADER, R.raw.sphere_color_vertex_shader);
-        shaders.put(GLES20.GL_FRAGMENT_SHADER, R.raw.sphere_color_fragment_shader);
         for (Marker marker : markers) {
-            marker.create(shaders);
+            marker.create(program);
+            marker.mvMatrixHandle = mvMatrixHandle;
+            marker.mvpMatrixHandle = mvpMatrixHandle;
+            marker.colorHandle = colorHandle;
+            marker.indicesBufferCapacity = indicesBufferCapacity;
         }
 
         setCreated(true);
@@ -135,24 +136,33 @@ public class AtomMarkers extends GlModel implements Creation, GlModel.IntersectL
     }
 
     @Override
-    protected void bindHandles() {
-
-    }
-
-    @Override
-    protected void buildData() {
-
-    }
-
-    @Override
     public void draw() {
         if (!isCreated() || !isVisible()) {
             return;
         }
 
+        GLES20.glUseProgram(program);
+        GLES20.glEnableVertexAttribArray(vertexHandle);
+        GLES20.glEnableVertexAttribArray(normalHandle);
+        if (lighting != null) {
+            GLES20.glUniform3fv(lightPosHandle, 1, lighting.getLightPosInCameraSpace(), 0);
+        }
+
+        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, verticesBuffHandle);
+        GLES20.glVertexAttribPointer(vertexHandle, 3, GLES20.GL_FLOAT, false, 0, 0);
+
+        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, normalsBuffHandle);
+        GLES20.glVertexAttribPointer(normalHandle, 3, GLES20.GL_FLOAT, false, 0, 0);
+
+        GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, indicesBuffHandle);
+
         for (Marker marker : markers) {
             marker.draw();
         }
+
+        GLES20.glDisableVertexAttribArray(vertexHandle);
+        GLES20.glDisableVertexAttribArray(normalHandle);
+        GLES20.glUseProgram(0);
 
         GlUtils.printGlError(TAG + " - draw end");
     }
@@ -178,11 +188,10 @@ public class AtomMarkers extends GlModel implements Creation, GlModel.IntersectL
         if (markerColorInteger != 0) {
             marker.setColor(markerColorInteger);
         }
-        marker.setOnClickListener(onClickListener);
+        marker.setOnClickListener(getOnClickListener());
         marker.setLocation(latLng, Marker.ALTITUDE);
         marker.setName(kmlPlacemark.getProperty("name"));
         marker.setDescription(kmlPlacemark.getProperty("description"));
-        marker.setLighting(lighting);
 
         String objProperty = kmlPlacemark.getProperty("obj");
         if (objProperty != null) {
@@ -225,10 +234,6 @@ public class AtomMarkers extends GlModel implements Creation, GlModel.IntersectL
     @Override
     public int getCreationState() {
         return creationState;
-    }
-
-    public void setOnClickListener(GlModel.ClickListener onClickListener) {
-        this.onClickListener = onClickListener;
     }
 
     public void destoryMarks() {
