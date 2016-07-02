@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.android.volley.VolleyError;
 import com.gmail.jiangyang5157.cardboard.net.Downloader;
+import com.gmail.jiangyang5157.cardboard.scene.Creation;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
 import com.gmail.jiangyang5157.cardboard.vr.Constant;
 import com.gmail.jiangyang5157.cardboard.vr.R;
@@ -32,7 +33,7 @@ import java.util.Vector;
  * @author Yang
  * @since 5/27/2016
  */
-public class ObjModel extends GlModel implements GlModel.BindingBuffers, GlModel.Creation {
+public class ObjModel extends GlModel implements GlModel.BindingBuffers, Creation {
     private static final String TAG = "[ObjModel]";
 
     public static final float DISTANCE = 10;
