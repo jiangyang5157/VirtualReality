@@ -2,7 +2,6 @@ package com.gmail.jiangyang5157.cardboard.scene.projection;
 
 import android.content.Context;
 import android.opengl.Matrix;
-import android.util.ArrayMap;
 
 import com.gmail.jiangyang5157.cardboard.scene.Coordinate;
 import com.gmail.jiangyang5157.tookit.app.AppUtils;
@@ -65,6 +64,10 @@ public class Marker extends Icosphere implements GlModel.ClickListener {
 
     public void setOnClickListener(GlModel.ClickListener onClickListener) {
         this.onClickListener = onClickListener;
+    }
+
+    public ClickListener getOnClickListener() {
+        return onClickListener;
     }
 
     public String getName() {
