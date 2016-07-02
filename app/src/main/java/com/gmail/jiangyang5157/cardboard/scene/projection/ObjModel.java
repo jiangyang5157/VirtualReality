@@ -121,7 +121,8 @@ public class ObjModel extends GlModel implements Creation {
         this.scale = scale;
         setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.DeepOrange, null));
 
-        initializeProgram();
+        createProgram();
+        bindHandles();
         bindBuffers();
 
         setCreated(true);

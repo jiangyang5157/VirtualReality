@@ -51,7 +51,8 @@ public abstract class Panel extends Rectangle {
         setColor(color);
         buildArrays();
 
-        initializeProgram();
+        createProgram();
+        bindHandles();
         bindBuffers();
 
         setCreated(true);

@@ -6,6 +6,7 @@ import android.opengl.GLES20;
 import android.opengl.Matrix;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.util.ArrayMap;
 import android.util.Log;
 
 import com.gmail.jiangyang5157.cardboard.scene.Lighting;
@@ -68,12 +69,7 @@ public abstract class GlModel extends Model {
         this.fragmentShaderRawResource = fragmentShaderRawResource;
     }
 
-    protected void initializeProgram() {
-        createProgram();
-        bindHandles();
-    }
-
-    private int createProgram() {
+    protected int createProgram() {
         int vertexShader = 0;
         int fragmentShader = 0;
         try {
@@ -103,6 +99,20 @@ public abstract class GlModel extends Model {
         return program;
     }
 
+    protected void buildProgram(ArrayMap<Integer, Integer> shaders) {
+        this.program = GlUtils.createProgram(context, shaders);
+    }
+
+    protected void buildProgram(int program) {
+        this.program = program;
+    }
+
+    protected abstract void buildArrays();
+
+    protected abstract void bindHandles();
+
+    protected abstract void bindBuffers();
+
     public void update(float[] view, float[] perspective) {
         Matrix.setIdentityM(model, 0);
 
@@ -113,12 +123,6 @@ public abstract class GlModel extends Model {
         Matrix.multiplyMM(modelView, 0, view, 0, model, 0);
         Matrix.multiplyMM(modelViewProjection, 0, perspective, 0, modelView, 0);
     }
-
-    protected abstract void buildArrays();
-
-    protected abstract void bindHandles();
-
-    protected abstract void bindBuffers();
 
     public void setLighting(Lighting lighting) {
         this.lighting = lighting;

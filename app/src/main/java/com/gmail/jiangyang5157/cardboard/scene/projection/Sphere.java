@@ -23,7 +23,8 @@ public abstract class Sphere extends GlModel implements Intersection.Intersectab
         setRadius(radius);
         buildArrays();
 
-        initializeProgram();
+        createProgram();
+        bindHandles();
         bindBuffers();
 
         setCreated(true);

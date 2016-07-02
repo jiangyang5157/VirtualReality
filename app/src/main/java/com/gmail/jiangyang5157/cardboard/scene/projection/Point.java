@@ -34,7 +34,8 @@ public class Point extends GlModel {
         setColor(color);
         buildArrays();
 
-        initializeProgram();
+        createProgram();
+        bindHandles();
         bindBuffers();
 
         setCreated(true);
