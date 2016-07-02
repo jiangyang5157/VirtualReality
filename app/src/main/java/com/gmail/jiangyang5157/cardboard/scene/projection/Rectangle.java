@@ -2,13 +2,11 @@ package com.gmail.jiangyang5157.cardboard.scene.projection;
 
 import android.content.Context;
 
-import com.gmail.jiangyang5157.cardboard.scene.Intersection;
-
 /**
  * @author Yang
  * @since 5/5/2016
  */
-public abstract class Rectangle extends GlModel implements Intersection.Intersectable {
+public abstract class Rectangle extends GlModel implements GlModel.IntersectListener {
 
     protected final float[] UP;
     protected final float[] RIGHT;

@@ -57,7 +57,7 @@ public class KmlChooserView extends Dialog {
             tf.setTextSize(textSize);
             tf.setAlignment(Layout.Alignment.ALIGN_CENTER);
             tf.create();
-            tf.setOnClickListener(new Intersection.Clickable() {
+            tf.setOnClickListener(new GlModel.ClickListener() {
                 @Override
                 public void onClick(Model model) {
                     if (eventListener != null) {

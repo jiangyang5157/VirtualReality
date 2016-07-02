@@ -8,6 +8,8 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.util.ArrayMap;
 
+import com.gmail.jiangyang5157.cardboard.scene.Head;
+import com.gmail.jiangyang5157.cardboard.scene.Intersection;
 import com.gmail.jiangyang5157.cardboard.scene.Lighting;
 import com.gmail.jiangyang5157.tookit.opengl.Model;
 import com.gmail.jiangyang5157.tookit.opengl.GlUtils;
@@ -18,6 +20,14 @@ import com.gmail.jiangyang5157.tookit.opengl.GlUtils;
  */
 public abstract class GlModel extends Model {
     private static final String TAG = "[GlModel]";
+
+    public interface ClickListener {
+        void onClick(Model model);
+    }
+
+    public interface IntersectListener {
+        Intersection onIntersect(Head head);
+    }
 
     protected interface BindingBuffers {
         void bindBuffers();

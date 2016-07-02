@@ -6,7 +6,6 @@ import android.opengl.Matrix;
 import android.util.ArrayMap;
 
 import com.gmail.jiangyang5157.cardboard.scene.Coordinate;
-import com.gmail.jiangyang5157.cardboard.scene.Intersection;
 import com.gmail.jiangyang5157.cardboard.vr.R;
 import com.gmail.jiangyang5157.tookit.app.AppUtils;
 import com.gmail.jiangyang5157.tookit.opengl.Model;
@@ -16,7 +15,7 @@ import com.google.android.gms.maps.model.LatLng;
  * @author Yang
  * @since 4/12/2016.
  */
-public class Marker extends Icosphere implements Intersection.Clickable {
+public class Marker extends Icosphere implements GlModel.ClickListener {
 
     public static final float RADIUS = Earth.RADIUS / 80;
     public static final float ALTITUDE = -1 * RADIUS;
@@ -29,7 +28,7 @@ public class Marker extends Icosphere implements Intersection.Clickable {
 
     private ObjModel objModel;
 
-    private Intersection.Clickable onClickListener;
+    private GlModel.ClickListener onClickListener;
 
     public Marker(Context context, Earth earth) {
         super(context, 3);
@@ -81,7 +80,7 @@ public class Marker extends Icosphere implements Intersection.Clickable {
         }
     }
 
-    public void setOnClickListener(Intersection.Clickable onClickListener) {
+    public void setOnClickListener(GlModel.ClickListener onClickListener) {
         this.onClickListener = onClickListener;
     }
 

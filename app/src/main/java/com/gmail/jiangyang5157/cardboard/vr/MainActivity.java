@@ -203,8 +203,8 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
 
         final Intersection intersection = ray.getIntersection();
         if (intersection != null) {
-            if (intersection.getModel() instanceof Intersection.Clickable) {
-                ((Intersection.Clickable) intersection.getModel()).onClick(intersection.getModel());
+            if (intersection.getModel() instanceof GlModel.ClickListener) {
+                ((GlModel.ClickListener) intersection.getModel()).onClick(intersection.getModel());
             }
         }
     }
@@ -238,7 +238,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         onCardboardClick();
     }
 
-    private Intersection.Clickable markerOnClickListener = new Intersection.Clickable() {
+    private GlModel.ClickListener markerOnClickListener = new GlModel.ClickListener() {
 
         @Override
         public void onClick(Model model) {

@@ -59,7 +59,7 @@ public class Earth extends UvSphere implements GlModel.Creation {
     protected Lighting markerLighting;
     protected Lighting markerObjModelLighting;
 
-    private Intersection.Clickable onMarkerClickListener;
+    private GlModel.ClickListener onMarkerClickListener;
 
     public Earth(Context context, String urlKml, String urlTexture) {
         super(context, 180, 180);
@@ -389,7 +389,7 @@ public class Earth extends UvSphere implements GlModel.Creation {
         return ret;
     }
 
-    public void setOnMarkerClickListener(Intersection.Clickable onClickListener) {
+    public void setOnMarkerClickListener(GlModel.ClickListener onClickListener) {
         this.onMarkerClickListener = onClickListener;
     }
 

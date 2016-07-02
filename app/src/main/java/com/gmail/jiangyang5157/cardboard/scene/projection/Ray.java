@@ -83,7 +83,7 @@ public class Ray extends Point {
             return;
         }
 
-        if (intersection.getModel() instanceof Intersection.Clickable) {
+        if (intersection.getModel() instanceof GlModel.ClickListener) {
             if (pointSize < POINT_SIZE_FOCUSED) {
                 pointSize += POINT_SIZE_GRADIENT_UNIT;
             }

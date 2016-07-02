@@ -56,7 +56,7 @@ public class MarkerDetailView extends Dialog {
             tf3.setTextSize(TextField.TEXT_SIZE_TINY);
             tf3.setAlignment(Layout.Alignment.ALIGN_NORMAL);
             tf3.create();
-            tf3.setOnClickListener(new Intersection.Clickable() {
+            tf3.setOnClickListener(new GlModel.ClickListener() {
                 @Override
                 public void onClick(Model model) {
                     if (eventListener != null) {

@@ -20,7 +20,7 @@ import com.gmail.jiangyang5157.tookit.opengl.Model;
  * @author Yang
  * @since 5/8/2016
  */
-public class TextField extends Panel implements Intersection.Clickable {
+public class TextField extends Panel implements GlModel.ClickListener {
     private static final String TAG = "[TextField]";
 
     private static final float ALPHA_BACKGROUND = 0.2f;
@@ -41,7 +41,7 @@ public class TextField extends Panel implements Intersection.Clickable {
 
     private Layout.Alignment alignment;
 
-    private Intersection.Clickable onClickListener;
+    private GlModel.ClickListener onClickListener;
 
     public TextField(Context context) {
         super(context);
@@ -109,7 +109,7 @@ public class TextField extends Panel implements Intersection.Clickable {
         }
     }
 
-    public void setOnClickListener(Intersection.Clickable onClickListener) {
+    public void setOnClickListener(GlModel.ClickListener onClickListener) {
         this.onClickListener = onClickListener;
     }
 
