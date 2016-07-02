@@ -4,10 +4,10 @@ import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
 import android.util.ArrayMap;
+import android.util.Log;
 
 import com.gmail.jiangyang5157.cardboard.scene.Camera;
 import com.gmail.jiangyang5157.cardboard.scene.Intersection;
-import com.gmail.jiangyang5157.cardboard.vr.R;
 import com.gmail.jiangyang5157.tookit.app.AppUtils;
 import com.gmail.jiangyang5157.tookit.math.Vector;
 import com.gmail.jiangyang5157.tookit.opengl.GlUtils;
@@ -40,16 +40,10 @@ public class Ray extends Point {
         intersections = new ArrayList<>();
     }
 
-    public void create() {
+    @Override
+    public void create(ArrayMap<Integer, Integer> shaders) {
         setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.DeepOrange, null));
-        buildData();
-
-        ArrayMap<Integer, Integer> shaders = new ArrayMap<>();
-        shaders.put(GLES20.GL_VERTEX_SHADER, R.raw.ray_point_vertex_shader);
-        shaders.put(GLES20.GL_FRAGMENT_SHADER, R.raw.ray_point_fragment_shader);
-        buildProgram(shaders);
-        bindHandles();
-        bindBuffers();
+        super.create(shaders);
 
         setCreated(true);
         setVisible(true);
@@ -129,7 +123,7 @@ public class Ray extends Point {
         GLES20.glDisableVertexAttribArray(vertexHandle);
         GLES20.glUseProgram(0);
 
-        GlUtils.printGlError("Point - draw end");
+        GlUtils.printGlError(TAG + " - draw end");
     }
 
     public void addBusy() {
@@ -144,6 +138,7 @@ public class Ray extends Point {
     @Override
     public void destroy() {
         super.destroy();
+        Log.d(TAG, "destroy");
         intersections.clear();
     }
 }

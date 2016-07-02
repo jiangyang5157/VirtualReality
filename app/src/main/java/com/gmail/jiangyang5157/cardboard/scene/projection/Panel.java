@@ -8,7 +8,6 @@ import android.util.Log;
 
 import com.gmail.jiangyang5157.cardboard.scene.Intersection;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
-import com.gmail.jiangyang5157.cardboard.vr.R;
 import com.gmail.jiangyang5157.tookit.data.buffer.BufferUtils;
 import com.gmail.jiangyang5157.tookit.math.Vector;
 import com.gmail.jiangyang5157.tookit.math.Vector3d;
@@ -43,19 +42,14 @@ public abstract class Panel extends Rectangle implements GlModel.BindingBuffers,
         super(context);
     }
 
-    protected void create() {
+    @Override
+    public void create(ArrayMap<Integer, Integer> shaders) {
         bindTexBuffers();
         buildData();
 
-        ArrayMap<Integer, Integer> shaders = new ArrayMap<>();
-        shaders.put(GLES20.GL_VERTEX_SHADER, R.raw.panel_vertex_shader);
-        shaders.put(GLES20.GL_FRAGMENT_SHADER, R.raw.panel_fragment_shader);
-        buildProgram(shaders);
+        super.create(shaders);
         bindHandles();
         bindBuffers();
-
-        setCreated(true);
-        setVisible(true);
     }
 
     public void setPosition(float[] cameraPos, float[] forward, float distance, float[] quaternion, float[] up, float[] right) {
@@ -250,7 +244,7 @@ public abstract class Panel extends Rectangle implements GlModel.BindingBuffers,
         GLES20.glDisableVertexAttribArray(texCoordHandle);
         GLES20.glUseProgram(0);
 
-        GlUtils.printGlError("Panel - draw end");
+        GlUtils.printGlError(TAG + " - draw end");
     }
 
     @Override

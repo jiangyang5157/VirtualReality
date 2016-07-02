@@ -11,7 +11,6 @@ import com.gmail.jiangyang5157.cardboard.net.Downloader;
 import com.gmail.jiangyang5157.cardboard.scene.Creation;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
 import com.gmail.jiangyang5157.cardboard.vr.Constant;
-import com.gmail.jiangyang5157.cardboard.vr.R;
 import com.gmail.jiangyang5157.tookit.app.AppUtils;
 import com.gmail.jiangyang5157.tookit.data.buffer.BufferUtils;
 import com.gmail.jiangyang5157.tookit.data.io.IoUtils;
@@ -108,14 +107,12 @@ public class ObjModel extends GlModel implements GlModel.BindingBuffers, Creatio
         });
     }
 
-    public void create() {
+    @Override
+    public void create(ArrayMap<Integer, Integer> shaders) {
         creationState = STATE_CREATING;
         setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.DeepOrange, null));
+        super.create(shaders);
 
-        ArrayMap<Integer, Integer> shaders = new ArrayMap<>();
-        shaders.put(GLES20.GL_VERTEX_SHADER, R.raw.obj_color_vertex_shader);
-        shaders.put(GLES20.GL_FRAGMENT_SHADER, R.raw.obj_color_fragment_shader);
-        buildProgram(shaders);
         bindHandles();
         bindBuffers();
 
@@ -429,7 +426,7 @@ public class ObjModel extends GlModel implements GlModel.BindingBuffers, Creatio
         GLES20.glDisableVertexAttribArray(normalHandle);
         GLES20.glUseProgram(0);
 
-        GlUtils.printGlError("ObjModel - draw end");
+        GlUtils.printGlError(TAG + " - draw end");
     }
 
     public String getTitle() {

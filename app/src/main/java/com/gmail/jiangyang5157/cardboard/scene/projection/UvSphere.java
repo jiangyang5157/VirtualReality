@@ -1,6 +1,7 @@
 package com.gmail.jiangyang5157.cardboard.scene.projection;
 
 import android.content.Context;
+import android.util.ArrayMap;
 
 /**
  * @author Yang
@@ -20,6 +21,16 @@ public abstract class UvSphere extends Sphere implements GlModel.BindingTexBuffe
         super(context);
         this.stacks = stacks;
         this.slices = slices;
+    }
+
+    @Override
+    public void create(ArrayMap<Integer, Integer> shaders) {
+        bindTexBuffers();
+        buildData();
+
+        super.create(shaders);
+        bindHandles();
+        bindBuffers();
     }
 
     @Override

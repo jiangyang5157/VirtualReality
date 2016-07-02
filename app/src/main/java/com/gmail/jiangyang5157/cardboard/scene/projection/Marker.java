@@ -1,12 +1,10 @@
 package com.gmail.jiangyang5157.cardboard.scene.projection;
 
 import android.content.Context;
-import android.opengl.GLES20;
 import android.opengl.Matrix;
 import android.util.ArrayMap;
 
 import com.gmail.jiangyang5157.cardboard.scene.Coordinate;
-import com.gmail.jiangyang5157.cardboard.vr.R;
 import com.gmail.jiangyang5157.tookit.app.AppUtils;
 import com.gmail.jiangyang5157.tookit.opengl.Model;
 import com.google.android.gms.maps.model.LatLng;
@@ -36,20 +34,12 @@ public class Marker extends Icosphere implements GlModel.ClickListener {
         setRadius(RADIUS);
     }
 
-    public void create() {
-        super.create();
+    @Override
+    public void create(ArrayMap<Integer, Integer> shaders) {
         if (color == null) {
             setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.White, null));
         }
-
-        buildData();
-
-        ArrayMap<Integer, Integer> shaders = new ArrayMap<>();
-        shaders.put(GLES20.GL_VERTEX_SHADER, R.raw.sphere_color_vertex_shader);
-        shaders.put(GLES20.GL_FRAGMENT_SHADER, R.raw.sphere_color_fragment_shader);
-        buildProgram(shaders);
-        bindHandles();
-        bindBuffers();
+        super.create(shaders);
 
         setCreated(true);
         setVisible(true);

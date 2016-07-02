@@ -1,10 +1,11 @@
 package com.gmail.jiangyang5157.cardboard.scene.projection;
 
 import android.content.Context;
+import android.opengl.GLES20;
 import android.text.Layout;
+import android.util.ArrayMap;
 
-import com.gmail.jiangyang5157.cardboard.scene.Intersection;
-import com.gmail.jiangyang5157.tookit.app.AppUtils;
+import com.gmail.jiangyang5157.cardboard.vr.R;
 import com.gmail.jiangyang5157.tookit.opengl.Model;
 
 /**
@@ -27,7 +28,19 @@ public class MarkerDetailView extends Dialog {
     }
 
     @Override
+    public void create(ArrayMap<Integer, Integer> shaders) {
+        super.create(shaders);
+
+        setCreated(true);
+        setVisible(true);
+    }
+
+    @Override
     protected void createPanels() {
+        ArrayMap<Integer, Integer> shaders = new ArrayMap<>();
+        shaders.put(GLES20.GL_VERTEX_SHADER, R.raw.panel_vertex_shader);
+        shaders.put(GLES20.GL_FRAGMENT_SHADER, R.raw.panel_fragment_shader);
+
         if (marker.getName() != null) {
             TextField tf1 = new TextField(context);
             tf1.setText(marker.getName());
@@ -35,7 +48,7 @@ public class MarkerDetailView extends Dialog {
             tf1.setScale(SCALE);
             tf1.setTextSize(TextField.TEXT_SIZE_LARGE);
             tf1.setAlignment(Layout.Alignment.ALIGN_CENTER);
-            tf1.create();
+            tf1.create(shaders);
             addPanel(tf1);
         }
         if (marker.getDescription() != null) {
@@ -45,7 +58,7 @@ public class MarkerDetailView extends Dialog {
             tf2.setScale(SCALE);
             tf2.setTextSize(TextField.TEXT_SIZE_TINY);
             tf2.setAlignment(Layout.Alignment.ALIGN_NORMAL);
-            tf2.create();
+            tf2.create(shaders);
             addPanel(tf2);
         }
         if (marker.getObjModel() != null) {
@@ -55,7 +68,7 @@ public class MarkerDetailView extends Dialog {
             tf3.setScale(SCALE);
             tf3.setTextSize(TextField.TEXT_SIZE_TINY);
             tf3.setAlignment(Layout.Alignment.ALIGN_NORMAL);
-            tf3.create();
+            tf3.create(shaders);
             tf3.setOnClickListener(new GlModel.ClickListener() {
                 @Override
                 public void onClick(Model model) {

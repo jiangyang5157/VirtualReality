@@ -1,6 +1,7 @@
 package com.gmail.jiangyang5157.cardboard.scene.projection;
 
 import android.content.Context;
+import android.util.ArrayMap;
 
 import com.gmail.jiangyang5157.cardboard.scene.Intersection;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
@@ -19,10 +20,9 @@ public abstract class Sphere extends GlModel implements GlModel.BindingBuffers, 
         super(context);
     }
 
-    protected void create(){
-        if (radius <= 0){
-            throw new RuntimeException("Radius should greater than 0.");
-        }
+    @Override
+    public void create(ArrayMap<Integer, Integer> shaders) {
+        super.create(shaders);
     }
 
     @Override
@@ -64,7 +64,7 @@ public abstract class Sphere extends GlModel implements GlModel.BindingBuffers, 
         return new Intersection(this, cameraPosVec, cameraPosVec.plus(forwardVec.times(t)), t);
     }
 
-    public boolean contain(float radius, float[] center, float[] point) {
+    public static boolean contain(float radius, float[] center, float[] point) {
         Vector positionVec = new Vector3d(center[0], center[1], center[2]);
         Vector pointVec = new Vector3d(point[0], point[1], point[2]);
         return pointVec.minus(positionVec).length() < radius;

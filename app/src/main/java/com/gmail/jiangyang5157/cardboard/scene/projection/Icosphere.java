@@ -2,6 +2,7 @@ package com.gmail.jiangyang5157.cardboard.scene.projection;
 
 import android.content.Context;
 import android.opengl.GLES20;
+import android.util.ArrayMap;
 import android.util.Log;
 
 import com.gmail.jiangyang5157.tookit.data.buffer.BufferUtils;
@@ -30,6 +31,15 @@ public abstract class Icosphere extends Sphere {
     protected Icosphere(Context context, int recursionLevel) {
         super(context);
         this.recursionLevel = recursionLevel;
+    }
+
+    @Override
+    public void create(ArrayMap<Integer, Integer> shaders) {
+        buildData();
+
+        super.create(shaders);
+        bindHandles();
+        bindBuffers();
     }
 
     @Override
@@ -114,7 +124,7 @@ public abstract class Icosphere extends Sphere {
         GLES20.glDisableVertexAttribArray(normalHandle);
         GLES20.glUseProgram(0);
 
-        GlUtils.printGlError("Icosphere - draw end");
+        GlUtils.printGlError(TAG + " - draw end");
     }
 
     @Override

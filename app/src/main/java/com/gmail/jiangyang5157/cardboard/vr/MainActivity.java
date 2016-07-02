@@ -3,6 +3,7 @@ package com.gmail.jiangyang5157.cardboard.vr;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
 import android.os.Bundle;
+import android.util.ArrayMap;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -34,7 +35,6 @@ import com.google.vr.sdk.base.Viewport;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.ParseException;
@@ -285,14 +285,20 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
                 if (earth.getCreationState() == Creation.STATE_BEFORE_PREPARE) {
                     earth.prepare(ray);
                 } else if (earth.getCreationState() == Creation.STATE_BEFORE_CREATE) {
-                    earth.create();
+                    ArrayMap<Integer, Integer> shaders = new ArrayMap<>();
+                    shaders.put(GLES20.GL_VERTEX_SHADER, R.raw.earth_uv_vertex_shader);
+                    shaders.put(GLES20.GL_FRAGMENT_SHADER, R.raw.earth_uv_fragment_shader);
+                    earth.create(shaders);
                 }
             }
         }
 
         if (markerDetailView != null) {
             if (!markerDetailView.isCreated()) {
-                markerDetailView.create();
+                ArrayMap<Integer, Integer> shaders = new ArrayMap<>();
+                shaders.put(GLES20.GL_VERTEX_SHADER, R.raw.panel_vertex_shader);
+                shaders.put(GLES20.GL_FRAGMENT_SHADER, R.raw.panel_fragment_shader);
+                markerDetailView.create(shaders);
                 markerDetailView.setPosition(head.getCamera().getPosition(), head.getForward(), Dialog.DISTANCE, head.getQuaternion(), head.getUp(), head.getRight());
             }
 
@@ -301,7 +307,10 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
                     if (objModel.getCreationState() == Creation.STATE_BEFORE_PREPARE) {
                         objModel.prepare(ray);
                     } else if (objModel.getCreationState() == Creation.STATE_BEFORE_CREATE) {
-                        objModel.create();
+                        ArrayMap<Integer, Integer> shaders = new ArrayMap<>();
+                        shaders.put(GLES20.GL_VERTEX_SHADER, R.raw.obj_color_vertex_shader);
+                        shaders.put(GLES20.GL_FRAGMENT_SHADER, R.raw.obj_color_fragment_shader);
+                        objModel.create(shaders);
                         objModel.setPosition(head.getCamera().getPosition(), head.getForward(), ObjModel.DISTANCE, head.getQuaternion(), head.getUp(), head.getRight());
                     }
                 }
@@ -310,7 +319,10 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
 
         if (kmlChooserView != null) {
             if (!kmlChooserView.isCreated()) {
-                kmlChooserView.create();
+                ArrayMap<Integer, Integer> shaders = new ArrayMap<>();
+                shaders.put(GLES20.GL_VERTEX_SHADER, R.raw.panel_vertex_shader);
+                shaders.put(GLES20.GL_FRAGMENT_SHADER, R.raw.panel_fragment_shader);
+                kmlChooserView.create(shaders);
                 kmlChooserView.setPosition(head.getCamera().getPosition(), head.getForward(), Dialog.DISTANCE, head.getQuaternion(), head.getUp(), head.getRight());
             }
         }
@@ -420,7 +432,10 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         GLES20.glClearColor(0.1f, 0.1f, 0.1f, 0.5f);
 
         ray = new Ray(getApplicationContext());
-        ray.create();
+        ArrayMap<Integer, Integer> shaders = new ArrayMap<>();
+        shaders.put(GLES20.GL_VERTEX_SHADER, R.raw.ray_point_vertex_shader);
+        shaders.put(GLES20.GL_FRAGMENT_SHADER, R.raw.ray_point_fragment_shader);
+        ray.create(shaders);
 
         newEarth(Constant.getKmlUrl(Constant.getLastKmlFileName(getApplicationContext())));
     }

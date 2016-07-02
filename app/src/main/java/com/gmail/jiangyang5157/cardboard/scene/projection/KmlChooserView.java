@@ -1,11 +1,12 @@
 package com.gmail.jiangyang5157.cardboard.scene.projection;
 
 import android.content.Context;
+import android.opengl.GLES20;
 import android.text.Layout;
+import android.util.ArrayMap;
 
-import com.gmail.jiangyang5157.cardboard.scene.Intersection;
 import com.gmail.jiangyang5157.cardboard.vr.Constant;
-import com.gmail.jiangyang5157.tookit.app.AppUtils;
+import com.gmail.jiangyang5157.cardboard.vr.R;
 import com.gmail.jiangyang5157.tookit.opengl.Model;
 
 import java.io.File;
@@ -28,6 +29,14 @@ public class KmlChooserView extends Dialog {
     }
 
     @Override
+    public void create(ArrayMap<Integer, Integer> shaders) {
+        super.create(shaders);
+
+        setCreated(true);
+        setVisible(true);
+    }
+
+    @Override
     protected void createPanels() {
         File directory = new File(Constant.getAbsolutePath(context, Constant.getKmlPath("")));
         if (!directory.exists() || !directory.isDirectory()) {
@@ -41,6 +50,10 @@ public class KmlChooserView extends Dialog {
                 return filename.endsWith(".kml");
             }
         });
+
+        ArrayMap<Integer, Integer> shaders = new ArrayMap<>();
+        shaders.put(GLES20.GL_VERTEX_SHADER, R.raw.panel_vertex_shader);
+        shaders.put(GLES20.GL_FRAGMENT_SHADER, R.raw.panel_fragment_shader);
 
         String lastKmlFileName = Constant.getLastKmlFileName(context);
         for (final String fileName : fileNames) {
@@ -56,7 +69,7 @@ public class KmlChooserView extends Dialog {
             tf.setScale(SCALE);
             tf.setTextSize(textSize);
             tf.setAlignment(Layout.Alignment.ALIGN_CENTER);
-            tf.create();
+            tf.create(shaders);
             tf.setOnClickListener(new GlModel.ClickListener() {
                 @Override
                 public void onClick(Model model) {

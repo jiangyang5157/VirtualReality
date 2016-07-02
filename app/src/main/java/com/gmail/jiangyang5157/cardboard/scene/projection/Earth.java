@@ -166,25 +166,20 @@ public class Earth extends UvSphere implements Creation {
         }
     }
 
-    public void create() {
+    @Override
+    public void create(ArrayMap<Integer, Integer> shaders) {
         creationState = STATE_CREATING;
-        super.create();
+        super.create(shaders);
 
-        bindTexBuffers();
-        buildData();
-
-        ArrayMap<Integer, Integer> shaders = new ArrayMap<>();
-        shaders.put(GLES20.GL_VERTEX_SHADER, R.raw.earth_uv_vertex_shader);
-        shaders.put(GLES20.GL_FRAGMENT_SHADER, R.raw.earth_uv_fragment_shader);
-        buildProgram(shaders);
-        bindHandles();
-        bindBuffers();
+        ArrayMap<Integer, Integer> markerShaders = new ArrayMap<>();
+        markerShaders.put(GLES20.GL_VERTEX_SHADER, R.raw.sphere_color_vertex_shader);
+        markerShaders.put(GLES20.GL_FRAGMENT_SHADER, R.raw.sphere_color_fragment_shader);
 
         setCreated(true);
         setVisible(true);
 
         for (Marker marker : markers) {
-            marker.create();
+            marker.create(markerShaders);
         }
 
         creationState = STATE_BEFORE_CREATE;
@@ -310,12 +305,12 @@ public class Earth extends UvSphere implements Creation {
         GLES20.glDisableVertexAttribArray(texCoordHandle);
         GLES20.glUseProgram(0);
 
-        GlUtils.printGlError("UvSphere - draw end");
+        GlUtils.printGlError(TAG + " - draw end");
     }
 
     @Override
     public void destroy() {
-        Log.d("UvSphere", "destroy");
+        Log.d(TAG, "destroy");
         super.destroy();
         GLES20.glDeleteBuffers(buffers.length, buffers, 0);
         GLES20.glDeleteTextures(texBuffers.length, texBuffers, 0);
@@ -363,7 +358,7 @@ public class Earth extends UvSphere implements Creation {
     }
 
     public boolean contain(float[] point) {
-        return contain(radius + Camera.ALTITUDE, getPosition(), point);
+        return Sphere.contain(radius + Camera.ALTITUDE, getPosition(), point);
     }
 
     @Override

@@ -9,6 +9,7 @@ import android.opengl.GLUtils;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
+import android.util.ArrayMap;
 import android.util.TypedValue;
 
 import com.gmail.jiangyang5157.cardboard.scene.Head;
@@ -54,10 +55,14 @@ public class TextField extends Panel implements GlModel.ClickListener {
         scaleSelector = scaleNormal;
     }
 
-    protected void create() {
+    @Override
+    public void create(ArrayMap<Integer, Integer> shaders) {
         setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.White, null));
         initScaleSelector(scale);
-        super.create();
+        super.create(shaders);
+
+        setCreated(true);
+        setVisible(true);
     }
 
     @Override

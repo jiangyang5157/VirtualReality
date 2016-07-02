@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
+import android.util.ArrayMap;
 
 import com.gmail.jiangyang5157.cardboard.scene.Intersection;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
@@ -19,7 +20,7 @@ import java.util.Collections;
 public abstract class Dialog extends Panel {
     private static final String TAG = "[Dialog]";
 
-    protected static final float ALPHA_BACKGROUND = 0.1f;
+    protected static final float ALPHA_BACKGROUND = 0.0f;
 
     protected static final float PADDING_LAYER = 1.0f;
 
@@ -37,11 +38,12 @@ public abstract class Dialog extends Panel {
 
     protected abstract void createPanels();
 
-    public void create() {
+    @Override
+    public void create(ArrayMap<Integer, Integer> shaders) {
         setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.Red, null));
         createPanels();
         adjustBounds(WIDTH);
-        super.create();
+        super.create(shaders);
     }
 
     @Override
