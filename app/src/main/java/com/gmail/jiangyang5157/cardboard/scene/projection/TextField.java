@@ -9,7 +9,6 @@ import android.opengl.GLUtils;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
-import android.util.ArrayMap;
 import android.util.Log;
 import android.util.TypedValue;
 

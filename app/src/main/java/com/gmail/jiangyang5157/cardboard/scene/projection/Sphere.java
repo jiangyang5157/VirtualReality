@@ -1,6 +1,7 @@
 package com.gmail.jiangyang5157.cardboard.scene.projection;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 
 import com.gmail.jiangyang5157.cardboard.scene.Intersection;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
@@ -58,7 +59,7 @@ public abstract class Sphere extends GlModel implements GlModel.BindingBuffers, 
         return new Intersection(this, cameraPosVec, cameraPosVec.plus(forwardVec.times(t)), t);
     }
 
-    public static boolean contain(float radius, float[] center, float[] point) {
+    public static boolean contain(float radius, @NonNull float[] center, @NonNull float[] point) {
         Vector positionVec = new Vector3d(center[0], center[1], center[2]);
         Vector pointVec = new Vector3d(point[0], point[1], point[2]);
         return pointVec.minus(positionVec).length() < radius;

@@ -6,6 +6,7 @@ import android.opengl.GLES20;
 import android.opengl.Matrix;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.support.annotation.NonNull;
 import android.util.ArrayMap;
 
 import com.gmail.jiangyang5157.cardboard.scene.Head;
@@ -81,7 +82,7 @@ public abstract class GlModel extends Model {
         this.context = context;
     }
 
-    public void create(ArrayMap<Integer, Integer> shaders) {
+    public void create(@NonNull ArrayMap<Integer, Integer> shaders) {
         create(GlUtils.createProgram(context, shaders));
     }
 

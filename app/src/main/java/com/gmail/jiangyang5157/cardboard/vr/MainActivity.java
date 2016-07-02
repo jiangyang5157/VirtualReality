@@ -161,6 +161,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         }
     }
 
+    // TODO: 7/3/2016 performance
     private Intersection getIntersection() {
         Intersection intersection = null;
         if (kmlChooserView != null) {

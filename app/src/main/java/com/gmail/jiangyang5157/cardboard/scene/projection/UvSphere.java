@@ -1,7 +1,6 @@
 package com.gmail.jiangyang5157.cardboard.scene.projection;
 
 import android.content.Context;
-import android.util.ArrayMap;
 
 /**
  * @author Yang

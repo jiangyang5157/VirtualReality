@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
-import android.util.ArrayMap;
 import android.util.Log;
 
 import com.android.volley.VolleyError;

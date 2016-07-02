@@ -1,6 +1,7 @@
 package com.gmail.jiangyang5157.cardboard.scene;
 
 import android.opengl.Matrix;
+import android.support.annotation.NonNull;
 
 import com.gmail.jiangyang5157.cardboard.scene.projection.Dialog;
 import com.gmail.jiangyang5157.cardboard.scene.projection.Earth;
@@ -44,6 +45,9 @@ public class Camera {
     }
 
     protected void move(float[] offset) {
+        if (offset == null) {
+            return;
+        }
         forward(position, offset);
         forward(lookAt, offset);
 
@@ -53,7 +57,13 @@ public class Camera {
                 UP[0], UP[1], UP[2]);
     }
 
-    protected static void forward(float[] src, float[] dir) {
+    protected static void forward(@NonNull float[] src, float[] dir) {
+        if (dir == null) {
+            return;
+        }
+        if (dir.length != src.length) {
+            throw new IndexOutOfBoundsException("Array src and dir must have different length.");
+        }
         src[0] += dir[0];
         src[1] += dir[1];
         src[2] += dir[2];

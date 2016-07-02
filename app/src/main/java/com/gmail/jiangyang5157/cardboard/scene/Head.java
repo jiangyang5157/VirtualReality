@@ -5,6 +5,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.support.annotation.NonNull;
 
 import com.gmail.jiangyang5157.cardboard.scene.projection.Earth;
 
@@ -96,7 +97,7 @@ public class Head implements SensorEventListener {
         velocity = newVelocity;
     }
 
-    public static float[] getQquaternionMatrix(float[] quaternion) {
+    public static float[] getQquaternionMatrix(@NonNull float[] quaternion) {
         float x = quaternion[0];
         float y = quaternion[1];
         float z = quaternion[2];

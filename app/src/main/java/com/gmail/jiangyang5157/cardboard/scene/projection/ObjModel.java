@@ -3,7 +3,6 @@ package com.gmail.jiangyang5157.cardboard.scene.projection;
 import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
-import android.util.ArrayMap;
 import android.util.Log;
 
 import com.android.volley.VolleyError;
