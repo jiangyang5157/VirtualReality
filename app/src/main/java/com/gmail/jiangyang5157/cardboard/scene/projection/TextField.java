@@ -57,13 +57,13 @@ public class TextField extends Panel implements Intersection.Clickable {
     }
 
     protected void create() {
+        setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.White, null));
+        initScaleSelector(scale);
+
         GLES20.glGenTextures(1, texBuffers, 0);
         if (texBuffers[0] == 0) {
             throw new RuntimeException("Error loading texture.");
         } else {
-            setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.White, null));
-            initScaleSelector(scale);
-
             TextPaint textPaint = new TextPaint();
             float textSizePixels = dp2px(context, textSize);
             textPaint.setTextSize(textSizePixels);
@@ -88,9 +88,9 @@ public class TextField extends Panel implements Intersection.Clickable {
             GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_NEAREST);
             GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
             bitmap.recycle();
-
-            super.create();
         }
+
+        super.create();
     }
 
     private float dp2px(Context context, float dp) {
