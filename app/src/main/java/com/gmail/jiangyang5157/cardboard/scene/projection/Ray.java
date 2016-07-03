@@ -6,6 +6,7 @@ import android.opengl.Matrix;
 import android.util.Log;
 
 import com.gmail.jiangyang5157.cardboard.scene.Camera;
+import com.gmail.jiangyang5157.cardboard.scene.Head;
 import com.gmail.jiangyang5157.cardboard.scene.Intersection;
 import com.gmail.jiangyang5157.tookit.app.AppUtils;
 import com.gmail.jiangyang5157.tookit.math.Vector;
@@ -20,6 +21,10 @@ import java.util.Collections;
  */
 public class Ray extends Point {
     private static final String TAG = "[Ray]";
+
+    public interface IntersectListener {
+        Intersection onIntersect(Head head);
+    }
 
     private static final float POINT_SIZE_NORMAL = 18f;
     private static final float POINT_SIZE_FOCUSED = 36f;
