@@ -289,7 +289,27 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         head.adjustPosition();
         ray.setIntersections(getIntersection());
         ray.update();
+    }
 
+    @Override
+    public void onDrawEye(Eye eye) {
+//        Log.d(TAG, "onDrawEye");
+        GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
+
+        // Apply the eye transformation to the matrix.
+        Matrix.multiplyMM(head.getCamera().getView(), 0, eye.getEyeView(), 0, head.getCamera().getMatrix(), 0);
+        // Set the position of the light
+        Matrix.multiplyMV(lightPosInCameraSpace, 0, head.getCamera().getView(), 0, LIGHT_POS_IN_WORLD_SPACE, 0);
+
+        float[] perspective = eye.getPerspective(Camera.Z_NEAR, Camera.Z_FAR);
+
+        updateScene(head.getCamera().getView(), perspective);
+        drawScene();
+    }
+
+    @Override
+    public void onFinishFrame(Viewport viewport) {
+//        Log.d(TAG, "onFinishFrame");
         if (earth != null) {
             if (!earth.isCreated()) {
                 if (earth.getCreationState() == Creation.STATE_BEFORE_PREPARE) {
@@ -346,27 +366,6 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
                 kmlChooserView.setPosition(head.getCamera().getPosition(), head.getForward(), Dialog.DISTANCE, head.getQuaternion(), head.getUp(), head.getRight());
             }
         }
-    }
-
-    @Override
-    public void onDrawEye(Eye eye) {
-//        Log.d(TAG, "onDrawEye");
-        GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
-
-        // Apply the eye transformation to the matrix.
-        Matrix.multiplyMM(head.getCamera().getView(), 0, eye.getEyeView(), 0, head.getCamera().getMatrix(), 0);
-        // Set the position of the light
-        Matrix.multiplyMV(lightPosInCameraSpace, 0, head.getCamera().getView(), 0, LIGHT_POS_IN_WORLD_SPACE, 0);
-
-        float[] perspective = eye.getPerspective(Camera.Z_NEAR, Camera.Z_FAR);
-
-        updateScene(head.getCamera().getView(), perspective);
-        drawScene();
-    }
-
-    @Override
-    public void onFinishFrame(Viewport viewport) {
-//        Log.d(TAG, "onFinishFrame");
     }
 
     private void updateScene(float[] view, float[] perspective) {

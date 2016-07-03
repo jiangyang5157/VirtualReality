@@ -8,6 +8,8 @@ import com.gmail.jiangyang5157.cardboard.scene.Coordinate;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
 import com.gmail.jiangyang5157.cardboard.scene.RayIntersection;
 import com.gmail.jiangyang5157.tookit.app.AppUtils;
+import com.gmail.jiangyang5157.tookit.math.Vector;
+import com.gmail.jiangyang5157.tookit.math.Vector3d;
 import com.gmail.jiangyang5157.tookit.opengl.Model;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -18,7 +20,7 @@ import com.google.android.gms.maps.model.LatLng;
 public class Marker extends Icosphere implements GlModel.ClickListener {
     private static final String TAG = "[Marker]";
 
-//    public static final float RADIUS = 1;
+    //    public static final float RADIUS = 1;
     public static final float RADIUS = 40;
     public static final float ALTITUDE = -1 * RADIUS;
 
@@ -85,7 +87,14 @@ public class Marker extends Icosphere implements GlModel.ClickListener {
 //        final float PITCH_LIMIT = 0.1f;
 //
 //        if (Math.abs(pitch) < PITCH_LIMIT && Math.abs(yaw) < YAW_LIMIT) {
-//            return new RayIntersection(this, radius);
+//            float[] position = getPosition();
+//            float[] cameraPos = head.getCamera().getPosition();
+//            Vector pos_camera = new Vector3d(
+//                    cameraPos[0] - position[0],
+//                    cameraPos[1] - position[1],
+//                    cameraPos[2] - position[2]
+//            );
+//            return new RayIntersection(this, pos_camera.length() * 0.5);
 //        } else {
 //            return null;
 //        }

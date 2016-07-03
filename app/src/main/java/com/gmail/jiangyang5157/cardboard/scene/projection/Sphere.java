@@ -29,10 +29,12 @@ public abstract class Sphere extends GlModel implements GlModel.BindingBuffers, 
         float[] position = getPosition();
         float[] cameraPos = head.getCamera().getPosition();
         float[] forward = head.getForward();
-        Vector positionVec = new Vector3d(position[0], position[1], position[2]);
-        Vector cameraPosVec = new Vector3d(cameraPos[0], cameraPos[1], cameraPos[2]);
         Vector forwardVec = new Vector3d(forward[0], forward[1], forward[2]);
-        Vector pos_camera = cameraPosVec.minus(positionVec);
+        Vector pos_camera = new Vector3d(
+                cameraPos[0] - position[0],
+                cameraPos[1] - position[1],
+                cameraPos[2] - position[2]
+        );
 
         final double b = forwardVec.dot(pos_camera);
         final double c = pos_camera.dot(pos_camera) - (radius * radius);
@@ -63,7 +65,8 @@ public abstract class Sphere extends GlModel implements GlModel.BindingBuffers, 
         Vector vec = new Vector3d(
                 center[0] - point[0],
                 center[1] - point[1],
-                center[2] - point[2]);
+                center[2] - point[2]
+        );
         return vec.length() < radius;
     }
 
