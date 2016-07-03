@@ -63,11 +63,7 @@ public class Head implements SensorEventListener {
         }
     }
 
-    public void adjustPosition(Earth earth) {
-        if (earth == null){
-            return;
-        }
-
+    public void adjustPosition() {
         float[] a = new float[]{
                 forward[0] * stepsCounter,
                 forward[1] * stepsCounter,
@@ -89,7 +85,7 @@ public class Head implements SensorEventListener {
 
         float[] pos = camera.getPosition();
         Camera.forward(pos, offset);
-        if (earth.contain(pos)) {
+        if (Earth.contain(pos)) {
             camera.move(offset);
         } else {
             newVelocity[0] = newVelocity[1] = newVelocity[2] = 0;

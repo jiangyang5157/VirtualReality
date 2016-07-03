@@ -286,7 +286,9 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         headTransform.getRightVector(head.getRight(), 0);
         headTransform.getQuaternion(head.getQuaternion(), 0);
 
-        head.adjustPosition(earth);
+        head.adjustPosition();
+        ray.setIntersections(getIntersection());
+        ray.update();
 
         if (earth != null) {
             if (!earth.isCreated()) {
@@ -344,9 +346,6 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
                 kmlChooserView.setPosition(head.getCamera().getPosition(), head.getForward(), Dialog.DISTANCE, head.getQuaternion(), head.getUp(), head.getRight());
             }
         }
-
-        ray.setIntersections(getIntersection());
-        ray.update();
     }
 
     @Override

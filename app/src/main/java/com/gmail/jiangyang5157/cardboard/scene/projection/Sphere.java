@@ -60,9 +60,11 @@ public abstract class Sphere extends GlModel implements GlModel.BindingBuffers, 
     }
 
     public static boolean contain(float radius, @NonNull float[] center, @NonNull float[] point) {
-        Vector positionVec = new Vector3d(center[0], center[1], center[2]);
-        Vector pointVec = new Vector3d(point[0], point[1], point[2]);
-        return pointVec.minus(positionVec).length() < radius;
+        Vector vec = new Vector3d(
+                center[0] - point[0],
+                center[1] - point[1],
+                center[2] - point[2]);
+        return vec.length() < radius;
     }
 
     public void setRadius(float radius) {
