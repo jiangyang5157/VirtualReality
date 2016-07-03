@@ -22,17 +22,17 @@ public class Camera {
     private float[] matrix;
     private float[] view;
 
+    private final float[] UP;
     private float[] position;
     private float[] lookAt;
-    private final float[] UP;
 
     public Camera() {
         matrix = new float[16];
         view = new float[16];
 
+        UP = new float[]{0.0f, 1.0f, 0.0f};
         position = new float[]{0.0f, 0.0f, 0.0f};
         lookAt = new float[]{0.0f, 0.0f, -1.0f};
-        UP = new float[]{0.0f, 1.0f, 0.0f};
 
         Matrix.setLookAtM(matrix, 0,
                 position[0], position[1], position[2],
@@ -40,11 +40,7 @@ public class Camera {
                 UP[0], UP[1], UP[2]);
     }
 
-    public float[] getPosition() {
-        return position.clone();
-    }
-
-    protected void move(float[] offset) {
+    public void move(float[] offset) {
         if (offset == null) {
             return;
         }
@@ -67,6 +63,10 @@ public class Camera {
         src[0] += dir[0];
         src[1] += dir[1];
         src[2] += dir[2];
+    }
+
+    public float[] getPosition() {
+        return position.clone();
     }
 
     public float[] getMatrix() {

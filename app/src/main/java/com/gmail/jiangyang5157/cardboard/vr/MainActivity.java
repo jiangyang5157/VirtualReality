@@ -270,6 +270,10 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
             }
             Constant.setLastKmlFileName(getApplicationContext(), fileName);
             newMap(Constant.getKmlUrl(fileName));
+
+            // move camera to <0,0,0>
+            float[] cameraPos = head.getCamera().getPosition();
+            head.getCamera().move(new float[]{-cameraPos[0], -cameraPos[1], -cameraPos[2]});
         }
     };
 
