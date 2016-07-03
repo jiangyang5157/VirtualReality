@@ -126,16 +126,12 @@ public class AtomMarkers extends Marker {
         RayIntersection ret = null;
 
         // TODO: 7/3/2016 performance
-        ArrayList<RayIntersection> rayIntersections = new ArrayList<>();
         for (Marker marker : markers) {
             RayIntersection rayIntersection = marker.onIntersect(head);
             if (rayIntersection != null) {
-                rayIntersections.add(rayIntersection);
+                ret = rayIntersection;
+                break;
             }
-        }
-        Collections.sort(rayIntersections);
-        if (rayIntersections.size() > 0) {
-            ret = rayIntersections.get(0);
         }
 
         return ret;

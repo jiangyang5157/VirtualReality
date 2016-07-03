@@ -5,6 +5,8 @@ import android.opengl.Matrix;
 import android.util.Log;
 
 import com.gmail.jiangyang5157.cardboard.scene.Coordinate;
+import com.gmail.jiangyang5157.cardboard.scene.Head;
+import com.gmail.jiangyang5157.cardboard.scene.RayIntersection;
 import com.gmail.jiangyang5157.tookit.app.AppUtils;
 import com.gmail.jiangyang5157.tookit.opengl.Model;
 import com.google.android.gms.maps.model.LatLng;
@@ -58,6 +60,33 @@ public class Marker extends Icosphere implements GlModel.ClickListener {
         if (onClickListener != null) {
             onClickListener.onClick(this);
         }
+    }
+
+    @Override
+    public RayIntersection onIntersect(Head head) {
+        return super.onIntersect(head);
+//        if (!isCreated() || !isVisible()) {
+//            return null;
+//        }
+//
+//        float[] objPosition = new float[4];
+//        // Convenience vector for extracting the position from a matrix via multiplication.
+//        final float[] POS_MATRIX_MULTIPLY = {0, 0, 0, 1.0f};
+//        // Convert object space to camera space. Use the headView from onNewFrame.
+//        Matrix.multiplyMM(modelView, 0, head.getHeadView(), 0, model, 0);
+//        Matrix.multiplyMV(objPosition, 0, modelView, 0, POS_MATRIX_MULTIPLY, 0);
+//
+//        float pitch = (float) Math.atan2(objPosition[1], -objPosition[2]);
+//        float yaw = (float) Math.atan2(objPosition[0], -objPosition[2]);
+//
+//        final float YAW_LIMIT = 0.01f;
+//        final float PITCH_LIMIT = 0.01f;
+//
+//        if (Math.abs(pitch) < PITCH_LIMIT && Math.abs(yaw) < YAW_LIMIT){
+//            return new RayIntersection(this, radius);
+//        } else {
+//            return null;
+//        }
     }
 
     public void setOnClickListener(GlModel.ClickListener onClickListener) {

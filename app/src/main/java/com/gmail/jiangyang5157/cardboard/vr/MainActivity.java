@@ -440,27 +440,6 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         GLES20.glDisable(GLES20.GL_CULL_FACE);
     }
 
-    /**
-     * Check if user is looking at object by calculating where the object is in eye-space.
-     *
-     * @return true if the user is looking at the object.
-     */
-    private boolean isLookingAtObject(float[] model, float[] modelView) {
-        float[] objPosition = new float[4];
-        // Convenience vector for extracting the position from a matrix via multiplication.
-        final float[] POS_MATRIX_MULTIPLY = {0, 0, 0, 1.0f};
-        // Convert object space to camera space. Use the headView from onNewFrame.
-        Matrix.multiplyMM(modelView, 0, head.getHeadView(), 0, model, 0);
-        Matrix.multiplyMV(objPosition, 0, modelView, 0, POS_MATRIX_MULTIPLY, 0);
-
-        float pitch = (float) Math.atan2(objPosition[1], -objPosition[2]);
-        float yaw = (float) Math.atan2(objPosition[0], -objPosition[2]);
-
-        final float YAW_LIMIT = 0.1f;
-        final float PITCH_LIMIT = 0.1f;
-        return Math.abs(pitch) < PITCH_LIMIT && Math.abs(yaw) < YAW_LIMIT;
-    }
-
     @Override
     public void onSurfaceCreated(EGLConfig eglConfig) {
         // Dark background so text shows up well.
