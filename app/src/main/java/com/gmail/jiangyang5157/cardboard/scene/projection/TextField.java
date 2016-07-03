@@ -13,7 +13,7 @@ import android.util.Log;
 import android.util.TypedValue;
 
 import com.gmail.jiangyang5157.cardboard.scene.Head;
-import com.gmail.jiangyang5157.cardboard.scene.Intersection;
+import com.gmail.jiangyang5157.cardboard.scene.RayIntersection;
 import com.gmail.jiangyang5157.tookit.app.AppUtils;
 import com.gmail.jiangyang5157.tookit.opengl.Model;
 
@@ -119,8 +119,8 @@ public class TextField extends Panel implements GlModel.ClickListener {
     }
 
     @Override
-    public Intersection onIntersect(Head head) {
-        Intersection ret = super.onIntersect(head);
+    public RayIntersection onIntersect(Head head) {
+        RayIntersection ret = super.onIntersect(head);
 
         if (ret == null) {
             if (scaleSelector < scaleNormal) {

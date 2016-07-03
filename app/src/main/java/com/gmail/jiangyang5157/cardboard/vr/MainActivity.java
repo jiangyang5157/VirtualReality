@@ -12,7 +12,7 @@ import com.gmail.jiangyang5157.app.VolleyApplication;
 import com.gmail.jiangyang5157.cardboard.net.Downloader;
 import com.gmail.jiangyang5157.cardboard.scene.Camera;
 import com.gmail.jiangyang5157.cardboard.scene.Creation;
-import com.gmail.jiangyang5157.cardboard.scene.Intersection;
+import com.gmail.jiangyang5157.cardboard.scene.RayIntersection;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
 import com.gmail.jiangyang5157.cardboard.scene.projection.AtomMap;
 import com.gmail.jiangyang5157.cardboard.scene.projection.Dialog;
@@ -161,21 +161,21 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         }
     }
 
-    private Intersection getIntersection() {
-        Intersection intersection = null;
+    private RayIntersection getIntersection() {
+        RayIntersection rayIntersection = null;
         if (kmlChooserView != null) {
-            intersection = kmlChooserView.onIntersect(head);
-            if (intersection == null) {
+            rayIntersection = kmlChooserView.onIntersect(head);
+            if (rayIntersection == null) {
                 if (kmlChooserView.isCreated()) {
                     kmlChooserView.destroy();
                     kmlChooserView = null;
                 }
             }
         }
-        if (intersection == null) {
+        if (rayIntersection == null) {
             if (markerDetailView != null) {
-                intersection = markerDetailView.onIntersect(head);
-                if (intersection == null) {
+                rayIntersection = markerDetailView.onIntersect(head);
+                if (rayIntersection == null) {
                     if (markerDetailView.isCreated()) {
                         markerDetailView.destroy();
                         markerDetailView = null;
@@ -187,17 +187,17 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
                 }
             }
         }
-        if (intersection == null) {
+        if (rayIntersection == null) {
             if (atomMap != null) {
-                intersection = atomMap.onIntersect(head);
+                rayIntersection = atomMap.onIntersect(head);
             }
         }
-        if (intersection == null) {
+        if (rayIntersection == null) {
             if (earth != null) {
-                intersection = earth.onIntersect(head);
+                rayIntersection = earth.onIntersect(head);
             }
         }
-        return intersection;
+        return rayIntersection;
     }
 
     private void onCardboardClick() {
@@ -206,10 +206,10 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
             return;
         }
 
-        final Intersection intersection = ray.getIntersection();
-        if (intersection != null) {
-            if (intersection.getModel() instanceof GlModel.ClickListener) {
-                ((GlModel.ClickListener) intersection.getModel()).onClick(intersection.getModel());
+        final RayIntersection rayIntersection = ray.getRayIntersection();
+        if (rayIntersection != null) {
+            if (rayIntersection.getModel() instanceof GlModel.ClickListener) {
+                ((GlModel.ClickListener) rayIntersection.getModel()).onClick(rayIntersection.getModel());
             }
         }
     }
@@ -466,7 +466,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         // Dark background so text shows up well.
         GLES20.glClearColor(0.1f, 0.1f, 0.1f, 0.5f);
 
-        ray = new Ray(getApplicationContext());
+        ray = new Ray(getApplicationContext(), head);
         ArrayMap<Integer, Integer> shaders = new ArrayMap<>();
         shaders.put(GLES20.GL_VERTEX_SHADER, R.raw.ray_point_vertex_shader);
         shaders.put(GLES20.GL_FRAGMENT_SHADER, R.raw.ray_point_fragment_shader);

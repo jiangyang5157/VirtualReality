@@ -3,7 +3,7 @@ package com.gmail.jiangyang5157.cardboard.scene.projection;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import com.gmail.jiangyang5157.cardboard.scene.Intersection;
+import com.gmail.jiangyang5157.cardboard.scene.RayIntersection;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
 import com.gmail.jiangyang5157.tookit.math.Vector;
 import com.gmail.jiangyang5157.tookit.math.Vector3d;
@@ -21,7 +21,7 @@ public abstract class Sphere extends GlModel implements GlModel.BindingBuffers, 
     }
 
     @Override
-    public Intersection onIntersect(Head head) {
+    public RayIntersection onIntersect(Head head) {
         if (!isCreated() || !isVisible()) {
             return null;
         }
@@ -56,7 +56,7 @@ public abstract class Sphere extends GlModel implements GlModel.BindingBuffers, 
             return null;
         }
 
-        return new Intersection(this, cameraPosVec, cameraPosVec.plus(forwardVec.times(t)), t);
+        return new RayIntersection(this, t);
     }
 
     public static boolean contain(float radius, @NonNull float[] center, @NonNull float[] point) {

@@ -9,17 +9,13 @@ import com.gmail.jiangyang5157.tookit.opengl.Model;
  * @author Yang
  * @since 5/3/2016
  */
-public class Intersection implements Comparable<Intersection> {
+public class RayIntersection implements Comparable<RayIntersection> {
 
     private final Model model;
-    private final Vector cameraPosVec;
-    private final Vector intersecttPosVec;
-    private final double t;
+    private final double t; // more smaller t, more closer to the ray
 
-    public Intersection(Model model, Vector cameraPosVec, Vector intersecttPosVec, double t) {
+    public RayIntersection(Model model, double t) {
         this.model = model;
-        this.cameraPosVec = cameraPosVec;
-        this.intersecttPosVec = intersecttPosVec;
         this.t = t;
     }
 
@@ -27,16 +23,12 @@ public class Intersection implements Comparable<Intersection> {
         return model;
     }
 
-    public Vector getIntersecttPosVec() {
-        return intersecttPosVec;
-    }
-
-    public Vector getCameraPosVec() {
-        return cameraPosVec;
+    public double getT() {
+        return t;
     }
 
     @Override
-    public int compareTo(@NonNull Intersection that) {
+    public int compareTo(@NonNull RayIntersection that) {
         double ret = this.t - that.t;
         if (ret < 0) {
             return -1; // this less than that

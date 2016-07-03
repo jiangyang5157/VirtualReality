@@ -10,7 +10,7 @@ import com.gmail.jiangyang5157.cardboard.kml.KmlLayer;
 import com.gmail.jiangyang5157.cardboard.net.Downloader;
 import com.gmail.jiangyang5157.cardboard.scene.Creation;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
-import com.gmail.jiangyang5157.cardboard.scene.Intersection;
+import com.gmail.jiangyang5157.cardboard.scene.RayIntersection;
 import com.gmail.jiangyang5157.cardboard.scene.Lighting;
 import com.gmail.jiangyang5157.cardboard.vr.Constant;
 import com.gmail.jiangyang5157.cardboard.vr.R;
@@ -135,7 +135,7 @@ public class AtomMap extends GlModel implements Creation, Ray.IntersectListener 
     }
 
     @Override
-    public Intersection onIntersect(Head head) {
+    public RayIntersection onIntersect(Head head) {
         if (!isCreated() || !isVisible()) {
             return null;
         }

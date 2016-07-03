@@ -7,7 +7,7 @@ import android.util.Log;
 
 import com.gmail.jiangyang5157.cardboard.scene.Camera;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
-import com.gmail.jiangyang5157.cardboard.scene.Intersection;
+import com.gmail.jiangyang5157.cardboard.scene.RayIntersection;
 import com.gmail.jiangyang5157.tookit.app.AppUtils;
 import com.gmail.jiangyang5157.tookit.math.Vector;
 import com.gmail.jiangyang5157.tookit.opengl.GlUtils;
@@ -20,7 +20,7 @@ public class Ray extends Point {
     private static final String TAG = "[Ray]";
 
     public interface IntersectListener {
-        Intersection onIntersect(Head head);
+        RayIntersection onIntersect(Head head);
     }
 
     private static final float POINT_SIZE_NORMAL = 18f;
@@ -33,10 +33,12 @@ public class Ray extends Point {
     private int busyHandle;
     private int busy = 0;
 
-    private Intersection intersection;
+    private Head head;
+    private RayIntersection rayIntersection;
 
-    public Ray(Context context) {
+    public Ray(Context context, Head head) {
         super(context);
+        this.head = head;
         pointSize = POINT_SIZE_NORMAL;
     }
 
@@ -51,14 +53,14 @@ public class Ray extends Point {
 
     @Override
     public void update() {
-        if (intersection == null) {
+        if (rayIntersection == null) {
             if (pointSize > POINT_SIZE_NORMAL) {
                 pointSize -= POINT_SIZE_GRADIENT_UNIT;
             }
             return;
         }
 
-        if (intersection.getModel() instanceof GlModel.ClickListener) {
+        if (rayIntersection.getModel() instanceof GlModel.ClickListener) {
             if (pointSize < POINT_SIZE_FOCUSED) {
                 pointSize += POINT_SIZE_GRADIENT_UNIT;
             }
@@ -68,8 +70,15 @@ public class Ray extends Point {
             }
         }
 
-        Vector camera_intersection = intersection.getIntersecttPosVec().minus(intersection.getCameraPosVec());
-        Vector rayPosVec = new Vector(intersection.getIntersecttPosVec().plus(camera_intersection.direction().times(DISTANCE)));
+        float[] cameraPos = head.getCamera().getPosition();
+        float[] forward = head.getForward();
+        Vector cameraPosVec = new Vector(cameraPos[0], cameraPos[1], cameraPos[2]);
+        Vector forwardVec = new Vector(forward[0], forward[1], forward[2]);
+
+        Vector intersectPosVec = cameraPosVec.plus(forwardVec.times(rayIntersection.getT()));
+        Vector camera_intersection = intersectPosVec.minus(cameraPosVec);
+
+        Vector rayPosVec = new Vector(intersectPosVec.plus(camera_intersection.direction().times(DISTANCE)));
         double[] rayPosVecData = rayPosVec.getData();
 
         Matrix.setIdentityM(translation, 0);
@@ -116,12 +125,12 @@ public class Ray extends Point {
         busy = busy < 0 ? 0 : busy;
     }
 
-    public void setIntersections(Intersection intersection) {
-        this.intersection = intersection;
+    public void setIntersections(RayIntersection rayIntersection) {
+        this.rayIntersection = rayIntersection;
     }
 
-    public Intersection getIntersection() {
-        return intersection;
+    public RayIntersection getRayIntersection() {
+        return rayIntersection;
     }
 
     @Override

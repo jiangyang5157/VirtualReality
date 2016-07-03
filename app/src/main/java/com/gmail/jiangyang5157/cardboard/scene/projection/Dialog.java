@@ -6,7 +6,7 @@ import android.opengl.GLES20;
 import android.opengl.GLUtils;
 import android.util.Log;
 
-import com.gmail.jiangyang5157.cardboard.scene.Intersection;
+import com.gmail.jiangyang5157.cardboard.scene.RayIntersection;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
 import com.gmail.jiangyang5157.tookit.app.AppUtils;
 
@@ -93,22 +93,22 @@ public abstract class Dialog extends Panel {
     }
 
     @Override
-    public Intersection onIntersect(Head head) {
+    public RayIntersection onIntersect(Head head) {
         if (!isCreated() || !isVisible()) {
             return null;
         }
-        Intersection ret;
+        RayIntersection ret;
 
-        ArrayList<Intersection> intersections = new ArrayList<>();
+        ArrayList<RayIntersection> rayIntersections = new ArrayList<>();
         for (Panel panel : panels) {
-            Intersection intersection = panel.onIntersect(head);
-            if (intersection != null) {
-                intersections.add(intersection);
+            RayIntersection rayIntersection = panel.onIntersect(head);
+            if (rayIntersection != null) {
+                rayIntersections.add(rayIntersection);
             }
         }
-        Collections.sort(intersections);
-        if (intersections.size() > 0) {
-            ret = intersections.get(0);
+        Collections.sort(rayIntersections);
+        if (rayIntersections.size() > 0) {
+            ret = rayIntersections.get(0);
         } else {
             ret = super.onIntersect(head);
         }

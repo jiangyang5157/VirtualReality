@@ -4,7 +4,7 @@ import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
 
-import com.gmail.jiangyang5157.cardboard.scene.Intersection;
+import com.gmail.jiangyang5157.cardboard.scene.RayIntersection;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
 import com.gmail.jiangyang5157.tookit.data.buffer.BufferUtils;
 import com.gmail.jiangyang5157.tookit.math.Vector;
@@ -20,7 +20,7 @@ import java.nio.ShortBuffer;
  * @author Yang
  * @since 5/5/2016
  */
-public abstract class Panel extends Rectangle implements GlModel.BindingBuffers, GlModel.BindingTexBuffers{
+public abstract class Panel extends Rectangle implements GlModel.BindingBuffers, GlModel.BindingTexBuffers {
     private static final String TAG = "[Panel]";
 
     protected float[] vertices;
@@ -69,7 +69,7 @@ public abstract class Panel extends Rectangle implements GlModel.BindingBuffers,
     }
 
     @Override
-    public Intersection onIntersect(Head head) {
+    public RayIntersection onIntersect(Head head) {
         if (!isCreated() || !isVisible()) {
             return null;
         }
@@ -89,7 +89,7 @@ public abstract class Panel extends Rectangle implements GlModel.BindingBuffers,
             return null;
         }
         double t = normal.dot(tlVec.minus(cameraPosVec)) / ndotdRay;
-        if (t < 0) {
+        if (t <= 0) {
             // eliminate squares behind the ray
             return null;
         }
@@ -105,7 +105,7 @@ public abstract class Panel extends Rectangle implements GlModel.BindingBuffers,
             return null;
         }
 
-        return new Intersection(this, cameraPosVec, cameraPosVec.plus(forwardVec.times(t)), t);
+        return new RayIntersection(this, t);
     }
 
     @Override

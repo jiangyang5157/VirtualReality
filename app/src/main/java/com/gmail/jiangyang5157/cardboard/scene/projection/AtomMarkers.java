@@ -2,11 +2,10 @@ package com.gmail.jiangyang5157.cardboard.scene.projection;
 
 import android.content.Context;
 import android.opengl.GLES20;
-import android.util.Log;
 
 import com.gmail.jiangyang5157.cardboard.kml.KmlPlacemark;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
-import com.gmail.jiangyang5157.cardboard.scene.Intersection;
+import com.gmail.jiangyang5157.cardboard.scene.RayIntersection;
 import com.gmail.jiangyang5157.cardboard.scene.Lighting;
 import com.gmail.jiangyang5157.tookit.opengl.GlUtils;
 import com.google.android.gms.maps.model.LatLng;
@@ -120,23 +119,23 @@ public class AtomMarkers extends Marker {
     }
 
     @Override
-    public Intersection onIntersect(Head head) {
+    public RayIntersection onIntersect(Head head) {
         if (!isCreated() || !isVisible()) {
             return null;
         }
-        Intersection ret = null;
+        RayIntersection ret = null;
 
         // TODO: 7/3/2016 performance
-        ArrayList<Intersection> intersections = new ArrayList<>();
+        ArrayList<RayIntersection> rayIntersections = new ArrayList<>();
         for (Marker marker : markers) {
-            Intersection intersection = marker.onIntersect(head);
-            if (intersection != null) {
-                intersections.add(intersection);
+            RayIntersection rayIntersection = marker.onIntersect(head);
+            if (rayIntersection != null) {
+                rayIntersections.add(rayIntersection);
             }
         }
-        Collections.sort(intersections);
-        if (intersections.size() > 0) {
-            ret = intersections.get(0);
+        Collections.sort(rayIntersections);
+        if (rayIntersections.size() > 0) {
+            ret = rayIntersections.get(0);
         }
 
         return ret;
