@@ -16,7 +16,7 @@ import com.google.android.gms.maps.model.LatLng;
 public class Marker extends Icosphere implements GlModel.ClickListener {
     private static final String TAG = "[Marker]";
 
-    public static final float RADIUS = Earth.RADIUS / 80;
+    public static final float RADIUS = 1;
     public static final float ALTITUDE = -1 * RADIUS;
 
     private String name;
