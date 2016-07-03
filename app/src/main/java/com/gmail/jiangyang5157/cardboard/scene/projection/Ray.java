@@ -27,7 +27,7 @@ public class Ray extends Point {
     private static final float POINT_SIZE_FOCUSED = 36f;
     private static final float POINT_SIZE_GRADIENT_UNIT = (POINT_SIZE_FOCUSED - POINT_SIZE_NORMAL) / 8;
 
-    public static final float DISTANCE = Camera.Z_NEAR * 2;
+    public static final float DISTANCE = 5;
 
     private static final String BUSY_HANDLE = "u_Busy";
     private int busyHandle;
@@ -72,17 +72,15 @@ public class Ray extends Point {
 
         float[] cameraPos = head.getCamera().getPosition();
         float[] forward = head.getForward();
-        Vector cameraPosVec = new Vector(cameraPos[0], cameraPos[1], cameraPos[2]);
-        Vector forwardVec = new Vector(forward[0], forward[1], forward[2]);
-
-        Vector intersectPosVec = cameraPosVec.plus(forwardVec.times(rayIntersection.getT()));
-        Vector camera_intersection = intersectPosVec.minus(cameraPosVec);
-
-        Vector rayPosVec = new Vector(intersectPosVec.plus(camera_intersection.direction().times(DISTANCE)));
-        double[] rayPosVecData = rayPosVec.getData();
-
+        double t = rayIntersection.getT();
+        // intersectPos = cameraPos + forward * t
+        // position = intersectPos + forward * -DISTANCE
         Matrix.setIdentityM(translation, 0);
-        Matrix.translateM(translation, 0, (float) rayPosVecData[0], (float) rayPosVecData[1], (float) rayPosVecData[2]);
+        Matrix.translateM(translation, 0,
+                (float) (cameraPos[0] + forward[0] * (t - DISTANCE)),
+                (float) (cameraPos[1] + forward[1] * (t - DISTANCE)),
+                (float) (cameraPos[2] + forward[2] * (t - DISTANCE))
+        );
     }
 
     @Override
