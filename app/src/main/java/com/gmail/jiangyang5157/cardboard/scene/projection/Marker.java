@@ -16,7 +16,8 @@ import com.google.android.gms.maps.model.LatLng;
 public class Marker extends Icosphere implements GlModel.ClickListener {
     private static final String TAG = "[Marker]";
 
-    public static final float RADIUS = 1;
+//    public static final float RADIUS = 1;
+    public static final float RADIUS = 40;
     public static final float ALTITUDE = -1 * RADIUS;
 
     private String name;
@@ -35,7 +36,7 @@ public class Marker extends Icosphere implements GlModel.ClickListener {
     @Override
     public void create(int program) {
         if (color == null) {
-            setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.White, null));
+            setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.Yellow, null));
         }
         super.create(program);
 
