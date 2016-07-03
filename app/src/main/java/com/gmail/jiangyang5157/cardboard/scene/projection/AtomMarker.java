@@ -20,7 +20,7 @@ public class AtomMarker extends Marker {
     @Override
     public void create(int program) {
         if (color == null) {
-            setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.White, null));
+            setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.Yellow, null));
         }
         bindProgram(program);
         setCreated(true);
