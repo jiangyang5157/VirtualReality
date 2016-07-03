@@ -12,9 +12,6 @@ import com.gmail.jiangyang5157.tookit.app.AppUtils;
 import com.gmail.jiangyang5157.tookit.math.Vector;
 import com.gmail.jiangyang5157.tookit.opengl.GlUtils;
 
-import java.util.ArrayList;
-import java.util.Collections;
-
 /**
  * @author Yang
  * @since 5/1/2016
@@ -36,12 +33,11 @@ public class Ray extends Point {
     private int busyHandle;
     private int busy = 0;
 
-    private ArrayList<Intersection> intersections;
+    private Intersection intersection;
 
     public Ray(Context context) {
         super(context);
         pointSize = POINT_SIZE_NORMAL;
-        intersections = new ArrayList<>();
     }
 
     @Override
@@ -53,30 +49,7 @@ public class Ray extends Point {
         setVisible(true);
     }
 
-    public void clearIntersections() {
-        intersections.clear();
-    }
-
-    public void addIntersections(Intersection intersection) {
-        if (intersection == null) {
-            return;
-        }
-        intersections.add(intersection);
-    }
-
-    public Intersection getIntersection() {
-        Intersection ret = null;
-        int size = intersections.size();
-        if (size > 0) {
-            if (size > 1) {
-                Collections.sort(intersections);
-            }
-            ret = intersections.get(0);
-        }
-        return ret;
-    }
-
-    public void intersect(Intersection intersection) {
+    public void intersect() {
         if (intersection == null) {
             if (pointSize > POINT_SIZE_NORMAL) {
                 pointSize -= POINT_SIZE_GRADIENT_UNIT;
@@ -142,10 +115,17 @@ public class Ray extends Point {
         busy = busy < 0 ? 0 : busy;
     }
 
+    public void setIntersections(Intersection intersection) {
+        this.intersection = intersection;
+    }
+
+    public Intersection getIntersection() {
+        return intersection;
+    }
+
     @Override
     public void destroy() {
         Log.d(TAG, "destroy");
         super.destroy();
-        intersections.clear();
     }
 }

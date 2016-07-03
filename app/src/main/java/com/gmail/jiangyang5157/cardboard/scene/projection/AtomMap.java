@@ -27,7 +27,7 @@ import java.io.InputStream;
  * @author Yang
  * @since 7/3/2016
  */
-public class AtomMap extends GlModel implements Creation, GlModel.IntersectListener {
+public class AtomMap extends GlModel implements Creation, Ray.IntersectListener {
     private static final String TAG = "[AtomMap]";
 
     protected int creationState = STATE_BEFORE_PREPARE;

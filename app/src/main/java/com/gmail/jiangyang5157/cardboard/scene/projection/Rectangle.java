@@ -6,7 +6,7 @@ import android.content.Context;
  * @author Yang
  * @since 5/5/2016
  */
-public abstract class Rectangle extends GlModel implements GlModel.IntersectListener {
+public abstract class Rectangle extends GlModel implements Ray.IntersectListener {
 
     protected final float[] UP;
     protected final float[] RIGHT;

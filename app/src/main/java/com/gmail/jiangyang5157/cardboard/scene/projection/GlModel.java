@@ -26,10 +26,6 @@ public abstract class GlModel extends Model {
         void onClick(Model model);
     }
 
-    public interface IntersectListener {
-        Intersection onIntersect(Head head);
-    }
-
     protected interface BindingBuffers {
         void bindBuffers();
     }
