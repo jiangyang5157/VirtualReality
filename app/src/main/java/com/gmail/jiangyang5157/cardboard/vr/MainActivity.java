@@ -346,7 +346,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         }
 
         ray.setIntersections(getIntersection());
-        ray.intersect();
+        ray.update();
     }
 
     @Override

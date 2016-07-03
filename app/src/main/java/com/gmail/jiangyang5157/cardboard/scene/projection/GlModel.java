@@ -9,8 +9,6 @@ import android.os.HandlerThread;
 import android.support.annotation.NonNull;
 import android.util.ArrayMap;
 
-import com.gmail.jiangyang5157.cardboard.scene.Head;
-import com.gmail.jiangyang5157.cardboard.scene.Intersection;
 import com.gmail.jiangyang5157.cardboard.scene.Lighting;
 import com.gmail.jiangyang5157.tookit.opengl.Model;
 import com.gmail.jiangyang5157.tookit.opengl.GlUtils;
@@ -93,6 +91,11 @@ public abstract class GlModel extends Model {
     protected abstract void bindHandles();
 
     protected abstract void buildData();
+
+    @Override
+    public void update() {
+
+    }
 
     public void update(float[] view, float[] perspective) {
         Matrix.setIdentityM(model, 0);

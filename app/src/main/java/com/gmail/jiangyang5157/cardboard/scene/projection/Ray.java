@@ -49,7 +49,8 @@ public class Ray extends Point {
         setVisible(true);
     }
 
-    public void intersect() {
+    @Override
+    public void update() {
         if (intersection == null) {
             if (pointSize > POINT_SIZE_NORMAL) {
                 pointSize -= POINT_SIZE_GRADIENT_UNIT;
