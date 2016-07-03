@@ -39,11 +39,11 @@ public class Intersection implements Comparable<Intersection> {
     public int compareTo(@NonNull Intersection that) {
         double ret = this.t - that.t;
         if (ret < 0) {
-            return -1;
+            return -1; // this less than that
         } else if (ret > 0) {
-            return 1;
+            return 1; // this greater than that
         } else {
-            return 0;
+            return 0; // this equals to that
         }
     }
 }
