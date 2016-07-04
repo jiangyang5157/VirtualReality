@@ -66,38 +66,46 @@ public class Marker extends Icosphere implements GlModel.ClickListener {
 
     @Override
     public RayIntersection onIntersect(Head head) {
-        return super.onIntersect(head);
-//        if (!isCreated() || !isVisible()) {
-//            return null;
-//        }
-//
-//        // Convenience vector for extracting the position from a matrix via multiplication.
+//        return super.onIntersect(head);
+        if (!isCreated() || !isVisible()) {
+            return null;
+        }
+
+        // position in camera space
+        float[] posInCameraSpace = new float[4];
+
+        float[] position = getPosition();
+        float[] cameraPos = head.getCamera().getPosition();
+        Vector camera_pos = new Vector3d(
+                position[0] - cameraPos[0],
+                position[1] - cameraPos[1],
+                position[2] - cameraPos[2]
+        );
+
+        // Convenience vector for extracting the position from a matrix via multiplication.
 //        float[] posMultiply = new float[]{0, 0, 0, 1.0f};
-//        //float[] position = getPosition();
-//        //float[] posMultiply = new float[]{position[0], position[1], position[2], 1.0f};
-//        float[] objPosition = new float[4];
-//        // Convert object space to camera space. Use the headView from onNewFrame.
-//        Matrix.multiplyMM(modelView, 0, head.getHeadView(), 0, model, 0);
-//        Matrix.multiplyMV(objPosition, 0, modelView, 0, posMultiply, 0);
-//
-//        float pitch = (float) Math.atan2(objPosition[1], -objPosition[2]);
-//        float yaw = (float) Math.atan2(objPosition[0], -objPosition[2]);
-//
-//        final float YAW_LIMIT = 0.1f;
-//        final float PITCH_LIMIT = 0.1f;
-//
-//        if (Math.abs(pitch) < PITCH_LIMIT && Math.abs(yaw) < YAW_LIMIT) {
-//            float[] position = getPosition();
-//            float[] cameraPos = head.getCamera().getPosition();
-//            Vector pos_camera = new Vector3d(
-//                    cameraPos[0] - position[0],
-//                    cameraPos[1] - position[1],
-//                    cameraPos[2] - position[2]
-//            );
-//            return new RayIntersection(this, pos_camera.length() - radius);
-//        } else {
-//            return null;
-//        }
+        float[] posMultiply = new float[]{
+                position[0] - cameraPos[0],
+                position[1] - cameraPos[1],
+                position[2] - cameraPos[2],
+                1.0f};
+
+        // Convert object space to camera space - Use the headView from onNewFrame.
+        Matrix.multiplyMM(modelView, 0, head.getHeadView(), 0, model, 0);
+        Matrix.multiplyMV(posInCameraSpace, 0, modelView, 0, posMultiply, 0);
+
+        // TODO: 4/07/2016 try angle between forward and camera_pos
+
+        final double PITCH_LIMIT = 0.12;
+        final double YAW_LIMIT = 0.12;
+        double pitch = Math.atan2(posInCameraSpace[1], -posInCameraSpace[2]);
+        double yaw = Math.atan2(posInCameraSpace[0], -posInCameraSpace[2]);
+
+        if (Math.abs(pitch) < PITCH_LIMIT && Math.abs(yaw) < YAW_LIMIT) {
+            return new RayIntersection(this, camera_pos.length() - radius);
+        } else {
+            return null;
+        }
     }
 
     public void setOnClickListener(GlModel.ClickListener onClickListener) {
