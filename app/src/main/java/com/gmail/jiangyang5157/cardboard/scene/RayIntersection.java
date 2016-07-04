@@ -12,7 +12,8 @@ import com.gmail.jiangyang5157.tookit.opengl.Model;
 public class RayIntersection implements Comparable<RayIntersection> {
 
     private final Model model;
-    private final double t; // more smaller t, more closer to the ray
+    // t is the distance along the ray to the closest intersection
+    private final double t;
 
     public RayIntersection(Model model, double t) {
         this.model = model;

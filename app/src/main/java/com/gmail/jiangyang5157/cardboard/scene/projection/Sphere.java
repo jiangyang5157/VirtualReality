@@ -50,7 +50,6 @@ public abstract class Sphere extends GlModel implements GlModel.BindingBuffers, 
         final double t0 = -b + sqrtF;
         final double t1 = -b - sqrtF;
 
-        // t is the distance along the ray to the closest intersection with the sphere
         // pick the smaller of the two results if both are positive
         final double t = t0 < 0.0f ? Math.max(t1, 0.0f) : (t1 < 0.0f ? t0 : Math.min(t0, t1));
         if (t == 0) {

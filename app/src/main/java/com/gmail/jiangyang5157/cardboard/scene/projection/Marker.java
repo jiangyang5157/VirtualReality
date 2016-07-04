@@ -94,7 +94,7 @@ public class Marker extends Icosphere implements GlModel.ClickListener {
 //                    cameraPos[1] - position[1],
 //                    cameraPos[2] - position[2]
 //            );
-//            return new RayIntersection(this, pos_camera.length() * 0.5);
+//            return new RayIntersection(this, pos_camera.length() - radius);
 //        } else {
 //            return null;
 //        }
