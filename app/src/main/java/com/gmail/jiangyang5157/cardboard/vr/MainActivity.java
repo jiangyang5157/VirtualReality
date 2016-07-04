@@ -476,9 +476,8 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
     }
 
     @Override
-    public void onRendererShutdown() {
+    public void onRendererShutdown() { // TODO: 7/4/2016 [WHY] never get called
         Log.d(TAG, "onRendererShutdown");
-        // WHY: never get called
     }
 
     @Override

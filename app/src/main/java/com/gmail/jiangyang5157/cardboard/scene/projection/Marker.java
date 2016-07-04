@@ -20,8 +20,7 @@ import com.google.android.gms.maps.model.LatLng;
 public class Marker extends Icosphere implements GlModel.ClickListener {
     private static final String TAG = "[Marker]";
 
-    //    public static final float RADIUS = 1;
-    public static final float RADIUS = 40;
+    public static final float RADIUS = 1;
     public static final float ALTITUDE = -1 * RADIUS;
 
     private String name;
@@ -78,7 +77,7 @@ public class Marker extends Icosphere implements GlModel.ClickListener {
                 position[2] - cameraPos[2]
         };
         // Convenience vector for extracting the position from a matrix via multiplication.
-        float[] posMultiply = new float[]{camera_pos[0], camera_pos[1], camera_pos[2], 1.0f};
+        float[] posMultiply = new float[]{camera_pos[0], camera_pos[1], camera_pos[2], 0.0f}; // TODO: 7/4/2016 [WHY] use 0.0 but 1.0
         // position in camera space
         float[] posInCameraSpace = new float[4];
         // Convert object space to camera space - Use the headView from onNewFrame.

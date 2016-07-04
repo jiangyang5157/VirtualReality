@@ -12,8 +12,8 @@ void main()
     float diffuse = max(dot(v_Normal, lightVec), 0.0);
 
     float distance = length(u_LightPos - v_Position);
-    //diffuse = diffuse * (1.0 / (1.0 + (0.00025 * distance * distance))); // r = 1
-    diffuse = diffuse * (1.0 / (1.0 + (0.01 * distance * distance))); // r = 40
+    const float diffuseFactor = 0.00025; // 1r:0.00025, 40r:0.01
+    diffuse = diffuse * (1.0 / (1.0 + (diffuseFactor * distance * distance)));
     const float minDiffuse = 0.25;
     diffuse = max(diffuse, minDiffuse);
 
