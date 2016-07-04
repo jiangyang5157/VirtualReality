@@ -11,8 +11,8 @@ void main()
 {
     // Draw an object that looks the same size regarles the distance in perspective view.
     const float reciprocalScaleOnScreen = 0.01;
-    // Transform the vector (0,0,0) to clipspace. This will get the w the object's pivot will be divided by.
-    float w = (u_MVPMatrix * vec4(0,0,0,1)).w * reciprocalScaleOnScreen;
+    // Transform the vector (0, 0, 0) to clipspace. This will get the w the object's pivot will be divided by.
+    float w = (u_MVPMatrix * vec4(0, 0, 0, 1)).w * reciprocalScaleOnScreen;
     vec4 position = vec4(a_Position.xyz * w , 1);
 
     // Transform the vertex into eye space.
