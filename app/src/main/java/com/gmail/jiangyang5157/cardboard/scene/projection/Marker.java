@@ -66,45 +66,34 @@ public class Marker extends Icosphere implements GlModel.ClickListener {
 
     @Override
     public RayIntersection onIntersect(Head head) {
-//        return super.onIntersect(head);
         if (!isCreated() || !isVisible()) {
             return null;
         }
 
-        // position in camera space
-        float[] posInCameraSpace = new float[4];
-
         float[] position = getPosition();
         float[] cameraPos = head.getCamera().getPosition();
-        Vector camera_pos = new Vector3d(
+        float[] camera_pos = new float[]{
                 position[0] - cameraPos[0],
                 position[1] - cameraPos[1],
                 position[2] - cameraPos[2]
-        );
-
+        };
         // Convenience vector for extracting the position from a matrix via multiplication.
-//        float[] posMultiply = new float[]{0, 0, 0, 1.0f};
-        float[] posMultiply = new float[]{
-                position[0] - cameraPos[0],
-                position[1] - cameraPos[1],
-                position[2] - cameraPos[2],
-                1.0f};
-
+        float[] posMultiply = new float[]{camera_pos[0], camera_pos[1], camera_pos[2], 1.0f};
+        // position in camera space
+        float[] posInCameraSpace = new float[4];
         // Convert object space to camera space - Use the headView from onNewFrame.
         Matrix.multiplyMM(modelView, 0, head.getHeadView(), 0, model, 0);
         Matrix.multiplyMV(posInCameraSpace, 0, modelView, 0, posMultiply, 0);
 
-        // TODO: 4/07/2016 try angle between forward and camera_pos
-
-        final double PITCH_LIMIT = 0.12;
-        final double YAW_LIMIT = 0.12;
         double pitch = Math.atan2(posInCameraSpace[1], -posInCameraSpace[2]);
         double yaw = Math.atan2(posInCameraSpace[0], -posInCameraSpace[2]);
-
-        if (Math.abs(pitch) < PITCH_LIMIT && Math.abs(yaw) < YAW_LIMIT) {
-            return new RayIntersection(this, camera_pos.length() - radius);
-        } else {
+        final double PITCH_LIMIT = 0.02;
+        final double YAW_LIMIT = 0.02;
+        if (Math.abs(pitch) > PITCH_LIMIT || Math.abs(yaw) > YAW_LIMIT) {
             return null;
+        } else {
+            Vector camera_pos_vec = new Vector3d(camera_pos[0], camera_pos[1], camera_pos[2]);
+            return new RayIntersection(this, camera_pos_vec.length() - radius);
         }
     }
 
