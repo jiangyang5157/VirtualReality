@@ -28,10 +28,10 @@ public abstract class Panel extends Rectangle implements GlModel.BindingBuffers,
     protected short[] indices;
     protected float[] textures;
 
-    private Vector tlVec;
-    private Vector blVec;
-    private Vector trVec;
-    private Vector brVec;
+    private Vector tl_vec;
+    private Vector bl_vec;
+    private Vector tr_vec;
+    private Vector br_vec;
 
     protected final int[] buffers = new int[3];
     protected final int[] texBuffers = new int[1];
@@ -51,13 +51,14 @@ public abstract class Panel extends Rectangle implements GlModel.BindingBuffers,
     }
 
     public void setPosition(float[] cameraPos, float[] forward, float distance, float[] quaternion, float[] up, float[] right) {
-        Vector cameraPosVec = new Vector3d(cameraPos[0], cameraPos[1], cameraPos[2]);
-        Vector forwardVec = new Vector3d(forward[0], forward[1], forward[2]).times(distance);
-        Vector positionVec = cameraPosVec.plus(forwardVec);
+        float[] position = new float[]{
+                cameraPos[0] + forward[0] * distance,
+                cameraPos[1] + forward[1] * distance,
+                cameraPos[2] + forward[2] * distance,
+        };
 
-        double[] positionVecData = positionVec.getData();
         Matrix.setIdentityM(translation, 0);
-        Matrix.translateM(translation, 0, (float) positionVecData[0], (float) positionVecData[1], (float) positionVecData[2]);
+        Matrix.translateM(translation, 0, position[0], position[1], position[2]);
 
         Matrix.setIdentityM(rotation, 0);
         // it should face to eye
@@ -65,7 +66,7 @@ public abstract class Panel extends Rectangle implements GlModel.BindingBuffers,
         Matrix.multiplyMM(rotation, 0, Head.getQquaternionMatrix(q), 0, rotation, 0);
 
         // build corners' vector, they are for intersect calculation
-        buildCorners(up, right, positionVec);
+        buildCorners(up, right, position);
     }
 
     @Override
@@ -76,30 +77,30 @@ public abstract class Panel extends Rectangle implements GlModel.BindingBuffers,
 
         float[] cameraPos = head.getCamera().getPosition();
         float[] forward = head.getForward();
-        Vector cameraPosVec = new Vector(cameraPos[0], cameraPos[1], cameraPos[2]);
-        Vector forwardVec = new Vector(forward[0], forward[1], forward[2]);
+        Vector cameraPos_vec = new Vector(cameraPos[0], cameraPos[1], cameraPos[2]);
+        Vector forward_vec = new Vector(forward[0], forward[1], forward[2]);
 
-        Vector tl_tr = new Vector3d(trVec.minus(tlVec));
-        Vector tl_bl = new Vector3d(blVec.minus(tlVec));
-        Vector normal = ((Vector3d) tl_tr).cross((Vector3d) tl_bl).direction();
-        Vector ray = (cameraPosVec.plus(forwardVec)).minus(cameraPosVec).direction();
-        double ndotdRay = normal.dot(ray);
+        Vector tl_tr_vec = new Vector3d(tr_vec.minus(tl_vec));
+        Vector tl_bl_vec = new Vector3d(bl_vec.minus(tl_vec));
+        Vector normal_vec = ((Vector3d) tl_tr_vec).cross((Vector3d) tl_bl_vec).direction();
+        Vector ray_vec = (cameraPos_vec.plus(forward_vec)).minus(cameraPos_vec).direction();
+        double ndotdRay = normal_vec.dot(ray_vec);
         if (Math.abs(ndotdRay) < Vector.EPSILON) {
             // perpendicular
             return null;
         }
-        double t = normal.dot(tlVec.minus(cameraPosVec)) / ndotdRay;
+        double t = normal_vec.dot(tl_vec.minus(cameraPos_vec)) / ndotdRay;
         if (t <= 0) {
             // eliminate squares behind the ray
             return null;
         }
 
-        Vector iPlane = cameraPosVec.plus(ray.times(t));
-        Vector tl_iPlane = iPlane.minus(tlVec);
-        double u = tl_iPlane.dot(tl_tr);
-        double v = tl_iPlane.dot(tl_bl);
+        Vector iPlane = cameraPos_vec.plus(ray_vec.times(t));
+        Vector tl_iPlane = iPlane.minus(tl_vec);
+        double u = tl_iPlane.dot(tl_tr_vec);
+        double v = tl_iPlane.dot(tl_bl_vec);
 
-        boolean intersecting = u >= 0 && u <= tl_tr.dot(tl_tr) && v >= 0 && v <= tl_bl.dot(tl_bl);
+        boolean intersecting = u >= 0 && u <= tl_tr_vec.dot(tl_tr_vec) && v >= 0 && v <= tl_bl_vec.dot(tl_bl_vec);
         if (!intersecting) {
             // intersection is out of boundary
             return null;
@@ -118,46 +119,47 @@ public abstract class Panel extends Rectangle implements GlModel.BindingBuffers,
     }
 
     protected void buildCorners(float[] up, float[] right) {
-        Vector upVec = new Vector(up[0], up[1], up[2]);
-        Vector rightVec = new Vector(right[0], right[1], right[2]);
-        double[] dNormals = (new Vector3d(rightVec)).cross(new Vector3d(upVec)).getData();
+        Vector up_vec = new Vector(up[0], up[1], up[2]);
+        Vector right_vec = new Vector(right[0], right[1], right[2]);
+        double[] normals_temp = (new Vector3d(right_vec)).cross(new Vector3d(up_vec)).getData();
         normals = new float[]{
-                (float) dNormals[0], (float) dNormals[1], (float) dNormals[2]
+                (float) normals_temp[0], (float) normals_temp[1], (float) normals_temp[2]
         };
 
         final float HALF_WIDTH = width / 2.0f;
         final float HALF_HEIGHT = height / 2.0f;
-        upVec = upVec.times(HALF_HEIGHT);
-        rightVec = rightVec.times(HALF_WIDTH);
+        up_vec = up_vec.times(HALF_HEIGHT);
+        right_vec = right_vec.times(HALF_WIDTH);
 
-        tlVec = upVec.plus(rightVec.negate());
-        blVec = upVec.negate().plus(rightVec.negate());
-        trVec = upVec.plus(rightVec);
-        brVec = upVec.negate().plus(rightVec);
+        tl_vec = up_vec.plus(right_vec.negate());
+        bl_vec = up_vec.negate().plus(right_vec.negate());
+        tr_vec = up_vec.plus(right_vec);
+        br_vec = up_vec.negate().plus(right_vec);
     }
 
-    protected void buildCorners(float[] up, float[] right, Vector posVec) {
+    protected void buildCorners(float[] up, float[] right, float[] position) {
         buildCorners(up, right);
 
-        tlVec = tlVec.times(scale);
-        blVec = blVec.times(scale);
-        trVec = trVec.times(scale);
-        brVec = brVec.times(scale);
+        tl_vec = tl_vec.times(scale);
+        bl_vec = bl_vec.times(scale);
+        tr_vec = tr_vec.times(scale);
+        br_vec = br_vec.times(scale);
 
-        tlVec = tlVec.plus(posVec);
-        blVec = blVec.plus(posVec);
-        trVec = trVec.plus(posVec);
-        brVec = brVec.plus(posVec);
+        Vector pos_vec = new Vector(position[0], position[1], position[2]);
+        tl_vec = tl_vec.plus(pos_vec);
+        bl_vec = bl_vec.plus(pos_vec);
+        tr_vec = tr_vec.plus(pos_vec);
+        br_vec = br_vec.plus(pos_vec);
     }
 
     @Override
     protected void buildData() {
         buildCorners(UP, RIGHT);
 
-        double[] tl = tlVec.getData();
-        double[] bl = blVec.getData();
-        double[] tr = trVec.getData();
-        double[] br = brVec.getData();
+        double[] tl = tl_vec.getData();
+        double[] bl = bl_vec.getData();
+        double[] tr = tr_vec.getData();
+        double[] br = br_vec.getData();
 
         vertices = new float[]{
                 (float) tl[0], (float) tl[1], (float) tl[2],
@@ -173,10 +175,10 @@ public abstract class Panel extends Rectangle implements GlModel.BindingBuffers,
         };
 
         textures = new float[]{
-                0.0f, 0.0f, // tlVec
-                0.0f, 1.0f, // blVec
-                1.0f, 0.0f, // trVec
-                1.0f, 1.0f // brVec
+                0.0f, 0.0f, // tl_vec
+                0.0f, 1.0f, // bl_vec
+                1.0f, 0.0f, // tr_vec
+                1.0f, 1.0f // br_vec
         };
     }
 

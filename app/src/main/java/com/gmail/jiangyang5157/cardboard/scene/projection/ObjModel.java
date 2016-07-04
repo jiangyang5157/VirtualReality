@@ -121,12 +121,14 @@ public class ObjModel extends GlModel implements GlModel.BindingBuffers, Creatio
     }
 
     public void setPosition(float[] cameraPos, float[] forward, float distance, float[] quaternion, float[] up, float[] right) {
-        com.gmail.jiangyang5157.tookit.math.Vector cameraPosVec = new Vector3d(cameraPos[0], cameraPos[1], cameraPos[2]);
-        com.gmail.jiangyang5157.tookit.math.Vector forwardVec = new Vector3d(forward[0], forward[1], forward[2]).times(distance);
-        com.gmail.jiangyang5157.tookit.math.Vector positionVec = cameraPosVec.plus(forwardVec);
-        double[] positionVecData = positionVec.getData();
+        float[] position = new float[]{
+                cameraPos[0] + forward[0] * distance,
+                cameraPos[1] + forward[1] * distance,
+                cameraPos[2] + forward[2] * distance,
+        };
+
         Matrix.setIdentityM(translation, 0);
-        Matrix.translateM(translation, 0, (float) positionVecData[0], (float) positionVecData[1], (float) positionVecData[2]);
+        Matrix.translateM(translation, 0, position[0], position[1], position[2]);
 
         Matrix.setIdentityM(rotation, 0);
         // it should face to eye
