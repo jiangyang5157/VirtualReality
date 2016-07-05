@@ -21,7 +21,7 @@ public abstract class GlModel extends Model {
     private static final String TAG = "[GlModel]";
 
     public interface ClickListener {
-        void onClick(Model model);
+        void onClick(GlModel model);
     }
 
     protected interface BindingBuffers {

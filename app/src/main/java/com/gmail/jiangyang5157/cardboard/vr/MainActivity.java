@@ -27,7 +27,6 @@ import com.gmail.jiangyang5157.cardboard.scene.projection.MarkerDetailView;
 import com.gmail.jiangyang5157.tookit.app.AppUtils;
 import com.gmail.jiangyang5157.tookit.app.DeviceUtils;
 import com.gmail.jiangyang5157.tookit.data.io.IoUtils;
-import com.gmail.jiangyang5157.tookit.opengl.Model;
 import com.google.vr.sdk.base.Eye;
 import com.google.vr.sdk.base.GvrView;
 import com.google.vr.sdk.base.GvrActivity;
@@ -208,8 +207,9 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
 
         final RayIntersection rayIntersection = ray.getRayIntersection();
         if (rayIntersection != null) {
-            if (rayIntersection.getModel() instanceof GlModel.ClickListener) {
-                ((GlModel.ClickListener) rayIntersection.getModel()).onClick(rayIntersection.getModel());
+            GlModel model = rayIntersection.getModel();
+            if (model instanceof GlModel.ClickListener) {
+                ((GlModel.ClickListener) model).onClick(model);
             }
         }
     }
@@ -246,7 +246,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
     private GlModel.ClickListener onMarkerClickListener = new GlModel.ClickListener() {
 
         @Override
-        public void onClick(Model model) {
+        public void onClick(GlModel model) {
             markerDetailView = new MarkerDetailView(getApplicationContext(), (Marker) model);
             markerDetailView.setEventListener(markerDetailEventListener);
         }

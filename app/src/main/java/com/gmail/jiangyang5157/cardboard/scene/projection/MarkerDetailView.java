@@ -6,7 +6,6 @@ import android.text.Layout;
 import android.util.ArrayMap;
 
 import com.gmail.jiangyang5157.cardboard.vr.R;
-import com.gmail.jiangyang5157.tookit.opengl.Model;
 
 /**
  * @author Yang
@@ -69,9 +68,10 @@ public class MarkerDetailView extends Dialog {
             tf3.setTextSize(TextField.TEXT_SIZE_TINY);
             tf3.setAlignment(Layout.Alignment.ALIGN_NORMAL);
             tf3.create(shaders);
+            tf3.isClickable = true;
             tf3.setOnClickListener(new GlModel.ClickListener() {
                 @Override
-                public void onClick(Model model) {
+                public void onClick(GlModel model) {
                     if (eventListener != null) {
                         eventListener.showObjModel(marker.getObjModel());
                     }

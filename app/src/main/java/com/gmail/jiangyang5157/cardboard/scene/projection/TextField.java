@@ -44,6 +44,8 @@ public class TextField extends Panel implements GlModel.ClickListener {
 
     private GlModel.ClickListener onClickListener;
 
+    protected boolean isClickable;
+
     public TextField(Context context) {
         super(context);
     }
@@ -108,8 +110,8 @@ public class TextField extends Panel implements GlModel.ClickListener {
     }
 
     @Override
-    public void onClick(Model model) {
-        if (onClickListener != null) {
+    public void onClick(GlModel model) {
+        if (isClickable && onClickListener != null) {
             onClickListener.onClick(this);
         }
     }
@@ -122,7 +124,7 @@ public class TextField extends Panel implements GlModel.ClickListener {
     public RayIntersection onIntersect(Head head) {
         RayIntersection ret = super.onIntersect(head);
 
-        if (ret == null) {
+        if (ret == null || !isClickable){
             if (scaleSelector < scaleNormal) {
                 scaleSelector -= scaleGradient;
             }

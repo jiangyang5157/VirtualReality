@@ -7,7 +7,6 @@ import android.util.ArrayMap;
 
 import com.gmail.jiangyang5157.cardboard.vr.Constant;
 import com.gmail.jiangyang5157.cardboard.vr.R;
-import com.gmail.jiangyang5157.tookit.opengl.Model;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -58,21 +57,17 @@ public class KmlChooserView extends Dialog {
         String lastKmlFileName = Constant.getLastKmlFileName(context);
         for (final String fileName : fileNames) {
             TextField tf = new TextField(context);
-            float textSize;
-            if (fileName.equals(lastKmlFileName)) {
-                textSize = TextField.TEXT_SIZE_MEDIUM;
-            } else {
-                textSize = TextField.TEXT_SIZE_TINY;
-            }
+            float textSize = TextField.TEXT_SIZE_TINY;
             tf.setText(fileName);
             tf.width = WIDTH;
             tf.setScale(SCALE);
             tf.setTextSize(textSize);
             tf.setAlignment(Layout.Alignment.ALIGN_CENTER);
             tf.create(shaders);
+            tf.isClickable =!fileName.equals(lastKmlFileName);
             tf.setOnClickListener(new GlModel.ClickListener() {
                 @Override
-                public void onClick(Model model) {
+                public void onClick(GlModel model) {
                     if (eventListener != null) {
                         eventListener.onKmlSelected(fileName);
                     }

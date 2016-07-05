@@ -10,7 +10,6 @@ import com.gmail.jiangyang5157.cardboard.scene.RayIntersection;
 import com.gmail.jiangyang5157.tookit.app.AppUtils;
 import com.gmail.jiangyang5157.tookit.math.Vector;
 import com.gmail.jiangyang5157.tookit.math.Vector3d;
-import com.gmail.jiangyang5157.tookit.opengl.Model;
 import com.google.android.gms.maps.model.LatLng;
 
 /**
@@ -57,7 +56,7 @@ public class Marker extends Icosphere implements GlModel.ClickListener {
     }
 
     @Override
-    public void onClick(Model model) {
+    public void onClick(GlModel model) {
         if (onClickListener != null) {
             onClickListener.onClick(this);
         }

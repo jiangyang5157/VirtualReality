@@ -2,8 +2,7 @@ package com.gmail.jiangyang5157.cardboard.scene;
 
 import android.support.annotation.NonNull;
 
-import com.gmail.jiangyang5157.tookit.math.Vector;
-import com.gmail.jiangyang5157.tookit.opengl.Model;
+import com.gmail.jiangyang5157.cardboard.scene.projection.GlModel;
 
 /**
  * @author Yang
@@ -11,16 +10,16 @@ import com.gmail.jiangyang5157.tookit.opengl.Model;
  */
 public class RayIntersection implements Comparable<RayIntersection> {
 
-    private final Model model;
+    private final GlModel model;
     // t is the distance along the ray to the closest intersection
     private final double t;
 
-    public RayIntersection(Model model, double t) {
+    public RayIntersection(GlModel model, double t) {
         this.model = model;
         this.t = t;
     }
 
-    public Model getModel() {
+    public GlModel getModel() {
         return model;
     }
 
