@@ -3,10 +3,10 @@ package com.gmail.jiangyang5157.cardboard.scene;
 import android.opengl.Matrix;
 import android.support.annotation.NonNull;
 
-import com.gmail.jiangyang5157.cardboard.scene.projection.Dialog;
-import com.gmail.jiangyang5157.cardboard.scene.projection.Earth;
-import com.gmail.jiangyang5157.cardboard.scene.projection.Marker;
-import com.gmail.jiangyang5157.cardboard.scene.projection.Ray;
+import com.gmail.jiangyang5157.cardboard.scene.model.Dialog;
+import com.gmail.jiangyang5157.cardboard.scene.model.Earth;
+import com.gmail.jiangyang5157.cardboard.scene.model.Marker;
+import com.gmail.jiangyang5157.cardboard.scene.model.Ray;
 
 /**
  * @author Yang

@@ -2,7 +2,7 @@ package com.gmail.jiangyang5157.cardboard.scene;
 
 import android.support.annotation.NonNull;
 
-import com.gmail.jiangyang5157.cardboard.scene.projection.GlModel;
+import com.gmail.jiangyang5157.cardboard.scene.model.GlModel;
 
 /**
  * @author Yang

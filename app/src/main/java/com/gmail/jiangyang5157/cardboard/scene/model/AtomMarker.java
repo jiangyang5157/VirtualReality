@@ -1,4 +1,4 @@
-package com.gmail.jiangyang5157.cardboard.scene.projection;
+package com.gmail.jiangyang5157.cardboard.scene.model;
 
 import android.content.Context;
 import android.opengl.GLES20;
