@@ -70,7 +70,7 @@ public abstract class Panel extends Rectangle implements GlModel.BindableBuffer,
     }
 
     @Override
-    public RayIntersection onIntersect(Head head) {
+    public RayIntersection onIntersection(Head head) {
         if (!isCreated() || !isVisible()) {
             return null;
         }

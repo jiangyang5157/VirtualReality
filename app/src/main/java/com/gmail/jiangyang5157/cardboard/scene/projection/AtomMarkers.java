@@ -119,7 +119,7 @@ public class AtomMarkers extends Marker {
     }
 
     @Override
-    public RayIntersection onIntersect(Head head) {
+    public RayIntersection onIntersection(Head head) {
         if (!isCreated() || !isVisible()) {
             return null;
         }
@@ -128,7 +128,7 @@ public class AtomMarkers extends Marker {
         // TODO: 7/3/2016 performance
         ArrayList<RayIntersection> rayIntersections = new ArrayList<>();
         for (Marker marker : markers) {
-            RayIntersection rayIntersection = marker.onIntersect(head);
+            RayIntersection rayIntersection = marker.onIntersection(head);
             if (rayIntersection != null) {
                 rayIntersections.add(rayIntersection);
             }

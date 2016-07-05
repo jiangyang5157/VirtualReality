@@ -105,22 +105,25 @@ public class TextField extends Panel {
     }
 
     @Override
-    public RayIntersection onIntersect(Head head) {
-        RayIntersection ret = super.onIntersect(head);
+    public RayIntersection onIntersection(Head head) {
+        RayIntersection ret = super.onIntersection(head);
+        boolean isFocused = ret != null && onClickListener != null;
+        onFocuse(isFocused);
+        return ret;
+    }
 
-        // TODO: 7/5/2016
-        if (ret == null || onClickListener == null){
-            if (scaleSelector < scaleNormal) {
-                scaleSelector -= scaleGradient;
-            }
-        } else {
+    @Override
+    public void onFocuse(boolean isFocused) {
+        if (isFocused){
             if (scaleSelector > scaleFocused) {
                 scaleSelector += scaleGradient;
             }
+        } else {
+            if (scaleSelector < scaleNormal) {
+                scaleSelector -= scaleGradient;
+            }
         }
         this.scale = scaleSelector;
-
-        return ret;
     }
 
     public String getText() {

@@ -135,11 +135,11 @@ public class AtomMap extends GlModel implements Creation {
     }
 
     @Override
-    public RayIntersection onIntersect(Head head) {
+    public RayIntersection onIntersection(Head head) {
         if (!isCreated() || !isVisible()) {
             return null;
         }
-        return markers.onIntersect(head);
+        return markers.onIntersection(head);
     }
 
     @Override

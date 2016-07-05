@@ -47,35 +47,35 @@ public class Ray extends Point {
 
     @Override
     public void update() {
-        if (rayIntersection == null) {
-            if (pointSize > POINT_SIZE_NORMAL) {
-                pointSize -= POINT_SIZE_GRADIENT_UNIT;
-            }
-            return;
-        }
+        boolean isFocused = rayIntersection != null && rayIntersection.getModel().onClickListener != null;
+        onFocuse(isFocused);
 
-        // TODO: 7/5/2016
-        if (rayIntersection.getModel().onClickListener == null) {
-            if (pointSize > POINT_SIZE_NORMAL) {
-                pointSize -= POINT_SIZE_GRADIENT_UNIT;
-            }
-        } else {
+        if (rayIntersection != null) {
+            float[] cameraPos = head.getCamera().getPosition();
+            float[] forward = head.getForward();
+            double t = rayIntersection.getT();
+            // intersectPos = cameraPos + forward * t
+            // position = intersectPos + forward * -DISTANCE
+            Matrix.setIdentityM(translation, 0);
+            Matrix.translateM(translation, 0,
+                    (float) (cameraPos[0] + forward[0] * (t - DISTANCE)),
+                    (float) (cameraPos[1] + forward[1] * (t - DISTANCE)),
+                    (float) (cameraPos[2] + forward[2] * (t - DISTANCE))
+            );
+        }
+    }
+
+    @Override
+    public void onFocuse(boolean isFocused) {
+        if (isFocused) {
             if (pointSize < POINT_SIZE_FOCUSED) {
                 pointSize += POINT_SIZE_GRADIENT_UNIT;
             }
+        } else {
+            if (pointSize > POINT_SIZE_NORMAL) {
+                pointSize -= POINT_SIZE_GRADIENT_UNIT;
+            }
         }
-
-        float[] cameraPos = head.getCamera().getPosition();
-        float[] forward = head.getForward();
-        double t = rayIntersection.getT();
-        // intersectPos = cameraPos + forward * t
-        // position = intersectPos + forward * -DISTANCE
-        Matrix.setIdentityM(translation, 0);
-        Matrix.translateM(translation, 0,
-                (float) (cameraPos[0] + forward[0] * (t - DISTANCE)),
-                (float) (cameraPos[1] + forward[1] * (t - DISTANCE)),
-                (float) (cameraPos[2] + forward[2] * (t - DISTANCE))
-        );
     }
 
     @Override

@@ -21,7 +21,7 @@ public abstract class Sphere extends GlModel implements GlModel.BindableBuffer {
     }
 
     @Override
-    public RayIntersection onIntersect(Head head) {
+    public RayIntersection onIntersection(Head head) {
         if (!isCreated() || !isVisible()) {
             return null;
         }

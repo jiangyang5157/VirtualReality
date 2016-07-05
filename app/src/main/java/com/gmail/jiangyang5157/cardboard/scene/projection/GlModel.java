@@ -9,6 +9,7 @@ import android.os.HandlerThread;
 import android.support.annotation.NonNull;
 import android.util.ArrayMap;
 
+import com.gmail.jiangyang5157.cardboard.scene.Focuseable;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
 import com.gmail.jiangyang5157.cardboard.scene.Intersectable;
 import com.gmail.jiangyang5157.cardboard.scene.Lighting;
@@ -20,7 +21,7 @@ import com.gmail.jiangyang5157.tookit.opengl.GlUtils;
  * @author Yang
  * @since 4/30/2016
  */
-public abstract class GlModel extends Model implements Intersectable {
+public abstract class GlModel extends Model implements Intersectable, Focuseable {
     private static final String TAG = "[GlModel]";
 
     public interface ClickListener {
@@ -114,13 +115,19 @@ public abstract class GlModel extends Model implements Intersectable {
     }
 
     @Override
-    public RayIntersection onIntersect(Head head) {
+    public RayIntersection onIntersection(Head head) {
         return null;
+    }
+
+    @Override
+    public void onFocuse(boolean isFocused) {
+
     }
 
     public void setOnClickListener(ClickListener onClickListener) {
         this.onClickListener = onClickListener;
     }
+
     public ClickListener getOnClickListener() {
         return onClickListener;
     }

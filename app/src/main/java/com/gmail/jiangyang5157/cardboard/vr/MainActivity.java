@@ -74,7 +74,6 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
             // The transition view used to prompt the user to place their phone into a GVR viewer.
             gvrView.setTransitionViewEnabled(true);
         }
-
         gvrView.setOnCardboardBackButtonListener(
                 new Runnable() {
                     @Override
@@ -163,7 +162,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
     private RayIntersection getIntersection() {
         RayIntersection rayIntersection = null;
         if (kmlChooserView != null) {
-            rayIntersection = kmlChooserView.onIntersect(head);
+            rayIntersection = kmlChooserView.onIntersection(head);
             if (rayIntersection == null) {
                 if (kmlChooserView.isCreated()) {
                     kmlChooserView.destroy();
@@ -173,7 +172,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         }
         if (rayIntersection == null) {
             if (markerDetailView != null) {
-                rayIntersection = markerDetailView.onIntersect(head);
+                rayIntersection = markerDetailView.onIntersection(head);
                 if (rayIntersection == null) {
                     if (markerDetailView.isCreated()) {
                         markerDetailView.destroy();
@@ -188,12 +187,12 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         }
         if (rayIntersection == null) {
             if (atomMap != null) {
-                rayIntersection = atomMap.onIntersect(head);
+                rayIntersection = atomMap.onIntersection(head);
             }
         }
         if (rayIntersection == null) {
             if (earth != null) {
-                rayIntersection = earth.onIntersect(head);
+                rayIntersection = earth.onIntersection(head);
             }
         }
         return rayIntersection;
