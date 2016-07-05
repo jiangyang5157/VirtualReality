@@ -9,7 +9,10 @@ import android.os.HandlerThread;
 import android.support.annotation.NonNull;
 import android.util.ArrayMap;
 
+import com.gmail.jiangyang5157.cardboard.scene.Head;
+import com.gmail.jiangyang5157.cardboard.scene.Intersectable;
 import com.gmail.jiangyang5157.cardboard.scene.Lighting;
+import com.gmail.jiangyang5157.cardboard.scene.RayIntersection;
 import com.gmail.jiangyang5157.tookit.opengl.Model;
 import com.gmail.jiangyang5157.tookit.opengl.GlUtils;
 
@@ -17,19 +20,19 @@ import com.gmail.jiangyang5157.tookit.opengl.GlUtils;
  * @author Yang
  * @since 4/30/2016
  */
-public abstract class GlModel extends Model {
+public abstract class GlModel extends Model implements Intersectable {
     private static final String TAG = "[GlModel]";
 
     public interface ClickListener {
         void onClick(GlModel model);
     }
 
-    protected interface BindingBuffers {
+    protected interface BindableBuffer {
         void bindBuffers();
     }
 
-    protected interface BindingTexBuffers {
-        void bindTexBuffers();
+    protected interface BindableTextureBuffer {
+        void bindTextureBuffers();
     }
 
     public static final int GLES_VERSION_REQUIRED = 0x00020000;
@@ -71,6 +74,8 @@ public abstract class GlModel extends Model {
     protected Handler handler;
     protected HandlerThread handlerThread;
 
+    protected ClickListener onClickListener;
+
     protected GlModel(Context context) {
         super();
         this.context = context;
@@ -106,6 +111,18 @@ public abstract class GlModel extends Model {
 
         Matrix.multiplyMM(modelView, 0, view, 0, model, 0);
         Matrix.multiplyMM(modelViewProjection, 0, perspective, 0, modelView, 0);
+    }
+
+    @Override
+    public RayIntersection onIntersect(Head head) {
+        return null;
+    }
+
+    public void setOnClickListener(ClickListener onClickListener) {
+        this.onClickListener = onClickListener;
+    }
+    public ClickListener getOnClickListener() {
+        return onClickListener;
     }
 
     public void setLighting(Lighting lighting) {

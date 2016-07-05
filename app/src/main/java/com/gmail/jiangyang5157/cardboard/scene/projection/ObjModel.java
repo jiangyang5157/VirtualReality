@@ -13,7 +13,6 @@ import com.gmail.jiangyang5157.cardboard.vr.Constant;
 import com.gmail.jiangyang5157.tookit.app.AppUtils;
 import com.gmail.jiangyang5157.tookit.data.buffer.BufferUtils;
 import com.gmail.jiangyang5157.tookit.data.io.IoUtils;
-import com.gmail.jiangyang5157.tookit.math.Vector3d;
 import com.gmail.jiangyang5157.tookit.opengl.GlUtils;
 
 import java.io.File;
@@ -31,7 +30,7 @@ import java.util.Vector;
  * @author Yang
  * @since 5/27/2016
  */
-public class ObjModel extends GlModel implements GlModel.BindingBuffers, Creation {
+public class ObjModel extends GlModel implements GlModel.BindableBuffer, Creation {
     private static final String TAG = "[ObjModel]";
 
     public static final float DISTANCE = 10;

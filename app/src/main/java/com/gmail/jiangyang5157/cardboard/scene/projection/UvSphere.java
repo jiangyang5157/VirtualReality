@@ -6,7 +6,7 @@ import android.content.Context;
  * @author Yang
  * @since 4/12/2016.
  */
-public abstract class UvSphere extends Sphere implements GlModel.BindingTexBuffers{
+public abstract class UvSphere extends Sphere implements GlModel.BindableTextureBuffer {
 
     private int stacks;
     private int slices;
@@ -24,7 +24,7 @@ public abstract class UvSphere extends Sphere implements GlModel.BindingTexBuffe
 
     @Override
     public void create(int program) {
-        bindTexBuffers();
+        bindTextureBuffers();
         buildData();
 
         super.create(program);

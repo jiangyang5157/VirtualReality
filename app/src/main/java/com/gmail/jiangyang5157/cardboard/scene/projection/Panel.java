@@ -20,7 +20,7 @@ import java.nio.ShortBuffer;
  * @author Yang
  * @since 5/5/2016
  */
-public abstract class Panel extends Rectangle implements GlModel.BindingBuffers, GlModel.BindingTexBuffers {
+public abstract class Panel extends Rectangle implements GlModel.BindableBuffer, GlModel.BindableTextureBuffer {
     private static final String TAG = "[Panel]";
 
     protected float[] vertices;
@@ -42,7 +42,7 @@ public abstract class Panel extends Rectangle implements GlModel.BindingBuffers,
 
     @Override
     public void create(int program) {
-        bindTexBuffers();
+        bindTextureBuffers();
         buildData();
 
         super.create(program);

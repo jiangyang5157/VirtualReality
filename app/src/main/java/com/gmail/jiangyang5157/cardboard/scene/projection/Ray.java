@@ -17,10 +17,6 @@ import com.gmail.jiangyang5157.tookit.opengl.GlUtils;
 public class Ray extends Point {
     private static final String TAG = "[Ray]";
 
-    public interface IntersectListener {
-        RayIntersection onIntersect(Head head);
-    }
-
     private static final float POINT_SIZE_NORMAL = 18f;
     private static final float POINT_SIZE_FOCUSED = 36f;
     private static final float POINT_SIZE_GRADIENT_UNIT = (POINT_SIZE_FOCUSED - POINT_SIZE_NORMAL) / 8;
@@ -58,13 +54,14 @@ public class Ray extends Point {
             return;
         }
 
-        if (rayIntersection.getModel() instanceof GlModel.ClickListener) {
-            if (pointSize < POINT_SIZE_FOCUSED) {
-                pointSize += POINT_SIZE_GRADIENT_UNIT;
-            }
-        } else {
+        // TODO: 7/5/2016
+        if (rayIntersection.getModel().onClickListener == null) {
             if (pointSize > POINT_SIZE_NORMAL) {
                 pointSize -= POINT_SIZE_GRADIENT_UNIT;
+            }
+        } else {
+            if (pointSize < POINT_SIZE_FOCUSED) {
+                pointSize += POINT_SIZE_GRADIENT_UNIT;
             }
         }
 

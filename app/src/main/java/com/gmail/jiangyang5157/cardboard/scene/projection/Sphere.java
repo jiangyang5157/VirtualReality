@@ -12,7 +12,7 @@ import com.gmail.jiangyang5157.tookit.math.Vector3d;
  * @author Yang
  * @since 4/30/2016
  */
-public abstract class Sphere extends GlModel implements GlModel.BindingBuffers, Ray.IntersectListener {
+public abstract class Sphere extends GlModel implements GlModel.BindableBuffer {
 
     protected float radius;
 

@@ -208,8 +208,9 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         final RayIntersection rayIntersection = ray.getRayIntersection();
         if (rayIntersection != null) {
             GlModel model = rayIntersection.getModel();
-            if (model instanceof GlModel.ClickListener) {
-                ((GlModel.ClickListener) model).onClick(model);
+            GlModel.ClickListener onClickListener = model.getOnClickListener();
+            if (onClickListener != null) {
+                onClickListener.onClick(model);
             }
         }
     }

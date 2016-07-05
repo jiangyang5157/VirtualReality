@@ -97,7 +97,7 @@ public class AtomMarkers extends Marker {
         if (markerColorInteger != 0) {
             marker.setColor(markerColorInteger);
         }
-        marker.setOnClickListener(getOnClickListener());
+        marker.setOnClickListener(onClickListener);
         marker.setLocation(latLng, Marker.ALTITUDE);
         marker.setName(kmlPlacemark.getProperty("name"));
         marker.setDescription(kmlPlacemark.getProperty("description"));

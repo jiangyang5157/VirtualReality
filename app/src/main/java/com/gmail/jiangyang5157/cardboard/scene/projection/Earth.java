@@ -143,7 +143,7 @@ public class Earth extends UvSphere implements Creation {
     }
 
     @Override
-    public void bindTexBuffers() {
+    public void bindTextureBuffers() {
         InputStream in = null;
         try {
             in = new FileInputStream(new File(Constant.getAbsolutePath(context, Constant.getPath(urlTexture))));

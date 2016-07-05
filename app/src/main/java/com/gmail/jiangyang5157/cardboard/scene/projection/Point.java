@@ -14,7 +14,7 @@ import java.nio.FloatBuffer;
  * @author Yang
  * @since 5/1/2016
  */
-public abstract class Point extends GlModel implements GlModel.BindingBuffers {
+public abstract class Point extends GlModel implements GlModel.BindableBuffer {
     private static final String TAG = "[Point]";
 
     protected static final String POINT_SIZE_HANDLE = "u_PointSize";

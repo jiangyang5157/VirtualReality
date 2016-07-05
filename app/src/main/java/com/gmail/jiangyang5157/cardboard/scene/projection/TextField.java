@@ -15,13 +15,12 @@ import android.util.TypedValue;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
 import com.gmail.jiangyang5157.cardboard.scene.RayIntersection;
 import com.gmail.jiangyang5157.tookit.app.AppUtils;
-import com.gmail.jiangyang5157.tookit.opengl.Model;
 
 /**
  * @author Yang
  * @since 5/8/2016
  */
-public class TextField extends Panel implements GlModel.ClickListener {
+public class TextField extends Panel {
     private static final String TAG = "[TextField]";
 
     private static final float ALPHA_BACKGROUND = 0.2f;
@@ -41,10 +40,6 @@ public class TextField extends Panel implements GlModel.ClickListener {
     private float textSize;
 
     private Layout.Alignment alignment;
-
-    private GlModel.ClickListener onClickListener;
-
-    protected boolean isClickable;
 
     public TextField(Context context) {
         super(context);
@@ -68,7 +63,7 @@ public class TextField extends Panel implements GlModel.ClickListener {
     }
 
     @Override
-    public void bindTexBuffers() {
+    public void bindTextureBuffers() {
         GLES20.glGenTextures(1, texBuffers, 0);
         if (texBuffers[0] == 0) {
             throw new RuntimeException("Error loading texture.");
@@ -110,21 +105,11 @@ public class TextField extends Panel implements GlModel.ClickListener {
     }
 
     @Override
-    public void onClick(GlModel model) {
-        if (isClickable && onClickListener != null) {
-            onClickListener.onClick(this);
-        }
-    }
-
-    public void setOnClickListener(GlModel.ClickListener onClickListener) {
-        this.onClickListener = onClickListener;
-    }
-
-    @Override
     public RayIntersection onIntersect(Head head) {
         RayIntersection ret = super.onIntersect(head);
 
-        if (ret == null || !isClickable){
+        // TODO: 7/5/2016
+        if (ret == null || onClickListener == null){
             if (scaleSelector < scaleNormal) {
                 scaleSelector -= scaleGradient;
             }

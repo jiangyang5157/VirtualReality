@@ -16,7 +16,7 @@ import com.google.android.gms.maps.model.LatLng;
  * @author Yang
  * @since 4/12/2016.
  */
-public class Marker extends Icosphere implements GlModel.ClickListener {
+public class Marker extends Icosphere {
     private static final String TAG = "[Marker]";
 
     public static final float RADIUS = 1;
@@ -27,8 +27,6 @@ public class Marker extends Icosphere implements GlModel.ClickListener {
     private Coordinate coordinate;
 
     private ObjModel objModel;
-
-    private GlModel.ClickListener onClickListener;
 
     public Marker(Context context) {
         super(context, 3);
@@ -53,13 +51,6 @@ public class Marker extends Icosphere implements GlModel.ClickListener {
                 (float) coordinate.ecef[0],
                 (float) coordinate.ecef[1],
                 (float) coordinate.ecef[2]);
-    }
-
-    @Override
-    public void onClick(GlModel model) {
-        if (onClickListener != null) {
-            onClickListener.onClick(this);
-        }
     }
 
     @Override
@@ -93,14 +84,6 @@ public class Marker extends Icosphere implements GlModel.ClickListener {
             Vector camera_pos_vec = new Vector3d(camera_pos[0], camera_pos[1], camera_pos[2]);
             return new RayIntersection(this, camera_pos_vec.length() - radius);
         }
-    }
-
-    public void setOnClickListener(GlModel.ClickListener onClickListener) {
-        this.onClickListener = onClickListener;
-    }
-
-    public ClickListener getOnClickListener() {
-        return onClickListener;
     }
 
     public String getName() {

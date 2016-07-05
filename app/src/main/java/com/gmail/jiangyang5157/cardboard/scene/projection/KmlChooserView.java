@@ -64,15 +64,16 @@ public class KmlChooserView extends Dialog {
             tf.setTextSize(textSize);
             tf.setAlignment(Layout.Alignment.ALIGN_CENTER);
             tf.create(shaders);
-            tf.isClickable =!fileName.equals(lastKmlFileName);
-            tf.setOnClickListener(new GlModel.ClickListener() {
-                @Override
-                public void onClick(GlModel model) {
-                    if (eventListener != null) {
-                        eventListener.onKmlSelected(fileName);
+            if (!fileName.equals(lastKmlFileName)) {
+                tf.setOnClickListener(new GlModel.ClickListener() {
+                    @Override
+                    public void onClick(GlModel model) {
+                        if (eventListener != null) {
+                            eventListener.onKmlSelected(fileName);
+                        }
                     }
-                }
-            });
+                });
+            }
             addPanel(tf);
         }
     }
