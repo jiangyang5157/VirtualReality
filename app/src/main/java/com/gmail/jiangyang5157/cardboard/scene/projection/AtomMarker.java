@@ -27,7 +27,6 @@ public class AtomMarker extends Marker {
         setVisible(true);
     }
 
-
     @Override
     public void draw() {
         if (!isCreated() || !isVisible()) {
