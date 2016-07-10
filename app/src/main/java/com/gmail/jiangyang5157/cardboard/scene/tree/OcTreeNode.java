@@ -1,6 +1,8 @@
 package com.gmail.jiangyang5157.cardboard.scene.tree;
 
 import android.util.ArrayMap;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
@@ -17,6 +19,7 @@ public class OcTreeNode extends TreeNode {
 
     protected final int depth; // depth of this node
     private ArrayMap<Integer, OcTreeNode> nodes; // the child nodes - <octant code, node>
+
     private ArrayMap<TreeObject, Integer> objects; // the objects stored at this node - <object, octant code>
 
     public OcTreeNode(float[] center, float step, int depth) {
@@ -73,6 +76,32 @@ public class OcTreeNode extends TreeNode {
             OcTreeNode node = new OcTreeNode(new float[]{center[0] + offsetX, center[1] + offsetY, center[2] + offsetZ}, halfStep, depth + 1);
             nodes.put(i, node);
         }
+    }
+
+    @Override
+    protected boolean isValid() {
+        return objects.size() > 0;
+    }
+
+    @Override
+    protected ArrayList<TreeNode> getValidNodes() {
+        ArrayList<TreeNode> ret = new ArrayList<>();
+
+        if (isValid()) {
+            ret.add(this);
+        }
+
+        if (nodes != null) {
+            for (int key : nodes.keySet()) {
+                ret.addAll(nodes.get(key).getValidNodes());
+            }
+        }
+
+        return ret;
+    }
+
+    public ArrayMap<TreeObject, Integer> getObjects() {
+        return objects;
     }
 
     private boolean[] getBooleanOctant(int index) {

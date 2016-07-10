@@ -2,6 +2,7 @@ package com.gmail.jiangyang5157.cardboard.scene.model;
 
 import android.content.Context;
 import android.opengl.GLES20;
+import android.util.Log;
 
 import com.gmail.jiangyang5157.cardboard.kml.KmlPlacemark;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
@@ -9,6 +10,7 @@ import com.gmail.jiangyang5157.cardboard.scene.RayIntersection;
 import com.gmail.jiangyang5157.cardboard.scene.Lighting;
 import com.gmail.jiangyang5157.cardboard.scene.tree.OcTree;
 import com.gmail.jiangyang5157.cardboard.scene.tree.SphereObj;
+import com.gmail.jiangyang5157.cardboard.scene.tree.TreeNode;
 import com.gmail.jiangyang5157.tookit.opengl.GlUtils;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -24,6 +26,7 @@ public class AtomMarkers extends Marker {
     private static final String TAG = "[AtomMarkers]";
 
     private OcTree ocTree;
+    private ArrayList<TreeNode> ocTreeNodes;
     private ArrayList<Marker> markers;
 
     public AtomMarkers(Context context) {
@@ -36,6 +39,7 @@ public class AtomMarkers extends Marker {
     public void create(int program) {
         super.create(program);
 
+        ocTreeNodes = ocTree.getValidNodes();
         for (Marker marker : markers) {
             marker.create(program);
             marker.mvMatrixHandle = mvMatrixHandle;
@@ -127,19 +131,22 @@ public class AtomMarkers extends Marker {
         RayIntersection ret = null;
 
         // TODO: 7/3/2016 performance
-//        ocTree
+        Log.d(TAG, "ocTreeNodes.size = " + ocTreeNodes.size());
+//        for (TreeNode node : ocTreeNodes) {
+//            OcTreeNode ocTreeNode = (OcTreeNode) node;
+//        }
 
-        ArrayList<RayIntersection> rayIntersections = new ArrayList<>();
-        for (Marker marker : markers) {
-            RayIntersection rayIntersection = marker.onIntersection(head);
-            if (rayIntersection != null) {
-                rayIntersections.add(rayIntersection);
-            }
-        }
-        Collections.sort(rayIntersections);
-        if (rayIntersections.size() > 0) {
-            ret = rayIntersections.get(0);
-        }
+//        ArrayList<RayIntersection> rayIntersections = new ArrayList<>();
+//        for (Marker marker : markers) {
+//            RayIntersection rayIntersection = marker.onIntersection(head);
+//            if (rayIntersection != null) {
+//                rayIntersections.add(rayIntersection);
+//            }
+//        }
+//        Collections.sort(rayIntersections);
+//        if (rayIntersections.size() > 0) {
+//            ret = rayIntersections.get(0);
+//        }
 
         return ret;
     }

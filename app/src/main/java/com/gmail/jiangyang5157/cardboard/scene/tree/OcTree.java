@@ -1,5 +1,7 @@
 package com.gmail.jiangyang5157.cardboard.scene.tree;
 
+import java.util.ArrayList;
+
 /**
  * @author Yang
  * @since 7/10/2016
@@ -18,6 +20,10 @@ public class OcTree implements TreePhase {
     @Override
     public void clean() {
         node.clean();
+    }
+
+    public ArrayList<TreeNode> getValidNodes() {
+        return node.getValidNodes();
     }
 
     @Override
