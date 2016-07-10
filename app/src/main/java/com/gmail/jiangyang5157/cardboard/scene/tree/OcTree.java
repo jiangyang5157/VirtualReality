@@ -7,7 +7,7 @@ package com.gmail.jiangyang5157.cardboard.scene.tree;
 public class OcTree implements TreePhase {
     private static final String TAG = "[OcTree]";
 
-    protected static final int MAX_DEPTH = 20;
+    protected static final int MAX_DEPTH = 4; // TODO: 7/10/2016 up to 16
 
     private OcTreeNode node;
 
@@ -27,6 +27,6 @@ public class OcTree implements TreePhase {
 
     @Override
     public String toString() {
-        return TAG + "Node Size" + node.getNodeSize() + ", Leaf Size: " + node.getLeafSize();
+        return TAG + "Node Size: " + node.getNodeSize() + ", Leaf Size: " + node.getLeafSize();
     }
 }

@@ -1,8 +1,6 @@
 package com.gmail.jiangyang5157.cardboard.scene.tree;
 
 import android.util.ArrayMap;
-import android.util.Log;
-
 import java.util.Arrays;
 
 /**
@@ -12,14 +10,14 @@ import java.util.Arrays;
 public class OcTreeNode extends TreeNode {
     private static final String TAG = "[OcTreeNode]";
 
-    protected static final int MIN_OBJECT_SIZE = 1; // size > 0
+    protected static final int MIN_OBJECT_SIZE = 4; // size > 0
 
     protected float[] center; // center position of this node
     protected float step; // half of edge's length of this node
 
     protected final int depth; // depth of this node
-    private ArrayMap<Integer, OcTreeNode> nodes; // the child nodes - key: octant code
-    private ArrayMap<Integer, TreeObject> objects; // the objects stored at this node - key: octant code
+    private ArrayMap<Integer, OcTreeNode> nodes; // the child nodes - <octant code, node>
+    private ArrayMap<TreeObject, Integer> objects; // the objects stored at this node - <object, octant code>
 
     public OcTreeNode(float[] center, float step, int depth) {
         this.center = center;
@@ -107,21 +105,21 @@ public class OcTreeNode extends TreeNode {
         if (depth < OcTree.MAX_DEPTH) {
             if (nodes == null) {
                 if (objects.size() < MIN_OBJECT_SIZE) {
-                    objects.put(index, obj);
+                    objects.put(obj, index);
                 } else {
                     split();
-                    for (int key : objects.keySet()) {
-                        TreeObject tempObj = objects.get(key);
-                        objects.remove(key);
-                        nodes.get(key).insertObject(tempObj);
+                    for (TreeObject key : objects.keySet()) {
+                        int code = objects.get(key);
+                        nodes.get(code).insertObject(key);
                     }
+                    objects.clear();
                     nodes.get(index).insertObject(obj);
                 }
             } else {
                 nodes.get(index).insertObject(obj);
             }
         } else {
-            objects.put(index, obj);
+            objects.put(obj, index);
         }
     }
 

@@ -11,8 +11,7 @@ public class SphereObj extends TreeObject {
     private Sphere sphere;
 
     public SphereObj(Sphere sphere) {
+        super(sphere.getPosition(), sphere.getRadius());
         this.sphere = sphere;
-        this.center = sphere.getPosition();
-        this.radius = sphere.getRadius();
     }
 }
