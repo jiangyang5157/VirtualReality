@@ -1,5 +1,7 @@
 package com.gmail.jiangyang5157.cardboard.scene.tree;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 
 /**
@@ -28,6 +30,7 @@ public class OcTreeNode extends TreeNode {
     }
 
     private void split() {
+        Log.d(TAG, "split on depth: " + depth);
         nodes = new OcTreeNode[8];
         float halfStep = step * 0.5f;
         for (int i = 0; i < 8; i++) {
