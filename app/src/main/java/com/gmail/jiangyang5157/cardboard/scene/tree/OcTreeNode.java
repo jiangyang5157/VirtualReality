@@ -12,12 +12,12 @@ import java.util.Arrays;
 public class OcTreeNode extends TreeNode {
     private static final String TAG = "[OcTreeNode]";
 
-    protected static final int MIN_OBJECT_SIZE = 2; // size > 0
+    protected static final int MIN_OBJECT_SIZE = 1; // size > 0
 
     protected float[] center; // center position of this node
     protected float step; // half of edge's length of this node
 
-    private final int depth; // depth of this node
+    protected final int depth; // depth of this node
     private ArrayMap<Integer, OcTreeNode> nodes; // the child nodes - key: octant code
     private ArrayMap<Integer, TreeObject> objects; // the objects stored at this node - key: octant code
 
@@ -26,7 +26,6 @@ public class OcTreeNode extends TreeNode {
         this.step = step;
         this.depth = depth;
         objects = new ArrayMap<>();
-        Log.d(TAG, toString());
     }
 
     @Override
@@ -135,17 +134,47 @@ public class OcTreeNode extends TreeNode {
             }
             nodes.clear();
         }
-        if (objects != null) {
-            objects.clear();
+        objects.clear();
+    }
+
+
+    @Override
+    protected int getDepth() {
+        return depth;
+    }
+
+    @Override
+    protected int getNodeSize() {
+        int ret = 0;
+        if (nodes != null) {
+            ret = nodes.size();
+            for (int key : nodes.keySet()) {
+                OcTreeNode node = nodes.get(key);
+                ret += node.getNodeSize();
+            }
         }
+        return ret;
+    }
+
+    @Override
+    int getLeafSize() {
+        int ret = objects.size();
+        if (nodes != null) {
+            for (int key : nodes.keySet()) {
+                OcTreeNode node = nodes.get(key);
+                ret += node.getLeafSize();
+            }
+        }
+        return ret;
     }
 
     @Override
     public String toString() {
-        return "OcTreeNode{" +
-                "center=" + Arrays.toString(center) +
+        return TAG +
+                ": center=" + Arrays.toString(center) +
                 ", step=" + step +
                 ", depth=" + depth +
-                '}';
+                ", hasNodes=" + (nodes != null) +
+                ", objects.size=" + objects.size();
     }
 }

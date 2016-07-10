@@ -6,4 +6,10 @@ package com.gmail.jiangyang5157.cardboard.scene.tree;
  */
 public abstract class TreeNode implements TreePhase {
     abstract void split();
+
+    abstract int getDepth();
+
+    abstract int getNodeSize();
+
+    abstract int getLeafSize();
 }

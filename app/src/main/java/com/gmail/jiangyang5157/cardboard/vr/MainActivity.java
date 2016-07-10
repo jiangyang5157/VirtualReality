@@ -251,10 +251,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         public void onClick(GlModel model) {
 //            markerDetailView = new MarkerDetailView(getApplicationContext(), (Marker) model);
 //            markerDetailView.setEventListener(markerDetailEventListener);
-            OcTree ocTree = new OcTree(earth.getPosition(), Earth.RADIUS);
-            ocTree.insertObject(new SphereObj(atomMap.getAtomMarkers().getMarkers().get(0)));
-            ocTree.insertObject(new SphereObj(atomMap.getAtomMarkers().getMarkers().get(1)));
-            ocTree.insertObject(new SphereObj(atomMap.getAtomMarkers().getMarkers().get(2)));
+            Log.d(TAG, "OcTree getNodeCount: " + atomMap.getAtomMarkers().getOcTree().toString());
         }
     };
 

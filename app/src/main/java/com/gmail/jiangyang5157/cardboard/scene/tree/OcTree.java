@@ -5,6 +5,8 @@ package com.gmail.jiangyang5157.cardboard.scene.tree;
  * @since 7/10/2016
  */
 public class OcTree implements TreePhase {
+    private static final String TAG = "[OcTree]";
+
     protected static final int MAX_DEPTH = 10;
 
     private OcTreeNode node;
@@ -21,5 +23,10 @@ public class OcTree implements TreePhase {
     @Override
     public void insertObject(TreeObject obj) {
         node.insertObject(obj);
+    }
+
+    @Override
+    public String toString() {
+        return TAG + "Node Size" + node.getNodeSize() + ", Leaf Size: " + node.getLeafSize();
     }
 }

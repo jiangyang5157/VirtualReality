@@ -69,7 +69,7 @@ import java.util.HashMap;
         // Remove map object from the map
         for (Object mapObject : placemarks.values()) {
             if (mapObject instanceof Marker) {
-                mMap.getAtomMarkers().removeMarker(((Marker) mapObject));
+                // TODO: 7/10/2016
             }
         }
     }

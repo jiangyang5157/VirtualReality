@@ -7,6 +7,8 @@ import com.gmail.jiangyang5157.cardboard.kml.KmlPlacemark;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
 import com.gmail.jiangyang5157.cardboard.scene.RayIntersection;
 import com.gmail.jiangyang5157.cardboard.scene.Lighting;
+import com.gmail.jiangyang5157.cardboard.scene.tree.OcTree;
+import com.gmail.jiangyang5157.cardboard.scene.tree.SphereObj;
 import com.gmail.jiangyang5157.tookit.opengl.GlUtils;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -21,11 +23,13 @@ import java.util.Collections;
 public class AtomMarkers extends Marker {
     private static final String TAG = "[AtomMarkers]";
 
+    private OcTree ocTree;
     private ArrayList<Marker> markers;
 
     public AtomMarkers(Context context) {
         super(context);
         markers = new ArrayList<>();
+        ocTree = new OcTree(new float[3], Earth.RADIUS);
     }
 
     @Override
@@ -83,12 +87,9 @@ public class AtomMarkers extends Marker {
         }
     }
 
-    public void removeMarker(Marker marker) {
-        markers.remove(marker);
-    }
-
     private void addMarker(Marker marker) {
         markers.add(marker);
+        ocTree.insertObject(new SphereObj(marker));
     }
 
     public Marker addMarker(KmlPlacemark kmlPlacemark, MarkerOptions markerUrlStyle, int markerColorInteger) {
@@ -118,10 +119,6 @@ public class AtomMarkers extends Marker {
         return marker;
     }
 
-    public ArrayList<Marker> getMarkers() {
-        return markers;
-    }
-
     @Override
     public RayIntersection onIntersection(Head head) {
         if (!isCreated() || !isVisible()) {
@@ -145,7 +142,16 @@ public class AtomMarkers extends Marker {
         return ret;
     }
 
+    public OcTree getOcTree() {
+        return ocTree;
+    }
+
+    public ArrayList<Marker> getMarkers() {
+        return markers;
+    }
+
     public void destoryMarks() {
+        ocTree.clean();
         for (Marker marker : markers) {
             marker.destroy();
         }
