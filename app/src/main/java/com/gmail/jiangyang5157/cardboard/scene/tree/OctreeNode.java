@@ -29,7 +29,8 @@ public class OcTreeNode extends TreeNode {
         this.objects = new ArrayList<>();
     }
 
-    private void split() {
+    @Override
+    protected void split() {
         Log.d(TAG, "split on depth: " + depth);
         nodes = new OcTreeNode[8];
         float halfStep = step * 0.5f;
