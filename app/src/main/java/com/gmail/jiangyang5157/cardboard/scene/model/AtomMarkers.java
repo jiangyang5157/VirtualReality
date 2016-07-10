@@ -127,6 +127,8 @@ public class AtomMarkers extends Marker {
         RayIntersection ret = null;
 
         // TODO: 7/3/2016 performance
+//        ocTree
+
         ArrayList<RayIntersection> rayIntersections = new ArrayList<>();
         for (Marker marker : markers) {
             RayIntersection rayIntersection = marker.onIntersection(head);
