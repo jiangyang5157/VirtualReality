@@ -155,7 +155,7 @@ public class AtomMap extends GlModel implements Creation {
         markers.setOnClickListener(onClickListener);
     }
 
-    public AtomMarkers getMarkers() {
+    public AtomMarkers getAtomMarkers() {
         return markers;
     }
 

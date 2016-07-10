@@ -24,6 +24,8 @@ import com.gmail.jiangyang5157.cardboard.scene.model.Marker;
 import com.gmail.jiangyang5157.cardboard.scene.Lighting;
 import com.gmail.jiangyang5157.cardboard.scene.model.GlModel;
 import com.gmail.jiangyang5157.cardboard.scene.model.MarkerDetailView;
+import com.gmail.jiangyang5157.cardboard.scene.tree.OcTree;
+import com.gmail.jiangyang5157.cardboard.scene.tree.SphereObj;
 import com.gmail.jiangyang5157.tookit.app.AppUtils;
 import com.gmail.jiangyang5157.tookit.app.DeviceUtils;
 import com.gmail.jiangyang5157.tookit.data.io.IoUtils;
@@ -234,8 +236,12 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
     public void onCardboardTrigger() {
         long thisTime = System.currentTimeMillis();
         if (thisTime - lastTimeOnCardboardTrigger < TIME_DELTA_DOUBLE_CLICK) {
-            lastTimeOnCardboardTrigger = 0;
-            onCardboardDoubleClick();
+//            lastTimeOnCardboardTrigger = 0;
+//            onCardboardDoubleClick();
+            OcTree ocTree = new OcTree(earth.getPosition(), Earth.RADIUS * 2, 10);
+            Marker marker = atomMap.getAtomMarkers().getMarkers().get(0);
+            SphereObj sphereObj = new SphereObj(marker);
+            ocTree.insertObject(sphereObj);
             return;
         } else {
             lastTimeOnCardboardTrigger = thisTime;

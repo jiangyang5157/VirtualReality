@@ -118,6 +118,10 @@ public class AtomMarkers extends Marker {
         return marker;
     }
 
+    public ArrayList<Marker> getMarkers() {
+        return markers;
+    }
+
     @Override
     public RayIntersection onIntersection(Head head) {
         if (!isCreated() || !isVisible()) {

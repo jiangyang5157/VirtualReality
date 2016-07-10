@@ -5,7 +5,8 @@ package com.gmail.jiangyang5157.cardboard.scene.tree;
  * @since 7/10/2016
  */
 public class TreeObject {
-    protected float radius;
 
     protected float[] center;
+
+    protected float radius;
 }
