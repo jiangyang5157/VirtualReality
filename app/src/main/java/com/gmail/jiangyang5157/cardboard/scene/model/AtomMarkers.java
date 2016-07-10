@@ -159,8 +159,11 @@ public class AtomMarkers extends Marker {
         return markers;
     }
 
-    public void destoryMarks() {
+    public void destoryOcTree() {
         ocTree.clean();
+    }
+
+    public void destoryMarks() {
         for (Marker marker : markers) {
             marker.destroy();
         }
@@ -169,6 +172,7 @@ public class AtomMarkers extends Marker {
 
     @Override
     public void destroy() {
+        destoryOcTree();
         destoryMarks();
         super.destroy();
     }
