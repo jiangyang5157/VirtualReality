@@ -238,10 +238,10 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         if (thisTime - lastTimeOnCardboardTrigger < TIME_DELTA_DOUBLE_CLICK) {
 //            lastTimeOnCardboardTrigger = 0;
 //            onCardboardDoubleClick();
-            OcTree ocTree = new OcTree(earth.getPosition(), Earth.RADIUS * 2, 4);
+            OcTree ocTree = new OcTree(earth.getPosition(), Earth.RADIUS * 2);
             ocTree.insertObject(new SphereObj(atomMap.getAtomMarkers().getMarkers().get(0)));
-//            ocTree.insertObject(new SphereObj(atomMap.getAtomMarkers().getMarkers().get(1)));
-//            ocTree.insertObject(new SphereObj(atomMap.getAtomMarkers().getMarkers().get(2)));
+            ocTree.insertObject(new SphereObj(atomMap.getAtomMarkers().getMarkers().get(1)));
+            ocTree.insertObject(new SphereObj(atomMap.getAtomMarkers().getMarkers().get(2)));
             return;
         } else {
             lastTimeOnCardboardTrigger = thisTime;

@@ -18,16 +18,12 @@ public class OcTreeNode extends TreeNode {
     private final int depth; // depth of this node
     private OcTreeNode[] nodes; // the child nodes
 
-    private final ArrayList<TreeObject> objects; // the objects stored at this node
+    private ArrayList<TreeObject> objects; // the objects stored at this node
 
     public OcTreeNode(float[] center, float step, int depth) {
-        if (depth < 0) {
-            throw new IllegalArgumentException(TAG + " - depth should not less than 0.");
-        }
         this.center = center;
         this.step = step;
         this.depth = depth;
-        this.objects = new ArrayList<>();
         Log.d(TAG, toString());
     }
 
@@ -36,40 +32,100 @@ public class OcTreeNode extends TreeNode {
         nodes = new OcTreeNode[8];
         float halfStep = step * 0.5f;
         for (int i = 0; i < 8; i++) {
-            float offsetX = (((i & 1) == 0) ? halfStep : -halfStep);
-            float offsetY = (((i & 2) == 0) ? halfStep : -halfStep);
-            float offsetZ = (((i & 4) == 0) ? halfStep : -halfStep);
-            nodes[i] = new OcTreeNode(new float[]{center[0] + offsetX, center[1] + offsetY, center[2] + offsetZ}, halfStep, depth - 1);
+             /*
+            // Octants numbering
+            //
+            //                                 +Y                 -Z
+            //                                 |                  /
+            //                                 |                 /
+            //                                 |                /
+            //                                 |               /
+            //                     o-----------|---o---------------o
+            //                    /            |  /               /|
+            //                   /       5     | /       4       / |
+            //                  /              |/               /  |
+            //                 o---------------o---------------o   |
+            //                /               /               /|   |
+            //               /       1       /       0       / | 4 |
+            //              /               /               /  |   o
+            //             o---------------o---------------o   |  /|
+            //             |               |               |   | / |
+            //             |               |               | 0 |/  |
+            //             |               |               |   o --|-------------- +X
+            //             |       1       |       0       |  /|   |
+            //             |               |               | / | 6 |
+            //             |               |               |/  |   o
+            //             o---------------o---------------o   |  /
+            //             |               |               |   | /
+            //             |               |               | 2 |/
+            //             |               |               |   o
+            //             |       3       |       2       |  /
+            //             |               |               | /
+            //             |               |               |/
+            //             o---------------o---------------o
+            //
+            //
+            //
+            */
+            boolean[] octant = getOctant(i);
+            float offsetX = octant[0] ? halfStep : -halfStep;
+            float offsetY = octant[1] ? halfStep : -halfStep;
+            float offsetZ = octant[2] ? halfStep : -halfStep;
+            nodes[i] = new OcTreeNode(new float[]{center[0] + offsetX, center[1] + offsetY, center[2] + offsetZ}, halfStep, depth + 1);
         }
+    }
+
+    private boolean[] getOctant(int index) {
+        return new boolean[]{
+                (index & 1) == 0, // 0, 2, 4, 6
+                (index & 2) == 0, // 0, 1, 4, 5
+                (index & 4) == 0, // 0, 1, 2, 3
+        };
+    }
+
+    private int getIndex(boolean[] octant) {
+//        int a1 = 1 << 0; // 1
+//        int a2 = 1 << 1; // 2
+//        int a3 = 1 << 2; // 4
+//        Log.d("####", "" + a1 + ", " + a2 + ", " + a3);
+//        int b = 0;
+//        Log.d("####", "b = 0    " + b); // 0
+//        b |= a1;
+//        Log.d("####", "b |= a1    " + b); // 1
+////            b |= a2;
+////            Log.d("####", "b |= a2    " + b); // 3
+//        b |= a3;
+//        Log.d("####", "b |= a3    " + b);  // 7, 5
+
+        int ret = 0;
+        for (int i = 0; i < 3; i++) {
+            if (!octant[i]) {
+                ret |= (1 << i);
+            }
+        }
+        return ret;
     }
 
     @Override
     public void insertObject(TreeObject obj) {
-        boolean straddle = false;
-        int index = 0;
+        boolean[] octant = new boolean[3];
         for (int i = 0; i < 3; i++) {
-            float delta = center[i] - obj.center[i];
-            if (Math.abs(delta) <= obj.radius) {
-                straddle = true;
-                break;
-            }
-
-            // calculate the child index
-            if (delta > 0) {
-                index |= (1 << i);
-            }
+            float delta = obj.center[i] - center[i];
+            octant[i] = delta >= 0;
         }
+        int index = getIndex(octant);
 
-        if (depth > 0) {
+        if (depth < OcTree.MAX_DEPTH) {
             if (nodes == null) {
                 split();
             }
             nodes[index].insertObject(obj);
         } else {
-            if (straddle) {
-                objects.add(obj);
-                Log.d(TAG, "insertObject on depth: " + depth + ": " + Arrays.toString(obj.center) + " - " + Arrays.toString(obj.center));
+            if (objects == null) {
+                objects = new ArrayList<>();
             }
+            objects.add(obj);
+            Log.d(TAG, "insertObject on depth: " + depth + ": " + Arrays.toString(center) + " - " + Arrays.toString(obj.center));
         }
 
 //        if (!straddle && depth > 0) {
@@ -85,11 +141,13 @@ public class OcTreeNode extends TreeNode {
 
     @Override
     public void clean() {
-        objects.clear();
         if (nodes != null) {
             for (OcTreeNode node : nodes) {
                 node.clean();
             }
+        }
+        if (objects != null) {
+            objects.clear();
         }
     }
 

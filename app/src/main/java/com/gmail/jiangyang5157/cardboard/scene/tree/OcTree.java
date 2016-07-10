@@ -5,10 +5,12 @@ package com.gmail.jiangyang5157.cardboard.scene.tree;
  * @since 7/10/2016
  */
 public class OcTree implements TreePhase {
+    protected static final int MAX_DEPTH = 4;
+
     private OcTreeNode node;
 
-    public OcTree(float[] center, float step, int depth) {
-        node = new OcTreeNode(center, step, depth);
+    public OcTree(float[] center, float step) {
+        node = new OcTreeNode(center, step, 0);
     }
 
     @Override
