@@ -5,7 +5,8 @@ package com.gmail.jiangyang5157.cardboard.scene.tree;
  * @since 7/10/2016
  */
 public class OcTree implements TreePhase {
-    protected static final int MAX_DEPTH = 4;
+    protected static final int MAX_DEPTH = 10;
+    protected static final int MAX_NODE_OBJECT_SIZE = 4;
 
     private OcTreeNode node;
 

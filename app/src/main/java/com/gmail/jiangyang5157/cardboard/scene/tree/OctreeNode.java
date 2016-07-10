@@ -1,8 +1,8 @@
 package com.gmail.jiangyang5157.cardboard.scene.tree;
 
+import android.util.ArrayMap;
 import android.util.Log;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
@@ -16,9 +16,8 @@ public class OcTreeNode extends TreeNode {
     protected float step; // edge length of this node
 
     private final int depth; // depth of this node
-    private OcTreeNode[] nodes; // the child nodes
-
-    private ArrayList<TreeObject> objects; // the objects stored at this node
+    private ArrayMap<Integer, OcTreeNode> nodes; // the child nodes - key: octant code
+    private ArrayMap<Integer, TreeObject> objects; // the objects stored at this node - key: octant code
 
     public OcTreeNode(float[] center, float step, int depth) {
         this.center = center;
@@ -29,7 +28,7 @@ public class OcTreeNode extends TreeNode {
 
     @Override
     protected void split() {
-        nodes = new OcTreeNode[8];
+        nodes = new ArrayMap<>();
         float halfStep = step * 0.5f;
         for (int i = 0; i < 8; i++) {
              /*
@@ -67,15 +66,16 @@ public class OcTreeNode extends TreeNode {
             //
             //
             */
-            boolean[] octant = getOctant(i);
+            boolean[] octant = getBooleanOctant(i);
             float offsetX = octant[0] ? halfStep : -halfStep;
             float offsetY = octant[1] ? halfStep : -halfStep;
             float offsetZ = octant[2] ? halfStep : -halfStep;
-            nodes[i] = new OcTreeNode(new float[]{center[0] + offsetX, center[1] + offsetY, center[2] + offsetZ}, halfStep, depth + 1);
+            OcTreeNode node = new OcTreeNode(new float[]{center[0] + offsetX, center[1] + offsetY, center[2] + offsetZ}, halfStep, depth + 1);
+            nodes.put(i, node);
         }
     }
 
-    private boolean[] getOctant(int index) {
+    private boolean[] getBooleanOctant(int index) {
         return new boolean[]{
                 (index & 1) == 0, // 0, 2, 4, 6
                 (index & 2) == 0, // 0, 1, 4, 5
@@ -108,10 +108,14 @@ public class OcTreeNode extends TreeNode {
 
     @Override
     public void insertObject(TreeObject obj) {
+        boolean straddle = false;
         boolean[] octant = new boolean[3];
         for (int i = 0; i < 3; i++) {
             float delta = obj.center[i] - center[i];
             octant[i] = delta >= 0;
+            if (Math.abs(delta) <= obj.radius) {
+                straddle = true;
+            }
         }
         int index = getIndex(octant);
 
@@ -119,12 +123,9 @@ public class OcTreeNode extends TreeNode {
             if (nodes == null) {
                 split();
             }
-            nodes[index].insertObject(obj);
+            nodes.get(index).insertObject(obj);
         } else {
-            if (objects == null) {
-                objects = new ArrayList<>();
-            }
-            objects.add(obj);
+            addObject(index, obj);
             Log.d(TAG, "insertObject on depth: " + depth + ": " + Arrays.toString(center) + " - " + Arrays.toString(obj.center));
         }
 
@@ -139,12 +140,21 @@ public class OcTreeNode extends TreeNode {
 //        }
     }
 
+    protected void addObject(int octant, TreeObject object) {
+        if (objects == null) {
+            objects = new ArrayMap<>();
+        }
+        objects.put(octant, object);
+    }
+
     @Override
     public void clean() {
         if (nodes != null) {
-            for (OcTreeNode node : nodes) {
+            for (int key : nodes.keySet()) {
+                OcTreeNode node = nodes.get(key);
                 node.clean();
             }
+            nodes.clear();
         }
         if (objects != null) {
             objects.clear();
