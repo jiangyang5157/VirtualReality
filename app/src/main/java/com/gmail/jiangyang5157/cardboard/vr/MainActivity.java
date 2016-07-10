@@ -236,12 +236,8 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
     public void onCardboardTrigger() {
         long thisTime = System.currentTimeMillis();
         if (thisTime - lastTimeOnCardboardTrigger < TIME_DELTA_DOUBLE_CLICK) {
-//            lastTimeOnCardboardTrigger = 0;
-//            onCardboardDoubleClick();
-            OcTree ocTree = new OcTree(earth.getPosition(), Earth.RADIUS * 2);
-            ocTree.insertObject(new SphereObj(atomMap.getAtomMarkers().getMarkers().get(0)));
-            ocTree.insertObject(new SphereObj(atomMap.getAtomMarkers().getMarkers().get(1)));
-            ocTree.insertObject(new SphereObj(atomMap.getAtomMarkers().getMarkers().get(2)));
+            lastTimeOnCardboardTrigger = 0;
+            onCardboardDoubleClick();
             return;
         } else {
             lastTimeOnCardboardTrigger = thisTime;
@@ -253,8 +249,12 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
 
         @Override
         public void onClick(GlModel model) {
-            markerDetailView = new MarkerDetailView(getApplicationContext(), (Marker) model);
-            markerDetailView.setEventListener(markerDetailEventListener);
+//            markerDetailView = new MarkerDetailView(getApplicationContext(), (Marker) model);
+//            markerDetailView.setEventListener(markerDetailEventListener);
+            OcTree ocTree = new OcTree(earth.getPosition(), Earth.RADIUS * 2);
+            ocTree.insertObject(new SphereObj(atomMap.getAtomMarkers().getMarkers().get(0)));
+            ocTree.insertObject(new SphereObj(atomMap.getAtomMarkers().getMarkers().get(1)));
+            ocTree.insertObject(new SphereObj(atomMap.getAtomMarkers().getMarkers().get(2)));
         }
     };
 

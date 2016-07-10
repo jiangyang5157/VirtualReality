@@ -23,6 +23,7 @@ public class OcTreeNode extends TreeNode {
         this.center = center;
         this.step = step;
         this.depth = depth;
+        objects = new ArrayMap<>();
         Log.d(TAG, toString());
     }
 
@@ -84,19 +85,6 @@ public class OcTreeNode extends TreeNode {
     }
 
     private int getIndex(boolean[] octant) {
-//        int a1 = 1 << 0; // 1
-//        int a2 = 1 << 1; // 2
-//        int a3 = 1 << 2; // 4
-//        Log.d("####", "" + a1 + ", " + a2 + ", " + a3);
-//        int b = 0;
-//        Log.d("####", "b = 0    " + b); // 0
-//        b |= a1;
-//        Log.d("####", "b |= a1    " + b); // 1
-////            b |= a2;
-////            Log.d("####", "b |= a2    " + b); // 3
-//        b |= a3;
-//        Log.d("####", "b |= a3    " + b);  // 7, 5
-
         int ret = 0;
         for (int i = 0; i < 3; i++) {
             if (!octant[i]) {
@@ -108,43 +96,35 @@ public class OcTreeNode extends TreeNode {
 
     @Override
     public void insertObject(TreeObject obj) {
-        boolean straddle = false;
         boolean[] octant = new boolean[3];
         for (int i = 0; i < 3; i++) {
             float delta = obj.center[i] - center[i];
             octant[i] = delta >= 0;
-            if (Math.abs(delta) <= obj.radius) {
-                straddle = true;
-            }
         }
+        // index of straddled octant
         int index = getIndex(octant);
 
         if (depth < OcTree.MAX_DEPTH) {
             if (nodes == null) {
-                split();
+                if (objects.size() < OcTree.MAX_NODE_OBJECT_SIZE) {
+                    objects.put(index, obj);
+                    Log.d(TAG, "insertObject at depth: " + depth + ": " + Arrays.toString(center) + " - " + Arrays.toString(obj.center));
+                } else {
+                    split();
+                    for (int key : objects.keySet()) {
+                        TreeObject tempObj = objects.get(key);
+                        objects.remove(key);
+                        nodes.get(key).insertObject(tempObj);
+                    }
+                    nodes.get(index).insertObject(obj);
+                }
+            } else {
+                nodes.get(index).insertObject(obj);
             }
-            nodes.get(index).insertObject(obj);
         } else {
-            addObject(index, obj);
-            Log.d(TAG, "insertObject on depth: " + depth + ": " + Arrays.toString(center) + " - " + Arrays.toString(obj.center));
+            objects.put(index, obj);
+            Log.d(TAG, "insertObject at depth: " + depth + ": " + Arrays.toString(center) + " - " + Arrays.toString(obj.center));
         }
-
-//        if (!straddle && depth > 0) {
-//            if (nodes == null) {
-//                split();
-//            }
-//            nodes[index].insertObject(obj);
-//        } else {
-//            objects.add(obj);
-//            Log.d(TAG, "insertObject: " + toString());
-//        }
-    }
-
-    protected void addObject(int octant, TreeObject object) {
-        if (objects == null) {
-            objects = new ArrayMap<>();
-        }
-        objects.put(octant, object);
     }
 
     @Override
