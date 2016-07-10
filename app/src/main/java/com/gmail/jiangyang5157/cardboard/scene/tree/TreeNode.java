@@ -8,5 +8,5 @@ public abstract class TreeNode {
 
     abstract void clean();
 
-    abstract void insertObject(final TreeObject obj);
+    abstract void insertObject(TreeObject obj);
 }
