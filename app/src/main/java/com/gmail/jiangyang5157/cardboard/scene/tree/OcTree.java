@@ -7,7 +7,7 @@ package com.gmail.jiangyang5157.cardboard.scene.tree;
 public class OcTree implements TreePhase {
     private static final String TAG = "[OcTree]";
 
-    protected static final int MAX_DEPTH = 10;
+    protected static final int MAX_DEPTH = 20;
 
     private OcTreeNode node;
 
