@@ -101,14 +101,12 @@ public class OcTreeNode extends TreeNode {
             float delta = obj.center[i] - center[i];
             octant[i] = delta >= 0;
         }
-        // index of straddled octant
-        int index = getIndex(octant);
+        int index = getIndex(octant); // index of the straddled octant
 
         if (depth < OcTree.MAX_DEPTH) {
             if (nodes == null) {
                 if (objects.size() < OcTree.MAX_NODE_OBJECT_SIZE) {
                     objects.put(index, obj);
-                    Log.d(TAG, "insertObject at depth: " + depth + ": " + Arrays.toString(center) + " - " + Arrays.toString(obj.center));
                 } else {
                     split();
                     for (int key : objects.keySet()) {
@@ -123,7 +121,6 @@ public class OcTreeNode extends TreeNode {
             }
         } else {
             objects.put(index, obj);
-            Log.d(TAG, "insertObject at depth: " + depth + ": " + Arrays.toString(center) + " - " + Arrays.toString(obj.center));
         }
     }
 
