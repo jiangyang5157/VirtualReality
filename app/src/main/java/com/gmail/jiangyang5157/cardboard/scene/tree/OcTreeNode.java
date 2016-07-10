@@ -12,8 +12,10 @@ import java.util.Arrays;
 public class OcTreeNode extends TreeNode {
     private static final String TAG = "[OcTreeNode]";
 
+    protected static final int MIN_OBJECT_SIZE = 2; // size > 0
+
     protected float[] center; // center position of this node
-    protected float step; // edge length of this node
+    protected float step; // half of edge's length of this node
 
     private final int depth; // depth of this node
     private ArrayMap<Integer, OcTreeNode> nodes; // the child nodes - key: octant code
@@ -105,7 +107,7 @@ public class OcTreeNode extends TreeNode {
 
         if (depth < OcTree.MAX_DEPTH) {
             if (nodes == null) {
-                if (objects.size() < OcTree.MAX_NODE_OBJECT_SIZE) {
+                if (objects.size() < MIN_OBJECT_SIZE) {
                     objects.put(index, obj);
                 } else {
                     split();
