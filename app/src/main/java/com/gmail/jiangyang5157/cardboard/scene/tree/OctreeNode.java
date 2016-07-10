@@ -3,6 +3,7 @@ package com.gmail.jiangyang5157.cardboard.scene.tree;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * @author Yang
@@ -20,25 +21,25 @@ public class OcTreeNode extends TreeNode {
     private final ArrayList<TreeObject> objects; // the objects stored at this node
 
     public OcTreeNode(float[] center, float step, int depth) {
-        if (depth <= 0) {
+        if (depth < 0) {
             throw new IllegalArgumentException(TAG + " - depth should not less than 0.");
         }
         this.center = center;
         this.step = step;
         this.depth = depth;
         this.objects = new ArrayList<>();
+        Log.d(TAG, toString());
     }
 
     @Override
     protected void split() {
-        Log.d(TAG, "split on depth: " + depth);
         nodes = new OcTreeNode[8];
         float halfStep = step * 0.5f;
         for (int i = 0; i < 8; i++) {
             float offsetX = (((i & 1) == 0) ? halfStep : -halfStep);
             float offsetY = (((i & 2) == 0) ? halfStep : -halfStep);
             float offsetZ = (((i & 4) == 0) ? halfStep : -halfStep);
-            nodes[i] = new OcTreeNode(new float[]{center[0] + offsetX, center[1] + offsetY, center[2] + offsetZ}, step, depth - 1);
+            nodes[i] = new OcTreeNode(new float[]{center[0] + offsetX, center[1] + offsetY, center[2] + offsetZ}, halfStep, depth - 1);
         }
     }
 
@@ -59,14 +60,27 @@ public class OcTreeNode extends TreeNode {
             }
         }
 
-        if (!straddle && depth > 0) {
+        if (depth > 0) {
             if (nodes == null) {
                 split();
             }
             nodes[index].insertObject(obj);
         } else {
-            objects.add(obj);
+            if (straddle) {
+                objects.add(obj);
+                Log.d(TAG, "insertObject on depth: " + depth + ": " + Arrays.toString(obj.center) + " - " + Arrays.toString(obj.center));
+            }
         }
+
+//        if (!straddle && depth > 0) {
+//            if (nodes == null) {
+//                split();
+//            }
+//            nodes[index].insertObject(obj);
+//        } else {
+//            objects.add(obj);
+//            Log.d(TAG, "insertObject: " + toString());
+//        }
     }
 
     @Override
@@ -77,5 +91,14 @@ public class OcTreeNode extends TreeNode {
                 node.clean();
             }
         }
+    }
+
+    @Override
+    public String toString() {
+        return "OcTreeNode{" +
+                "center=" + Arrays.toString(center) +
+                ", step=" + step +
+                ", depth=" + depth +
+                '}';
     }
 }
