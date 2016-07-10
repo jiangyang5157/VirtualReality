@@ -69,7 +69,7 @@ import java.util.HashMap;
         // Remove map object from the map
         for (Object mapObject : placemarks.values()) {
             if (mapObject instanceof Marker) {
-                mMap.getMarkers().removeMarker(((Marker) mapObject));
+                mMap.getAtomMarkers().removeMarker(((Marker) mapObject));
             }
         }
     }
@@ -325,6 +325,6 @@ import java.util.HashMap;
     private Marker addPointToMap(KmlPlacemark placemark, KmlPoint point, KmlStyle style) {
         MarkerOptions markerUrlStyle = style.getMarkerOptions();
         markerUrlStyle.position(point.getGeometryObject());
-        return mMap.getMarkers().addMarker(placemark, markerUrlStyle, style.getMarkerColorInteger());
+        return mMap.getAtomMarkers().addMarker(placemark, markerUrlStyle, style.getMarkerColorInteger());
     }
 }
