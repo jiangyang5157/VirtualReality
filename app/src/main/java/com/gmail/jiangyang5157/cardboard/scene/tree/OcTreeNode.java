@@ -12,7 +12,7 @@ import java.util.Arrays;
 public class OcTreeNode extends TreeNode {
     private static final String TAG = "[OcTreeNode]";
 
-    protected static final int MIN_OBJECT_SIZE = 4; // size > 0
+    protected static final int MIN_OBJECT_SIZE = 5; // size > 0
 
     protected float[] center; // center position of this node
     protected float step; // half of edge's length of this node

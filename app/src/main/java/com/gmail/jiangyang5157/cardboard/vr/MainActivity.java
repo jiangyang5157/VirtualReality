@@ -249,9 +249,8 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
 
         @Override
         public void onClick(GlModel model) {
-//            markerDetailView = new MarkerDetailView(getApplicationContext(), (Marker) model);
-//            markerDetailView.setEventListener(markerDetailEventListener);
-            Log.d(TAG, "OcTree getNodeCount: " + atomMap.getAtomMarkers().getOcTree().toString());
+            markerDetailView = new MarkerDetailView(getApplicationContext(), (Marker) model);
+            markerDetailView.setEventListener(markerDetailEventListener);
         }
     };
 

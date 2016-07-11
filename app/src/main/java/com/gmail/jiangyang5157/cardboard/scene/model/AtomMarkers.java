@@ -39,6 +39,7 @@ public class AtomMarkers extends Marker {
     public void create(int program) {
         super.create(program);
 
+        Log.d(TAG, "OcTree getNodeCount: " + ocTree.toString());
         ocTreeNodes = ocTree.getValidNodes();
         for (Marker marker : markers) {
             marker.create(program);
@@ -92,8 +93,8 @@ public class AtomMarkers extends Marker {
     }
 
     private void addMarker(Marker marker) {
-        markers.add(marker);
         ocTree.insertObject(new SphereObj(marker));
+        markers.add(marker);
     }
 
     public Marker addMarker(KmlPlacemark kmlPlacemark, MarkerOptions markerUrlStyle, int markerColorInteger) {
