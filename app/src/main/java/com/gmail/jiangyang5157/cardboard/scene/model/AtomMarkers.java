@@ -9,14 +9,14 @@ import com.gmail.jiangyang5157.cardboard.scene.Head;
 import com.gmail.jiangyang5157.cardboard.scene.RayIntersection;
 import com.gmail.jiangyang5157.cardboard.scene.Lighting;
 import com.gmail.jiangyang5157.cardboard.scene.tree.OcTree;
-import com.gmail.jiangyang5157.cardboard.scene.tree.SphereObj;
+import com.gmail.jiangyang5157.cardboard.scene.tree.OcTreeNode;
 import com.gmail.jiangyang5157.cardboard.scene.tree.TreeNode;
+import com.gmail.jiangyang5157.cardboard.scene.tree.OcTreeObject;
 import com.gmail.jiangyang5157.tookit.opengl.GlUtils;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 /**
  * @author Yang
@@ -26,7 +26,7 @@ public class AtomMarkers extends Marker {
     private static final String TAG = "[AtomMarkers]";
 
     private OcTree ocTree;
-    private ArrayList<TreeNode> ocTreeNodes;
+    private ArrayList<OcTreeNode> ocTreeNodes;
     private ArrayList<Marker> markers;
 
     public AtomMarkers(Context context) {
@@ -93,7 +93,7 @@ public class AtomMarkers extends Marker {
     }
 
     private void addMarker(Marker marker) {
-        ocTree.insertObject(new SphereObj(marker));
+        ocTree.insertObject(new OcTreeObject(marker));
         markers.add(marker);
     }
 
@@ -132,7 +132,7 @@ public class AtomMarkers extends Marker {
         RayIntersection ret = null;
 
         // TODO: 7/3/2016 performance
-        Log.d(TAG, "ocTreeNodes.size = " + ocTreeNodes.size());
+        Log.d(TAG, "valid ocTreeNodes.size = " + ocTreeNodes.size());
 //        for (TreeNode node : ocTreeNodes) {
 //            OcTreeNode ocTreeNode = (OcTreeNode) node;
 //        }

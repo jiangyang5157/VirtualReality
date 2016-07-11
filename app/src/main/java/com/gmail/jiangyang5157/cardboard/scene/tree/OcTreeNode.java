@@ -2,6 +2,10 @@ package com.gmail.jiangyang5157.cardboard.scene.tree;
 
 import android.util.ArrayMap;
 
+import com.gmail.jiangyang5157.cardboard.scene.Head;
+import com.gmail.jiangyang5157.cardboard.scene.Intersectable;
+import com.gmail.jiangyang5157.cardboard.scene.RayIntersection;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -9,7 +13,7 @@ import java.util.Arrays;
  * @author Yang
  * @since 7/10/2016
  */
-public class OcTreeNode extends TreeNode {
+public class OcTreeNode extends TreeNode implements Intersectable {
     private static final String TAG = "[OcTreeNode]";
 
     protected static final int MIN_OBJECT_SIZE = 5; // size > 0
@@ -19,8 +23,7 @@ public class OcTreeNode extends TreeNode {
 
     protected final int depth; // depth of this node
     private ArrayMap<Integer, OcTreeNode> nodes; // the child nodes - <octant code, node>
-
-    private ArrayMap<TreeObject, Integer> objects; // the objects stored at this node - <object, octant code>
+    private ArrayMap<OcTreeObject, Integer> objects; // the objects stored at this node - <object, octant code>
 
     public OcTreeNode(float[] center, float step, int depth) {
         this.center = center;
@@ -79,13 +82,17 @@ public class OcTreeNode extends TreeNode {
     }
 
     @Override
+    public RayIntersection onIntersection(Head head) {
+        return null;
+    }
+
+    @Override
     protected boolean isValid() {
         return objects.size() > 0;
     }
 
-    @Override
-    protected ArrayList<TreeNode> getValidNodes() {
-        ArrayList<TreeNode> ret = new ArrayList<>();
+    protected ArrayList<OcTreeNode> getValidNodes() {
+        ArrayList<OcTreeNode> ret = new ArrayList<>();
 
         if (isValid()) {
             ret.add(this);
@@ -100,7 +107,7 @@ public class OcTreeNode extends TreeNode {
         return ret;
     }
 
-    public ArrayMap<TreeObject, Integer> getObjects() {
+    public ArrayMap<OcTreeObject, Integer> getObjects() {
         return objects;
     }
 
@@ -123,7 +130,7 @@ public class OcTreeNode extends TreeNode {
     }
 
     @Override
-    public void insertObject(TreeObject obj) {
+    public void insertObject(OcTreeObject obj) {
         boolean[] octant = new boolean[3];
         for (int i = 0; i < 3; i++) {
             float delta = obj.center[i] - center[i];
@@ -137,7 +144,7 @@ public class OcTreeNode extends TreeNode {
                     objects.put(obj, index);
                 } else {
                     split();
-                    for (TreeObject key : objects.keySet()) {
+                    for (OcTreeObject key : objects.keySet()) {
                         int code = objects.get(key);
                         nodes.get(code).insertObject(key);
                     }
@@ -172,7 +179,7 @@ public class OcTreeNode extends TreeNode {
 
     @Override
     protected int getNodeSize() {
-        int ret = 0;
+        int ret = 1;
         if (nodes != null) {
             ret = nodes.size();
             for (int key : nodes.keySet()) {

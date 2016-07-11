@@ -7,5 +7,5 @@ package com.gmail.jiangyang5157.cardboard.scene.tree;
 public interface TreePhase {
     void clean();
 
-    void insertObject(TreeObject obj);
+    void insertObject(OcTreeObject obj);
 }

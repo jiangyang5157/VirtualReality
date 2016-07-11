@@ -22,12 +22,12 @@ public class OcTree implements TreePhase {
         node.clean();
     }
 
-    public ArrayList<TreeNode> getValidNodes() {
+    public ArrayList<OcTreeNode> getValidNodes() {
         return node.getValidNodes();
     }
 
     @Override
-    public void insertObject(TreeObject obj) {
+    public void insertObject(OcTreeObject obj) {
         node.insertObject(obj);
     }
 

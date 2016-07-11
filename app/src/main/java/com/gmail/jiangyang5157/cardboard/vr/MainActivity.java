@@ -24,8 +24,6 @@ import com.gmail.jiangyang5157.cardboard.scene.model.Marker;
 import com.gmail.jiangyang5157.cardboard.scene.Lighting;
 import com.gmail.jiangyang5157.cardboard.scene.model.GlModel;
 import com.gmail.jiangyang5157.cardboard.scene.model.MarkerDetailView;
-import com.gmail.jiangyang5157.cardboard.scene.tree.OcTree;
-import com.gmail.jiangyang5157.cardboard.scene.tree.SphereObj;
 import com.gmail.jiangyang5157.tookit.app.AppUtils;
 import com.gmail.jiangyang5157.tookit.app.DeviceUtils;
 import com.gmail.jiangyang5157.tookit.data.io.IoUtils;
