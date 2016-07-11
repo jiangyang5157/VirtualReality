@@ -10,13 +10,13 @@ import com.gmail.jiangyang5157.cardboard.scene.RayIntersection;
 import com.gmail.jiangyang5157.cardboard.scene.Lighting;
 import com.gmail.jiangyang5157.cardboard.scene.tree.OcTree;
 import com.gmail.jiangyang5157.cardboard.scene.tree.OcTreeNode;
-import com.gmail.jiangyang5157.cardboard.scene.tree.TreeNode;
 import com.gmail.jiangyang5157.cardboard.scene.tree.OcTreeObject;
 import com.gmail.jiangyang5157.tookit.opengl.GlUtils;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * @author Yang
@@ -39,8 +39,9 @@ public class AtomMarkers extends Marker {
     public void create(int program) {
         super.create(program);
 
-        Log.d(TAG, "OcTree getNodeCount: " + ocTree.toString());
         ocTreeNodes = ocTree.getValidNodes();
+//        Log.d(TAG, "ocTree: " + ocTree.toString() + ", valid ocTreeNodes: " + ocTreeNodes.size());
+
         for (Marker marker : markers) {
             marker.create(program);
             marker.mvMatrixHandle = mvMatrixHandle;
@@ -129,15 +130,20 @@ public class AtomMarkers extends Marker {
         if (!isCreated() || !isVisible()) {
             return null;
         }
+
         RayIntersection ret = null;
-
-        // TODO: 7/3/2016 performance
-        Log.d(TAG, "valid ocTreeNodes.size = " + ocTreeNodes.size());
+        ArrayList<RayIntersection> rayIntersections = new ArrayList<>();
         for (OcTreeNode ocTreeNode : ocTreeNodes) {
-            // if octreNode
-
+            RayIntersection rayIntersection = ocTreeNode.onIntersection(head);
+            if (rayIntersection != null) {
+                rayIntersections.add(rayIntersection);
+            }
         }
 
+        Collections.sort(rayIntersections);
+        if (rayIntersections.size() > 0) {
+            ret = rayIntersections.get(0);
+        }
         return ret;
     }
 

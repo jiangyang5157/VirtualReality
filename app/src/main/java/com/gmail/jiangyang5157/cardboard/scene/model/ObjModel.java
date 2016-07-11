@@ -193,7 +193,7 @@ public class ObjModel extends GlModel implements GlModel.BindableBuffer, Creatio
         fvt = new java.util.Vector<>();
         fvn = new java.util.Vector<>();
 
-        // TODO: 7/5/2016 OBJ Loader
+        // TODO: 7/5/2016 [IMPLEMENTATION] OBJ Loader
         InputStream in = null;
         try {
             in = new FileInputStream(new File(Constant.getAbsolutePath(context, Constant.getPath(url))));

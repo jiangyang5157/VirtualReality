@@ -1,10 +1,13 @@
 package com.gmail.jiangyang5157.cardboard.scene.tree;
 
 import android.util.ArrayMap;
+import android.util.Log;
 
 import com.gmail.jiangyang5157.cardboard.scene.Head;
 import com.gmail.jiangyang5157.cardboard.scene.Intersectable;
 import com.gmail.jiangyang5157.cardboard.scene.RayIntersection;
+import com.gmail.jiangyang5157.tookit.math.Vector;
+import com.gmail.jiangyang5157.tookit.math.Vector3d;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -87,11 +90,13 @@ public class OcTreeNode extends TreeNode implements Intersectable {
     public RayIntersection onIntersection(Head head) {
         RayIntersection ret = null;
         ArrayList<RayIntersection> rayIntersections = new ArrayList<>();
-        Set<OcTreeObject> ocTreeObjects = objects.keySet();
-        for (OcTreeObject ocTreeObject : ocTreeObjects) {
-            RayIntersection rayIntersection = ocTreeObject.sphere.onIntersection(head);
-            if (rayIntersection != null) {
-                rayIntersections.add(rayIntersection);
+        if (isIntersectant(head)) {
+            Set<OcTreeObject> ocTreeObjects = objects.keySet();
+            for (OcTreeObject ocTreeObject : ocTreeObjects) {
+                RayIntersection rayIntersection = ocTreeObject.sphere.onIntersection(head);
+                if (rayIntersection != null) {
+                    rayIntersections.add(rayIntersection);
+                }
             }
         }
         Collections.sort(rayIntersections);
@@ -99,6 +104,45 @@ public class OcTreeNode extends TreeNode implements Intersectable {
             ret = rayIntersections.get(0);
         }
         return ret;
+    }
+
+    private boolean isIntersectant(Head head) {
+        // TODO: 7/11/2016 [IMPLEMENTATION] ray-intersection-cube, currently using ray-intersection-sphere, and diagonal of the cube as the radius
+        float[] cameraPos = head.getCamera().getPosition();
+        float[] forward = head.getForward();
+        Vector forward_vec = new Vector3d(forward[0], forward[1], forward[2]);
+        Vector pos_camera_vec = new Vector3d(
+                cameraPos[0] - center[0],
+                cameraPos[1] - center[1],
+                cameraPos[2] - center[2]
+        );
+
+        double stepPower2 = step * step;
+        double twoStepPower2 = stepPower2 + stepPower2;
+        double threeStepPower2 = twoStepPower2 + stepPower2;
+        double radius = Math.sqrt(threeStepPower2);
+        final double b = forward_vec.dot(pos_camera_vec);
+        final double c = pos_camera_vec.dot(pos_camera_vec) - (radius * radius);
+
+        // solve the quadratic equation
+        final double f = b * b - c;
+        if (f <= Vector.EPSILON) {
+            // ray misses sphere
+            return false;
+        }
+
+        final double sqrtF = Math.sqrt(f);
+        final double t0 = -b + sqrtF;
+        final double t1 = -b - sqrtF;
+
+        // pick the smaller of the two results if both are positive
+        final double t = t0 < 0.0f ? Math.max(t1, 0.0f) : (t1 < 0.0f ? t0 : Math.min(t0, t1));
+        if (t == 0) {
+            // both intersections are behind the matrix
+            return false;
+        }
+
+        return true;
     }
 
     @Override

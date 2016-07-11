@@ -12,7 +12,7 @@ import java.util.HashMap;
 /**
  * Renders all visible KmlPlacemark and KmlGroundOverlay objects onto the Map as Marker,
  * Polyline, Polygon, GroundOverlay objects. Also removes objects from the map.
- *
+ * <p/>
  * Reference https://github.com/googlemaps/android-maps-utils/tree/master/library/src/com/google/maps/android/kml
  * Get rid of GoogleMap dependence
  */
@@ -69,7 +69,7 @@ import java.util.HashMap;
         // Remove map object from the map
         for (Object mapObject : placemarks.values()) {
             if (mapObject instanceof Marker) {
-                // TODO: 7/10/2016
+                // TODO: 7/10/2016 [IMPLEMENTATION]
             }
         }
     }
