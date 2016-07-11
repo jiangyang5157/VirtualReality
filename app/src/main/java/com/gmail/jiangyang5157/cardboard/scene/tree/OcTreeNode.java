@@ -8,6 +8,8 @@ import com.gmail.jiangyang5157.cardboard.scene.RayIntersection;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Set;
 
 /**
  * @author Yang
@@ -83,7 +85,20 @@ public class OcTreeNode extends TreeNode implements Intersectable {
 
     @Override
     public RayIntersection onIntersection(Head head) {
-        return null;
+        RayIntersection ret = null;
+        ArrayList<RayIntersection> rayIntersections = new ArrayList<>();
+        Set<OcTreeObject> ocTreeObjects = objects.keySet();
+        for (OcTreeObject ocTreeObject : ocTreeObjects) {
+            RayIntersection rayIntersection = ocTreeObject.sphere.onIntersection(head);
+            if (rayIntersection != null) {
+                rayIntersections.add(rayIntersection);
+            }
+        }
+        Collections.sort(rayIntersections);
+        if (rayIntersections.size() > 0) {
+            ret = rayIntersections.get(0);
+        }
+        return ret;
     }
 
     @Override

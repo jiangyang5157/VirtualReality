@@ -133,21 +133,10 @@ public class AtomMarkers extends Marker {
 
         // TODO: 7/3/2016 performance
         Log.d(TAG, "valid ocTreeNodes.size = " + ocTreeNodes.size());
-//        for (TreeNode node : ocTreeNodes) {
-//            OcTreeNode ocTreeNode = (OcTreeNode) node;
-//        }
+        for (OcTreeNode ocTreeNode : ocTreeNodes) {
+            // if octreNode
 
-//        ArrayList<RayIntersection> rayIntersections = new ArrayList<>();
-//        for (Marker marker : markers) {
-//            RayIntersection rayIntersection = marker.onIntersection(head);
-//            if (rayIntersection != null) {
-//                rayIntersections.add(rayIntersection);
-//            }
-//        }
-//        Collections.sort(rayIntersections);
-//        if (rayIntersections.size() > 0) {
-//            ret = rayIntersections.get(0);
-//        }
+        }
 
         return ret;
     }

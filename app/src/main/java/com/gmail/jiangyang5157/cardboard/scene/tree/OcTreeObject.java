@@ -11,7 +11,7 @@ import com.gmail.jiangyang5157.cardboard.scene.model.Sphere;
  */
 public class OcTreeObject implements Intersectable {
 
-    private Sphere sphere;
+    protected Sphere sphere;
 
     protected float[] center;
 
