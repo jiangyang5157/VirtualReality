@@ -107,7 +107,7 @@ public class OcTreeNode extends TreeNode implements Intersectable {
     }
 
     private boolean isIntersectant(Head head) {
-        // TODO: 7/11/2016 [IMPLEMENTATION] ray-intersection-cube, currently using ray-intersection-sphere, and diagonal of the cube as the radius
+        // TODO: 7/11/2016 ray-intersection-cube, currently using ray-intersection-sphere, and diagonal of the cube as the radius
         float[] cameraPos = head.getCamera().getPosition();
         float[] forward = head.getForward();
         Vector forward_vec = new Vector3d(forward[0], forward[1], forward[2]);
