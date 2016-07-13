@@ -5,8 +5,6 @@ package com.gmail.jiangyang5157.cardboard.scene.model;
  * @since 7/13/2016
  */
 public interface Marker {
-    float RADIUS = 1;
-    float ALTITUDE = -1 * RADIUS;
 
     void setName(String name);
 

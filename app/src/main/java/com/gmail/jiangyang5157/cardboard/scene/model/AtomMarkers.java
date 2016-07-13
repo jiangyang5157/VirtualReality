@@ -2,7 +2,6 @@ package com.gmail.jiangyang5157.cardboard.scene.model;
 
 import android.content.Context;
 import android.opengl.GLES20;
-import android.util.Log;
 
 import com.gmail.jiangyang5157.cardboard.kml.KmlPlacemark;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
@@ -105,7 +104,7 @@ public class AtomMarkers extends Marker3d {
             marker.setColor(markerColorInteger);
         }
         marker.setOnClickListener(onClickListener);
-        marker.setLocation(latLng, Marker.ALTITUDE);
+        marker.setLocation(latLng, Marker3d.ALTITUDE);
         marker.setName(kmlPlacemark.getProperty("name"));
         marker.setDescription(kmlPlacemark.getProperty("description"));
 

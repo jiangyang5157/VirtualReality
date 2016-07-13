@@ -19,6 +19,9 @@ import com.google.android.gms.maps.model.LatLng;
 public class Marker3d extends Icosphere implements Marker {
     private static final String TAG = "[Marker3d]";
 
+    public static final float RADIUS = 1;
+    public static final float ALTITUDE = -1 * RADIUS;
+
     private String name;
     private String description;
     private Coordinate coordinate;
