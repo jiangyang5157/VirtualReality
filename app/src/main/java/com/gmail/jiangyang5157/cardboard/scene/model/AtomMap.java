@@ -115,8 +115,8 @@ public class AtomMap extends GlModel implements Creation {
         creationState = STATE_CREATING;
 
         ArrayMap<Integer, Integer> markerShaders = new ArrayMap<>();
-        markerShaders.put(GLES20.GL_VERTEX_SHADER, R.raw.marker_icosphere_color_vertex_shader);
-        markerShaders.put(GLES20.GL_FRAGMENT_SHADER, R.raw.marker_icosphere_color_fragment_shader);
+        markerShaders.put(GLES20.GL_VERTEX_SHADER, AtomMarker.RESOURCE_ID_VERTEX_SHADER);
+        markerShaders.put(GLES20.GL_FRAGMENT_SHADER, AtomMarker.RESOURCE_ID_FRAGMENT_SHADER);
         markers.create(markerShaders);
 
         setCreated(true);

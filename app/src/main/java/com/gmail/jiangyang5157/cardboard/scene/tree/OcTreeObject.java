@@ -3,7 +3,7 @@ package com.gmail.jiangyang5157.cardboard.scene.tree;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
 import com.gmail.jiangyang5157.cardboard.scene.Intersectable;
 import com.gmail.jiangyang5157.cardboard.scene.RayIntersection;
-import com.gmail.jiangyang5157.cardboard.scene.model.Sphere;
+import com.gmail.jiangyang5157.cardboard.scene.model.GlModel;
 
 /**
  * @author Yang
@@ -11,17 +11,17 @@ import com.gmail.jiangyang5157.cardboard.scene.model.Sphere;
  */
 public class OcTreeObject implements Intersectable {
 
-    protected Sphere sphere;
+    protected GlModel model;
 
     protected float[] center;
 
-    public OcTreeObject(Sphere sphere) {
-        this.sphere = sphere;
-        this.center = sphere.getPosition();
+    public OcTreeObject(GlModel model) {
+        this.model = model;
+        this.center = model.getPosition();
     }
 
     @Override
     public RayIntersection onIntersection(Head head) {
-        return sphere.onIntersection(head);
+        return model.onIntersection(head);
     }
 }

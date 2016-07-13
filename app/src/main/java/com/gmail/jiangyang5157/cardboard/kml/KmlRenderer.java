@@ -3,7 +3,7 @@ package com.gmail.jiangyang5157.cardboard.kml;
 import android.content.Context;
 
 import com.gmail.jiangyang5157.cardboard.scene.model.AtomMap;
-import com.gmail.jiangyang5157.cardboard.scene.model.Marker;
+import com.gmail.jiangyang5157.cardboard.scene.model.AtomMarker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
@@ -68,7 +68,7 @@ import java.util.HashMap;
     private void removePlacemarks(HashMap<KmlPlacemark, Object> placemarks) {
         // Remove map object from the map
         for (Object mapObject : placemarks.values()) {
-            if (mapObject instanceof Marker) {
+            if (mapObject instanceof AtomMarker) {
                 // TODO: 7/10/2016 [IMPLEMENTATION]
             }
         }
@@ -308,7 +308,8 @@ import java.util.HashMap;
 
         String geometryType = geometry.getGeometryType();
         if (geometryType.equals("Point")) {
-            Marker marker = addPointToMap(placemark, (KmlPoint) geometry, style);
+            AtomMarker marker = addPointToMap(placemark, (KmlPoint) geometry, style);
+            marker.setVisible(isVisible);
             return marker;
         }
         return null;
@@ -321,7 +322,7 @@ import java.util.HashMap;
      * @param style contains relevant styling properties for the Marker
      * @return Marker object
      */
-    private Marker addPointToMap(KmlPlacemark placemark, KmlPoint point, KmlStyle style) {
+    private AtomMarker addPointToMap(KmlPlacemark placemark, KmlPoint point, KmlStyle style) {
         MarkerOptions markerUrlStyle = style.getMarkerOptions();
         markerUrlStyle.position(point.getGeometryObject());
         return mMap.getAtomMarkers().addMarker(placemark, markerUrlStyle, style.getMarkerColorInteger());

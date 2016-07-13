@@ -93,7 +93,7 @@ public class OcTreeNode extends TreeNode implements Intersectable {
         if (isIntersectant(head)) {
             Set<OcTreeObject> ocTreeObjects = objects.keySet();
             for (OcTreeObject ocTreeObject : ocTreeObjects) {
-                RayIntersection rayIntersection = ocTreeObject.sphere.onIntersection(head);
+                RayIntersection rayIntersection = ocTreeObject.model.onIntersection(head);
                 if (rayIntersection != null) {
                     rayIntersections.add(rayIntersection);
                 }

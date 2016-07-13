@@ -26,7 +26,7 @@ public class AtomMarkers extends Marker3d {
 
     private OcTree ocTree;
     private ArrayList<OcTreeNode> ocTreeNodes;
-    private ArrayList<Marker3d> markers;
+    private ArrayList<AtomMarker> markers;
 
     public AtomMarkers(Context context) {
         super(context);
@@ -41,11 +41,12 @@ public class AtomMarkers extends Marker3d {
         ocTreeNodes = ocTree.getValidNodes();
 //        Log.d(TAG, "ocTree: " + ocTree.toString() + ", valid ocTreeNodes: " + ocTreeNodes.size());
 
-        for (Marker3d marker : markers) {
+        for (AtomMarker marker : markers) {
             marker.create(program);
             marker.mvMatrixHandle = mvMatrixHandle;
             marker.mvpMatrixHandle = mvpMatrixHandle;
             marker.colorHandle = colorHandle;
+            // TODO: 7/14/2016  for 3d
             marker.indicesBufferCapacity = indicesBufferCapacity;
         }
 
@@ -59,6 +60,7 @@ public class AtomMarkers extends Marker3d {
             return;
         }
 
+        // TODO: 7/14/2016 for 3d
         GLES20.glUseProgram(program);
         GLES20.glEnableVertexAttribArray(vertexHandle);
         GLES20.glEnableVertexAttribArray(normalHandle);
@@ -74,7 +76,7 @@ public class AtomMarkers extends Marker3d {
 
         GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, indicesBuffHandle);
 
-        for (Marker3d marker : markers) {
+        for (AtomMarker marker : markers) {
             marker.draw();
         }
 
@@ -82,29 +84,43 @@ public class AtomMarkers extends Marker3d {
         GLES20.glDisableVertexAttribArray(normalHandle);
         GLES20.glUseProgram(0);
 
+        // TODO: 7/14/2016 for 2d
+//        GLES20.glUseProgram(program);
+//        GLES20.glEnableVertexAttribArray(vertexHandle);
+//
+//        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, verticesBuffHandle);
+//        GLES20.glVertexAttribPointer(vertexHandle, 3, GLES20.GL_FLOAT, false, 0, 0);
+//
+//        for (AtomMarker marker : markers) {
+//            marker.draw();
+//        }
+//
+//        GLES20.glDisableVertexAttribArray(vertexHandle);
+//        GLES20.glUseProgram(0);
+
         GlUtils.printGlError(TAG + " - draw end");
     }
 
     @Override
     public void update(float[] view, float[] perspective) {
-        for (Marker3d marker : markers) {
+        for (AtomMarker marker : markers) {
             marker.update(view, perspective);
         }
     }
 
-    private void addMarker(Marker3d marker) {
+    private void addMarker(AtomMarker marker) {
         ocTree.insertObject(new OcTreeObject(marker));
         markers.add(marker);
     }
 
-    public Marker3d addMarker(KmlPlacemark kmlPlacemark, MarkerOptions markerUrlStyle, int markerColorInteger) {
+    public AtomMarker addMarker(KmlPlacemark kmlPlacemark, MarkerOptions markerUrlStyle, int markerColorInteger) {
         LatLng latLng = markerUrlStyle.getPosition();
         AtomMarker marker = new AtomMarker(context);
         if (markerColorInteger != 0) {
             marker.setColor(markerColorInteger);
         }
         marker.setOnClickListener(onClickListener);
-        marker.setLocation(latLng, Marker3d.ALTITUDE);
+        marker.setLocation(latLng, AtomMarker.ALTITUDE);
         marker.setName(kmlPlacemark.getProperty("name"));
         marker.setDescription(kmlPlacemark.getProperty("description"));
 
@@ -150,7 +166,7 @@ public class AtomMarkers extends Marker3d {
         return ocTree;
     }
 
-    public ArrayList<Marker3d> getMarkers() {
+    public ArrayList<AtomMarker> getMarkers() {
         return markers;
     }
 
@@ -159,7 +175,7 @@ public class AtomMarkers extends Marker3d {
     }
 
     public void destoryMarks() {
-        for (Marker3d marker : markers) {
+        for (AtomMarker marker : markers) {
             marker.destroy();
         }
         markers.clear();

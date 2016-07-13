@@ -3,9 +3,9 @@ package com.gmail.jiangyang5157.cardboard.scene;
 import android.opengl.Matrix;
 import android.support.annotation.NonNull;
 
+import com.gmail.jiangyang5157.cardboard.scene.model.AtomMarker;
 import com.gmail.jiangyang5157.cardboard.scene.model.Dialog;
 import com.gmail.jiangyang5157.cardboard.scene.model.Earth;
-import com.gmail.jiangyang5157.cardboard.scene.model.Marker3d;
 import com.gmail.jiangyang5157.cardboard.scene.model.Ray;
 
 /**
@@ -14,7 +14,7 @@ import com.gmail.jiangyang5157.cardboard.scene.model.Ray;
  */
 public class Camera {
 
-    public static final float ALTITUDE = -1 * (Math.abs(Marker3d.ALTITUDE) + Marker3d.RADIUS + Dialog.DISTANCE + Ray.DISTANCE);
+    public static final float ALTITUDE = -1 * (Math.abs(AtomMarker.ALTITUDE) + AtomMarker.RADIUS + Dialog.DISTANCE + Ray.DISTANCE);
 
     public static final float Z_NEAR = 0.1f;
     public static final float Z_FAR = Earth.RADIUS * 2;

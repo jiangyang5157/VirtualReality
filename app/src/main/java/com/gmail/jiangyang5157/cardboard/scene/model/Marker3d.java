@@ -7,6 +7,7 @@ import android.util.Log;
 import com.gmail.jiangyang5157.cardboard.scene.Coordinate;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
 import com.gmail.jiangyang5157.cardboard.scene.RayIntersection;
+import com.gmail.jiangyang5157.cardboard.vr.R;
 import com.gmail.jiangyang5157.tookit.app.AppUtils;
 import com.gmail.jiangyang5157.tookit.math.Vector;
 import com.gmail.jiangyang5157.tookit.math.Vector3d;
@@ -16,8 +17,11 @@ import com.google.android.gms.maps.model.LatLng;
  * @author Yang
  * @since 7/13/2016
  */
-public class Marker3d extends Icosphere implements Marker {
+public class Marker3d extends Icosphere {
     private static final String TAG = "[Marker3d]";
+
+    protected static final int RESOURCE_ID_VERTEX_SHADER = R.raw.marker_icosphere_color_vertex_shader;
+    protected static final int RESOURCE_ID_FRAGMENT_SHADER = R.raw.marker_icosphere_color_fragment_shader;
 
     public static final float RADIUS = 1;
     public static final float ALTITUDE = -1 * RADIUS;
@@ -44,7 +48,6 @@ public class Marker3d extends Icosphere implements Marker {
         setVisible(true);
     }
 
-    @Override
     public void setLocation(LatLng latLng, float altitude) {
         this.coordinate = new Coordinate(latLng.latitude, latLng.longitude, altitude, Earth.RADIUS);
         Matrix.setIdentityM(translation, 0);
@@ -93,32 +96,26 @@ public class Marker3d extends Icosphere implements Marker {
         super.destroy();
     }
 
-    @Override
     public void setName(String name) {
         this.name = name;
     }
 
-    @Override
     public void setDescription(String description) {
         this.description = description;
     }
 
-    @Override
     public void setObjModel(ObjModel model) {
         this.objModel = model;
     }
 
-    @Override
     public String getName() {
         return name;
     }
 
-    @Override
     public String getDescription() {
         return description;
     }
 
-    @Override
     public ObjModel getObjModel() {
         return objModel;
     }

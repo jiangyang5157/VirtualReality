@@ -15,9 +15,9 @@ import com.gmail.jiangyang5157.cardboard.scene.Creation;
 import com.gmail.jiangyang5157.cardboard.scene.RayIntersection;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
 import com.gmail.jiangyang5157.cardboard.scene.model.AtomMap;
+import com.gmail.jiangyang5157.cardboard.scene.model.AtomMarker;
 import com.gmail.jiangyang5157.cardboard.scene.model.Dialog;
 import com.gmail.jiangyang5157.cardboard.scene.model.KmlChooserView;
-import com.gmail.jiangyang5157.cardboard.scene.model.Marker;
 import com.gmail.jiangyang5157.cardboard.scene.model.ObjModel;
 import com.gmail.jiangyang5157.cardboard.scene.model.Ray;
 import com.gmail.jiangyang5157.cardboard.scene.model.Earth;
@@ -247,7 +247,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
 
         @Override
         public void onClick(GlModel model) {
-            markerDetailView = new MarkerDetailView(getApplicationContext(), (Marker) model);
+            markerDetailView = new MarkerDetailView(getApplicationContext(), (AtomMarker) model);
             markerDetailView.setEventListener(markerDetailEventListener);
         }
     };
