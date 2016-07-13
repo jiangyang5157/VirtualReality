@@ -44,6 +44,7 @@ public class Marker3d extends Icosphere implements Marker {
         setVisible(true);
     }
 
+    @Override
     public void setLocation(LatLng latLng, float altitude) {
         this.coordinate = new Coordinate(latLng.latitude, latLng.longitude, altitude, Earth.RADIUS);
         Matrix.setIdentityM(translation, 0);
