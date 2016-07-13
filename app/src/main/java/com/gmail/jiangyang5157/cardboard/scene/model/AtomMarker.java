@@ -10,7 +10,7 @@ import com.gmail.jiangyang5157.tookit.opengl.GlUtils;
  * @author Yang
  * @since 4/12/2016.
  */
-public class AtomMarker extends Marker {
+public class AtomMarker extends Marker3d {
     private static final String TAG = "[AtomMarker]";
 
     public AtomMarker(Context context) {

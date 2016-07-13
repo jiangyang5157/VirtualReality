@@ -22,12 +22,12 @@ import java.util.Collections;
  * @author Yang
  * @since 7/2/2016
  */
-public class AtomMarkers extends Marker {
+public class AtomMarkers extends Marker3d {
     private static final String TAG = "[AtomMarkers]";
 
     private OcTree ocTree;
     private ArrayList<OcTreeNode> ocTreeNodes;
-    private ArrayList<Marker> markers;
+    private ArrayList<Marker3d> markers;
 
     public AtomMarkers(Context context) {
         super(context);
@@ -42,7 +42,7 @@ public class AtomMarkers extends Marker {
         ocTreeNodes = ocTree.getValidNodes();
 //        Log.d(TAG, "ocTree: " + ocTree.toString() + ", valid ocTreeNodes: " + ocTreeNodes.size());
 
-        for (Marker marker : markers) {
+        for (Marker3d marker : markers) {
             marker.create(program);
             marker.mvMatrixHandle = mvMatrixHandle;
             marker.mvpMatrixHandle = mvpMatrixHandle;
@@ -75,7 +75,7 @@ public class AtomMarkers extends Marker {
 
         GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, indicesBuffHandle);
 
-        for (Marker marker : markers) {
+        for (Marker3d marker : markers) {
             marker.draw();
         }
 
@@ -88,24 +88,24 @@ public class AtomMarkers extends Marker {
 
     @Override
     public void update(float[] view, float[] perspective) {
-        for (Marker marker : markers) {
+        for (Marker3d marker : markers) {
             marker.update(view, perspective);
         }
     }
 
-    private void addMarker(Marker marker) {
+    private void addMarker(Marker3d marker) {
         ocTree.insertObject(new OcTreeObject(marker));
         markers.add(marker);
     }
 
-    public Marker addMarker(KmlPlacemark kmlPlacemark, MarkerOptions markerUrlStyle, int markerColorInteger) {
+    public Marker3d addMarker(KmlPlacemark kmlPlacemark, MarkerOptions markerUrlStyle, int markerColorInteger) {
         LatLng latLng = markerUrlStyle.getPosition();
         AtomMarker marker = new AtomMarker(context);
         if (markerColorInteger != 0) {
             marker.setColor(markerColorInteger);
         }
         marker.setOnClickListener(onClickListener);
-        marker.setLocation(latLng, Marker.ALTITUDE);
+        marker.setLocation(latLng, Marker3d.ALTITUDE);
         marker.setName(kmlPlacemark.getProperty("name"));
         marker.setDescription(kmlPlacemark.getProperty("description"));
 
@@ -151,7 +151,7 @@ public class AtomMarkers extends Marker {
         return ocTree;
     }
 
-    public ArrayList<Marker> getMarkers() {
+    public ArrayList<Marker3d> getMarkers() {
         return markers;
     }
 
@@ -160,7 +160,7 @@ public class AtomMarkers extends Marker {
     }
 
     public void destoryMarks() {
-        for (Marker marker : markers) {
+        for (Marker3d marker : markers) {
             marker.destroy();
         }
         markers.clear();
