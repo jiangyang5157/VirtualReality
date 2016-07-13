@@ -16,11 +16,8 @@ import com.google.android.gms.maps.model.LatLng;
  * @author Yang
  * @since 7/13/2016
  */
-public class Marker3d extends Icosphere {
-    private static final String TAG = "[Marker]";
-
-    public static final float RADIUS = 1;
-    public static final float ALTITUDE = -1 * RADIUS;
+public class Marker3d extends Icosphere implements Marker {
+    private static final String TAG = "[Marker3d]";
 
     private String name;
     private String description;
@@ -86,33 +83,39 @@ public class Marker3d extends Icosphere {
         }
     }
 
-    public String getName() {
-        return name;
+    @Override
+    public void destroy() {
+        Log.d(TAG, "destroy");
+        super.destroy();
     }
 
+    @Override
     public void setName(String name) {
         this.name = name;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
+    @Override
     public void setDescription(String description) {
         this.description = description;
     }
 
-    public ObjModel getObjModel() {
-        return objModel;
-    }
-
+    @Override
     public void setObjModel(ObjModel model) {
         this.objModel = model;
     }
 
     @Override
-    public void destroy() {
-        Log.d(TAG, "destroy");
-        super.destroy();
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public String getDescription() {
+        return description;
+    }
+
+    @Override
+    public ObjModel getObjModel() {
+        return objModel;
     }
 }

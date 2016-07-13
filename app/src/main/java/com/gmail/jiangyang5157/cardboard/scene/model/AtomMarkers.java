@@ -105,7 +105,7 @@ public class AtomMarkers extends Marker3d {
             marker.setColor(markerColorInteger);
         }
         marker.setOnClickListener(onClickListener);
-        marker.setLocation(latLng, Marker3d.ALTITUDE);
+        marker.setLocation(latLng, Marker.ALTITUDE);
         marker.setName(kmlPlacemark.getProperty("name"));
         marker.setDescription(kmlPlacemark.getProperty("description"));
 

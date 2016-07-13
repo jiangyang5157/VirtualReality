@@ -19,9 +19,9 @@ public class MarkerDetailView extends Dialog {
         void showObjModel(ObjModel model);
     }
 
-    private Marker3d marker;
+    private Marker marker;
 
-    public MarkerDetailView(Context context, Marker3d marker) {
+    public MarkerDetailView(Context context, Marker marker) {
         super(context);
         this.marker = marker;
     }
