@@ -24,4 +24,8 @@ public class OcTreeObject implements Intersectable {
     public RayIntersection onIntersection(Head head) {
         return model.onIntersection(head);
     }
+
+    public GlModel getModel() {
+        return model;
+    }
 }
