@@ -2,7 +2,6 @@ precision mediump float;
 uniform vec3 u_Color;
 uniform int u_Busy;
 
-varying vec3 v_Color;
 varying float v_PointSize;
 
 void main()

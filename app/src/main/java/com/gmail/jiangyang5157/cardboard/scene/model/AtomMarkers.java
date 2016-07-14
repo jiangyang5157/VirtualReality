@@ -46,7 +46,6 @@ public class AtomMarkers extends Marker3d {
             marker.mvMatrixHandle = mvMatrixHandle;
             marker.mvpMatrixHandle = mvpMatrixHandle;
             marker.colorHandle = colorHandle;
-            // TODO: 7/14/2016  for 3d
             marker.indicesBufferCapacity = indicesBufferCapacity;
         }
 
@@ -60,7 +59,6 @@ public class AtomMarkers extends Marker3d {
             return;
         }
 
-        // TODO: 7/14/2016 for 3d
         GLES20.glUseProgram(program);
         GLES20.glEnableVertexAttribArray(vertexHandle);
         GLES20.glEnableVertexAttribArray(normalHandle);
@@ -83,20 +81,6 @@ public class AtomMarkers extends Marker3d {
         GLES20.glDisableVertexAttribArray(vertexHandle);
         GLES20.glDisableVertexAttribArray(normalHandle);
         GLES20.glUseProgram(0);
-
-        // TODO: 7/14/2016 for 2d
-//        GLES20.glUseProgram(program);
-//        GLES20.glEnableVertexAttribArray(vertexHandle);
-//
-//        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, verticesBuffHandle);
-//        GLES20.glVertexAttribPointer(vertexHandle, 3, GLES20.GL_FLOAT, false, 0, 0);
-//
-//        for (AtomMarker marker : markers) {
-//            marker.draw();
-//        }
-//
-//        GLES20.glDisableVertexAttribArray(vertexHandle);
-//        GLES20.glUseProgram(0);
 
         GlUtils.printGlError(TAG + " - draw end");
     }
