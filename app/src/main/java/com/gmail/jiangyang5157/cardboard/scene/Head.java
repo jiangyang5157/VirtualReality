@@ -15,7 +15,7 @@ import com.gmail.jiangyang5157.cardboard.scene.model.Earth;
  */
 public class Head implements SensorEventListener {
 
-    private final float MOVEMENT_UNIT = 80;
+    private static final float MOVEMENT_UNIT = Earth.RADIUS / 100;
 
     private Camera camera;
 
