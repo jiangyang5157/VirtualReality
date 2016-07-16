@@ -4,7 +4,7 @@ import android.content.Context;
 import android.preference.PreferenceManager;
 
 import com.gmail.jiangyang5157.tookit.app.AppUtils;
-import com.gmail.jiangyang5157.tookit.app.RegularExpression;
+import com.gmail.jiangyang5157.tookit.app.RegularExpressionUtils;
 
 import java.io.File;
 import java.text.ParseException;
@@ -99,7 +99,7 @@ public class Constant {
     }
 
     public static long getHttpDateTime(String httpDate) throws ParseException {
-        SimpleDateFormat format = new SimpleDateFormat(RegularExpression.DATE_TEMPLATE_HTTP_DATE);
+        SimpleDateFormat format = new SimpleDateFormat(RegularExpressionUtils.DATE_TEMPLATE_HTTP_DATE);
         return format.parse(httpDate).getTime();
     }
 }
