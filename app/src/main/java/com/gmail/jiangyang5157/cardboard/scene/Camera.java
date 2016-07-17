@@ -66,7 +66,7 @@ public class Camera {
     }
 
     public float[] getPosition() {
-        return position.clone();
+        return new float[]{position[0], position[1], position[2]};
     }
 
     public float[] getMatrix() {

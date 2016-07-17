@@ -1,11 +1,12 @@
 package com.gmail.jiangyang5157.cardboard.scene.tree;
 
 import android.util.ArrayMap;
-import android.util.Log;
 
 import com.gmail.jiangyang5157.cardboard.scene.Head;
 import com.gmail.jiangyang5157.cardboard.scene.Intersectable;
 import com.gmail.jiangyang5157.cardboard.scene.RayIntersection;
+import com.gmail.jiangyang5157.tookit.math.Vector;
+import com.gmail.jiangyang5157.tookit.math.Vector3d;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -104,57 +105,83 @@ public class OcTreeNode extends TreeNode implements Intersectable {
         return ret;
     }
 
-    /**
-     * ray-intersection-cube
-     *
-     * @param head
-     * @return
-     */
     private boolean isIntersectant(Head head) {
+        //ray-intersection-cube
+//        float[] cameraPos = head.getCamera().getPosition();
+//        float[] forward = head.getForward();
+//
+//        double dirfracX = 1.0 / forward[0];
+//        double dirfracY = 1.0 / forward[1];
+//        double dirfracZ = 1.0 / forward[2];
+//
+//        double lbX = center[0] - step;
+//        double lbY = center[1] - step;
+//        double lbZ = center[2] - step;
+//
+//        double rtX = center[0] + step;
+//        double rtY = center[1] + step;
+//        double rtZ = center[2] + step;
+//
+//        double t1 = (lbX - cameraPos[0]) * dirfracX;
+//        double t2 = (rtX - cameraPos[0]) * dirfracX;
+//        double t3 = (lbY - cameraPos[1]) * dirfracY;
+//        double t4 = (rtY - cameraPos[1]) * dirfracY;
+//        double t5 = (lbZ - cameraPos[2]) * dirfracZ;
+//        double t6 = (rtZ - cameraPos[2]) * dirfracZ;
+//
+//        double tmin = Math.max(Math.max(Math.min(t1, t2), Math.min(t3, t4)), Math.min(t5, t6));
+//        double tmax = Math.min(Math.min(Math.max(t1, t2), Math.max(t3, t4)), Math.max(t5, t6));
+//
+//        double t;
+//        if (tmax < 0) {
+//            // ray is intersecting AABB, but whole AABB is behind us
+//            t = tmax;
+//            return false;
+//        }
+//
+//        if (tmin > tmax) {
+//            // ray doesn't intersect AABB
+//            t = tmax;
+//            return false;
+//        }
+//
+//        t = tmin;
+//        return true;
+
+        // ray-intersection-sphere
         float[] cameraPos = head.getCamera().getPosition();
         float[] forward = head.getForward();
+        Vector forward_vec = new Vector3d(forward[0], forward[1], forward[2]);
+        Vector pos_camera_vec = new Vector3d(
+                cameraPos[0] - center[0],
+                cameraPos[1] - center[1],
+                cameraPos[2] - center[2]
+        );
 
-        float[] dirfrac = new float[]{
-                1.0f / forward[0],
-                1.0f / forward[1],
-                1.0f / forward[2]
-        };
+        double stepPower2 = step * step;
+        double twoStepPower2 = stepPower2 + stepPower2;
+        double threeStepPower2 = twoStepPower2 + stepPower2;
+        double radius = Math.sqrt(threeStepPower2);
+        final double b = forward_vec.dot(pos_camera_vec);
+        final double c = pos_camera_vec.dot(pos_camera_vec) - (radius * radius);
 
-        float[] lb = new float[]{
-                center[0] - step,
-                center[1] - step,
-                center[2] - step
-        };
-        float[] rt = new float[]{
-                center[0] + step,
-                center[1] + step,
-                center[2] + step
-        };
-
-        double t1 = (lb[0] - cameraPos[0]) * dirfrac[0];
-        double t2 = (rt[0] - cameraPos[0]) * dirfrac[0];
-        double t3 = (lb[1] - cameraPos[1]) * dirfrac[1];
-        double t4 = (rt[1] - cameraPos[1]) * dirfrac[1];
-        double t5 = (lb[2] - cameraPos[2]) * dirfrac[2];
-        double t6 = (rt[2] - cameraPos[2]) * dirfrac[2];
-
-        double tmin = Math.max(Math.max(Math.min(t1, t2), Math.min(t3, t4)), Math.min(t5, t6));
-        double tmax = Math.min(Math.min(Math.max(t1, t2), Math.max(t3, t4)), Math.max(t5, t6));
-
-        double t;
-        if (tmax < 0) {
-            // ray is intersecting AABB, but whole AABB is behind us
-            t = tmax;
+        // solve the quadratic equation
+        final double f = b * b - c;
+        if (f <= Vector.EPSILON) {
+            // ray misses sphere
             return false;
         }
 
-        if (tmin > tmax) {
-            // ray doesn't intersect AABB
-            t = tmax;
+        final double sqrtF = Math.sqrt(f);
+        final double t0 = -b + sqrtF;
+        final double t1 = -b - sqrtF;
+
+        // pick the smaller of the two results if both are positive
+        final double t = t0 < 0.0f ? Math.max(t1, 0.0f) : (t1 < 0.0f ? t0 : Math.min(t0, t1));
+        if (t == 0) {
+            // both intersections are behind the matrix
             return false;
         }
-
-        t = tmin;
         return true;
     }
 
