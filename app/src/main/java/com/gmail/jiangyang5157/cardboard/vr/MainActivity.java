@@ -272,8 +272,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
             newMap(Constant.getKmlUrl(fileName));
 
             // move camera to <0,0,0>
-            float[] cameraPos = head.getCamera().getPosition();
-            head.getCamera().move(new float[]{-cameraPos[0], -cameraPos[1], -cameraPos[2]});
+            head.getCamera().move(-head.getCamera().getX(), -head.getCamera().getY(), -head.getCamera().getZ());
         }
     };
 
@@ -286,7 +285,9 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         headTransform.getRightVector(head.getRight(), 0);
         headTransform.getQuaternion(head.getQuaternion(), 0);
 
-        head.adjustPosition();
+        if (earth != null) {
+            head.adjustPosition(earth);
+        }
         ray.setIntersections(getIntersection());
         ray.update();
     }

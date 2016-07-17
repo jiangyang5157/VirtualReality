@@ -51,16 +51,14 @@ public class Ray extends Point {
         onFocuse(isFocused);
 
         if (rayIntersection != null) {
-            float[] cameraPos = head.getCamera().getPosition();
             float[] forward = head.getForward();
-            double t = rayIntersection.getT();
-            // intersectPos = cameraPos + forward * t
-            // position = intersectPos + forward * -DISTANCE
+            float t = (float) rayIntersection.getT();
+            // intersectPos = cameraPos + forward * t;  position = intersectPos + forward * -DISTANCE
             Matrix.setIdentityM(translation, 0);
             Matrix.translateM(translation, 0,
-                    (float) (cameraPos[0] + forward[0] * (t - DISTANCE)),
-                    (float) (cameraPos[1] + forward[1] * (t - DISTANCE)),
-                    (float) (cameraPos[2] + forward[2] * (t - DISTANCE))
+                    head.getCamera().getX() + forward[0] * (t - DISTANCE),
+                    head.getCamera().getY() + forward[1] * (t - DISTANCE),
+                    head.getCamera().getZ() + forward[2] * (t - DISTANCE)
             );
         }
     }

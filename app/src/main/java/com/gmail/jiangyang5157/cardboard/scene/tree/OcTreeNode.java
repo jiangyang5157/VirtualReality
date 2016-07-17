@@ -107,7 +107,6 @@ public class OcTreeNode extends TreeNode implements Intersectable {
 
     private boolean isIntersectant(Head head) {
         //ray-intersection-cube
-//        float[] cameraPos = head.getCamera().getPosition();
 //        float[] forward = head.getForward();
 //
 //        double dirfracX = 1.0 / forward[0];
@@ -122,12 +121,12 @@ public class OcTreeNode extends TreeNode implements Intersectable {
 //        double rtY = center[1] + step;
 //        double rtZ = center[2] + step;
 //
-//        double t1 = (lbX - cameraPos[0]) * dirfracX;
-//        double t2 = (rtX - cameraPos[0]) * dirfracX;
-//        double t3 = (lbY - cameraPos[1]) * dirfracY;
-//        double t4 = (rtY - cameraPos[1]) * dirfracY;
-//        double t5 = (lbZ - cameraPos[2]) * dirfracZ;
-//        double t6 = (rtZ - cameraPos[2]) * dirfracZ;
+//        double t1 = (lbX - head.getCamera().getX()) * dirfracX;
+//        double t2 = (rtX - head.getCamera().getX()) * dirfracX;
+//        double t3 = (lbY - head.getCamera().getY()) * dirfracY;
+//        double t4 = (rtY - head.getCamera().getY()) * dirfracY;
+//        double t5 = (lbZ - head.getCamera().getZ()) * dirfracZ;
+//        double t6 = (rtZ - head.getCamera().getZ()) * dirfracZ;
 //
 //        double tmin = Math.max(Math.max(Math.min(t1, t2), Math.min(t3, t4)), Math.min(t5, t6));
 //        double tmax = Math.min(Math.min(Math.max(t1, t2), Math.max(t3, t4)), Math.max(t5, t6));
@@ -149,13 +148,12 @@ public class OcTreeNode extends TreeNode implements Intersectable {
 //        return true;
 
         // ray-intersection-sphere
-        float[] cameraPos = head.getCamera().getPosition();
         float[] forward = head.getForward();
         Vector forward_vec = new Vector3d(forward[0], forward[1], forward[2]);
         Vector pos_camera_vec = new Vector3d(
-                cameraPos[0] - center[0],
-                cameraPos[1] - center[1],
-                cameraPos[2] - center[2]
+                head.getCamera().getX() - center[0],
+                head.getCamera().getY() - center[1],
+                head.getCamera().getZ() - center[2]
         );
 
         double stepPower2 = step * step;

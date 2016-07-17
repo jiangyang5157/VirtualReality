@@ -75,9 +75,8 @@ public abstract class Panel extends Rectangle implements GlModel.BindableBuffer,
             return null;
         }
 
-        float[] cameraPos = head.getCamera().getPosition();
         float[] forward = head.getForward();
-        Vector cameraPos_vec = new Vector(cameraPos[0], cameraPos[1], cameraPos[2]);
+        Vector cameraPos_vec = new Vector(head.getCamera().getX(), head.getCamera().getY(), head.getCamera().getZ());
         Vector forward_vec = new Vector(forward[0], forward[1], forward[2]);
 
         Vector tl_tr_vec = new Vector3d(tr_vec.minus(tl_vec));

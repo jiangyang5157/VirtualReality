@@ -1,7 +1,6 @@
 package com.gmail.jiangyang5157.cardboard.scene.model;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 
 import com.gmail.jiangyang5157.cardboard.scene.RayIntersection;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
@@ -26,14 +25,12 @@ public abstract class Sphere extends GlModel implements GlModel.BindableBuffer {
             return null;
         }
 
-        float[] position = getPosition();
-        float[] cameraPos = head.getCamera().getPosition();
         float[] forward = head.getForward();
         Vector forward_vec = new Vector3d(forward[0], forward[1], forward[2]);
         Vector pos_camera_vec = new Vector3d(
-                cameraPos[0] - position[0],
-                cameraPos[1] - position[1],
-                cameraPos[2] - position[2]
+                head.getCamera().getX() - getX(),
+                head.getCamera().getY() - getY(),
+                head.getCamera().getZ() - getZ()
         );
 
         final double b = forward_vec.dot(pos_camera_vec);
@@ -60,12 +57,12 @@ public abstract class Sphere extends GlModel implements GlModel.BindableBuffer {
         return new RayIntersection(this, t);
     }
 
-    public static boolean contain(float radius, @NonNull float[] center, @NonNull float[] point) {
-        double point_center_x = center[0] - point[0];
-        double point_center_y = center[1] - point[1];
-        double point_center_z = center[2] - point[2];
+    public boolean contain(float r, float x, float y, float z) {
+        double point_center_x = getX() - x;
+        double point_center_y = getY() - y;
+        double point_center_z = getZ() - z;
         double dot = point_center_x * point_center_x + point_center_y * point_center_y + point_center_z * point_center_z;
-        double squaredRadius = radius * radius;
+        double squaredRadius = r * r;
         return dot < squaredRadius;
     }
 

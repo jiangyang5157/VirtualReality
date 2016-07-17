@@ -40,12 +40,14 @@ public class Camera {
                 UP[0], UP[1], UP[2]);
     }
 
-    public void move(float[] offset) {
-        if (offset == null) {
-            return;
-        }
-        forward(position, offset);
-        forward(lookAt, offset);
+    public void move(float offsetX, float offsetY, float offsetZ) {
+        position[0] += offsetX;
+        position[1] += offsetY;
+        position[2] += offsetZ;
+
+        lookAt[0] += offsetX;
+        lookAt[1] += offsetY;
+        lookAt[2] += offsetZ;
 
         Matrix.setLookAtM(matrix, 0,
                 position[0], position[1], position[2],
@@ -53,20 +55,20 @@ public class Camera {
                 UP[0], UP[1], UP[2]);
     }
 
-    protected static void forward(@NonNull float[] src, float[] dir) {
-        if (dir == null) {
-            return;
-        }
-        if (dir.length != src.length) {
-            throw new IndexOutOfBoundsException("Array src and dir must have different length.");
-        }
-        src[0] += dir[0];
-        src[1] += dir[1];
-        src[2] += dir[2];
-    }
-
     public float[] getPosition() {
         return new float[]{position[0], position[1], position[2]};
+    }
+
+    public float getX() {
+        return position[0];
+    }
+
+    public float getY() {
+        return position[1];
+    }
+
+    public float getZ() {
+        return position[2];
     }
 
     public float[] getMatrix() {

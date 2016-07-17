@@ -63,34 +63,32 @@ public class Head implements SensorEventListener {
         }
     }
 
-    public void adjustPosition() {
-        float[] a = new float[]{
-                forward[0] * stepsCounter,
-                forward[1] * stepsCounter,
-                forward[2] * stepsCounter
-        };
+    public void adjustPosition(Earth earth) {
+        float accelX = forward[0] * stepsCounter;
+        float accelY = forward[1] * stepsCounter;
+        float accelZ = forward[2] * stepsCounter;
         stepsCounter = 0;
 
         final float D = 0.9f;
-        float[] newVelocity = new float[]{
-                velocity[0] * D + a[0],
-                velocity[1] * D + a[1],
-                velocity[2] * D + a[2]
-        };
-        float[] offset = new float[]{
-                newVelocity[0] * MOVEMENT_UNIT,
-                newVelocity[1] * MOVEMENT_UNIT,
-                newVelocity[2] * MOVEMENT_UNIT
-        };
+        float newVelocityX = velocity[0] * D + accelX;
+        float newVelocityY = velocity[1] * D + accelY;
+        float newVelocityZ = velocity[2] * D + accelZ;
 
-        float[] pos = camera.getPosition();
-        Camera.forward(pos, offset);
-        if (Earth.contain(pos)) {
-            camera.move(offset);
+        float offsetX = newVelocityX * MOVEMENT_UNIT;
+        float offsetY = newVelocityY * MOVEMENT_UNIT;
+        float offsetZ = newVelocityZ * MOVEMENT_UNIT;
+
+        if (earth.contain(Earth.RADIUS + Camera.ALTITUDE,
+                camera.getX() + offsetX,
+                camera.getY() + offsetY,
+                camera.getZ() + offsetZ)) {
+            camera.move(offsetX, offsetY, offsetZ);
         } else {
-            newVelocity[0] = newVelocity[1] = newVelocity[2] = 0;
+            newVelocityX = newVelocityY = newVelocityZ = 0;
         }
-        velocity = newVelocity;
+        velocity[0] = newVelocityX;
+        velocity[1] = newVelocityY;
+        velocity[2] = newVelocityZ;
     }
 
     public static float[] getQquaternionMatrix(@NonNull float[] quaternion) {

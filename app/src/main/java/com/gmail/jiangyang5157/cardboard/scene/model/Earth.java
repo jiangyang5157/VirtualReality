@@ -215,10 +215,6 @@ public class Earth extends UvSphere implements Creation {
         GlUtils.printGlError(TAG + " - draw end");
     }
 
-    public static boolean contain(float[] point) {
-        return Sphere.contain(Earth.RADIUS + Camera.ALTITUDE, new float[3], point);
-    }
-
     @Override
     public void destroy() {
         Log.d(TAG, "destroy");
