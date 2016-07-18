@@ -162,9 +162,8 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
     }
 
     private RayIntersection getIntersection() {
-        float[] cameraPos = head.getCamera().getPosition();
         float[] headForward = head.getForward();
-        Vector cameraPos_vec = new Vector3d(cameraPos[0], cameraPos[1], cameraPos[2]);
+        Vector cameraPos_vec = new Vector3d(head.getCamera().getX(), head.getCamera().getY(), head.getCamera().getZ());
         Vector headForward_vec = new Vector3d(headForward[0], headForward[1], headForward[2]);
         Vector headForwardFrac_vec = new Vector3d(1.0 / headForward[0], 1.0 / headForward[1], 1.0 / headForward[2]);
 
@@ -213,7 +212,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
             return;
         }
 
-        final RayIntersection rayIntersection = ray.getRayIntersection();
+        RayIntersection rayIntersection = ray.getRayIntersection();
         if (rayIntersection != null) {
             GlModel model = rayIntersection.getModel();
             GlModel.ClickListener onClickListener = model.getOnClickListener();
