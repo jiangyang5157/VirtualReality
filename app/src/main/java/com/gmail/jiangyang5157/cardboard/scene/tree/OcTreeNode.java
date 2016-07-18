@@ -1,6 +1,7 @@
 package com.gmail.jiangyang5157.cardboard.scene.tree;
 
 import android.util.ArrayMap;
+import android.util.Log;
 
 import com.gmail.jiangyang5157.cardboard.scene.Head;
 import com.gmail.jiangyang5157.cardboard.scene.Intersectable;
@@ -140,10 +141,6 @@ public class OcTreeNode extends TreeNode implements Intersectable {
 //        return true;
 
         //ray-intersection-cube
-//        double headForwardFracX = 1.0 / headForward_vec.getData(0);
-//        double headForwardFracY = 1.0 / headForward_vec.getData(1);
-//        double headForwardFracZ = 1.0 / headForward_vec.getData(2);
-//
 //        double lbX = center[0] - step;
 //        double lbY = center[1] - step;
 //        double lbZ = center[2] - step;
@@ -151,6 +148,10 @@ public class OcTreeNode extends TreeNode implements Intersectable {
 //        double rtX = center[0] + step;
 //        double rtY = center[1] + step;
 //        double rtZ = center[2] + step;
+//
+//        double headForwardFracX = 1.0 / headForward_vec.getData(0);
+//        double headForwardFracY = 1.0 / headForward_vec.getData(1);
+//        double headForwardFracZ = 1.0 / headForward_vec.getData(2);
 //
 //        double t1 = (lbX - cameraPos_vec.getData(0)) * headForwardFracX;
 //        double t2 = (rtX - cameraPos_vec.getData(0)) * headForwardFracX;
@@ -174,11 +175,7 @@ public class OcTreeNode extends TreeNode implements Intersectable {
 //        t = tmin;
 //        return true;
 
-        //ray-intersection-cube 2
-        double headForwardFracX = 1.0 / headForward_vec.getData(0);
-        double headForwardFracY = 1.0 / headForward_vec.getData(1);
-        double headForwardFracZ = 1.0 / headForward_vec.getData(2);
-
+        //ray-intersection-cube
         double lbX = center[0] - step;
         double lbY = center[1] - step;
         double lbZ = center[2] - step;
@@ -187,26 +184,59 @@ public class OcTreeNode extends TreeNode implements Intersectable {
         double rtY = center[1] + step;
         double rtZ = center[2] + step;
 
-        double t1 = (lbX - cameraPos_vec.getData(0)) * headForwardFracX;
-        double t2 = (rtX - cameraPos_vec.getData(0)) * headForwardFracX;
-        double t3 = (lbY - cameraPos_vec.getData(1)) * headForwardFracY;
-        double t4 = (rtY - cameraPos_vec.getData(1)) * headForwardFracY;
-        double t5 = (lbZ - cameraPos_vec.getData(2)) * headForwardFracZ;
-        double t6 = (rtZ - cameraPos_vec.getData(2)) * headForwardFracZ;
+        double headForwardFracX = 1.0 / headForward_vec.getData(0);
+        double headForwardFracY = 1.0 / headForward_vec.getData(1);
+        double headForwardFracZ = 1.0 / headForward_vec.getData(2);
+        double tmin, tmax, tymin, tymax, tzmin, tzmax;
 
-        double tmin = Math.max(Math.max(Math.min(t1, t2), Math.min(t3, t4)), Math.min(t5, t6));
-        double tmax = Math.min(Math.min(Math.max(t1, t2), Math.max(t3, t4)), Math.max(t5, t6));
+        if (headForwardFracX >= 0) {
+            tmin = (lbX - cameraPos_vec.getData(0)) * headForwardFracX;
+            tmax = (rtX - cameraPos_vec.getData(0)) * headForwardFracX;
+        } else {
+            tmin = (rtX - cameraPos_vec.getData(0)) * headForwardFracX;
+            tmax = (lbX - cameraPos_vec.getData(0)) * headForwardFracX;
+        }
+        if (headForwardFracY >= 0) {
+            tymin = (lbY - cameraPos_vec.getData(1)) * headForwardFracY;
+            tymax = (rtY - cameraPos_vec.getData(1)) * headForwardFracY;
+        } else {
+            tymin = (rtY - cameraPos_vec.getData(1)) * headForwardFracY;
+            tymax = (lbY - cameraPos_vec.getData(1)) * headForwardFracY;
+        }
 
-        double t;
+        if ((tmin > tymax) || (tymin > tmax)) {
+            return false;
+        }
+        if (tymin > tmin) {
+            tmin = tymin;
+        }
+        if (tymax < tmax) {
+            tmax = tymax;
+        }
+
+        if (headForwardFracZ >= 0) {
+            tzmin = (lbZ - cameraPos_vec.getData(2)) * headForwardFracZ;
+            tzmax = (rtZ - cameraPos_vec.getData(2)) * headForwardFracZ;
+        } else {
+            tzmin = (rtZ - cameraPos_vec.getData(2)) * headForwardFracZ;
+            tzmax = (lbZ - cameraPos_vec.getData(2)) * headForwardFracZ;
+        }
+
+        if ((tmin > tzmax) || (tzmin > tmax)) {
+            return false;
+        }
+        if (tzmin > tmin) {
+            tmin = tzmin;
+        }
+        if (tzmax < tmax) {
+            tmax = tzmax;
+        }
+
+        Log.d(TAG, "tmin/tmax: " + tmin + ", " + tmax);
         if (tmax < 0) {
-            t = tmax;
             return false; // ray is intersecting AABB, but whole AABB is behind us
         }
-        if (tmin > tmax) {
-            t = tmax;
-            return false;  // ray doesn't intersect AABB
-        }
-        t = tmin;
+
         return true;
     }
 
