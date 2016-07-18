@@ -1,13 +1,9 @@
 package com.gmail.jiangyang5157.cardboard.scene.tree;
 
 import android.util.ArrayMap;
-import android.util.Log;
-
-import com.gmail.jiangyang5157.cardboard.scene.Head;
 import com.gmail.jiangyang5157.cardboard.scene.Intersectable;
 import com.gmail.jiangyang5157.cardboard.scene.RayIntersection;
 import com.gmail.jiangyang5157.tookit.math.Vector;
-import com.gmail.jiangyang5157.tookit.math.Vector3d;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -120,67 +116,6 @@ public class OcTreeNode extends TreeNode implements Intersectable {
     }
 
     private boolean isIntersectant(Vector cameraPos_vec, Vector headForward_vec, float[] headView) {
-        // ray-intersection-sphere
-//        Vector pos_camera_vec = new Vector3d(
-//                cameraPos_vec.getData(0) - center[0],
-//                cameraPos_vec.getData(1) - center[1],
-//                cameraPos_vec.getData(2) - center[2]
-//        );
-//
-//        double stepPower2 = step * step;
-//        double twoStepPower2 = stepPower2 + stepPower2;
-//        double threeStepPower2 = twoStepPower2 + stepPower2;
-//        double radius = Math.sqrt(threeStepPower2);
-//        final double b = headForward_vec.dot(pos_camera_vec);
-//        final double c = pos_camera_vec.dot(pos_camera_vec) - (radius * radius);
-//
-//        // solve the quadratic equation
-//        final double f = b * b - c;
-//        if (f <= Vector.EPSILON) {
-//            // ray misses sphere
-//            return false;
-//        }
-//
-//        final double sqrtF = Math.sqrt(f);
-//        final double t0 = -b + sqrtF;
-//        final double t1 = -b - sqrtF;
-//
-//        // pick the smaller of the two results if both are positive
-//        final double t = t0 < 0.0f ? Math.max(t1, 0.0f) : (t1 < 0.0f ? t0 : Math.min(t0, t1));
-//        if (t == 0) {
-//            // both intersections are behind the matrix
-//            return false;
-//        }
-//        return true;
-
-        //ray-intersection-cube
-//        double headForwardFracX = 1.0 / headForward_vec.getData(0);
-//        double headForwardFracY = 1.0 / headForward_vec.getData(1);
-//        double headForwardFracZ = 1.0 / headForward_vec.getData(2);
-//
-//        double t1 = (lb[0] - cameraPos_vec.getData(0)) * headForwardFracX;
-//        double t2 = (rt[0] - cameraPos_vec.getData(0)) * headForwardFracX;
-//        double t3 = (lb[1] - cameraPos_vec.getData(1)) * headForwardFracY;
-//        double t4 = (rt[1] - cameraPos_vec.getData(1)) * headForwardFracY;
-//        double t5 = (lb[2] - cameraPos_vec.getData(2)) * headForwardFracZ;
-//        double t6 = (rt[2] - cameraPos_vec.getData(2)) * headForwardFracZ;
-//
-//        double tmin = Math.max(Math.max(Math.min(t1, t2), Math.min(t3, t4)), Math.min(t5, t6));
-//        double tmax = Math.min(Math.min(Math.max(t1, t2), Math.max(t3, t4)), Math.max(t5, t6));
-//
-//        double t;
-//        if (tmax < 0) {
-//            t = tmax;
-//            return false; // ray is intersecting AABB, but whole AABB is behind us
-//        }
-//        if (tmin > tmax) {
-//            t = tmax;
-//            return false;  // ray doesn't intersect AABB
-//        }
-//        t = tmin;
-//        return true;
-
-        //ray-intersection-cube
         double headForwardFracX = 1.0 / headForward_vec.getData(0);
         double headForwardFracY = 1.0 / headForward_vec.getData(1);
         double headForwardFracZ = 1.0 / headForward_vec.getData(2);
@@ -229,9 +164,11 @@ public class OcTreeNode extends TreeNode implements Intersectable {
             tmax = tzmax;
         }
 
-        Log.d(TAG, "tmin/tmax: " + tmin + ", " + tmax);
         if (tmax < 0) {
             return false; // ray is intersecting AABB, but whole AABB is behind us
+        }
+        if (tmin > tmax) {
+            return false;  // ray doesn't intersect AABB
         }
 
         return true;
