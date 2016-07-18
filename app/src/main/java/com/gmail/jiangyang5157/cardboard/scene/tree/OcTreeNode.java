@@ -1,7 +1,7 @@
 package com.gmail.jiangyang5157.cardboard.scene.tree;
 
 import android.util.ArrayMap;
-import com.gmail.jiangyang5157.cardboard.scene.Intersectable;
+
 import com.gmail.jiangyang5157.cardboard.scene.RayIntersection;
 import com.gmail.jiangyang5157.tookit.math.Vector;
 
@@ -14,7 +14,7 @@ import java.util.Set;
  * @author Yang
  * @since 7/10/2016
  */
-public class OcTreeNode extends TreeNode implements Intersectable {
+public class OcTreeNode extends TreeNode {
     private static final String TAG = "[OcTreeNode]";
 
     protected static final int MIN_OBJECT_SIZE = 5; // size > 0
@@ -95,45 +95,47 @@ public class OcTreeNode extends TreeNode implements Intersectable {
         }
     }
 
-    @Override
-    public RayIntersection onIntersection(Vector cameraPos_vec, Vector headForward_vec, float[] headView) {
+    public RayIntersection getObjectIntersection(Vector cameraPos_vec, Vector headForwardFrac_vec, float[] headView) {
         RayIntersection ret = null;
-        ArrayList<RayIntersection> rayIntersections = new ArrayList<>();
-        if (isIntersectant(cameraPos_vec, headForward_vec, headView)) {
+
+        if (hasIntersection(cameraPos_vec, headForwardFrac_vec)) {
+            ArrayList<RayIntersection> rayIntersections = new ArrayList<>();
             Set<OcTreeObject> ocTreeObjects = objects.keySet();
             for (OcTreeObject ocTreeObject : ocTreeObjects) {
-                RayIntersection rayIntersection = ocTreeObject.model.onIntersection(cameraPos_vec, headForward_vec, headView);
+                RayIntersection rayIntersection = ocTreeObject.model.getIntersection(cameraPos_vec, headView);
                 if (rayIntersection != null) {
                     rayIntersections.add(rayIntersection);
                 }
             }
+
+            int size = rayIntersections.size();
+            if (size > 0) {
+                if (size > 1) {
+                    Collections.sort(rayIntersections);
+                }
+                ret = rayIntersections.get(0);
+            }
         }
-        Collections.sort(rayIntersections);
-        if (rayIntersections.size() > 0) {
-            ret = rayIntersections.get(0);
-        }
+
         return ret;
     }
 
-    private boolean isIntersectant(Vector cameraPos_vec, Vector headForward_vec, float[] headView) {
-        double headForwardFracX = 1.0 / headForward_vec.getData(0);
-        double headForwardFracY = 1.0 / headForward_vec.getData(1);
-        double headForwardFracZ = 1.0 / headForward_vec.getData(2);
+    private boolean hasIntersection(Vector cameraPos_vec, Vector headForwardFrac_vec) {
         double tmin, tmax, tymin, tymax, tzmin, tzmax;
 
-        if (headForwardFracX >= 0) {
-            tmin = (lb[0] - cameraPos_vec.getData(0)) * headForwardFracX;
-            tmax = (rt[0] - cameraPos_vec.getData(0)) * headForwardFracX;
+        if (headForwardFrac_vec.getData(0) >= 0) {
+            tmin = (lb[0] - cameraPos_vec.getData(0)) * headForwardFrac_vec.getData(0);
+            tmax = (rt[0] - cameraPos_vec.getData(0)) * headForwardFrac_vec.getData(0);
         } else {
-            tmin = (rt[0] - cameraPos_vec.getData(0)) * headForwardFracX;
-            tmax = (lb[0] - cameraPos_vec.getData(0)) * headForwardFracX;
+            tmin = (rt[0] - cameraPos_vec.getData(0)) * headForwardFrac_vec.getData(0);
+            tmax = (lb[0] - cameraPos_vec.getData(0)) * headForwardFrac_vec.getData(0);
         }
-        if (headForwardFracY >= 0) {
-            tymin = (lb[1] - cameraPos_vec.getData(1)) * headForwardFracY;
-            tymax = (rt[1] - cameraPos_vec.getData(1)) * headForwardFracY;
+        if (headForwardFrac_vec.getData(1) >= 0) {
+            tymin = (lb[1] - cameraPos_vec.getData(1)) * headForwardFrac_vec.getData(1);
+            tymax = (rt[1] - cameraPos_vec.getData(1)) * headForwardFrac_vec.getData(1);
         } else {
-            tymin = (rt[1] - cameraPos_vec.getData(1)) * headForwardFracY;
-            tymax = (lb[1] - cameraPos_vec.getData(1)) * headForwardFracY;
+            tymin = (rt[1] - cameraPos_vec.getData(1)) * headForwardFrac_vec.getData(1);
+            tymax = (lb[1] - cameraPos_vec.getData(1)) * headForwardFrac_vec.getData(1);
         }
 
         if ((tmin > tymax) || (tymin > tmax)) {
@@ -146,12 +148,12 @@ public class OcTreeNode extends TreeNode implements Intersectable {
             tmax = tymax;
         }
 
-        if (headForwardFracZ >= 0) {
-            tzmin = (lb[2] - cameraPos_vec.getData(2)) * headForwardFracZ;
-            tzmax = (rt[2] - cameraPos_vec.getData(2)) * headForwardFracZ;
+        if (headForwardFrac_vec.getData(2) >= 0) {
+            tzmin = (lb[2] - cameraPos_vec.getData(2)) * headForwardFrac_vec.getData(2);
+            tzmax = (rt[2] - cameraPos_vec.getData(2)) * headForwardFrac_vec.getData(2);
         } else {
-            tzmin = (rt[2] - cameraPos_vec.getData(2)) * headForwardFracZ;
-            tzmax = (lb[2] - cameraPos_vec.getData(2)) * headForwardFracZ;
+            tzmin = (rt[2] - cameraPos_vec.getData(2)) * headForwardFrac_vec.getData(2);
+            tzmax = (lb[2] - cameraPos_vec.getData(2)) * headForwardFrac_vec.getData(2);
         }
 
         if ((tmin > tzmax) || (tzmin > tmax)) {

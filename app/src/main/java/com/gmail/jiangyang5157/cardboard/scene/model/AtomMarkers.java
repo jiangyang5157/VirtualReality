@@ -124,8 +124,7 @@ public class AtomMarkers extends Marker3d {
         return marker;
     }
 
-    @Override
-    public RayIntersection onIntersection(Vector cameraPos_vec, Vector headForward_vec, final float[] headView) {
+    public RayIntersection getIntersection(Vector cameraPos_vec, Vector headForwardFrac_vec, final float[] headView) {
         if (!isCreated() || !isVisible()) {
             return null;
         }
@@ -133,16 +132,20 @@ public class AtomMarkers extends Marker3d {
         RayIntersection ret = null;
         ArrayList<RayIntersection> rayIntersections = new ArrayList<>();
         for (OcTreeNode ocTreeNode : ocTreeNodes) {
-            RayIntersection rayIntersection = ocTreeNode.onIntersection(cameraPos_vec, headForward_vec, headView);
+            RayIntersection rayIntersection = ocTreeNode.getObjectIntersection(cameraPos_vec, headForwardFrac_vec, headView);
             if (rayIntersection != null) {
                 rayIntersections.add(rayIntersection);
             }
         }
 
-        Collections.sort(rayIntersections);
-        if (rayIntersections.size() > 0) {
+        int size = rayIntersections.size();
+        if (size > 0) {
+            if (size > 1) {
+                Collections.sort(rayIntersections);
+            }
             ret = rayIntersections.get(0);
         }
+
         return ret;
     }
 

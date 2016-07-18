@@ -33,6 +33,10 @@ public abstract class Panel extends Rectangle implements GlModel.BindableBuffer,
     private Vector tr_vec;
     private Vector br_vec;
 
+    private Vector tl_tr_vec;
+    private Vector tl_bl_vec;
+    private Vector normal_vec;
+
     protected final int[] buffers = new int[3];
     protected final int[] texBuffers = new int[1];
 
@@ -69,15 +73,11 @@ public abstract class Panel extends Rectangle implements GlModel.BindableBuffer,
         buildCorners(up, right, position);
     }
 
-    @Override
-    public RayIntersection onIntersection(Vector cameraPos_vec, Vector headForward_vec, final float[] headView) {
+    public RayIntersection getIntersection(Vector cameraPos_vec, Vector headForward_vec) {
         if (!isCreated() || !isVisible()) {
             return null;
         }
 
-        Vector tl_tr_vec = new Vector3d(tr_vec.minus(tl_vec));
-        Vector tl_bl_vec = new Vector3d(bl_vec.minus(tl_vec));
-        Vector normal_vec = ((Vector3d) tl_tr_vec).cross((Vector3d) tl_bl_vec).direction();
         Vector ray_vec = (cameraPos_vec.plus(headForward_vec)).minus(cameraPos_vec).direction();
         double ndotdRay = normal_vec.dot(ray_vec);
         if (Math.abs(ndotdRay) < Vector.EPSILON) {
@@ -142,6 +142,10 @@ public abstract class Panel extends Rectangle implements GlModel.BindableBuffer,
         bl_vec = bl_vec.plus(pos_vec);
         tr_vec = tr_vec.plus(pos_vec);
         br_vec = br_vec.plus(pos_vec);
+
+        tl_tr_vec = new Vector3d(tr_vec.minus(tl_vec));
+        tl_bl_vec = new Vector3d(bl_vec.minus(tl_vec));
+        normal_vec = ((Vector3d) tl_tr_vec).cross((Vector3d) tl_bl_vec).direction();
     }
 
     @Override

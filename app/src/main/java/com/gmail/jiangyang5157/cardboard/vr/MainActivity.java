@@ -166,10 +166,11 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         float[] headForward = head.getForward();
         Vector cameraPos_vec = new Vector3d(cameraPos[0], cameraPos[1], cameraPos[2]);
         Vector headForward_vec = new Vector3d(headForward[0], headForward[1], headForward[2]);
+        Vector headForwardFrac_vec = new Vector3d(1.0 / headForward[0], 1.0 / headForward[1], 1.0 / headForward[2]);
 
         RayIntersection rayIntersection = null;
         if (kmlChooserView != null) {
-            rayIntersection = kmlChooserView.onIntersection(cameraPos_vec, headForward_vec, head.getHeadView());
+            rayIntersection = kmlChooserView.getIntersection(cameraPos_vec, headForward_vec);
             if (rayIntersection == null) {
                 if (kmlChooserView.isCreated()) {
                     kmlChooserView.destroy();
@@ -179,7 +180,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         }
         if (rayIntersection == null) {
             if (markerDetailView != null) {
-                rayIntersection = markerDetailView.onIntersection(cameraPos_vec, headForward_vec, head.getHeadView());
+                rayIntersection = markerDetailView.getIntersection(cameraPos_vec, headForward_vec);
                 if (rayIntersection == null) {
                     if (markerDetailView.isCreated()) {
                         markerDetailView.destroy();
@@ -194,14 +195,15 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         }
         if (rayIntersection == null) {
             if (atomMap != null) {
-                rayIntersection = atomMap.onIntersection(cameraPos_vec, headForward_vec, head.getHeadView());
+                rayIntersection = atomMap.getIntersection(cameraPos_vec, headForwardFrac_vec, head.getHeadView());
             }
         }
         if (rayIntersection == null) {
             if (earth != null) {
-                rayIntersection = earth.onIntersection(cameraPos_vec, headForward_vec, head.getHeadView());
+                rayIntersection = earth.getIntersection(cameraPos_vec, headForward_vec);
             }
         }
+
         return rayIntersection;
     }
 

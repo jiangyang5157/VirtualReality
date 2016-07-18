@@ -105,8 +105,8 @@ public class TextField extends Panel {
     }
 
     @Override
-    public RayIntersection onIntersection(Vector cameraPos_vec, Vector headForward_vec, final float[] headView) {
-        RayIntersection ret = super.onIntersection(cameraPos_vec, headForward_vec, headView);
+    public RayIntersection getIntersection(Vector cameraPos_vec, Vector headForward_vec) {
+        RayIntersection ret = super.getIntersection(cameraPos_vec, headForward_vec);
         boolean isFocused = ret != null && onClickListener != null;
         onFocuse(isFocused);
         return ret;

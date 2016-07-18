@@ -93,24 +93,28 @@ public abstract class Dialog extends Panel {
     }
 
     @Override
-    public RayIntersection onIntersection(Vector cameraPos_vec, Vector headForward_vec, final float[] headView) {
+    public RayIntersection getIntersection(Vector cameraPos_vec, Vector headForward_vec) {
         if (!isCreated() || !isVisible()) {
             return null;
         }
-        RayIntersection ret;
 
+        RayIntersection ret = null;
         ArrayList<RayIntersection> rayIntersections = new ArrayList<>();
         for (Panel panel : panels) {
-            RayIntersection rayIntersection = panel.onIntersection(cameraPos_vec, headForward_vec, headView);
+            RayIntersection rayIntersection = panel.getIntersection(cameraPos_vec, headForward_vec);
             if (rayIntersection != null) {
                 rayIntersections.add(rayIntersection);
             }
         }
-        Collections.sort(rayIntersections);
-        if (rayIntersections.size() > 0) {
+
+        int size = rayIntersections.size();
+        if (size > 0) {
+            if (size > 1) {
+                Collections.sort(rayIntersections);
+            }
             ret = rayIntersections.get(0);
         } else {
-            ret = super.onIntersection(cameraPos_vec, headForward_vec, headView);
+            ret = super.getIntersection(cameraPos_vec, headForward_vec);
         }
 
         return ret;

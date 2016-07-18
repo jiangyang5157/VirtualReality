@@ -55,8 +55,7 @@ public class Marker3d extends Icosphere {
                 (float) coordinate.ecef[2]);
     }
 
-    @Override
-    public RayIntersection onIntersection(Vector cameraPos_vec, Vector headForward_vec, final float[] headView) {
+    public RayIntersection getIntersection(Vector cameraPos_vec, final float[] headView) {
         if (!isCreated() || !isVisible()) {
             return null;
         }
