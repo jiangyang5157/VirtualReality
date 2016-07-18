@@ -64,16 +64,18 @@ public abstract class Dialog extends Panel {
 
     @Override
     public void update(float[] view, float[] perspective) {
-        for (Panel panel : panels) {
-            panel.update(view, perspective);
+        int iSize = panels.size();
+        for(int i = 0; i < iSize; i++){
+            panels.get(i).update(view, perspective);
         }
         super.update(view, perspective);
     }
 
     @Override
     public void draw() {
-        for (Panel panel : panels) {
-            panel.draw();
+        int iSize = panels.size();
+        for(int i = 0; i < iSize; i++){
+            panels.get(i).draw();
         }
         super.draw();
     }
@@ -81,8 +83,9 @@ public abstract class Dialog extends Panel {
     @Override
     public void destroy() {
         Log.d(TAG, "destroy");
-        for (Panel panel : panels) {
-            panel.destroy();
+        int iSize = panels.size();
+        for(int i = 0; i < iSize; i++){
+            panels.get(i).destroy();
         }
         panels.clear();
         super.destroy();
@@ -100,8 +103,9 @@ public abstract class Dialog extends Panel {
 
         RayIntersection ret = null;
         ArrayList<RayIntersection> rayIntersections = new ArrayList<>();
-        for (Panel panel : panels) {
-            RayIntersection rayIntersection = panel.getIntersection(cameraPos_vec, headForward_vec);
+        int iSize = panels.size();
+        for(int i = 0; i < iSize; i++) {
+            RayIntersection rayIntersection = panels.get(i).getIntersection(cameraPos_vec, headForward_vec);
             if (rayIntersection != null) {
                 rayIntersections.add(rayIntersection);
             }
@@ -122,8 +126,9 @@ public abstract class Dialog extends Panel {
 
     protected void adjustBounds(float width) {
         float h = 0;
-        for (Panel panel : panels) {
-            h += panel.height;
+        int iSize = panels.size();
+        for(int i = 0; i < iSize; i++){
+            h += panels.get(i).height;
         }
         this.width = width;
         this.height = h;
@@ -138,7 +143,11 @@ public abstract class Dialog extends Panel {
         cameraPos[0] += up[0] * SCALED_HALF_HEIGHT;
         cameraPos[1] += up[1] * SCALED_HALF_HEIGHT;
         cameraPos[2] += up[2] * SCALED_HALF_HEIGHT;
-        for (Panel panel : panels) {
+
+        int iSize = panels.size();
+        for(int i = 0; i < iSize; i++){
+            Panel panel = panels.get(i);
+
             final float SCALED_PANEL_HALF_HEIGHT = panel.height / 2 * scale;
             cameraPos[0] -= up[0] * SCALED_PANEL_HALF_HEIGHT;
             cameraPos[1] -= up[1] * SCALED_PANEL_HALF_HEIGHT;
