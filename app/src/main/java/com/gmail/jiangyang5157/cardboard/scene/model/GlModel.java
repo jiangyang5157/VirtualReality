@@ -10,8 +10,6 @@ import android.support.annotation.NonNull;
 import android.util.ArrayMap;
 
 import com.gmail.jiangyang5157.cardboard.scene.Lighting;
-import com.gmail.jiangyang5157.cardboard.scene.RayIntersection;
-import com.gmail.jiangyang5157.tookit.math.Vector;
 import com.gmail.jiangyang5157.tookit.opengl.Model;
 import com.gmail.jiangyang5157.tookit.opengl.GlUtils;
 
