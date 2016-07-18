@@ -115,7 +115,6 @@ public class OcTreeNode extends TreeNode {
                 }
                 ret = rayIntersections.get(0);
             }
-
         }
 
         return ret;
