@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class OcTree implements TreePhase {
     private static final String TAG = "[OcTree]";
 
-    protected static final int MAX_DEPTH = 16;
+    protected static final int MAX_DEPTH = 32;
 
     private OcTreeNode node;
 

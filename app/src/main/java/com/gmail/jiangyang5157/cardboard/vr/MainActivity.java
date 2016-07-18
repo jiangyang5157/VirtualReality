@@ -26,6 +26,7 @@ import com.gmail.jiangyang5157.cardboard.scene.model.GlModel;
 import com.gmail.jiangyang5157.cardboard.scene.model.MarkerDetailView;
 import com.gmail.jiangyang5157.tookit.app.AppUtils;
 import com.gmail.jiangyang5157.tookit.app.DeviceUtils;
+import com.gmail.jiangyang5157.tookit.app.Performance;
 import com.gmail.jiangyang5157.tookit.data.io.IoUtils;
 import com.gmail.jiangyang5157.tookit.math.Vector;
 import com.gmail.jiangyang5157.tookit.math.Vector3d;
@@ -296,7 +297,11 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         if (earth != null) {
             head.adjustPosition(earth);
         }
+        Log.d(TAG, "getIntersection()");
+        Performance.getInstance().addBreakpoint();
         ray.setIntersections(getIntersection());
+        Performance.getInstance().addBreakpoint();
+        Performance.getInstance().printEvaluationInMilliseconds();
         ray.update();
     }
 
@@ -312,8 +317,16 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
 
         float[] perspective = eye.getPerspective(Camera.Z_NEAR, Camera.Z_FAR);
 
+        Log.d(TAG, "updateScene()"); // 13ms
+        Performance.getInstance().addBreakpoint();
         updateScene(head.getCamera().getView(), perspective);
+        Performance.getInstance().addBreakpoint();
+        Performance.getInstance().printEvaluationInMilliseconds();
+        Log.d(TAG, "drawScene()"); // 9ms
+        Performance.getInstance().addBreakpoint();
         drawScene();
+        Performance.getInstance().addBreakpoint();
+        Performance.getInstance().printEvaluationInMilliseconds();
     }
 
     @Override
