@@ -55,7 +55,9 @@ public class KmlChooserView extends Dialog {
         shaders.put(GLES20.GL_FRAGMENT_SHADER, R.raw.panel_fragment_shader);
 
         String lastKmlFileName = Constant.getLastKmlFileName(context);
-        for (final String fileName : fileNames) {
+        int iSize = fileNames.length;
+        for (int i = 0; i < iSize; i++){
+            final String fileName = fileNames[i];
             TextField tf = new TextField(context);
             float textSize = TextField.TEXT_SIZE_TINY;
             tf.setText(fileName);

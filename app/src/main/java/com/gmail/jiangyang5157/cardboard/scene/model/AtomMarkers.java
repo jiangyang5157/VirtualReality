@@ -41,7 +41,9 @@ public class AtomMarkers extends Marker3d {
         ocTreeNodes = ocTree.getValidNodes();
 //        Log.d(TAG, "ocTree: " + ocTree.toString() + ", valid ocTreeNodes: " + ocTreeNodes.size());
 
-        for (AtomMarker marker : markers) {
+        int iSize = markers.size();
+        for(int i = 0; i < iSize; i++){
+            AtomMarker marker = markers.get(i);
             marker.create(program);
             marker.mvMatrixHandle = mvMatrixHandle;
             marker.mvpMatrixHandle = mvpMatrixHandle;
@@ -74,8 +76,9 @@ public class AtomMarkers extends Marker3d {
 
         GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, indicesBuffHandle);
 
-        for (AtomMarker marker : markers) {
-            marker.draw();
+        int iSize = markers.size();
+        for(int i = 0; i < iSize; i++){
+            markers.get(i).draw();
         }
 
         GLES20.glDisableVertexAttribArray(vertexHandle);
@@ -87,8 +90,9 @@ public class AtomMarkers extends Marker3d {
 
     @Override
     public void update(float[] view, float[] perspective) {
-        for (AtomMarker marker : markers) {
-            marker.update(view, perspective);
+        int iSize = markers.size();
+        for(int i = 0; i < iSize; i++){
+           markers.get(i).update(view, perspective);
         }
     }
 
@@ -131,8 +135,9 @@ public class AtomMarkers extends Marker3d {
 
         RayIntersection ret = null;
         ArrayList<RayIntersection> rayIntersections = new ArrayList<>();
-        for (OcTreeNode ocTreeNode : ocTreeNodes) {
-            RayIntersection rayIntersection = ocTreeNode.getObjectIntersection(cameraPos_vec, headForwardFrac_vec, headView);
+        int iSize = ocTreeNodes.size();
+        for (int i = 0; i < iSize; i++){
+            RayIntersection rayIntersection = ocTreeNodes.get(i).getObjectIntersection(cameraPos_vec, headForwardFrac_vec, headView);
             if (rayIntersection != null) {
                 rayIntersections.add(rayIntersection);
             }
@@ -162,8 +167,9 @@ public class AtomMarkers extends Marker3d {
     }
 
     public void destoryMarks() {
-        for (AtomMarker marker : markers) {
-            marker.destroy();
+        int iSize = markers.size();
+        for(int i = 0; i < iSize; i++){
+            markers.get(i).destroy();
         }
         markers.clear();
     }
