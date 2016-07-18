@@ -9,12 +9,11 @@ import com.android.volley.VolleyError;
 import com.gmail.jiangyang5157.cardboard.kml.KmlLayer;
 import com.gmail.jiangyang5157.cardboard.net.Downloader;
 import com.gmail.jiangyang5157.cardboard.scene.Creation;
-import com.gmail.jiangyang5157.cardboard.scene.Head;
 import com.gmail.jiangyang5157.cardboard.scene.RayIntersection;
 import com.gmail.jiangyang5157.cardboard.scene.Lighting;
 import com.gmail.jiangyang5157.cardboard.vr.Constant;
-import com.gmail.jiangyang5157.cardboard.vr.R;
 import com.gmail.jiangyang5157.tookit.app.AppUtils;
+import com.gmail.jiangyang5157.tookit.math.Vector;
 
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -135,11 +134,11 @@ public class AtomMap extends GlModel implements Creation {
     }
 
     @Override
-    public RayIntersection onIntersection(Head head) {
+    public RayIntersection onIntersection(Vector cameraPos_vec, Vector headForward_vec, final float[] headView) {
         if (!isCreated() || !isVisible()) {
             return null;
         }
-        return markers.onIntersection(head);
+        return markers.onIntersection(cameraPos_vec, headForward_vec, headView);
     }
 
     @Override

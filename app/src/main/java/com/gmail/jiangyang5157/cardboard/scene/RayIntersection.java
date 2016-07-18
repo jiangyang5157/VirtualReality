@@ -11,7 +11,7 @@ import com.gmail.jiangyang5157.cardboard.scene.model.GlModel;
 public class RayIntersection implements Comparable<RayIntersection> {
 
     private final GlModel model;
-    // t is the distance along the ray to the closest intersection
+    // t is the "distance" along the ray to the closest intersection
     private final double t;
 
     public RayIntersection(GlModel model, double t) {

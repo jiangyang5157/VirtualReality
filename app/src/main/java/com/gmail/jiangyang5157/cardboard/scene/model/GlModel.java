@@ -10,10 +10,10 @@ import android.support.annotation.NonNull;
 import android.util.ArrayMap;
 
 import com.gmail.jiangyang5157.cardboard.scene.Focuseable;
-import com.gmail.jiangyang5157.cardboard.scene.Head;
 import com.gmail.jiangyang5157.cardboard.scene.Intersectable;
 import com.gmail.jiangyang5157.cardboard.scene.Lighting;
 import com.gmail.jiangyang5157.cardboard.scene.RayIntersection;
+import com.gmail.jiangyang5157.tookit.math.Vector;
 import com.gmail.jiangyang5157.tookit.opengl.Model;
 import com.gmail.jiangyang5157.tookit.opengl.GlUtils;
 
@@ -115,7 +115,7 @@ public abstract class GlModel extends Model implements Intersectable, Focuseable
     }
 
     @Override
-    public RayIntersection onIntersection(Head head) {
+    public RayIntersection onIntersection(Vector cameraPos_vec, Vector headForward_vec, float[] headView) {
         return null;
     }
 

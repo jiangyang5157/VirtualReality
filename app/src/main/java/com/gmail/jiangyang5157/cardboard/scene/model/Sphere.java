@@ -20,20 +20,18 @@ public abstract class Sphere extends GlModel implements GlModel.BindableBuffer {
     }
 
     @Override
-    public RayIntersection onIntersection(Head head) {
+    public RayIntersection onIntersection(Vector cameraPos_vec, Vector headForward_vec, final float[] headView) {
         if (!isCreated() || !isVisible()) {
             return null;
         }
 
-        float[] forward = head.getForward();
-        Vector forward_vec = new Vector3d(forward[0], forward[1], forward[2]);
         Vector pos_camera_vec = new Vector3d(
-                head.getCamera().getX() - getX(),
-                head.getCamera().getY() - getY(),
-                head.getCamera().getZ() - getZ()
+                cameraPos_vec.getData(0) - getX(),
+                cameraPos_vec.getData(1) - getY(),
+                cameraPos_vec.getData(2) - getZ()
         );
 
-        final double b = forward_vec.dot(pos_camera_vec);
+        final double b = headForward_vec.dot(pos_camera_vec);
         final double c = pos_camera_vec.dot(pos_camera_vec) - (radius * radius);
 
         // solve the quadratic equation

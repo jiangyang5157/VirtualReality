@@ -27,6 +27,8 @@ import com.gmail.jiangyang5157.cardboard.scene.model.MarkerDetailView;
 import com.gmail.jiangyang5157.tookit.app.AppUtils;
 import com.gmail.jiangyang5157.tookit.app.DeviceUtils;
 import com.gmail.jiangyang5157.tookit.data.io.IoUtils;
+import com.gmail.jiangyang5157.tookit.math.Vector;
+import com.gmail.jiangyang5157.tookit.math.Vector3d;
 import com.google.vr.sdk.base.Eye;
 import com.google.vr.sdk.base.GvrView;
 import com.google.vr.sdk.base.GvrActivity;
@@ -160,9 +162,14 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
     }
 
     private RayIntersection getIntersection() {
+        float[] cameraPos = head.getCamera().getPosition();
+        float[] headForward = head.getForward();
+        Vector cameraPos_vec = new Vector3d(cameraPos[0], cameraPos[1], cameraPos[2]);
+        Vector headForward_vec = new Vector3d(headForward[0], headForward[1], headForward[2]);
+
         RayIntersection rayIntersection = null;
         if (kmlChooserView != null) {
-            rayIntersection = kmlChooserView.onIntersection(head);
+            rayIntersection = kmlChooserView.onIntersection(cameraPos_vec, headForward_vec, head.getHeadView());
             if (rayIntersection == null) {
                 if (kmlChooserView.isCreated()) {
                     kmlChooserView.destroy();
@@ -172,7 +179,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         }
         if (rayIntersection == null) {
             if (markerDetailView != null) {
-                rayIntersection = markerDetailView.onIntersection(head);
+                rayIntersection = markerDetailView.onIntersection(cameraPos_vec, headForward_vec, head.getHeadView());
                 if (rayIntersection == null) {
                     if (markerDetailView.isCreated()) {
                         markerDetailView.destroy();
@@ -187,12 +194,12 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         }
         if (rayIntersection == null) {
             if (atomMap != null) {
-                rayIntersection = atomMap.onIntersection(head);
+                rayIntersection = atomMap.onIntersection(cameraPos_vec, headForward_vec, head.getHeadView());
             }
         }
         if (rayIntersection == null) {
             if (earth != null) {
-                rayIntersection = earth.onIntersection(head);
+                rayIntersection = earth.onIntersection(cameraPos_vec, headForward_vec, head.getHeadView());
             }
         }
         return rayIntersection;

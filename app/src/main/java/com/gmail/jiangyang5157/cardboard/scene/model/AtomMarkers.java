@@ -4,12 +4,12 @@ import android.content.Context;
 import android.opengl.GLES20;
 
 import com.gmail.jiangyang5157.cardboard.kml.KmlPlacemark;
-import com.gmail.jiangyang5157.cardboard.scene.Head;
 import com.gmail.jiangyang5157.cardboard.scene.RayIntersection;
 import com.gmail.jiangyang5157.cardboard.scene.Lighting;
 import com.gmail.jiangyang5157.cardboard.scene.tree.OcTree;
 import com.gmail.jiangyang5157.cardboard.scene.tree.OcTreeNode;
 import com.gmail.jiangyang5157.cardboard.scene.tree.OcTreeObject;
+import com.gmail.jiangyang5157.tookit.math.Vector;
 import com.gmail.jiangyang5157.tookit.opengl.GlUtils;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -125,7 +125,7 @@ public class AtomMarkers extends Marker3d {
     }
 
     @Override
-    public RayIntersection onIntersection(Head head) {
+    public RayIntersection onIntersection(Vector cameraPos_vec, Vector headForward_vec, final float[] headView) {
         if (!isCreated() || !isVisible()) {
             return null;
         }
@@ -133,7 +133,7 @@ public class AtomMarkers extends Marker3d {
         RayIntersection ret = null;
         ArrayList<RayIntersection> rayIntersections = new ArrayList<>();
         for (OcTreeNode ocTreeNode : ocTreeNodes) {
-            RayIntersection rayIntersection = ocTreeNode.onIntersection(head);
+            RayIntersection rayIntersection = ocTreeNode.onIntersection(cameraPos_vec, headForward_vec, headView);
             if (rayIntersection != null) {
                 rayIntersections.add(rayIntersection);
             }

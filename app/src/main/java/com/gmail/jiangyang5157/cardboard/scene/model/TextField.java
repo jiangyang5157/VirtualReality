@@ -12,9 +12,9 @@ import android.text.TextPaint;
 import android.util.Log;
 import android.util.TypedValue;
 
-import com.gmail.jiangyang5157.cardboard.scene.Head;
 import com.gmail.jiangyang5157.cardboard.scene.RayIntersection;
 import com.gmail.jiangyang5157.tookit.app.AppUtils;
+import com.gmail.jiangyang5157.tookit.math.Vector;
 
 /**
  * @author Yang
@@ -105,8 +105,8 @@ public class TextField extends Panel {
     }
 
     @Override
-    public RayIntersection onIntersection(Head head) {
-        RayIntersection ret = super.onIntersection(head);
+    public RayIntersection onIntersection(Vector cameraPos_vec, Vector headForward_vec, final float[] headView) {
+        RayIntersection ret = super.onIntersection(cameraPos_vec, headForward_vec, headView);
         boolean isFocused = ret != null && onClickListener != null;
         onFocuse(isFocused);
         return ret;

@@ -7,8 +7,8 @@ import android.opengl.GLUtils;
 import android.util.Log;
 
 import com.gmail.jiangyang5157.cardboard.scene.RayIntersection;
-import com.gmail.jiangyang5157.cardboard.scene.Head;
 import com.gmail.jiangyang5157.tookit.app.AppUtils;
+import com.gmail.jiangyang5157.tookit.math.Vector;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -93,7 +93,7 @@ public abstract class Dialog extends Panel {
     }
 
     @Override
-    public RayIntersection onIntersection(Head head) {
+    public RayIntersection onIntersection(Vector cameraPos_vec, Vector headForward_vec, final float[] headView) {
         if (!isCreated() || !isVisible()) {
             return null;
         }
@@ -101,7 +101,7 @@ public abstract class Dialog extends Panel {
 
         ArrayList<RayIntersection> rayIntersections = new ArrayList<>();
         for (Panel panel : panels) {
-            RayIntersection rayIntersection = panel.onIntersection(head);
+            RayIntersection rayIntersection = panel.onIntersection(cameraPos_vec, headForward_vec, headView);
             if (rayIntersection != null) {
                 rayIntersections.add(rayIntersection);
             }
@@ -110,7 +110,7 @@ public abstract class Dialog extends Panel {
         if (rayIntersections.size() > 0) {
             ret = rayIntersections.get(0);
         } else {
-            ret = super.onIntersection(head);
+            ret = super.onIntersection(cameraPos_vec, headForward_vec, headView);
         }
 
         return ret;

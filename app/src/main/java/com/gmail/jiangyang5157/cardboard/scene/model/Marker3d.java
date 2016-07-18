@@ -58,22 +58,22 @@ public class Marker3d extends Icosphere {
     }
 
     @Override
-    public RayIntersection onIntersection(Head head) {
+    public RayIntersection onIntersection(Vector cameraPos_vec, Vector headForward_vec, final float[] headView) {
         if (!isCreated() || !isVisible()) {
             return null;
         }
 
-        float[] camera_pos = new float[]{
-                getX() - head.getCamera().getX(),
-                getY() - head.getCamera().getY(),
-                getZ() - head.getCamera().getZ()
+        double[] camera_pos = new double[]{
+                getX() - cameraPos_vec.getData(0),
+                getY() - cameraPos_vec.getData(1),
+                getZ() - cameraPos_vec.getData(2)
         };
         // Convenience vector for extracting the position from a matrix via multiplication.
-        float[] posMultiply = new float[]{camera_pos[0], camera_pos[1], camera_pos[2], 0.0f};
+        float[] posMultiply = new float[]{(float) camera_pos[0], (float) camera_pos[1], (float) camera_pos[2], 0.0f};
         // position in camera space
         float[] posInCameraSpace = new float[4];
         // Convert object space to camera space - Use the headView from onNewFrame.
-        Matrix.multiplyMM(modelView, 0, head.getHeadView(), 0, model, 0);
+        Matrix.multiplyMM(modelView, 0, headView, 0, model, 0);
         Matrix.multiplyMV(posInCameraSpace, 0, modelView, 0, posMultiply, 0);
 
         double pitch = Math.atan2(posInCameraSpace[1], -posInCameraSpace[2]);
@@ -83,8 +83,9 @@ public class Marker3d extends Icosphere {
         if (Math.abs(pitch) > PITCH_LIMIT || Math.abs(yaw) > YAW_LIMIT) {
             return null;
         } else {
-            Vector camera_pos_vec = new Vector3d(camera_pos[0], camera_pos[1], camera_pos[2]);
-            return new RayIntersection(this, camera_pos_vec.length() - radius);
+            double dot = camera_pos[0] * camera_pos[0] + camera_pos[1] * camera_pos[1] + camera_pos[2] * camera_pos[2];
+            double t = Math.sqrt(dot) - radius;
+            return new RayIntersection(this, t);
         }
     }
 

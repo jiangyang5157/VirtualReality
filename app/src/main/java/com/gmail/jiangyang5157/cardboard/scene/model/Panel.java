@@ -70,28 +70,22 @@ public abstract class Panel extends Rectangle implements GlModel.BindableBuffer,
     }
 
     @Override
-    public RayIntersection onIntersection(Head head) {
+    public RayIntersection onIntersection(Vector cameraPos_vec, Vector headForward_vec, final float[] headView) {
         if (!isCreated() || !isVisible()) {
             return null;
         }
 
-        float[] forward = head.getForward();
-        Vector cameraPos_vec = new Vector(head.getCamera().getX(), head.getCamera().getY(), head.getCamera().getZ());
-        Vector forward_vec = new Vector(forward[0], forward[1], forward[2]);
-
         Vector tl_tr_vec = new Vector3d(tr_vec.minus(tl_vec));
         Vector tl_bl_vec = new Vector3d(bl_vec.minus(tl_vec));
         Vector normal_vec = ((Vector3d) tl_tr_vec).cross((Vector3d) tl_bl_vec).direction();
-        Vector ray_vec = (cameraPos_vec.plus(forward_vec)).minus(cameraPos_vec).direction();
+        Vector ray_vec = (cameraPos_vec.plus(headForward_vec)).minus(cameraPos_vec).direction();
         double ndotdRay = normal_vec.dot(ray_vec);
         if (Math.abs(ndotdRay) < Vector.EPSILON) {
-            // perpendicular
-            return null;
+            return null; // perpendicular
         }
         double t = normal_vec.dot(tl_vec.minus(cameraPos_vec)) / ndotdRay;
         if (t <= 0) {
-            // eliminate squares behind the ray
-            return null;
+            return null; // behind the ray
         }
 
         Vector iPlane = cameraPos_vec.plus(ray_vec.times(t));
@@ -101,8 +95,7 @@ public abstract class Panel extends Rectangle implements GlModel.BindableBuffer,
 
         boolean intersecting = u >= 0 && u <= tl_tr_vec.dot(tl_tr_vec) && v >= 0 && v <= tl_bl_vec.dot(tl_bl_vec);
         if (!intersecting) {
-            // intersection is out of boundary
-            return null;
+            return null; // intersection is out of boundary
         }
 
         return new RayIntersection(this, t);

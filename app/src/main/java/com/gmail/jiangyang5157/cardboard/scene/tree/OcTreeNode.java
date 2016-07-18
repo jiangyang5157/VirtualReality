@@ -86,13 +86,13 @@ public class OcTreeNode extends TreeNode implements Intersectable {
     }
 
     @Override
-    public RayIntersection onIntersection(Head head) {
+    public RayIntersection onIntersection(Vector cameraPos_vec, Vector headForward_vec, float[] headView) {
         RayIntersection ret = null;
         ArrayList<RayIntersection> rayIntersections = new ArrayList<>();
-        if (isIntersectant(head)) {
+        if (isIntersectant(cameraPos_vec, headForward_vec, headView)) {
             Set<OcTreeObject> ocTreeObjects = objects.keySet();
             for (OcTreeObject ocTreeObject : ocTreeObjects) {
-                RayIntersection rayIntersection = ocTreeObject.model.onIntersection(head);
+                RayIntersection rayIntersection = ocTreeObject.model.onIntersection(cameraPos_vec, headForward_vec, headView);
                 if (rayIntersection != null) {
                     rayIntersections.add(rayIntersection);
                 }
@@ -105,13 +105,44 @@ public class OcTreeNode extends TreeNode implements Intersectable {
         return ret;
     }
 
-    private boolean isIntersectant(Head head) {
-        //ray-intersection-cube
-//        float[] forward = head.getForward();
+    private boolean isIntersectant(Vector cameraPos_vec, Vector headForward_vec, float[] headView) {
+        // ray-intersection-sphere
+//        Vector pos_camera_vec = new Vector3d(
+//                cameraPos_vec.getData(0) - center[0],
+//                cameraPos_vec.getData(1) - center[1],
+//                cameraPos_vec.getData(2) - center[2]
+//        );
 //
-//        double dirfracX = 1.0 / forward[0];
-//        double dirfracY = 1.0 / forward[1];
-//        double dirfracZ = 1.0 / forward[2];
+//        double stepPower2 = step * step;
+//        double twoStepPower2 = stepPower2 + stepPower2;
+//        double threeStepPower2 = twoStepPower2 + stepPower2;
+//        double radius = Math.sqrt(threeStepPower2);
+//        final double b = headForward_vec.dot(pos_camera_vec);
+//        final double c = pos_camera_vec.dot(pos_camera_vec) - (radius * radius);
+//
+//        // solve the quadratic equation
+//        final double f = b * b - c;
+//        if (f <= Vector.EPSILON) {
+//            // ray misses sphere
+//            return false;
+//        }
+//
+//        final double sqrtF = Math.sqrt(f);
+//        final double t0 = -b + sqrtF;
+//        final double t1 = -b - sqrtF;
+//
+//        // pick the smaller of the two results if both are positive
+//        final double t = t0 < 0.0f ? Math.max(t1, 0.0f) : (t1 < 0.0f ? t0 : Math.min(t0, t1));
+//        if (t == 0) {
+//            // both intersections are behind the matrix
+//            return false;
+//        }
+//        return true;
+
+        //ray-intersection-cube
+//        double headForwardFracX = 1.0 / headForward_vec.getData(0);
+//        double headForwardFracY = 1.0 / headForward_vec.getData(1);
+//        double headForwardFracZ = 1.0 / headForward_vec.getData(2);
 //
 //        double lbX = center[0] - step;
 //        double lbY = center[1] - step;
@@ -121,65 +152,61 @@ public class OcTreeNode extends TreeNode implements Intersectable {
 //        double rtY = center[1] + step;
 //        double rtZ = center[2] + step;
 //
-//        double t1 = (lbX - head.getCamera().getX()) * dirfracX;
-//        double t2 = (rtX - head.getCamera().getX()) * dirfracX;
-//        double t3 = (lbY - head.getCamera().getY()) * dirfracY;
-//        double t4 = (rtY - head.getCamera().getY()) * dirfracY;
-//        double t5 = (lbZ - head.getCamera().getZ()) * dirfracZ;
-//        double t6 = (rtZ - head.getCamera().getZ()) * dirfracZ;
+//        double t1 = (lbX - cameraPos_vec.getData(0)) * headForwardFracX;
+//        double t2 = (rtX - cameraPos_vec.getData(0)) * headForwardFracX;
+//        double t3 = (lbY - cameraPos_vec.getData(1)) * headForwardFracY;
+//        double t4 = (rtY - cameraPos_vec.getData(1)) * headForwardFracY;
+//        double t5 = (lbZ - cameraPos_vec.getData(2)) * headForwardFracZ;
+//        double t6 = (rtZ - cameraPos_vec.getData(2)) * headForwardFracZ;
 //
 //        double tmin = Math.max(Math.max(Math.min(t1, t2), Math.min(t3, t4)), Math.min(t5, t6));
 //        double tmax = Math.min(Math.min(Math.max(t1, t2), Math.max(t3, t4)), Math.max(t5, t6));
 //
 //        double t;
 //        if (tmax < 0) {
-//            // ray is intersecting AABB, but whole AABB is behind us
 //            t = tmax;
-//            return false;
+//            return false; // ray is intersecting AABB, but whole AABB is behind us
 //        }
-//
 //        if (tmin > tmax) {
-//            // ray doesn't intersect AABB
 //            t = tmax;
-//            return false;
+//            return false;  // ray doesn't intersect AABB
 //        }
-//
 //        t = tmin;
 //        return true;
 
-        // ray-intersection-sphere
-        float[] forward = head.getForward();
-        Vector forward_vec = new Vector3d(forward[0], forward[1], forward[2]);
-        Vector pos_camera_vec = new Vector3d(
-                head.getCamera().getX() - center[0],
-                head.getCamera().getY() - center[1],
-                head.getCamera().getZ() - center[2]
-        );
+        //ray-intersection-cube 2
+        double headForwardFracX = 1.0 / headForward_vec.getData(0);
+        double headForwardFracY = 1.0 / headForward_vec.getData(1);
+        double headForwardFracZ = 1.0 / headForward_vec.getData(2);
 
-        double stepPower2 = step * step;
-        double twoStepPower2 = stepPower2 + stepPower2;
-        double threeStepPower2 = twoStepPower2 + stepPower2;
-        double radius = Math.sqrt(threeStepPower2);
-        final double b = forward_vec.dot(pos_camera_vec);
-        final double c = pos_camera_vec.dot(pos_camera_vec) - (radius * radius);
+        double lbX = center[0] - step;
+        double lbY = center[1] - step;
+        double lbZ = center[2] - step;
 
-        // solve the quadratic equation
-        final double f = b * b - c;
-        if (f <= Vector.EPSILON) {
-            // ray misses sphere
-            return false;
+        double rtX = center[0] + step;
+        double rtY = center[1] + step;
+        double rtZ = center[2] + step;
+
+        double t1 = (lbX - cameraPos_vec.getData(0)) * headForwardFracX;
+        double t2 = (rtX - cameraPos_vec.getData(0)) * headForwardFracX;
+        double t3 = (lbY - cameraPos_vec.getData(1)) * headForwardFracY;
+        double t4 = (rtY - cameraPos_vec.getData(1)) * headForwardFracY;
+        double t5 = (lbZ - cameraPos_vec.getData(2)) * headForwardFracZ;
+        double t6 = (rtZ - cameraPos_vec.getData(2)) * headForwardFracZ;
+
+        double tmin = Math.max(Math.max(Math.min(t1, t2), Math.min(t3, t4)), Math.min(t5, t6));
+        double tmax = Math.min(Math.min(Math.max(t1, t2), Math.max(t3, t4)), Math.max(t5, t6));
+
+        double t;
+        if (tmax < 0) {
+            t = tmax;
+            return false; // ray is intersecting AABB, but whole AABB is behind us
         }
-
-        final double sqrtF = Math.sqrt(f);
-        final double t0 = -b + sqrtF;
-        final double t1 = -b - sqrtF;
-
-        // pick the smaller of the two results if both are positive
-        final double t = t0 < 0.0f ? Math.max(t1, 0.0f) : (t1 < 0.0f ? t0 : Math.min(t0, t1));
-        if (t == 0) {
-            // both intersections are behind the matrix
-            return false;
+        if (tmin > tmax) {
+            t = tmax;
+            return false;  // ray doesn't intersect AABB
         }
+        t = tmin;
         return true;
     }
 
