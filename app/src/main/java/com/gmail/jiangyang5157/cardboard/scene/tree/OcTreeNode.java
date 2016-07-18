@@ -25,6 +25,8 @@ public class OcTreeNode extends TreeNode implements Intersectable {
 
     protected float[] center; // center position of this node
     protected float step; // half of edge's length of this node
+    protected float[] lb; // lb position of this node
+    protected float[] rt; // rt position of this node
 
     protected final int depth; // depth of this node
     private ArrayMap<Integer, OcTreeNode> nodes; // the child nodes - <octant code, node>
@@ -35,6 +37,17 @@ public class OcTreeNode extends TreeNode implements Intersectable {
         this.step = step;
         this.depth = depth;
         objects = new ArrayMap<>();
+
+        lb = new float[]{
+                center[0] - step,
+                center[1] - step,
+                center[2] - step
+        };
+        rt = new float[]{
+                center[0] + step,
+                center[1] + step,
+                center[2] + step
+        };
     }
 
     @Override
@@ -141,24 +154,16 @@ public class OcTreeNode extends TreeNode implements Intersectable {
 //        return true;
 
         //ray-intersection-cube
-//        double lbX = center[0] - step;
-//        double lbY = center[1] - step;
-//        double lbZ = center[2] - step;
-//
-//        double rtX = center[0] + step;
-//        double rtY = center[1] + step;
-//        double rtZ = center[2] + step;
-//
 //        double headForwardFracX = 1.0 / headForward_vec.getData(0);
 //        double headForwardFracY = 1.0 / headForward_vec.getData(1);
 //        double headForwardFracZ = 1.0 / headForward_vec.getData(2);
 //
-//        double t1 = (lbX - cameraPos_vec.getData(0)) * headForwardFracX;
-//        double t2 = (rtX - cameraPos_vec.getData(0)) * headForwardFracX;
-//        double t3 = (lbY - cameraPos_vec.getData(1)) * headForwardFracY;
-//        double t4 = (rtY - cameraPos_vec.getData(1)) * headForwardFracY;
-//        double t5 = (lbZ - cameraPos_vec.getData(2)) * headForwardFracZ;
-//        double t6 = (rtZ - cameraPos_vec.getData(2)) * headForwardFracZ;
+//        double t1 = (lb[0] - cameraPos_vec.getData(0)) * headForwardFracX;
+//        double t2 = (rt[0] - cameraPos_vec.getData(0)) * headForwardFracX;
+//        double t3 = (lb[1] - cameraPos_vec.getData(1)) * headForwardFracY;
+//        double t4 = (rt[1] - cameraPos_vec.getData(1)) * headForwardFracY;
+//        double t5 = (lb[2] - cameraPos_vec.getData(2)) * headForwardFracZ;
+//        double t6 = (rt[2] - cameraPos_vec.getData(2)) * headForwardFracZ;
 //
 //        double tmin = Math.max(Math.max(Math.min(t1, t2), Math.min(t3, t4)), Math.min(t5, t6));
 //        double tmax = Math.min(Math.min(Math.max(t1, t2), Math.max(t3, t4)), Math.max(t5, t6));
@@ -176,32 +181,24 @@ public class OcTreeNode extends TreeNode implements Intersectable {
 //        return true;
 
         //ray-intersection-cube
-        double lbX = center[0] - step;
-        double lbY = center[1] - step;
-        double lbZ = center[2] - step;
-
-        double rtX = center[0] + step;
-        double rtY = center[1] + step;
-        double rtZ = center[2] + step;
-
         double headForwardFracX = 1.0 / headForward_vec.getData(0);
         double headForwardFracY = 1.0 / headForward_vec.getData(1);
         double headForwardFracZ = 1.0 / headForward_vec.getData(2);
         double tmin, tmax, tymin, tymax, tzmin, tzmax;
 
         if (headForwardFracX >= 0) {
-            tmin = (lbX - cameraPos_vec.getData(0)) * headForwardFracX;
-            tmax = (rtX - cameraPos_vec.getData(0)) * headForwardFracX;
+            tmin = (lb[0] - cameraPos_vec.getData(0)) * headForwardFracX;
+            tmax = (rt[0] - cameraPos_vec.getData(0)) * headForwardFracX;
         } else {
-            tmin = (rtX - cameraPos_vec.getData(0)) * headForwardFracX;
-            tmax = (lbX - cameraPos_vec.getData(0)) * headForwardFracX;
+            tmin = (rt[0] - cameraPos_vec.getData(0)) * headForwardFracX;
+            tmax = (lb[0] - cameraPos_vec.getData(0)) * headForwardFracX;
         }
         if (headForwardFracY >= 0) {
-            tymin = (lbY - cameraPos_vec.getData(1)) * headForwardFracY;
-            tymax = (rtY - cameraPos_vec.getData(1)) * headForwardFracY;
+            tymin = (lb[1] - cameraPos_vec.getData(1)) * headForwardFracY;
+            tymax = (rt[1] - cameraPos_vec.getData(1)) * headForwardFracY;
         } else {
-            tymin = (rtY - cameraPos_vec.getData(1)) * headForwardFracY;
-            tymax = (lbY - cameraPos_vec.getData(1)) * headForwardFracY;
+            tymin = (rt[1] - cameraPos_vec.getData(1)) * headForwardFracY;
+            tymax = (lb[1] - cameraPos_vec.getData(1)) * headForwardFracY;
         }
 
         if ((tmin > tymax) || (tymin > tmax)) {
@@ -215,11 +212,11 @@ public class OcTreeNode extends TreeNode implements Intersectable {
         }
 
         if (headForwardFracZ >= 0) {
-            tzmin = (lbZ - cameraPos_vec.getData(2)) * headForwardFracZ;
-            tzmax = (rtZ - cameraPos_vec.getData(2)) * headForwardFracZ;
+            tzmin = (lb[2] - cameraPos_vec.getData(2)) * headForwardFracZ;
+            tzmax = (rt[2] - cameraPos_vec.getData(2)) * headForwardFracZ;
         } else {
-            tzmin = (rtZ - cameraPos_vec.getData(2)) * headForwardFracZ;
-            tzmax = (lbZ - cameraPos_vec.getData(2)) * headForwardFracZ;
+            tzmin = (rt[2] - cameraPos_vec.getData(2)) * headForwardFracZ;
+            tzmax = (lb[2] - cameraPos_vec.getData(2)) * headForwardFracZ;
         }
 
         if ((tmin > tzmax) || (tzmin > tmax)) {
