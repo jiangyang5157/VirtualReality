@@ -48,8 +48,7 @@ public abstract class Sphere extends GlModel implements GlModel.BindableBuffer {
         // pick the smaller of the two results if both are positive
         final double t = t0 < 0.0f ? Math.max(t1, 0.0f) : (t1 < 0.0f ? t0 : Math.min(t0, t1));
         if (t == 0) {
-            // both intersections are behind the matrix
-            return null;
+            return null; // both intersections are behind the matrix
         }
 
         return new RayIntersection(this, t);
