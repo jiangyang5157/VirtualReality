@@ -73,6 +73,10 @@ public abstract class GlModel extends Model {
 
     protected ClickListener onClickListener;
 
+    /**
+     * For each frame, check this value during modelView / modelViewProjection creation.
+     * When there is a change made for rotation / scale / translation, we need to set modelRequireUpdate true as well.
+     */
     protected boolean modelRequireUpdate = false;
 
     protected GlModel(Context context) {
