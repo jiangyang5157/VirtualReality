@@ -2,6 +2,7 @@ package com.gmail.jiangyang5157.cardboard.scene.model;
 
 import android.content.Context;
 import android.opengl.GLES20;
+import android.util.Log;
 
 import com.gmail.jiangyang5157.cardboard.kml.KmlPlacemark;
 import com.gmail.jiangyang5157.cardboard.scene.RayIntersection;
@@ -39,7 +40,7 @@ public class AtomMarkers extends Marker3d {
         super.create(program);
 
         ocTreeNodes = ocTree.getValidNodes();
-//        Log.d(TAG, "ocTree: " + ocTree.toString() + ", valid ocTreeNodes: " + ocTreeNodes.size());
+        Log.d(TAG, "ocTree: " + ocTree.toString() + ", valid ocTreeNodes: " + ocTreeNodes.size());
 
         int iSize = markers.size();
         for(int i = 0; i < iSize; i++){
