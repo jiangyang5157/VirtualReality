@@ -26,7 +26,6 @@ import com.gmail.jiangyang5157.cardboard.scene.model.GlModel;
 import com.gmail.jiangyang5157.cardboard.scene.model.MarkerDetailView;
 import com.gmail.jiangyang5157.tookit.app.AppUtils;
 import com.gmail.jiangyang5157.tookit.app.DeviceUtils;
-import com.gmail.jiangyang5157.tookit.app.Performance;
 import com.gmail.jiangyang5157.tookit.data.io.IoUtils;
 import com.gmail.jiangyang5157.tookit.math.Vector;
 import com.gmail.jiangyang5157.tookit.math.Vector3d;
@@ -302,12 +301,10 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
             objModel.update();
         }
 
-        Log.d(TAG, "getIntersection()");
-        Performance.getInstance().addBreakpoint();
-        ray.setIntersections(getIntersection());
-        Performance.getInstance().addBreakpoint();
-        Performance.getInstance().printEvaluationInMilliseconds();
-        ray.update();
+        if (ray != null) {
+            ray.setIntersections(getIntersection());
+            ray.update();
+        }
     }
 
     @Override
