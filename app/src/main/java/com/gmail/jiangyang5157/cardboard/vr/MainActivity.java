@@ -322,16 +322,8 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
 
         float[] perspective = eye.getPerspective(Camera.Z_NEAR, Camera.Z_FAR);
 
-        Log.d(TAG, "updateScene()"); // 13ms
-        Performance.getInstance().addBreakpoint();
         updateScene(head.getCamera().getView(), perspective);
-        Performance.getInstance().addBreakpoint();
-        Performance.getInstance().printEvaluationInMilliseconds();
-        Log.d(TAG, "drawScene()"); // 9ms
-        Performance.getInstance().addBreakpoint();
         drawScene();
-        Performance.getInstance().addBreakpoint();
-        Performance.getInstance().printEvaluationInMilliseconds();
     }
 
     @Override
