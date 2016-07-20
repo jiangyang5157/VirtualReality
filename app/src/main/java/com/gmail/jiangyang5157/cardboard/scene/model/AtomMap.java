@@ -13,6 +13,7 @@ import com.gmail.jiangyang5157.cardboard.scene.RayIntersection;
 import com.gmail.jiangyang5157.cardboard.scene.Lighting;
 import com.gmail.jiangyang5157.cardboard.vr.Constant;
 import com.gmail.jiangyang5157.tookit.app.AppUtils;
+import com.gmail.jiangyang5157.tookit.app.Performance;
 import com.gmail.jiangyang5157.tookit.math.Vector;
 
 import org.xmlpull.v1.XmlPullParserException;
@@ -159,12 +160,20 @@ public class AtomMap extends GlModel implements Creation {
 
     @Override
     public void update(float[] view, float[] perspective) {
+        Log.d(TAG, "update markers"); //
+        Performance.getInstance().addBreakpoint();
         markers.update(view, perspective);
+        Performance.getInstance().addBreakpoint();
+        Performance.getInstance().printEvaluationInMilliseconds();
     }
 
     @Override
     public void draw() {
+        Log.d(TAG, "draw markers"); //
+        Performance.getInstance().addBreakpoint();
         markers.draw();
+        Performance.getInstance().addBreakpoint();
+        Performance.getInstance().printEvaluationInMilliseconds();
     }
 
     @Override
