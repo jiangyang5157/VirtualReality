@@ -47,6 +47,7 @@ public class Ray extends Point {
 
     @Override
     public void update() {
+        super.update();
         boolean isFocused = rayIntersection != null && rayIntersection.getModel().onClickListener != null;
         onFocuse(isFocused);
 
@@ -60,6 +61,7 @@ public class Ray extends Point {
                     head.getCamera().getY() + forward[1] * (t - DISTANCE),
                     head.getCamera().getZ() + forward[2] * (t - DISTANCE)
             );
+            modelRequireUpdate = true;
         }
     }
 

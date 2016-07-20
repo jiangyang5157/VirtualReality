@@ -123,7 +123,8 @@ public class TextField extends Panel {
                 scaleSelector -= scaleGradient;
             }
         }
-        this.scale = scaleSelector;
+        scale = scaleSelector;
+        modelRequireUpdate = true;
     }
 
     public String getText() {

@@ -62,7 +62,7 @@ public abstract class Sphere extends GlModel implements GlModel.BindableBuffer {
     }
 
     public void setRadius(float radius) {
-        this.scale = this.radius = radius;
+        scale = this.radius = radius;
     }
 
     public float getRadius() {

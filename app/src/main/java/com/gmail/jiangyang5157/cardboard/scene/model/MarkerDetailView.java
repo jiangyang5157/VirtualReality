@@ -45,6 +45,7 @@ public class MarkerDetailView extends Dialog {
             tf1.setText(marker.getName());
             tf1.width = WIDTH;
             tf1.setScale(SCALE);
+            tf1.modelRequireUpdate = true;
             tf1.setTextSize(TextField.TEXT_SIZE_LARGE);
             tf1.setAlignment(Layout.Alignment.ALIGN_CENTER);
             tf1.create(shaders);
@@ -55,6 +56,7 @@ public class MarkerDetailView extends Dialog {
             tf2.setText(marker.getDescription());
             tf2.width = WIDTH;
             tf2.setScale(SCALE);
+            tf2.modelRequireUpdate = true;
             tf2.setTextSize(TextField.TEXT_SIZE_TINY);
             tf2.setAlignment(Layout.Alignment.ALIGN_NORMAL);
             tf2.create(shaders);
@@ -65,6 +67,7 @@ public class MarkerDetailView extends Dialog {
             tf3.setText(marker.getObjModel().getTitle());
             tf3.width = WIDTH;
             tf3.setScale(SCALE);
+            tf3.modelRequireUpdate = true;
             tf3.setTextSize(TextField.TEXT_SIZE_TINY);
             tf3.setAlignment(Layout.Alignment.ALIGN_NORMAL);
             tf3.create(shaders);

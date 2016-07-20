@@ -45,6 +45,8 @@ public class Earth extends UvSphere implements Creation {
         super(context, 180, 180);
         this.urlTexture = urlTexture;
         setRadius(RADIUS);
+
+        modelRequireUpdate = true;
     }
 
     public boolean checkPreparation() {

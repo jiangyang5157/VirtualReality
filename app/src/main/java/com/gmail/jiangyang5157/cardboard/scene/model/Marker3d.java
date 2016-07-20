@@ -53,6 +53,7 @@ public class Marker3d extends Icosphere {
                 (float) coordinate.ecef[0],
                 (float) coordinate.ecef[1],
                 (float) coordinate.ecef[2]);
+        modelRequireUpdate = true;
     }
 
     public RayIntersection getIntersection(Vector cameraPos_vec, final float[] headView) {

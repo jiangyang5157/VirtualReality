@@ -63,6 +63,7 @@ public class KmlChooserView extends Dialog {
             tf.setText(fileName);
             tf.width = WIDTH;
             tf.setScale(SCALE);
+            tf.modelRequireUpdate = true;
             tf.setTextSize(textSize);
             tf.setAlignment(Layout.Alignment.ALIGN_CENTER);
             tf.create(shaders);

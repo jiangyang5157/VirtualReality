@@ -62,7 +62,7 @@ public abstract class GlModel extends Model {
     protected int indicesBufferCapacity;
     protected float[] color;
 
-    protected int program;
+    protected int program = 0;
 
     protected Context context;
 
@@ -72,6 +72,8 @@ public abstract class GlModel extends Model {
     protected HandlerThread handlerThread;
 
     protected ClickListener onClickListener;
+
+    protected boolean modelRequireUpdate = false;
 
     protected GlModel(Context context) {
         super();
@@ -104,11 +106,13 @@ public abstract class GlModel extends Model {
     }
 
     public void update(float[] view, float[] perspective) {
-        Matrix.setIdentityM(model, 0);
-
-        Matrix.multiplyMM(model, 0, rotation, 0, model, 0);
-        Matrix.scaleM(model, 0, scale, scale, scale);
-        Matrix.multiplyMM(model, 0, translation, 0, model, 0);
+        if (modelRequireUpdate) {
+            Matrix.setIdentityM(model, 0);
+            Matrix.multiplyMM(model, 0, rotation, 0, model, 0);
+            Matrix.scaleM(model, 0, scale, scale, scale);
+            Matrix.multiplyMM(model, 0, translation, 0, model, 0);
+            modelRequireUpdate = false;
+        }
 
         Matrix.multiplyMM(modelView, 0, view, 0, model, 0);
         Matrix.multiplyMM(modelViewProjection, 0, perspective, 0, modelView, 0);

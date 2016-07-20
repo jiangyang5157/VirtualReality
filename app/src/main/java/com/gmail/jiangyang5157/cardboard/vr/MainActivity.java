@@ -297,6 +297,11 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         if (earth != null) {
             head.adjustPosition(earth);
         }
+
+        if (objModel != null) {
+            objModel.update();
+        }
+
         Log.d(TAG, "getIntersection()");
         Performance.getInstance().addBreakpoint();
         ray.setIntersections(getIntersection());

@@ -32,7 +32,8 @@ public abstract class Dialog extends Panel {
 
     public Dialog(Context context) {
         super(context);
-        this.scale = SCALE;
+        scale = SCALE;
+        modelRequireUpdate = true;
         panels = new ArrayList<>();
     }
 

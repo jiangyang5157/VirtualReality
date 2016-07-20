@@ -69,6 +69,8 @@ public abstract class Panel extends Rectangle implements GlModel.BindableBuffer,
         float[] q = new float[]{-quaternion[0], -quaternion[1], -quaternion[2], quaternion[3]};
         Matrix.multiplyMM(rotation, 0, Head.getQquaternionMatrix(q), 0, rotation, 0);
 
+        modelRequireUpdate = true;
+
         // build corners' vector, they are for intersect calculation
         buildCorners(up, right, position);
     }
