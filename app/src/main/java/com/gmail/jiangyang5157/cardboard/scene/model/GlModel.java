@@ -74,7 +74,7 @@ public abstract class GlModel extends Model {
     protected ClickListener onClickListener;
 
     /**
-     * For each frame, check this value during modelView / modelViewProjection creation.
+     * For each frame, check this value before modelView / modelViewProjection.
      * When there is a change made for rotation / scale / translation, we need to set modelRequireUpdate true as well.
      */
     protected boolean modelRequireUpdate = false;
@@ -111,6 +111,7 @@ public abstract class GlModel extends Model {
 
     public void update(float[] view, float[] perspective) {
         if (modelRequireUpdate) {
+            // Only update model mat when required, update need to be done in the following order rotation-scale-translation.
             Matrix.setIdentityM(model, 0);
             Matrix.multiplyMM(model, 0, rotation, 0, model, 0);
             Matrix.scaleM(model, 0, scale, scale, scale);
