@@ -4,6 +4,7 @@ import android.util.ArrayMap;
 
 import com.gmail.jiangyang5157.cardboard.scene.RayIntersection;
 import com.gmail.jiangyang5157.tookit.math.Vector;
+import com.gmail.jiangyang5157.tookit.math.Vector3d;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -121,6 +122,7 @@ public class OcTreeNode extends TreeNode {
     }
 
     private boolean hasIntersection(Vector cameraPos_vec, Vector headForwardFrac_vec) {
+        // ray-box
         double tmin, tmax, tymin, tymax, tzmin, tzmax;
 
         if (headForwardFrac_vec.getData(0) >= 0) {
@@ -174,6 +176,37 @@ public class OcTreeNode extends TreeNode {
         }
 
         return true;
+
+        // ray-sphere using diagonal of the box as the radius
+//        Vector pos_camera_vec = new Vector3d(
+//                cameraPos_vec.getData(0) - center[0],
+//                cameraPos_vec.getData(1) - center[1],
+//                cameraPos_vec.getData(2) - center[2]
+//        );
+//
+//        double stepPower2 = step * step;
+//        double twoStepPower2 = stepPower2 + stepPower2;
+//        double threeStepPower2 = twoStepPower2 + stepPower2;
+//        double radius = Math.sqrt(threeStepPower2);
+//        final double b = headForwardFrac_vec.dot(pos_camera_vec);
+//        final double c = pos_camera_vec.dot(pos_camera_vec) - (radius * radius);
+//
+//        final double f = b * b - c; // the quadratic equation
+//        if (f <= Vector.EPSILON) {
+//            return false; // ray misses sphere
+//        }
+//
+//        final double sqrtF = Math.sqrt(f);
+//        final double t0 = -b + sqrtF;
+//        final double t1 = -b - sqrtF;
+//
+//        // pick the smaller of the two results if both are positive
+//        final double t = t0 < 0.0f ? Math.max(t1, 0.0f) : (t1 < 0.0f ? t0 : Math.min(t0, t1));
+//        if (t == 0) {
+//            return false; // both intersections are behind the matrix
+//        }
+//
+//        return true;
     }
 
     @Override

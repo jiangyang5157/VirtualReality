@@ -32,11 +32,9 @@ public abstract class Sphere extends GlModel implements GlModel.BindableBuffer {
         final double b = headForward_vec.dot(pos_camera_vec);
         final double c = pos_camera_vec.dot(pos_camera_vec) - (radius * radius);
 
-        // solve the quadratic equation
-        final double f = b * b - c;
+        final double f = b * b - c; // the quadratic equation
         if (f <= Vector.EPSILON) {
-            // ray misses sphere
-            return null;
+            return null; // ray misses sphere
         }
 
         final double sqrtF = Math.sqrt(f);

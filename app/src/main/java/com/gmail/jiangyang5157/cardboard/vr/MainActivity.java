@@ -26,6 +26,7 @@ import com.gmail.jiangyang5157.cardboard.scene.model.GlModel;
 import com.gmail.jiangyang5157.cardboard.scene.model.MarkerDetailView;
 import com.gmail.jiangyang5157.tookit.app.AppUtils;
 import com.gmail.jiangyang5157.tookit.app.DeviceUtils;
+import com.gmail.jiangyang5157.tookit.app.Performance;
 import com.gmail.jiangyang5157.tookit.data.io.IoUtils;
 import com.gmail.jiangyang5157.tookit.math.Vector;
 import com.gmail.jiangyang5157.tookit.math.Vector3d;
@@ -161,129 +162,6 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         }
     }
 
-    private RayIntersection getIntersection() {
-        float[] headForward = head.getForward();
-        Vector cameraPos_vec = new Vector3d(head.getCamera().getX(), head.getCamera().getY(), head.getCamera().getZ());
-        Vector headForward_vec = new Vector3d(headForward[0], headForward[1], headForward[2]);
-        Vector headForwardFrac_vec = new Vector3d(1.0 / headForward[0], 1.0 / headForward[1], 1.0 / headForward[2]);
-
-        RayIntersection rayIntersection = null;
-        if (kmlChooserView != null) {
-            rayIntersection = kmlChooserView.getIntersection(cameraPos_vec, headForward_vec);
-            if (rayIntersection == null) {
-                if (kmlChooserView.isCreated()) {
-                    kmlChooserView.destroy();
-                    kmlChooserView = null;
-                }
-            }
-        }
-        if (rayIntersection == null) {
-            if (markerDetailView != null) {
-                rayIntersection = markerDetailView.getIntersection(cameraPos_vec, headForward_vec);
-                if (rayIntersection == null) {
-                    if (markerDetailView.isCreated()) {
-                        markerDetailView.destroy();
-                        markerDetailView = null;
-                        if (objModel != null) {
-                            objModel.destroy();
-                            objModel = null;
-                        }
-                    }
-                }
-            }
-        }
-        if (rayIntersection == null) {
-            if (atomMap != null) {
-                rayIntersection = atomMap.getIntersection(cameraPos_vec, headForwardFrac_vec, head.getHeadView());
-            }
-        }
-        if (rayIntersection == null) {
-            if (earth != null) {
-                rayIntersection = earth.getIntersection(cameraPos_vec, headForward_vec);
-            }
-        }
-
-        return rayIntersection;
-    }
-
-    private void onCardboardClick() {
-        if (objModel != null && objModel.isCreated()) {
-            destoryObjModel();
-            return;
-        }
-
-        RayIntersection rayIntersection = ray.getRayIntersection();
-        if (rayIntersection != null) {
-            GlModel model = rayIntersection.getModel();
-            GlModel.ClickListener onClickListener = model.getOnClickListener();
-            if (onClickListener != null) {
-                onClickListener.onClick(model);
-            }
-        }
-    }
-
-    private void onCardboardDoubleClick() {
-        if (objModel != null && objModel.isCreated()) {
-            destoryObjModel();
-        }
-        if (markerDetailView != null && markerDetailView.isCreated()) {
-            destoryMarkerDetailView();
-        }
-
-        if (kmlChooserView == null) {
-            kmlChooserView = new KmlChooserView(getApplicationContext());
-            kmlChooserView.setEventListener(kmlChooserEventListener);
-        } else if (kmlChooserView.isCreated()) {
-            destoryKmlChooserView();
-        }
-    }
-
-    @Override
-    public void onCardboardTrigger() {
-        long thisTime = System.currentTimeMillis();
-        if (thisTime - lastTimeOnCardboardTrigger < TIME_DELTA_DOUBLE_CLICK) {
-            lastTimeOnCardboardTrigger = 0;
-            onCardboardDoubleClick();
-            return;
-        } else {
-            lastTimeOnCardboardTrigger = thisTime;
-        }
-        onCardboardClick();
-    }
-
-    private GlModel.ClickListener onMarkerClickListener = new GlModel.ClickListener() {
-
-        @Override
-        public void onClick(GlModel model) {
-            markerDetailView = new MarkerDetailView(getApplicationContext(), (AtomMarker) model);
-            markerDetailView.setEventListener(markerDetailEventListener);
-        }
-    };
-
-    private MarkerDetailView.Event markerDetailEventListener = new MarkerDetailView.Event() {
-        @Override
-        public void showObjModel(ObjModel model) {
-            objModel = model;
-        }
-    };
-
-    private KmlChooserView.Event kmlChooserEventListener = new KmlChooserView.Event() {
-
-        @Override
-        public void onKmlSelected(String fileName) {
-            Log.d(TAG, "onKmlSelected: " + fileName);
-            if (fileName.equals(Constant.getLastKmlFileName(getApplicationContext()))) {
-                destoryKmlChooserView();
-                return;
-            }
-            Constant.setLastKmlFileName(getApplicationContext(), fileName);
-            newMap(Constant.getKmlUrl(fileName));
-
-            // move camera to <0,0,0>
-            head.getCamera().move(-head.getCamera().getX(), -head.getCamera().getY(), -head.getCamera().getZ());
-        }
-    };
-
     @Override
     public void onNewFrame(HeadTransform headTransform) {
 //        Log.d(TAG, "onNewFrame");
@@ -302,7 +180,11 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         }
 
         if (ray != null) {
+            Log.d(TAG, "getIntersection()");
+            Performance.getInstance().addBreakpoint();
             ray.setIntersections(getIntersection());
+            Performance.getInstance().addBreakpoint();
+            Performance.getInstance().printEvaluationInMilliseconds();
             ray.update();
         }
     }
@@ -454,20 +336,94 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         GLES20.glDisable(GLES20.GL_CULL_FACE);
     }
 
+    private RayIntersection getIntersection() {
+        float[] headForward = head.getForward();
+        Vector cameraPos_vec = new Vector3d(head.getCamera().getX(), head.getCamera().getY(), head.getCamera().getZ());
+        Vector headForward_vec = new Vector3d(headForward[0], headForward[1], headForward[2]);
+        Vector headForwardFrac_vec = new Vector3d(1.0 / headForward[0], 1.0 / headForward[1], 1.0 / headForward[2]);
+
+        RayIntersection rayIntersection = null;
+        if (kmlChooserView != null) {
+            rayIntersection = kmlChooserView.getIntersection(cameraPos_vec, headForward_vec);
+            if (rayIntersection == null) {
+                if (kmlChooserView.isCreated()) {
+                    kmlChooserView.destroy();
+                    kmlChooserView = null;
+                }
+            }
+        }
+        if (rayIntersection == null) {
+            if (markerDetailView != null) {
+                rayIntersection = markerDetailView.getIntersection(cameraPos_vec, headForward_vec);
+                if (rayIntersection == null) {
+                    if (markerDetailView.isCreated()) {
+                        markerDetailView.destroy();
+                        markerDetailView = null;
+                        if (objModel != null) {
+                            objModel.destroy();
+                            objModel = null;
+                        }
+                    }
+                }
+            }
+        }
+        if (rayIntersection == null) {
+            if (atomMap != null) {
+                rayIntersection = atomMap.getIntersection(cameraPos_vec, headForwardFrac_vec, head.getHeadView());
+            }
+        }
+        if (rayIntersection == null) {
+            if (earth != null) {
+                rayIntersection = earth.getIntersection(cameraPos_vec, headForward_vec);
+            }
+        }
+
+        return rayIntersection;
+    }
+
+    private void onCardboardClick() {
+        if (objModel != null && objModel.isCreated()) {
+            destoryObjModel();
+            return;
+        }
+
+        RayIntersection rayIntersection = ray.getRayIntersection();
+        if (rayIntersection != null) {
+            GlModel model = rayIntersection.getModel();
+            GlModel.ClickListener onClickListener = model.getOnClickListener();
+            if (onClickListener != null) {
+                onClickListener.onClick(model);
+            }
+        }
+    }
+
+    private void onCardboardDoubleClick() {
+        if (objModel != null && objModel.isCreated()) {
+            destoryObjModel();
+        }
+        if (markerDetailView != null && markerDetailView.isCreated()) {
+            destoryMarkerDetailView();
+        }
+
+        if (kmlChooserView == null) {
+            kmlChooserView = new KmlChooserView(getApplicationContext());
+            kmlChooserView.setEventListener(kmlChooserEventListener);
+        } else if (kmlChooserView.isCreated()) {
+            destoryKmlChooserView();
+        }
+    }
+
     @Override
-    public void onSurfaceCreated(EGLConfig eglConfig) {
-        // Dark background so text shows up well.
-        GLES20.glClearColor(0.1f, 0.1f, 0.1f, 0.5f);
-
-        ray = new Ray(getApplicationContext(), head);
-        ArrayMap<Integer, Integer> shaders = new ArrayMap<>();
-        shaders.put(GLES20.GL_VERTEX_SHADER, R.raw.ray_point_vertex_shader);
-        shaders.put(GLES20.GL_FRAGMENT_SHADER, R.raw.ray_point_fragment_shader);
-        ray.create(shaders);
-
-        earth = new Earth(getApplicationContext(), Constant.getResourceUrl(Constant.EARTH_TEXTURE_FILE_NAME));
-
-        newMap(Constant.getKmlUrl(Constant.getLastKmlFileName(getApplicationContext())));
+    public void onCardboardTrigger() {
+        long thisTime = System.currentTimeMillis();
+        if (thisTime - lastTimeOnCardboardTrigger < TIME_DELTA_DOUBLE_CLICK) {
+            lastTimeOnCardboardTrigger = 0;
+            onCardboardDoubleClick();
+            return;
+        } else {
+            lastTimeOnCardboardTrigger = thisTime;
+        }
+        onCardboardClick();
     }
 
     private void newMap(String urlKml) {
@@ -484,6 +440,55 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
                 return lightPosInCameraSpace;
             }
         });
+    }
+
+    private GlModel.ClickListener onMarkerClickListener = new GlModel.ClickListener() {
+
+        @Override
+        public void onClick(GlModel model) {
+            markerDetailView = new MarkerDetailView(getApplicationContext(), (AtomMarker) model);
+            markerDetailView.setEventListener(markerDetailEventListener);
+        }
+    };
+
+    private MarkerDetailView.Event markerDetailEventListener = new MarkerDetailView.Event() {
+        @Override
+        public void showObjModel(ObjModel model) {
+            objModel = model;
+        }
+    };
+
+    private KmlChooserView.Event kmlChooserEventListener = new KmlChooserView.Event() {
+
+        @Override
+        public void onKmlSelected(String fileName) {
+            Log.d(TAG, "onKmlSelected: " + fileName);
+            if (fileName.equals(Constant.getLastKmlFileName(getApplicationContext()))) {
+                destoryKmlChooserView();
+                return;
+            }
+            Constant.setLastKmlFileName(getApplicationContext(), fileName);
+            newMap(Constant.getKmlUrl(fileName));
+
+            // move camera to <0,0,0>
+            head.getCamera().move(-head.getCamera().getX(), -head.getCamera().getY(), -head.getCamera().getZ());
+        }
+    };
+
+    @Override
+    public void onSurfaceCreated(EGLConfig eglConfig) {
+        // Dark background so text shows up well.
+        GLES20.glClearColor(0.1f, 0.1f, 0.1f, 0.5f);
+
+        ray = new Ray(getApplicationContext(), head);
+        ArrayMap<Integer, Integer> shaders = new ArrayMap<>();
+        shaders.put(GLES20.GL_VERTEX_SHADER, R.raw.ray_point_vertex_shader);
+        shaders.put(GLES20.GL_FRAGMENT_SHADER, R.raw.ray_point_fragment_shader);
+        ray.create(shaders);
+
+        earth = new Earth(getApplicationContext(), Constant.getResourceUrl(Constant.EARTH_TEXTURE_FILE_NAME));
+
+        newMap(Constant.getKmlUrl(Constant.getLastKmlFileName(getApplicationContext())));
     }
 
     @Override
