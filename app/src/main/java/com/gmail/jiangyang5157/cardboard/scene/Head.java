@@ -15,7 +15,7 @@ import com.gmail.jiangyang5157.cardboard.scene.model.Earth;
  */
 public class Head implements SensorEventListener {
 
-    private static final float MOVEMENT_UNIT = Earth.RADIUS / 100;
+    private static final float MOVEMENT_UNIT = Earth.RADIUS / 50;
 
     private Camera camera;
 
@@ -48,7 +48,7 @@ public class Head implements SensorEventListener {
 
     public void onResume() {
         if (!sensorManager.registerListener(this, stepDetector, SensorManager.SENSOR_DELAY_GAME)) {
-            throw new UnsupportedOperationException("stepDetector not supported");
+            throw new UnsupportedOperationException("stepDetector is not supported");
         }
     }
 
@@ -63,7 +63,11 @@ public class Head implements SensorEventListener {
         }
     }
 
-    public void adjustPosition(Earth earth) {
+    public void update() {
+        updateCameraPosition();
+    }
+
+    private void updateCameraPosition() {
         float accelX = forward[0] * stepsCounter;
         float accelY = forward[1] * stepsCounter;
         float accelZ = forward[2] * stepsCounter;
@@ -78,7 +82,7 @@ public class Head implements SensorEventListener {
         float offsetY = newVelocityY * MOVEMENT_UNIT;
         float offsetZ = newVelocityZ * MOVEMENT_UNIT;
 
-        if (earth.contain(Earth.RADIUS + Camera.ALTITUDE,
+        if (Earth.contain(Earth.RADIUS + Camera.ALTITUDE, 0, 0, 0,
                 camera.getX() + offsetX,
                 camera.getY() + offsetY,
                 camera.getZ() + offsetZ)) {

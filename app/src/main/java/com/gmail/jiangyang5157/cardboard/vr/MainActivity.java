@@ -170,10 +170,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         headTransform.getUpVector(head.getUp(), 0);
         headTransform.getRightVector(head.getRight(), 0);
         headTransform.getQuaternion(head.getQuaternion(), 0);
-
-        if (earth != null) {
-            head.adjustPosition(earth);
-        }
+        head.update();
 
         if (objModel != null) {
             objModel.update();

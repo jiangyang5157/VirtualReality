@@ -50,10 +50,10 @@ public abstract class Sphere extends GlModel implements GlModel.BindableBuffer {
         return new RayIntersection(this, t);
     }
 
-    public boolean contain(float r, float x, float y, float z) {
-        double point_center_x = getX() - x;
-        double point_center_y = getY() - y;
-        double point_center_z = getZ() - z;
+    public static boolean contain(float r, float centerX, float centerY, float centerZ, float pointX, float pointY, float pointZ) {
+        double point_center_x = centerX - pointX;
+        double point_center_y = centerY - pointY;
+        double point_center_z = centerZ - pointZ;
         double dot = point_center_x * point_center_x + point_center_y * point_center_y + point_center_z * point_center_z;
         double squaredRadius = r * r;
         return dot < squaredRadius;
