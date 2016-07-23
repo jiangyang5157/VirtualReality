@@ -68,15 +68,17 @@ public class Head implements SensorEventListener {
     }
 
     private void updateCameraPosition() {
-        float accelX = forward[0] * stepsCounter;
-        float accelY = forward[1] * stepsCounter;
-        float accelZ = forward[2] * stepsCounter;
-        stepsCounter = 0;
-
         final float D = 0.9f;
-        float newVelocityX = velocity[0] * D + accelX;
-        float newVelocityY = velocity[1] * D + accelY;
-        float newVelocityZ = velocity[2] * D + accelZ;
+        float newVelocityX = velocity[0] * D;
+        float newVelocityY = velocity[1] * D;
+        float newVelocityZ = velocity[2] * D;
+
+        if (stepsCounter > 0) {
+            newVelocityX += forward[0] * stepsCounter;
+            newVelocityY += forward[1] * stepsCounter;
+            newVelocityZ += forward[2] * stepsCounter;
+            stepsCounter = 0;
+        }
 
         float offsetX = newVelocityX * MOVEMENT_UNIT;
         float offsetY = newVelocityY * MOVEMENT_UNIT;
