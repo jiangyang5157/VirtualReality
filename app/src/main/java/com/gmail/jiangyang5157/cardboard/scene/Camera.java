@@ -21,6 +21,7 @@ public class Camera {
 
     private float[] matrix;
     private float[] view;
+    private float[] perspective;
 
     private final float[] UP;
     private float[] position;
@@ -75,7 +76,19 @@ public class Camera {
         return matrix;
     }
 
+    public void setView(float[] view) {
+        this.view = view;
+    }
+
     public float[] getView() {
         return view;
+    }
+
+    public void setPerspective(float[] perspective) {
+        this.perspective = perspective;
+    }
+
+    public float[] getPerspective() {
+        return perspective;
     }
 }
