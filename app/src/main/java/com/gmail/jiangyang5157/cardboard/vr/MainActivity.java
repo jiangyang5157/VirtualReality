@@ -197,7 +197,6 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         Matrix.multiplyMV(lightPosInCameraSpace, 0, head.getCamera().getView(), 0, LIGHT_POS_IN_WORLD_SPACE, 0);
 
         float[] perspective = eye.getPerspective(Camera.Z_NEAR, Camera.Z_FAR);
-
         updateScene(head.getCamera().getView(), perspective);
         drawScene();
     }
