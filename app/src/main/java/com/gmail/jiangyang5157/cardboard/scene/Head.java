@@ -9,13 +9,19 @@ import android.support.annotation.NonNull;
 
 import com.gmail.jiangyang5157.cardboard.scene.model.Earth;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 /**
  * @author Yang
  * @since 5/12/2016
  */
 public class Head implements SensorEventListener {
+    private static final String TAG = "[Head]";
 
-    private static final float MOVEMENT_UNIT = Earth.RADIUS / 50;
+    private static final float MOVEMENT_UNIT = Earth.RADIUS / 400;
+    private static final float MOVEMENT_DAMPING_FACTOR = 0.7f;
+    private static final long UPDATE_VELOCITY_PERIOD_IN_MILLI = 200;  // reduce this value for a narrow step
 
     private Camera camera;
 
@@ -29,7 +35,10 @@ public class Head implements SensorEventListener {
     private Sensor stepDetector;
     private int stepsCounter;
 
-    private float[] velocity;
+    private float[] lastVelocity;
+    private float[] nextVelocity;
+
+    private Timer updateCameraVelocityTimer;
 
     public Head(Context context) {
         headView = new float[16];
@@ -40,7 +49,8 @@ public class Head implements SensorEventListener {
 
         camera = new Camera();
 
-        velocity = new float[3];
+        lastVelocity = new float[3];
+        nextVelocity = new float[3];
 
         sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         stepDetector = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
@@ -50,10 +60,19 @@ public class Head implements SensorEventListener {
         if (!sensorManager.registerListener(this, stepDetector, SensorManager.SENSOR_DELAY_GAME)) {
             throw new UnsupportedOperationException("stepDetector is not supported");
         }
+        updateCameraVelocityTimer = new Timer();
+        updateCameraVelocityTimer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                updateCameraVelocity();
+            }
+        }, 0, UPDATE_VELOCITY_PERIOD_IN_MILLI);
     }
 
     public void onPause() {
         sensorManager.unregisterListener(this);
+        updateCameraVelocityTimer.cancel();
+        updateCameraVelocityTimer = null;
     }
 
     @Override
@@ -67,34 +86,39 @@ public class Head implements SensorEventListener {
         updateCameraPosition();
     }
 
-    private void updateCameraPosition() {
-        final float D = 0.9f;
-        float newVelocityX = velocity[0] * D;
-        float newVelocityY = velocity[1] * D;
-        float newVelocityZ = velocity[2] * D;
+    private void updateCameraVelocity() {
+        if (nextVelocity[0] != 0 && nextVelocity[1] != 0 && nextVelocity[2] != 0) {
+            nextVelocity[0] = nextVelocity[0] * MOVEMENT_DAMPING_FACTOR;
+            nextVelocity[1] = nextVelocity[1] * MOVEMENT_DAMPING_FACTOR;
+            nextVelocity[2] = nextVelocity[2] * MOVEMENT_DAMPING_FACTOR;
+        }
 
         if (stepsCounter > 0) {
-            newVelocityX += forward[0] * stepsCounter;
-            newVelocityY += forward[1] * stepsCounter;
-            newVelocityZ += forward[2] * stepsCounter;
+            nextVelocity[0] += forward[0] * stepsCounter;
+            nextVelocity[1] += forward[1] * stepsCounter;
+            nextVelocity[2] += forward[2] * stepsCounter;
             stepsCounter = 0;
         }
+    }
 
-        float offsetX = newVelocityX * MOVEMENT_UNIT;
-        float offsetY = newVelocityY * MOVEMENT_UNIT;
-        float offsetZ = newVelocityZ * MOVEMENT_UNIT;
-
-        if (Earth.contain(Earth.RADIUS + Camera.ALTITUDE, 0, 0, 0,
-                camera.getX() + offsetX,
-                camera.getY() + offsetY,
-                camera.getZ() + offsetZ)) {
-            camera.move(offsetX, offsetY, offsetZ);
-        } else {
-            newVelocityX = newVelocityY = newVelocityZ = 0;
+    private void updateCameraPosition() {
+        if (nextVelocity[0] != 0 && nextVelocity[1] != 0 && nextVelocity[2] != 0) {
+            float offsetX = nextVelocity[0] * MOVEMENT_UNIT;
+            float offsetY = nextVelocity[1] * MOVEMENT_UNIT;
+            float offsetZ = nextVelocity[2] * MOVEMENT_UNIT;
+            if (Earth.contain(Earth.RADIUS + Camera.ALTITUDE, 0, 0, 0,
+                    camera.getX() + offsetX,
+                    camera.getY() + offsetY,
+                    camera.getZ() + offsetZ)) {
+                camera.move(offsetX, offsetY, offsetZ);
+            } else {
+                nextVelocity[0] = nextVelocity[1] = nextVelocity[2] = 0;
+            }
         }
-        velocity[0] = newVelocityX;
-        velocity[1] = newVelocityY;
-        velocity[2] = newVelocityZ;
+
+        lastVelocity[0] = nextVelocity[0];
+        lastVelocity[1] = nextVelocity[1];
+        lastVelocity[2] = nextVelocity[2];
     }
 
     public static float[] getQquaternionMatrix(@NonNull float[] quaternion) {

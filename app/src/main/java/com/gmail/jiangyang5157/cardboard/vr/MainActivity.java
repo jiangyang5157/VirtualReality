@@ -177,11 +177,11 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         }
 
         if (ray != null) {
-            Log.d(TAG, "getIntersection()");
-            Performance.getInstance().addBreakpoint();
+//            Log.d(TAG, "getIntersection()");
+//            Performance.getInstance().addBreakpoint();
             ray.setIntersections(getIntersection());
-            Performance.getInstance().addBreakpoint();
-            Performance.getInstance().printEvaluationInMilliseconds();
+//            Performance.getInstance().addBreakpoint();
+//            Performance.getInstance().printEvaluationInMilliseconds();
             ray.update();
         }
     }

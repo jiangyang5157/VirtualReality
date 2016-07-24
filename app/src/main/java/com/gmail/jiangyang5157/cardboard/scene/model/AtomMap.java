@@ -160,20 +160,20 @@ public class AtomMap extends GlModel implements Creation {
 
     @Override
     public void update(float[] view, float[] perspective) {
-        Log.d(TAG, "update markers"); //
-        Performance.getInstance().addBreakpoint();
+//        Log.d(TAG, "update markers"); //
+//        Performance.getInstance().addBreakpoint();
         markers.update(view, perspective);
-        Performance.getInstance().addBreakpoint();
-        Performance.getInstance().printEvaluationInMilliseconds();
+//        Performance.getInstance().addBreakpoint();
+//        Performance.getInstance().printEvaluationInMilliseconds();
     }
 
     @Override
     public void draw() {
-        Log.d(TAG, "draw markers"); //
-        Performance.getInstance().addBreakpoint();
+//        Log.d(TAG, "draw markers"); //
+//        Performance.getInstance().addBreakpoint();
         markers.draw();
-        Performance.getInstance().addBreakpoint();
-        Performance.getInstance().printEvaluationInMilliseconds();
+//        Performance.getInstance().addBreakpoint();
+//        Performance.getInstance().printEvaluationInMilliseconds();
     }
 
     @Override
