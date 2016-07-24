@@ -177,7 +177,12 @@ public class Earth extends UvSphere implements Creation {
 
     @Override
     protected void bindHandles() {
-        mvpMatrixHandle = GLES20.glGetUniformLocation(program, MODEL_VIEW_PROJECTION_HANDLE);
+        mModelHandle = GLES20.glGetUniformLocation(program, MODEL_HANDLE);
+        mViewHandle = GLES20.glGetUniformLocation(program, VIEW_HANDLE);
+        mPerspectiveHandle = GLES20.glGetUniformLocation(program, PERSPECTIVE_HANDLE);
+        mvHandle = GLES20.glGetUniformLocation(program, MV_HANDLE);
+        mvpHandle = GLES20.glGetUniformLocation(program, MVP_HANDLE);
+
         texIdHandle = GLES20.glGetUniformLocation(program, TEXTURE_ID_HANDLE);
 
         vertexHandle = GLES20.glGetAttribLocation(program, VERTEX_HANDLE);
@@ -194,7 +199,7 @@ public class Earth extends UvSphere implements Creation {
         GLES20.glEnableVertexAttribArray(vertexHandle);
         GLES20.glEnableVertexAttribArray(texCoordHandle);
 
-        GLES20.glUniformMatrix4fv(mvpMatrixHandle, 1, false, modelViewProjection, 0);
+        GLES20.glUniformMatrix4fv(mvpHandle, 1, false, mvp, 0);
 
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, verticesBuffHandle);
         GLES20.glVertexAttribPointer(vertexHandle, 3, GLES20.GL_FLOAT, false, 0, 0);

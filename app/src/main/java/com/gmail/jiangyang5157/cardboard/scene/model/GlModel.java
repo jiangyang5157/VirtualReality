@@ -34,9 +34,16 @@ public abstract class GlModel extends Model {
 
     public static final int GLES_VERSION_REQUIRED = 0x00020000;
 
+    protected float[] model = new float[16];
+    protected float[] mv = new float[16];
+    protected float[] mvp = new float[16];
+
     protected static final String MODEL_HANDLE = "u_ModelMatrix";
-    protected static final String MODEL_VIEW_HANDLE = "u_MVMatrix";
-    protected static final String MODEL_VIEW_PROJECTION_HANDLE = "u_MVPMatrix";
+    protected static final String VIEW_HANDLE = "u_ViewMatrix";
+    protected static final String PERSPECTIVE_HANDLE = "u_PerspectiveMatrix";
+    protected static final String MV_HANDLE = "u_MVMatrix";
+    protected static final String MVP_HANDLE = "u_MVPMatrix";
+
     protected static final String TEXTURE_ID_HANDLE = "u_TexId";
     protected static final String COLOR_HANDLE = "u_Color";
     protected static final String LIGHT_POSITION_HANDLE = "u_LightPos";
@@ -44,9 +51,12 @@ public abstract class GlModel extends Model {
     protected static final String NORMAL_HANDLE = "a_Normal";
     protected static final String TEXTURE_COORDS_HANDLE = "a_TexCoord";
 
-    protected int mMatrixHandle;
-    protected int mvMatrixHandle;
-    protected int mvpMatrixHandle;
+    protected int mModelHandle;
+    protected int mViewHandle;
+    protected int mPerspectiveHandle;
+    protected int mvHandle;
+    protected int mvpHandle;
+
     protected int texIdHandle;
     protected int colorHandle;
     protected int lightPosHandle;
@@ -74,7 +84,7 @@ public abstract class GlModel extends Model {
     protected ClickListener onClickListener;
 
     /**
-     * For each frame, check this value before modelView / modelViewProjection.
+     * For each frame, check this value before mv / mvp.
      * When there is a change made for rotation / scale / translation, we need to set modelRequireUpdate true as well.
      */
     protected boolean modelRequireUpdate = false;
@@ -82,6 +92,13 @@ public abstract class GlModel extends Model {
     protected GlModel(Context context) {
         super();
         this.context = context;
+
+        model = new float[16];
+        mv = new float[16];
+        mvp = new float[16];
+        Matrix.setIdentityM(this.model, 0);
+        Matrix.setIdentityM(this.mv, 0);
+        Matrix.setIdentityM(this.mvp, 0);
     }
 
     public void create(@NonNull ArrayMap<Integer, Integer> shaders) {
@@ -119,8 +136,10 @@ public abstract class GlModel extends Model {
             modelRequireUpdate = false;
         }
 
-        Matrix.multiplyMM(modelView, 0, view, 0, model, 0);
-        Matrix.multiplyMM(modelViewProjection, 0, perspective, 0, modelView, 0);
+        Matrix.multiplyMM(mv, 0, view, 0, model, 0);
+        Matrix.multiplyMM(mvp, 0, perspective, 0, mv, 0);
+//        Matrix.multiplyMM(mvp, 0, perspective, 0, view, 0);
+//        Matrix.multiplyMM(mvp, 0, mvp, 0, model, 0);
     }
 
     public void setOnClickListener(ClickListener onClickListener) {
@@ -179,6 +198,18 @@ public abstract class GlModel extends Model {
         }
 
         return handler;
+    }
+
+    public float[] getModel() {
+        return this.model;
+    }
+
+    public float[] getMv() {
+        return this.mv;
+    }
+
+    public float[] getMvp() {
+        return this.mvp;
     }
 
     @Override

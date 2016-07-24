@@ -42,8 +42,12 @@ public abstract class Icosphere extends Sphere {
 
     @Override
     protected void bindHandles() {
-        mvMatrixHandle = GLES20.glGetUniformLocation(program, MODEL_VIEW_HANDLE);
-        mvpMatrixHandle = GLES20.glGetUniformLocation(program, MODEL_VIEW_PROJECTION_HANDLE);
+        mModelHandle = GLES20.glGetUniformLocation(program, MODEL_HANDLE);
+        mViewHandle = GLES20.glGetUniformLocation(program, VIEW_HANDLE);
+        mPerspectiveHandle = GLES20.glGetUniformLocation(program, PERSPECTIVE_HANDLE);
+        mvHandle = GLES20.glGetUniformLocation(program, MV_HANDLE);
+        mvpHandle = GLES20.glGetUniformLocation(program, MVP_HANDLE);
+
         colorHandle = GLES20.glGetUniformLocation(program, COLOR_HANDLE);
         lightPosHandle = GLES20.glGetUniformLocation(program, LIGHT_POSITION_HANDLE);
 
@@ -102,8 +106,8 @@ public abstract class Icosphere extends Sphere {
         GLES20.glEnableVertexAttribArray(vertexHandle);
         GLES20.glEnableVertexAttribArray(normalHandle);
 
-        GLES20.glUniformMatrix4fv(mvMatrixHandle, 1, false, modelView, 0);
-        GLES20.glUniformMatrix4fv(mvpMatrixHandle, 1, false, modelViewProjection, 0);
+        GLES20.glUniformMatrix4fv(mvHandle, 1, false, mv, 0);
+        GLES20.glUniformMatrix4fv(mvpHandle, 1, false, mvp, 0);
         GLES20.glUniform3fv(colorHandle, 1, color, 0);
         if (lighting != null) {
             GLES20.glUniform3fv(lightPosHandle, 1, lighting.getLightPosInCameraSpace(), 0);

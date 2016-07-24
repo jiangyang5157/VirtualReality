@@ -71,8 +71,8 @@ public class Marker3d extends Icosphere {
         // position in camera space
         float[] posInCameraSpace = new float[4];
         // Convert object space to camera space - Use the headView from onNewFrame.
-        Matrix.multiplyMM(modelView, 0, headView, 0, model, 0);
-        Matrix.multiplyMV(posInCameraSpace, 0, modelView, 0, posMultiply, 0);
+        Matrix.multiplyMM(mv, 0, headView, 0, model, 0);
+        Matrix.multiplyMV(posInCameraSpace, 0, mv, 0, posMultiply, 0);
 
         double pitch = Math.atan2(posInCameraSpace[1], -posInCameraSpace[2]);
         double yaw = Math.atan2(posInCameraSpace[0], -posInCameraSpace[2]);
