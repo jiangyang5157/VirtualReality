@@ -71,6 +71,7 @@ public class Marker3d extends Icosphere {
         // position in camera space
         float[] posInCameraSpace = new float[4];
         // Convert object space to camera space - Use the headView from onNewFrame.
+        float[] mv = new float[16];
         Matrix.multiplyMM(mv, 0, headView, 0, model, 0);
         Matrix.multiplyMV(posInCameraSpace, 0, mv, 0, posMultiply, 0);
 

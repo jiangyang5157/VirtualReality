@@ -35,14 +35,12 @@ public abstract class GlModel extends Model {
     public static final int GLES_VERSION_REQUIRED = 0x00020000;
 
     protected float[] model = new float[16];
-    protected float[] mv = new float[16];
-    protected float[] mvp = new float[16];
+    protected float[] view;
+    protected float[] perspective;
 
     protected static final String MODEL_HANDLE = "u_ModelMatrix";
     protected static final String VIEW_HANDLE = "u_ViewMatrix";
     protected static final String PERSPECTIVE_HANDLE = "u_PerspectiveMatrix";
-    protected static final String MV_HANDLE = "u_MVMatrix";
-    protected static final String MVP_HANDLE = "u_MVPMatrix";
 
     protected static final String TEXTURE_ID_HANDLE = "u_TexId";
     protected static final String COLOR_HANDLE = "u_Color";
@@ -54,8 +52,6 @@ public abstract class GlModel extends Model {
     protected int mModelHandle;
     protected int mViewHandle;
     protected int mPerspectiveHandle;
-    protected int mvHandle;
-    protected int mvpHandle;
 
     protected int texIdHandle;
     protected int colorHandle;
@@ -94,11 +90,7 @@ public abstract class GlModel extends Model {
         this.context = context;
 
         model = new float[16];
-        mv = new float[16];
-        mvp = new float[16];
         Matrix.setIdentityM(this.model, 0);
-        Matrix.setIdentityM(this.mv, 0);
-        Matrix.setIdentityM(this.mvp, 0);
     }
 
     public void create(@NonNull ArrayMap<Integer, Integer> shaders) {
@@ -136,10 +128,8 @@ public abstract class GlModel extends Model {
             modelRequireUpdate = false;
         }
 
-        Matrix.multiplyMM(mv, 0, view, 0, model, 0);
-        Matrix.multiplyMM(mvp, 0, perspective, 0, mv, 0);
-//        Matrix.multiplyMM(mvp, 0, perspective, 0, view, 0);
-//        Matrix.multiplyMM(mvp, 0, mvp, 0, model, 0);
+        this.view = view;
+        this.perspective = perspective;
     }
 
     public void setOnClickListener(ClickListener onClickListener) {
@@ -202,14 +192,6 @@ public abstract class GlModel extends Model {
 
     public float[] getModel() {
         return this.model;
-    }
-
-    public float[] getMv() {
-        return this.mv;
-    }
-
-    public float[] getMvp() {
-        return this.mvp;
     }
 
     @Override

@@ -33,8 +33,10 @@ public class AtomMarker extends Marker3d {
             return;
         }
 
-        GLES20.glUniformMatrix4fv(mvHandle, 1, false, mv, 0);
-        GLES20.glUniformMatrix4fv(mvpHandle, 1, false, mvp, 0);
+        GLES20.glUniformMatrix4fv(mModelHandle, 1, false, model, 0);
+        GLES20.glUniformMatrix4fv(mViewHandle, 1, false, view, 0);
+        GLES20.glUniformMatrix4fv(mPerspectiveHandle, 1, false, perspective, 0);
+
         GLES20.glUniform3fv(colorHandle, 1, color, 0);
 
         GLES20.glDrawElements(GLES20.GL_TRIANGLES, indicesBufferCapacity, GLES20.GL_UNSIGNED_SHORT, 0);

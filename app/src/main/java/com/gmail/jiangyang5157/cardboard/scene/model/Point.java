@@ -48,8 +48,6 @@ public abstract class Point extends GlModel implements GlModel.BindableBuffer {
         mModelHandle = GLES20.glGetUniformLocation(program, MODEL_HANDLE);
         mViewHandle = GLES20.glGetUniformLocation(program, VIEW_HANDLE);
         mPerspectiveHandle = GLES20.glGetUniformLocation(program, PERSPECTIVE_HANDLE);
-        mvHandle = GLES20.glGetUniformLocation(program, MV_HANDLE);
-        mvpHandle = GLES20.glGetUniformLocation(program, MVP_HANDLE);
 
         colorHandle = GLES20.glGetUniformLocation(program, COLOR_HANDLE);
         pointSizeHandle = GLES20.glGetUniformLocation(program, POINT_SIZE_HANDLE);
@@ -80,7 +78,10 @@ public abstract class Point extends GlModel implements GlModel.BindableBuffer {
         GLES20.glUseProgram(program);
         GLES20.glEnableVertexAttribArray(vertexHandle);
 
-        GLES20.glUniformMatrix4fv(mvpHandle, 1, false, mvp, 0);
+        GLES20.glUniformMatrix4fv(mModelHandle, 1, false, model, 0);
+        GLES20.glUniformMatrix4fv(mViewHandle, 1, false, view, 0);
+        GLES20.glUniformMatrix4fv(mPerspectiveHandle, 1, false, perspective, 0);
+
         GLES20.glUniform3fv(colorHandle, 1, color, 0);
         GLES20.glUniform1f(pointSizeHandle, pointSize);
 
