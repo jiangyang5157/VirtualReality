@@ -46,8 +46,12 @@ public class AtomMarkers extends Marker3d {
         for(int i = 0; i < iSize; i++){
             AtomMarker marker = markers.get(i);
             marker.create(program);
+            marker.mModelHandle = mModelHandle;
+            marker.mViewHandle = mViewHandle;
+            marker.mPerspectiveHandle = mPerspectiveHandle;
             marker.mvHandle = mvHandle;
             marker.mvpHandle = mvpHandle;
+
             marker.colorHandle = colorHandle;
             marker.indicesBufferCapacity = indicesBufferCapacity;
         }
