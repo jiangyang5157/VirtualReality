@@ -31,8 +31,6 @@ public abstract class GlModel {
         void bindTextureBuffers();
     }
 
-    public static final int GLES_VERSION_REQUIRED = 0x00020000;
-
     protected float[] rotation;
     // The scale for all x, y and z axis
     protected float scale;

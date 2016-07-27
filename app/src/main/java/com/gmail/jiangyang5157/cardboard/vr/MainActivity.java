@@ -500,7 +500,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
     @Override
     protected void onStart() {
         super.onStart();
-        if (!DeviceUtils.glesValidate(getApplicationContext(), GlModel.GLES_VERSION_REQUIRED)) {
+        if (!DeviceUtils.glesValidate(getApplicationContext(), Constant.GLES_VERSION_REQUIRED)) {
             Toast.makeText(getApplicationContext(), getString(R.string.error_gles_version_not_supported), Toast.LENGTH_SHORT).show();
             finish();
         }
