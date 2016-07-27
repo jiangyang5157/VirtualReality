@@ -202,10 +202,6 @@ public abstract class GlModel {
         return handler;
     }
 
-    public float[] getModel() {
-        return this.model;
-    }
-
     public void setCreated(boolean created) {
         isCreated = created;
     }
@@ -222,21 +218,20 @@ public abstract class GlModel {
         return isVisible;
     }
 
-    public void destroy() {
-        isVisible = false;
-        isCreated = false;
-
-        if (program != 0) {
-            GLES20.glDeleteProgram(program);
-        }
-
-        if (handlerThread != null) {
-            handlerThread.quitSafely();
-        }
+    public float[] getRotation() {
+        return rotation;
     }
 
-    public float[] getPosition() {
-        return new float[]{translation[12], translation[13], translation[14]};
+    public void setScale(float scale) {
+        this.scale = scale;
+    }
+
+    public float getScale() {
+        return scale;
+    }
+
+    public float[] getTranslation() {
+        return translation;
     }
 
     public float getX() {
@@ -251,19 +246,24 @@ public abstract class GlModel {
         return translation[14];
     }
 
-    public void setScale(float scale) {
-        this.scale = scale;
+    public float[] getPosition() {
+        return new float[]{translation[12], translation[13], translation[14]};
+    }
+    
+    public float[] getModel() {
+        return this.model;
     }
 
-    public float getScale() {
-        return scale;
-    }
+    public void destroy() {
+        isVisible = false;
+        isCreated = false;
 
-    public float[] getRotation() {
-        return rotation;
-    }
+        if (program != 0) {
+            GLES20.glDeleteProgram(program);
+        }
 
-    public float[] getTranslation() {
-        return translation;
+        if (handlerThread != null) {
+            handlerThread.quitSafely();
+        }
     }
 }
