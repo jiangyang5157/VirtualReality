@@ -4,7 +4,7 @@ import android.content.Context;
 import android.opengl.GLES20;
 
 import com.gmail.jiangyang5157.tookit.app.AppUtils;
-import com.gmail.jiangyang5157.tookit.opengl.GlUtils;
+import com.gmail.jiangyang5157.tookit.render.GlesUtils;
 
 /**
  * @author Yang
@@ -41,6 +41,6 @@ public class AtomMarker extends Marker3d {
 
         GLES20.glDrawElements(GLES20.GL_TRIANGLES, indicesBufferCapacity, GLES20.GL_UNSIGNED_SHORT, 0);
 
-        GlUtils.printGlError(TAG + " - draw end");
+        GlesUtils.printGlError(TAG + " - draw end");
     }
 }

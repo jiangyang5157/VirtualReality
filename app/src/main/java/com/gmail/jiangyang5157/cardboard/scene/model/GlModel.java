@@ -10,14 +10,13 @@ import android.support.annotation.NonNull;
 import android.util.ArrayMap;
 
 import com.gmail.jiangyang5157.cardboard.scene.Lighting;
-import com.gmail.jiangyang5157.tookit.opengl.Model;
-import com.gmail.jiangyang5157.tookit.opengl.GlUtils;
+import com.gmail.jiangyang5157.tookit.render.GlesUtils;
 
 /**
  * @author Yang
  * @since 4/30/2016
  */
-public abstract class GlModel extends Model {
+public abstract class GlModel {
     private static final String TAG = "[GlModel]";
 
     public interface ClickListener {
@@ -33,6 +32,11 @@ public abstract class GlModel extends Model {
     }
 
     public static final int GLES_VERSION_REQUIRED = 0x00020000;
+
+    protected float[] rotation;
+    // The scale for all x, y and z axis
+    protected float scale;
+    protected float[] translation;
 
     protected float[] model = new float[16];
     protected float[] view;
@@ -79,6 +83,9 @@ public abstract class GlModel extends Model {
 
     protected ClickListener onClickListener;
 
+    private boolean isCreated;
+    private boolean isVisible;
+
     /**
      * For each frame, check this value before mv / mvp.
      * When there is a change made for rotation / scale / translation, we need to set modelRequireUpdate true as well.
@@ -86,15 +93,19 @@ public abstract class GlModel extends Model {
     protected boolean modelRequireUpdate = false;
 
     protected GlModel(Context context) {
-        super();
         this.context = context;
 
+        rotation = new float[16];
+        Matrix.setIdentityM(rotation, 0);
+        scale = 1.0f;
+        translation = new float[16];
+        Matrix.setIdentityM(translation, 0);
         model = new float[16];
         Matrix.setIdentityM(this.model, 0);
     }
 
     public void create(@NonNull ArrayMap<Integer, Integer> shaders) {
-        create(GlUtils.createProgram(context, shaders));
+        create(GlesUtils.createProgram(context, shaders));
     }
 
     public void create(int program) {
@@ -109,15 +120,6 @@ public abstract class GlModel extends Model {
 
     protected abstract void buildData();
 
-    @Override
-    public void update() {
-
-    }
-
-    public void onFocuse(boolean isFocused) {
-
-    }
-
     public void update(float[] view, float[] perspective) {
         if (modelRequireUpdate) {
             // Only update model mat when required, update need to be done in the following order rotation-scale-translation.
@@ -130,6 +132,18 @@ public abstract class GlModel extends Model {
 
         this.view = view;
         this.perspective = perspective;
+    }
+
+    public void update() {
+
+    }
+
+    public void draw() {
+
+    }
+
+    public void onFocuse(boolean isFocused) {
+
     }
 
     public void setOnClickListener(ClickListener onClickListener) {
@@ -194,9 +208,26 @@ public abstract class GlModel extends Model {
         return this.model;
     }
 
-    @Override
+    public void setCreated(boolean created) {
+        isCreated = created;
+    }
+
+    public boolean isCreated() {
+        return isCreated;
+    }
+
+    public void setVisible(boolean visible) {
+        this.isVisible = visible;
+    }
+
+    public boolean isVisible() {
+        return isVisible;
+    }
+
     public void destroy() {
-        super.destroy();
+        isVisible = false;
+        isCreated = false;
+
         if (program != 0) {
             GLES20.glDeleteProgram(program);
         }
@@ -204,5 +235,37 @@ public abstract class GlModel extends Model {
         if (handlerThread != null) {
             handlerThread.quitSafely();
         }
+    }
+
+    public float[] getPosition() {
+        return new float[]{translation[12], translation[13], translation[14]};
+    }
+
+    public float getX() {
+        return translation[12];
+    }
+
+    public float getY() {
+        return translation[13];
+    }
+
+    public float getZ() {
+        return translation[14];
+    }
+
+    public void setScale(float scale) {
+        this.scale = scale;
+    }
+
+    public float getScale() {
+        return scale;
+    }
+
+    public float[] getRotation() {
+        return rotation;
+    }
+
+    public float[] getTranslation() {
+        return translation;
     }
 }

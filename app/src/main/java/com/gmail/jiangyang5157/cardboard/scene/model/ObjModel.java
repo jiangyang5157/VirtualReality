@@ -13,7 +13,7 @@ import com.gmail.jiangyang5157.cardboard.vr.Constant;
 import com.gmail.jiangyang5157.tookit.app.AppUtils;
 import com.gmail.jiangyang5157.tookit.data.buffer.BufferUtils;
 import com.gmail.jiangyang5157.tookit.data.io.IoUtils;
-import com.gmail.jiangyang5157.tookit.opengl.GlUtils;
+import com.gmail.jiangyang5157.tookit.render.GlesUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -433,7 +433,7 @@ public class ObjModel extends GlModel implements GlModel.BindableBuffer, Creatio
         GLES20.glDisableVertexAttribArray(normalHandle);
         GLES20.glUseProgram(0);
 
-        GlUtils.printGlError(TAG + " - draw end");
+        GlesUtils.printGlError(TAG + " - draw end");
     }
 
     public String getTitle() {

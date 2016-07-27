@@ -8,7 +8,7 @@ import android.util.Log;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
 import com.gmail.jiangyang5157.cardboard.scene.RayIntersection;
 import com.gmail.jiangyang5157.tookit.app.AppUtils;
-import com.gmail.jiangyang5157.tookit.opengl.GlUtils;
+import com.gmail.jiangyang5157.tookit.render.GlesUtils;
 
 /**
  * @author Yang
@@ -109,7 +109,7 @@ public class Ray extends Point {
         GLES20.glDisableVertexAttribArray(vertexHandle);
         GLES20.glUseProgram(0);
 
-        GlUtils.printGlError(TAG + " - draw end");
+        GlesUtils.printGlError(TAG + " - draw end");
     }
 
     public void addBusy() {

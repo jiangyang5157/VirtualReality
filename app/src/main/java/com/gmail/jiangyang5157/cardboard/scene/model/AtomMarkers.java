@@ -11,7 +11,7 @@ import com.gmail.jiangyang5157.cardboard.scene.tree.OcTree;
 import com.gmail.jiangyang5157.cardboard.scene.tree.OcTreeNode;
 import com.gmail.jiangyang5157.cardboard.scene.tree.OcTreeObject;
 import com.gmail.jiangyang5157.tookit.math.Vector;
-import com.gmail.jiangyang5157.tookit.opengl.GlUtils;
+import com.gmail.jiangyang5157.tookit.render.GlesUtils;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -89,7 +89,7 @@ public class AtomMarkers extends Marker3d {
         GLES20.glDisableVertexAttribArray(normalHandle);
         GLES20.glUseProgram(0);
 
-        GlUtils.printGlError(TAG + " - draw end");
+        GlesUtils.printGlError(TAG + " - draw end");
     }
 
     @Override

@@ -8,6 +8,7 @@ import android.hardware.SensorManager;
 import android.support.annotation.NonNull;
 
 import com.gmail.jiangyang5157.cardboard.scene.model.Earth;
+import com.gmail.jiangyang5157.tookit.app.TimeUtils;
 
 /**
  * @author Yang
@@ -30,9 +31,8 @@ public class Head implements SensorEventListener {
 
     private double[] lastVelocity;
     private static final double VELOCITY_DAMPING = 0.96;
-    private static final double ACCELERATION_PULSE = 0.4;
+    private static final double ACCELERATION_PULSE = 0.6;
     private long lastTime;
-    private static final double MULTIPLICATOR_NANO_2_MILLI = 0.000001;
 
     public Head(Context context) {
         headView = new float[16];
@@ -73,7 +73,7 @@ public class Head implements SensorEventListener {
 
     private void updateCameraPosition() {
         long thisTime = System.nanoTime();
-        double estimatedTime = (thisTime - lastTime) * MULTIPLICATOR_NANO_2_MILLI; // 60 fps: ~26 ms
+        double estimatedTime = TimeUtils.nano2milli(thisTime - lastTime); // 60 fps: ~26 ms
         lastTime = thisTime;
 //        Log.d(TAG, "estimated time: " + estimatedTime);
 

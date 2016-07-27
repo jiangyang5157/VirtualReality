@@ -4,7 +4,7 @@ import android.content.Context;
 import android.opengl.GLES20;
 
 import com.gmail.jiangyang5157.tookit.data.buffer.BufferUtils;
-import com.gmail.jiangyang5157.tookit.opengl.GlUtils;
+import com.gmail.jiangyang5157.tookit.render.GlesUtils;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -93,7 +93,7 @@ public abstract class Point extends GlModel implements GlModel.BindableBuffer {
         GLES20.glDisableVertexAttribArray(vertexHandle);
         GLES20.glUseProgram(0);
 
-        GlUtils.printGlError(TAG + " - draw end");
+        GlesUtils.printGlError(TAG + " - draw end");
     }
 
     @Override
