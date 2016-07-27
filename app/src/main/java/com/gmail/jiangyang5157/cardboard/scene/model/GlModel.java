@@ -32,11 +32,10 @@ public abstract class GlModel {
     }
 
     protected float[] rotation;
-    // The scale for all x, y and z axis
-    protected float scale;
+    protected float scale; // Scale for all x, y and z axis
     protected float[] translation;
 
-    protected float[] model = new float[16];
+    protected float[] model;
     protected float[] view;
     protected float[] perspective;
 
@@ -94,12 +93,13 @@ public abstract class GlModel {
         this.context = context;
 
         rotation = new float[16];
-        Matrix.setIdentityM(rotation, 0);
         scale = 1.0f;
         translation = new float[16];
-        Matrix.setIdentityM(translation, 0);
         model = new float[16];
+
         Matrix.setIdentityM(this.model, 0);
+        Matrix.setIdentityM(rotation, 0);
+        Matrix.setIdentityM(translation, 0);
     }
 
     public void create(@NonNull ArrayMap<Integer, Integer> shaders) {
@@ -120,7 +120,7 @@ public abstract class GlModel {
 
     public void update(float[] view, float[] perspective) {
         if (modelRequireUpdate) {
-            // Only update model mat when required, update need to be done in the following order rotation-scale-translation.
+            // Only update model mat when required, model matrix creation has to be done in order rotation -> scale -> translation.
             Matrix.setIdentityM(model, 0);
             Matrix.multiplyMM(model, 0, rotation, 0, model, 0);
             Matrix.scaleM(model, 0, scale, scale, scale);
