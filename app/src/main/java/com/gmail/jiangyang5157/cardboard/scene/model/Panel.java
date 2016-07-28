@@ -75,6 +75,34 @@ public abstract class Panel extends Rectangle implements GlModel.BindableBuffer,
         buildCorners(up, right, position);
     }
 
+    /*
+      ################################################################
+       The original algorithm as follow:
+       Ray: R(t) = Ro + Rd * t
+
+             u
+       s1 +----------------------+ s2
+          | \  |                 |
+         v|   \|                 |
+          |--- m                 |
+          |          n           |
+          |                      |
+          |                      |
+       s3 +----------------------+ s4
+
+       if m belongs to Plane: n * (m - s1) = 0
+       if m belongs to Ray: m = Ro + Rd * t
+       solve t = (-n * (Ro - s1)) / (n * Rd)
+       if abs(n * Rd) < EPSILON the plane is parallel to the ray, and there is no intersection
+
+       u = (n - s1) . (s2 - s1)
+       v = (n - s1) . (s3 - s1)
+
+       if
+       u belongs to [0, dot(s2 - s1, s2 - s1)]
+       v belongs to [0, dot(s3 - s1, s3 - s1)]
+       then the point of intersection M lies inside the square, else it's outside.
+     */
     public RayIntersection getIntersection(Vector cameraPos_vec, Vector headForward_vec) {
         if (!isCreated() || !isVisible()) {
             return null;
@@ -90,8 +118,8 @@ public abstract class Panel extends Rectangle implements GlModel.BindableBuffer,
             return null; // behind the ray
         }
 
-        Vector iPlane = cameraPos_vec.plus(ray_vec.times(t));
-        Vector tl_iPlane = iPlane.minus(tl_vec);
+        Vector m = cameraPos_vec.plus(ray_vec.times(t));
+        Vector tl_iPlane = m.minus(tl_vec);
         double u = tl_iPlane.dot(tl_tr_vec);
         double v = tl_iPlane.dot(tl_bl_vec);
 
