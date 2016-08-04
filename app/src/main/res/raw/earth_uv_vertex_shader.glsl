@@ -11,7 +11,7 @@ out vec2 v_texCoord;
 
 void main()
 {
-    mat4 mv = u_ViewMatrix  * u_ModelMatrix;
+    mat4 mv = u_ViewMatrix * u_ModelMatrix;
     mat4 mvp = u_PerspectiveMatrix * mv;
 
     v_texCoord = a_TexCoord;

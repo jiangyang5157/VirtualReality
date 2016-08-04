@@ -11,7 +11,7 @@ out float v_PointSize;
 
 void main()
 {
-    mat4 mv = u_ViewMatrix  * u_ModelMatrix;
+    mat4 mv = u_ViewMatrix * u_ModelMatrix;
     mat4 mvp = u_PerspectiveMatrix * mv;
 
     gl_Position = mvp * a_Position;

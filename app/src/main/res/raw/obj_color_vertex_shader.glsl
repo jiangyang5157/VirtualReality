@@ -12,7 +12,7 @@ out vec3 v_Normal;
 
 void main()
 {
-    mat4 mv = u_ViewMatrix  * u_ModelMatrix;
+    mat4 mv = u_ViewMatrix * u_ModelMatrix;
     mat4 mvp = u_PerspectiveMatrix * mv;
 
     // Transform the vertex into eye space.

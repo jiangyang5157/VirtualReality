@@ -12,7 +12,7 @@ out vec3 v_Normal;
 
 void main()
 {
-    mat4 mv = u_ViewMatrix  * u_ModelMatrix;
+    mat4 mv = u_ViewMatrix * u_ModelMatrix;
     mat4 mvp = u_PerspectiveMatrix * mv;
 
     // Draw an object that looks the same size regarles the distance in perspective view.
