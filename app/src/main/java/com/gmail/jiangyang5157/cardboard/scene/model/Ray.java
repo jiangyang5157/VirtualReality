@@ -93,9 +93,9 @@ public class Ray extends Point {
         GLES20.glUseProgram(program);
         GLES20.glEnableVertexAttribArray(vertexHandle);
 
-        GLES20.glUniformMatrix4fv(mModelHandle, 1, false, model, 0);
-        GLES20.glUniformMatrix4fv(mViewHandle, 1, false, view, 0);
-        GLES20.glUniformMatrix4fv(mPerspectiveHandle, 1, false, perspective, 0);
+        GLES20.glUniformMatrix4fv(modelHandle, 1, false, model, 0);
+        GLES20.glUniformMatrix4fv(viewHandle, 1, false, view, 0);
+        GLES20.glUniformMatrix4fv(perspectiveHandle, 1, false, perspective, 0);
 
         GLES20.glUniform3fv(colorHandle, 1, color, 0);
         GLES20.glUniform1f(pointSizeHandle, pointSize);

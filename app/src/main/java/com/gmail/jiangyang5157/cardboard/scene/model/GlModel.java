@@ -50,9 +50,9 @@ public abstract class GlModel {
     protected static final String NORMAL_HANDLE = "a_Normal";
     protected static final String TEXTURE_COORDS_HANDLE = "a_TexCoord";
 
-    protected int mModelHandle;
-    protected int mViewHandle;
-    protected int mPerspectiveHandle;
+    protected int modelHandle;
+    protected int viewHandle;
+    protected int perspectiveHandle;
 
     protected int texIdHandle;
     protected int colorHandle;

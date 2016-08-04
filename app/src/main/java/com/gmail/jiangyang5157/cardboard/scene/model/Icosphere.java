@@ -42,9 +42,9 @@ public abstract class Icosphere extends Sphere {
 
     @Override
     protected void bindHandles() {
-        mModelHandle = GLES20.glGetUniformLocation(program, MODEL_HANDLE);
-        mViewHandle = GLES20.glGetUniformLocation(program, VIEW_HANDLE);
-        mPerspectiveHandle = GLES20.glGetUniformLocation(program, PERSPECTIVE_HANDLE);
+        modelHandle = GLES20.glGetUniformLocation(program, MODEL_HANDLE);
+        viewHandle = GLES20.glGetUniformLocation(program, VIEW_HANDLE);
+        perspectiveHandle = GLES20.glGetUniformLocation(program, PERSPECTIVE_HANDLE);
 
         colorHandle = GLES20.glGetUniformLocation(program, COLOR_HANDLE);
         lightPosHandle = GLES20.glGetUniformLocation(program, LIGHT_POSITION_HANDLE);
@@ -104,9 +104,9 @@ public abstract class Icosphere extends Sphere {
         GLES20.glEnableVertexAttribArray(vertexHandle);
         GLES20.glEnableVertexAttribArray(normalHandle);
 
-        GLES20.glUniformMatrix4fv(mModelHandle, 1, false, model, 0);
-        GLES20.glUniformMatrix4fv(mViewHandle, 1, false, view, 0);
-        GLES20.glUniformMatrix4fv(mPerspectiveHandle, 1, false, perspective, 0);
+        GLES20.glUniformMatrix4fv(modelHandle, 1, false, model, 0);
+        GLES20.glUniformMatrix4fv(viewHandle, 1, false, view, 0);
+        GLES20.glUniformMatrix4fv(perspectiveHandle, 1, false, perspective, 0);
 
         GLES20.glUniform3fv(colorHandle, 1, color, 0);
         if (lighting != null) {
