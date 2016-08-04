@@ -130,7 +130,7 @@ public abstract class GlModel {
     /**
      * The model matrix creation has to be done in order: rotation -> scale -> translation.
      */
-    private void updateModel() {
+    protected void updateModel() {
         Matrix.setIdentityM(model, 0);
         Matrix.multiplyMM(model, 0, rotation, 0, model, 0);
         Matrix.scaleM(model, 0, scale, scale, scale);
