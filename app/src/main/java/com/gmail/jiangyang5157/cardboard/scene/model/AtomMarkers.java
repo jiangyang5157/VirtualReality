@@ -100,6 +100,9 @@ public class AtomMarkers extends Marker3d {
 
     @Override
     public void update(float[] view, float[] perspective) {
+        this.view = view;
+        this.perspective = perspective;
+
         int iSize = markers.size();
         for (int i = 0; i < iSize; i++) {
             markers.get(i).update(view, perspective);
