@@ -18,7 +18,7 @@ public class Constant {
     private static final String TAG = "[Constant]";
     public static final int DEBUG = 0;
 
-    public static final int GLES_VERSION_REQUIRED = 0x00020000;
+    public static final int GLES_VERSION_REQUIRED = 0x00030000;
 
     public static final String URL_ = "http://192.168.1.68:8080/assets/";
 

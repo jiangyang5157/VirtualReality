@@ -1,12 +1,14 @@
+#version 300 es
+
 uniform mat4 u_ModelMatrix;
 uniform mat4 u_ViewMatrix;
 uniform mat4 u_PerspectiveMatrix;
 
-attribute vec4 a_Position;
-attribute vec3 a_Normal;
+in vec4 a_Position;
+in vec3 a_Normal;
 
-varying vec3 v_Position;
-varying vec3 v_Normal;
+out vec3 v_Position;
+out vec3 v_Normal;
 
 void main()
 {

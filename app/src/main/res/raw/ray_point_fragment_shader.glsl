@@ -1,8 +1,12 @@
+#version 300 es
 precision mediump float;
+
 uniform vec3 u_Color;
 uniform int u_Busy;
 
-varying float v_PointSize;
+in float v_PointSize;
+
+out vec4 FragColor;
 
 void main()
 {
@@ -16,7 +20,7 @@ void main()
     }
 
     if(down < length && length < up){
-        gl_FragColor = vec4(u_Color, 1.0);
+        FragColor = vec4(u_Color, 1.0);
     } else {
         discard;
     }

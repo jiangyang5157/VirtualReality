@@ -1,11 +1,13 @@
+#version 300 es
+
 uniform mat4 u_ModelMatrix;
 uniform mat4 u_ViewMatrix;
 uniform mat4 u_PerspectiveMatrix;
 uniform float u_PointSize;
 
-attribute vec4 a_Position;
+in vec4 a_Position;
 
-varying float v_PointSize;
+out float v_PointSize;
 
 void main()
 {

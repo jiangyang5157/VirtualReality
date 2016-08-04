@@ -70,6 +70,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         setContentView(R.layout.activity_main);
 
         gvrView = (GvrView) findViewById(R.id.gvr_view);
+        gvrView.setEGLContextClientVersion(3);
         gvrView.setEGLConfigChooser(8, 8, 8, 8, 16, 8);
 
         gvrView.setRenderer(this);

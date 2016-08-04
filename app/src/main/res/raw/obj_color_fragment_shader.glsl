@@ -1,10 +1,14 @@
+#version 300 es
 precision mediump float;
+
 uniform vec3 u_Color;
 
 uniform vec3 u_LightPos;
 
-varying vec3 v_Position;
-varying vec3 v_Normal;
+in vec3 v_Position;
+in vec3 v_Normal;
+
+out vec4 FragColor;
 
 void main()
 {
@@ -18,5 +22,5 @@ void main()
     const float minDiffuse = 0.25;
     diffuse = max(diffuse, minDiffuse);
 
-    gl_FragColor = vec4(u_Color, 1.0) * diffuse;
+    FragColor = vec4(u_Color, 1.0) * diffuse;
 }
