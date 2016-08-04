@@ -21,7 +21,7 @@ public abstract class Point extends GlModel implements GlModel.BindableBuffer {
     protected int pointSizeHandle;
     protected float pointSize;
 
-    private final int[] buffers = new int[1];
+    protected final int[] buffers = new int[1];
 
     protected float[] vertices;
 

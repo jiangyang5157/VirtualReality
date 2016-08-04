@@ -121,15 +121,18 @@ public abstract class GlModel {
     public void update(float[] view, float[] perspective) {
         if (modelRequireUpdate) {
             // Only update model mat when required, model matrix creation has to be done in order rotation -> scale -> translation.
-            Matrix.setIdentityM(model, 0);
-            Matrix.multiplyMM(model, 0, rotation, 0, model, 0);
-            Matrix.scaleM(model, 0, scale, scale, scale);
-            Matrix.multiplyMM(model, 0, translation, 0, model, 0);
+            updateModel();
             modelRequireUpdate = false;
         }
-
         this.view = view;
         this.perspective = perspective;
+    }
+
+    public void updateModel() {
+        Matrix.setIdentityM(model, 0);
+        Matrix.multiplyMM(model, 0, rotation, 0, model, 0);
+        Matrix.scaleM(model, 0, scale, scale, scale);
+        Matrix.multiplyMM(model, 0, translation, 0, model, 0);
     }
 
     public void update() {
@@ -154,6 +157,10 @@ public abstract class GlModel {
 
     public void setLighting(Lighting lighting) {
         this.lighting = lighting;
+    }
+
+    public void setColor(float[] color) {
+        this.color = color.clone();
     }
 
     public void setColor(String hex) {

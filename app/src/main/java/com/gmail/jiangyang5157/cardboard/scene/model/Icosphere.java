@@ -24,7 +24,7 @@ public abstract class Icosphere extends Sphere {
     protected float[] normals;
     protected short[] indices;
 
-    private final int[] buffers = new int[3];
+    protected final int[] buffers = new int[3];
 
     protected Icosphere(Context context, int recursionLevel) {
         super(context);
