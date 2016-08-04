@@ -120,7 +120,6 @@ public abstract class GlModel {
 
     public void update(float[] view, float[] perspective) {
         if (modelRequireUpdate) {
-            // Only update model mat when required, model matrix creation has to be done in order rotation -> scale -> translation.
             updateModel();
             modelRequireUpdate = false;
         }
@@ -128,6 +127,9 @@ public abstract class GlModel {
         this.perspective = perspective;
     }
 
+    /**
+     * The model matrix creation has to be done in order: rotation -> scale -> translation.
+     */
     private void updateModel() {
         Matrix.setIdentityM(model, 0);
         Matrix.multiplyMM(model, 0, rotation, 0, model, 0);
