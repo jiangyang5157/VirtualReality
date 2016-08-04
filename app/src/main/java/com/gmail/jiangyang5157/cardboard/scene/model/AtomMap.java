@@ -169,7 +169,7 @@ public class AtomMap extends GlModel implements Creation {
 
     @Override
     public void draw() {
-//        Log.d(TAG, "draw markers"); //
+//        Log.d(TAG, "draw markers"); // 460-12ms
 //        Performance.getInstance().addBreakpoint();
         markers.draw();
 //        Performance.getInstance().addBreakpoint();
