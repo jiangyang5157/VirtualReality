@@ -45,18 +45,20 @@ public class AtomMarkers extends Marker3d {
         int iSize = markers.size();
         for(int i = 0; i < iSize; i++){
             AtomMarker marker = markers.get(i);
-            marker.create(program);
+            if (marker.color == null) {
+                marker.setColor(color);
+            }
+            marker.bindProgram(program);
+            marker.setCreated(true);
+            marker.setVisible(true);
 
-            marker.mModelHandle = mModelHandle;
-            marker.mViewHandle = mViewHandle;
-            marker.mPerspectiveHandle = mPerspectiveHandle;
+            marker.modelHandle = modelHandle;
+            marker.viewHandle = viewHandle;
+            marker.perspectiveHandle = perspectiveHandle;
 
             marker.colorHandle = colorHandle;
             marker.indicesBufferCapacity = indicesBufferCapacity;
         }
-
-        setCreated(true);
-        setVisible(true);
     }
 
     @Override

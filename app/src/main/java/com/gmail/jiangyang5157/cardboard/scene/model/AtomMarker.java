@@ -18,24 +18,14 @@ public class AtomMarker extends Marker3d {
     }
 
     @Override
-    public void create(int program) {
-        if (color == null) {
-            setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.Yellow, null));
-        }
-        bindProgram(program);
-        setCreated(true);
-        setVisible(true);
-    }
-
-    @Override
     public void draw() {
         if (!isCreated() || !isVisible()) {
             return;
         }
 
-        GLES20.glUniformMatrix4fv(mModelHandle, 1, false, model, 0);
-        GLES20.glUniformMatrix4fv(mViewHandle, 1, false, view, 0);
-        GLES20.glUniformMatrix4fv(mPerspectiveHandle, 1, false, perspective, 0);
+        GLES20.glUniformMatrix4fv(modelHandle, 1, false, model, 0);
+        GLES20.glUniformMatrix4fv(viewHandle, 1, false, view, 0);
+        GLES20.glUniformMatrix4fv(perspectiveHandle, 1, false, perspective, 0);
 
         GLES20.glUniform3fv(colorHandle, 1, color, 0);
 

@@ -128,7 +128,7 @@ public abstract class GlModel {
         this.perspective = perspective;
     }
 
-    public void updateModel() {
+    private void updateModel() {
         Matrix.setIdentityM(model, 0);
         Matrix.multiplyMM(model, 0, rotation, 0, model, 0);
         Matrix.scaleM(model, 0, scale, scale, scale);
