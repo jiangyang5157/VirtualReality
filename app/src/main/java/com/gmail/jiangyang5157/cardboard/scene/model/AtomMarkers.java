@@ -43,7 +43,7 @@ public class AtomMarkers extends Marker3d {
         Log.d(TAG, "ocTree: " + ocTree.toString() + ", valid ocTreeNodes: " + ocTreeNodes.size());
 
         int iSize = markers.size();
-        for(int i = 0; i < iSize; i++){
+        for (int i = 0; i < iSize; i++) {
             AtomMarker marker = markers.get(i);
             if (marker.color == null) {
                 marker.setColor(color);
@@ -83,7 +83,7 @@ public class AtomMarkers extends Marker3d {
         GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, indicesBuffHandle);
 
         int iSize = markers.size();
-        for(int i = 0; i < iSize; i++){
+        for (int i = 0; i < iSize; i++) {
             markers.get(i).draw();
         }
 
@@ -97,8 +97,8 @@ public class AtomMarkers extends Marker3d {
     @Override
     public void update(float[] view, float[] perspective) {
         int iSize = markers.size();
-        for(int i = 0; i < iSize; i++){
-           markers.get(i).update(view, perspective);
+        for (int i = 0; i < iSize; i++) {
+            markers.get(i).update(view, perspective);
         }
     }
 
@@ -142,7 +142,7 @@ public class AtomMarkers extends Marker3d {
         RayIntersection ret = null;
         ArrayList<RayIntersection> rayIntersections = new ArrayList<>();
         int iSize = ocTreeNodes.size();
-        for (int i = 0; i < iSize; i++){
+        for (int i = 0; i < iSize; i++) {
             RayIntersection rayIntersection = ocTreeNodes.get(i).getObjectIntersection(cameraPos_vec, headForwardFrac_vec, headView);
             if (rayIntersection != null) {
                 rayIntersections.add(rayIntersection);
@@ -174,7 +174,7 @@ public class AtomMarkers extends Marker3d {
 
     public void destoryMarks() {
         int iSize = markers.size();
-        for(int i = 0; i < iSize; i++){
+        for (int i = 0; i < iSize; i++) {
             markers.get(i).destroy();
         }
         markers.clear();
