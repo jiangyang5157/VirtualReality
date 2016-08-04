@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 /**
+ * This GlModel doesn't have drawable entity. It is a package contains AtomMarker GlModels.
+ *
  * @author Yang
  * @since 7/2/2016
  */

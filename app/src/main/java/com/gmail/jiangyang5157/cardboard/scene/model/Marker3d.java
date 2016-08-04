@@ -12,6 +12,8 @@ import com.gmail.jiangyang5157.tookit.math.Vector;
 import com.google.android.gms.maps.model.LatLng;
 
 /**
+ * This is a independent Marker GlModel.
+ *
  * @author Yang
  * @since 7/13/2016
  */
