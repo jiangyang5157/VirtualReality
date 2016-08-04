@@ -10,6 +10,7 @@ import com.gmail.jiangyang5157.cardboard.scene.Lighting;
 import com.gmail.jiangyang5157.cardboard.scene.tree.OcTree;
 import com.gmail.jiangyang5157.cardboard.scene.tree.OcTreeNode;
 import com.gmail.jiangyang5157.cardboard.scene.tree.OcTreeObject;
+import com.gmail.jiangyang5157.cardboard.vr.R;
 import com.gmail.jiangyang5157.tookit.math.Vector;
 import com.gmail.jiangyang5157.tookit.render.GlesUtils;
 import com.google.android.gms.maps.model.LatLng;
@@ -24,6 +25,9 @@ import java.util.Collections;
  */
 public class AtomMarkers extends Marker3d {
     private static final String TAG = "[AtomMarkers]";
+
+    protected static final int RESOURCE_ID_VERTEX_SHADER = R.raw.atommarkers_icosphere_color_vertex_shader;
+    protected static final int RESOURCE_ID_FRAGMENT_SHADER = R.raw.atommarkers_icosphere_color_fragment_shader;
 
     private OcTree ocTree;
     private ArrayList<OcTreeNode> ocTreeNodes;
