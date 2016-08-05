@@ -68,9 +68,9 @@ public abstract class Sphere extends GlModel implements GlModel.BindableBuffer {
         }
 
         Vector pos_camera_vec = new Vector3d(
-                cameraPos_vec.getData(0) - getPositionX(),
-                cameraPos_vec.getData(1) - getPositionY(),
-                cameraPos_vec.getData(2) - getPositionZ()
+                cameraPos_vec.getData(0) - getTranslationX(),
+                cameraPos_vec.getData(1) - getTranslationY(),
+                cameraPos_vec.getData(2) - getTranslationZ()
         );
 
         final double B = headForward_vec.dot(pos_camera_vec);
@@ -106,7 +106,7 @@ public abstract class Sphere extends GlModel implements GlModel.BindableBuffer {
     }
 
     public void setRadius(float radius) {
-        xyzScale = this.radius = radius;
+        scale = this.radius = radius;
     }
 
     public float getRadius() {

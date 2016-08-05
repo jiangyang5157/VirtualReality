@@ -32,7 +32,7 @@ public abstract class GlModel {
     }
 
     protected float[] rotationMatrix;
-    protected float xyzScale; // Scale for all x, y and z axis
+    protected float scale; // Scale for all x, y and z axis
     protected float[] translationMatrix;
 
     protected float[] model;
@@ -93,7 +93,7 @@ public abstract class GlModel {
         this.context = context;
 
         rotationMatrix = new float[16];
-        xyzScale = 1.0f;
+        scale = 1.0f;
         translationMatrix = new float[16];
         model = new float[16];
 
@@ -133,7 +133,7 @@ public abstract class GlModel {
     protected void updateModel() {
         Matrix.setIdentityM(model, 0);
         Matrix.multiplyMM(model, 0, rotationMatrix, 0, model, 0);
-        Matrix.scaleM(model, 0, xyzScale, xyzScale, xyzScale);
+        Matrix.scaleM(model, 0, scale, scale, scale);
         Matrix.multiplyMM(model, 0, translationMatrix, 0, model, 0);
     }
 
@@ -227,23 +227,27 @@ public abstract class GlModel {
         return isVisible;
     }
 
-    public void setXyzScale(float xyzScale) {
-        this.xyzScale = xyzScale;
+    public void setScale(float scale) {
+        this.scale = scale;
     }
 
-    public float[] getPosition() {
+    public float[] getTranslationMatrix() {
+        return translationMatrix;
+    }
+
+    public float[] getTranslation() {
         return new float[]{translationMatrix[12], translationMatrix[13], translationMatrix[14]};
     }
 
-    public float getPositionX() {
+    public float getTranslationX() {
         return translationMatrix[12];
     }
 
-    public float getPositionY() {
+    public float getTranslationY() {
         return translationMatrix[13];
     }
 
-    public float getPositionZ() {
+    public float getTranslationZ() {
         return translationMatrix[14];
     }
 

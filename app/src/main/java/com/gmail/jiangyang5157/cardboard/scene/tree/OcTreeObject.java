@@ -15,7 +15,7 @@ public class OcTreeObject {
 
     public OcTreeObject(Marker3d model) {
         this.model = model;
-        this.center = model.getPosition();
+        this.center = model.getTranslation();
     }
 
     public GlModel getModel() {

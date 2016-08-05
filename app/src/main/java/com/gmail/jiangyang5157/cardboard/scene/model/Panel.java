@@ -165,10 +165,10 @@ public abstract class Panel extends Rectangle implements GlModel.BindableBuffer,
     protected void buildCorners(float[] up, float[] right, float[] position) {
         buildCorners(up, right);
 
-        tl_vec = tl_vec.times(xyzScale);
-        bl_vec = bl_vec.times(xyzScale);
-        tr_vec = tr_vec.times(xyzScale);
-        br_vec = br_vec.times(xyzScale);
+        tl_vec = tl_vec.times(scale);
+        bl_vec = bl_vec.times(scale);
+        tr_vec = tr_vec.times(scale);
+        br_vec = br_vec.times(scale);
 
         Vector pos_vec = new Vector(position[0], position[1], position[2]);
         tl_vec = tl_vec.plus(pos_vec);

@@ -64,9 +64,9 @@ public class Marker3d extends Icosphere {
         }
 
         double[] camera_pos = new double[]{
-                getPositionX() - cameraPos_vec.getData(0),
-                getPositionY() - cameraPos_vec.getData(1),
-                getPositionZ() - cameraPos_vec.getData(2)
+                getTranslationX() - cameraPos_vec.getData(0),
+                getTranslationY() - cameraPos_vec.getData(1),
+                getTranslationZ() - cameraPos_vec.getData(2)
         };
         // Convenience vector for extracting the position from a matrix via multiplication.
         float[] posMultiply = new float[]{(float) camera_pos[0], (float) camera_pos[1], (float) camera_pos[2], 0.0f};

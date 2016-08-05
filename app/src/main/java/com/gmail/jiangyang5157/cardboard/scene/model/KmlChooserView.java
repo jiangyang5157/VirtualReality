@@ -62,7 +62,7 @@ public class KmlChooserView extends Dialog {
             float textSize = TextField.TEXT_SIZE_TINY;
             tf.setText(fileName);
             tf.width = WIDTH;
-            tf.setXyzScale(SCALE);
+            tf.setScale(SCALE);
             tf.modelRequireUpdate = true;
             tf.setTextSize(textSize);
             tf.setAlignment(Layout.Alignment.ALIGN_CENTER);
