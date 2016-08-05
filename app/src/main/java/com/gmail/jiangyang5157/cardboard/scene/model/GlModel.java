@@ -226,6 +226,7 @@ public abstract class GlModel {
     public boolean isVisible() {
         return isVisible;
     }
+
     public void setXyzScale(float xyzScale) {
         this.xyzScale = xyzScale;
     }
@@ -244,10 +245,6 @@ public abstract class GlModel {
 
     public float getPositionZ() {
         return translationMatrix[14];
-    }
-
-    public float[] getModel() {
-        return this.model;
     }
 
     public void destroy() {
