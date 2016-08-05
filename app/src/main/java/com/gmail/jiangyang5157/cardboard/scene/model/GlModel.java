@@ -31,9 +31,9 @@ public abstract class GlModel {
         void bindTextureBuffers();
     }
 
-    protected float[] rotation;
-    protected float scale; // Scale for all x, y and z axis
-    protected float[] translation;
+    protected float[] rotationMatrix;
+    protected float xyzScale; // Scale for all x, y and z axis
+    protected float[] translationMatrix;
 
     protected float[] model;
     protected float[] view;
@@ -92,14 +92,14 @@ public abstract class GlModel {
     protected GlModel(Context context) {
         this.context = context;
 
-        rotation = new float[16];
-        scale = 1.0f;
-        translation = new float[16];
+        rotationMatrix = new float[16];
+        xyzScale = 1.0f;
+        translationMatrix = new float[16];
         model = new float[16];
 
         Matrix.setIdentityM(this.model, 0);
-        Matrix.setIdentityM(rotation, 0);
-        Matrix.setIdentityM(translation, 0);
+        Matrix.setIdentityM(rotationMatrix, 0);
+        Matrix.setIdentityM(translationMatrix, 0);
     }
 
     public void create(@NonNull ArrayMap<Integer, Integer> shaders) {
@@ -132,9 +132,9 @@ public abstract class GlModel {
      */
     protected void updateModel() {
         Matrix.setIdentityM(model, 0);
-        Matrix.multiplyMM(model, 0, rotation, 0, model, 0);
-        Matrix.scaleM(model, 0, scale, scale, scale);
-        Matrix.multiplyMM(model, 0, translation, 0, model, 0);
+        Matrix.multiplyMM(model, 0, rotationMatrix, 0, model, 0);
+        Matrix.scaleM(model, 0, xyzScale, xyzScale, xyzScale);
+        Matrix.multiplyMM(model, 0, translationMatrix, 0, model, 0);
     }
 
     public void update() {
@@ -226,39 +226,26 @@ public abstract class GlModel {
     public boolean isVisible() {
         return isVisible;
     }
-
-    public float[] getRotation() {
-        return rotation;
-    }
-
-    public void setScale(float scale) {
-        this.scale = scale;
-    }
-
-    public float getScale() {
-        return scale;
-    }
-
-    public float[] getTranslation() {
-        return translation;
-    }
-
-    public float getX() {
-        return translation[12];
-    }
-
-    public float getY() {
-        return translation[13];
-    }
-
-    public float getZ() {
-        return translation[14];
+    public void setXyzScale(float xyzScale) {
+        this.xyzScale = xyzScale;
     }
 
     public float[] getPosition() {
-        return new float[]{translation[12], translation[13], translation[14]};
+        return new float[]{translationMatrix[12], translationMatrix[13], translationMatrix[14]};
     }
-    
+
+    public float getPositionX() {
+        return translationMatrix[12];
+    }
+
+    public float getPositionY() {
+        return translationMatrix[13];
+    }
+
+    public float getPositionZ() {
+        return translationMatrix[14];
+    }
+
     public float[] getModel() {
         return this.model;
     }

@@ -50,8 +50,8 @@ public class Marker3d extends Icosphere {
 
     public void setLocation(LatLng latLng, float altitude) {
         this.coordinate = new Coordinate(latLng.latitude, latLng.longitude, altitude, Earth.RADIUS);
-        Matrix.setIdentityM(translation, 0);
-        Matrix.translateM(translation, 0,
+        Matrix.setIdentityM(translationMatrix, 0);
+        Matrix.translateM(translationMatrix, 0,
                 (float) coordinate.ecef[0],
                 (float) coordinate.ecef[1],
                 (float) coordinate.ecef[2]);
@@ -64,9 +64,9 @@ public class Marker3d extends Icosphere {
         }
 
         double[] camera_pos = new double[]{
-                getX() - cameraPos_vec.getData(0),
-                getY() - cameraPos_vec.getData(1),
-                getZ() - cameraPos_vec.getData(2)
+                getPositionX() - cameraPos_vec.getData(0),
+                getPositionY() - cameraPos_vec.getData(1),
+                getPositionZ() - cameraPos_vec.getData(2)
         };
         // Convenience vector for extracting the position from a matrix via multiplication.
         float[] posMultiply = new float[]{(float) camera_pos[0], (float) camera_pos[1], (float) camera_pos[2], 0.0f};

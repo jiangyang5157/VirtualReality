@@ -55,7 +55,7 @@ public class TextField extends Panel {
     @Override
     public void create(int program) {
         setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.White, null));
-        initScaleSelector(scale);
+        initScaleSelector(xyzScale);
         super.create(program);
 
         setCreated(true);
@@ -123,7 +123,7 @@ public class TextField extends Panel {
                 scaleSelector -= scaleGradient;
             }
         }
-        scale = scaleSelector;
+        xyzScale = scaleSelector;
         modelRequireUpdate = true;
     }
 

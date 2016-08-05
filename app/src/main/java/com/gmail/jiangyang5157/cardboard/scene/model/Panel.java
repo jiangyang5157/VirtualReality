@@ -61,13 +61,13 @@ public abstract class Panel extends Rectangle implements GlModel.BindableBuffer,
                 cameraPos[2] + forward[2] * distance,
         };
 
-        Matrix.setIdentityM(translation, 0);
-        Matrix.translateM(translation, 0, position[0], position[1], position[2]);
+        Matrix.setIdentityM(translationMatrix, 0);
+        Matrix.translateM(translationMatrix, 0, position[0], position[1], position[2]);
 
-        Matrix.setIdentityM(rotation, 0);
+        Matrix.setIdentityM(rotationMatrix, 0);
         // it should face to eye
         float[] q = new float[]{-quaternion[0], -quaternion[1], -quaternion[2], quaternion[3]};
-        Matrix.multiplyMM(rotation, 0, Head.getQquaternionMatrix(q), 0, rotation, 0);
+        Matrix.multiplyMM(rotationMatrix, 0, Head.getQquaternionMatrix(q), 0, rotationMatrix, 0);
 
         modelRequireUpdate = true;
 
@@ -165,10 +165,10 @@ public abstract class Panel extends Rectangle implements GlModel.BindableBuffer,
     protected void buildCorners(float[] up, float[] right, float[] position) {
         buildCorners(up, right);
 
-        tl_vec = tl_vec.times(scale);
-        bl_vec = bl_vec.times(scale);
-        tr_vec = tr_vec.times(scale);
-        br_vec = br_vec.times(scale);
+        tl_vec = tl_vec.times(xyzScale);
+        bl_vec = bl_vec.times(xyzScale);
+        tr_vec = tr_vec.times(xyzScale);
+        br_vec = br_vec.times(xyzScale);
 
         Vector pos_vec = new Vector(position[0], position[1], position[2]);
         tl_vec = tl_vec.plus(pos_vec);

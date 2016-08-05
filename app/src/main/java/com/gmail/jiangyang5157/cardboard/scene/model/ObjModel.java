@@ -126,13 +126,13 @@ public class ObjModel extends GlModel implements GlModel.BindableBuffer, Creatio
                 cameraPos[2] + forward[2] * distance,
         };
 
-        Matrix.setIdentityM(translation, 0);
-        Matrix.translateM(translation, 0, position[0], position[1], position[2]);
+        Matrix.setIdentityM(translationMatrix, 0);
+        Matrix.translateM(translationMatrix, 0, position[0], position[1], position[2]);
 
-        Matrix.setIdentityM(rotation, 0);
+        Matrix.setIdentityM(rotationMatrix, 0);
         // it should face to eye
         float[] q = new float[]{-quaternion[0], -quaternion[1], -quaternion[2], quaternion[3]};
-        Matrix.multiplyMM(rotation, 0, Head.getQquaternionMatrix(q), 0, rotation, 0);
+        Matrix.multiplyMM(rotationMatrix, 0, Head.getQquaternionMatrix(q), 0, rotationMatrix, 0);
 
         modelRequireUpdate = true;
     }
@@ -443,7 +443,7 @@ public class ObjModel extends GlModel implements GlModel.BindableBuffer, Creatio
     @Override
     public void update() {
         super.update();
-        Matrix.rotateM(rotation, 0, TIME_DELTA_ROTATION, 0.5f, 1.0f, 0.5f);
+        Matrix.rotateM(rotationMatrix, 0, TIME_DELTA_ROTATION, 0.5f, 1.0f, 0.5f);
         modelRequireUpdate = true;
     }
 
