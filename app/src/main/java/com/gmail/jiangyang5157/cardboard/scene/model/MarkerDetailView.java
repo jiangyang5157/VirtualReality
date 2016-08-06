@@ -41,37 +41,37 @@ public class MarkerDetailView extends Dialog {
         shaders.put(GLES20.GL_FRAGMENT_SHADER, R.raw.panel_fragment_shader);
 
         if (marker.getName() != null) {
-            SubPanel tf1 = new SubPanel(context);
-            tf1.setText(marker.getName());
-            tf1.width = WIDTH;
-            tf1.setScale(SCALE);
-            tf1.modelRequireUpdate = true;
-            tf1.setTextSize(SubPanel.TEXT_SIZE_LARGE);
-            tf1.setAlignment(Layout.Alignment.ALIGN_CENTER);
-            tf1.create(shaders);
-            addPanel(tf1);
+            TextField p1 = new TextField(context);
+            p1.setCcntent(marker.getName());
+            p1.width = WIDTH;
+            p1.setScale(SCALE);
+            p1.modelRequireUpdate = true;
+            p1.setTextSize(TextField.TEXT_SIZE_LARGE);
+            p1.setAlignment(Layout.Alignment.ALIGN_CENTER);
+            p1.create(shaders);
+            addPanel(p1);
         }
         if (marker.getDescription() != null) {
-            SubPanel tf2 = new SubPanel(context);
-            tf2.setText(marker.getDescription());
-            tf2.width = WIDTH;
-            tf2.setScale(SCALE);
-            tf2.modelRequireUpdate = true;
-            tf2.setTextSize(SubPanel.TEXT_SIZE_TINY);
-            tf2.setAlignment(Layout.Alignment.ALIGN_NORMAL);
-            tf2.create(shaders);
-            addPanel(tf2);
+            DescriptionField p2 = new DescriptionField(context);
+            p2.setCcntent(marker.getDescription());
+            p2.width = WIDTH;
+            p2.setScale(SCALE);
+            p2.modelRequireUpdate = true;
+            p2.setTextSize(TextField.TEXT_SIZE_TINY);
+            p2.setAlignment(Layout.Alignment.ALIGN_NORMAL);
+            p2.create(shaders);
+            addPanel(p2);
         }
         if (marker.getObjModel() != null) {
-            SubPanel tf3 = new SubPanel(context);
-            tf3.setText(marker.getObjModel().getTitle());
-            tf3.width = WIDTH;
-            tf3.setScale(SCALE);
-            tf3.modelRequireUpdate = true;
-            tf3.setTextSize(SubPanel.TEXT_SIZE_TINY);
-            tf3.setAlignment(Layout.Alignment.ALIGN_NORMAL);
-            tf3.create(shaders);
-            tf3.setOnClickListener(new GlModel.ClickListener() {
+            TextField p3 = new TextField(context);
+            p3.setCcntent(marker.getObjModel().getTitle());
+            p3.width = WIDTH;
+            p3.setScale(SCALE);
+            p3.modelRequireUpdate = true;
+            p3.setTextSize(TextField.TEXT_SIZE_TINY);
+            p3.setAlignment(Layout.Alignment.ALIGN_NORMAL);
+            p3.create(shaders);
+            p3.setOnClickListener(new GlModel.ClickListener() {
                 @Override
                 public void onClick(GlModel model) {
                     if (eventListener != null) {
@@ -79,7 +79,7 @@ public class MarkerDetailView extends Dialog {
                     }
                 }
             });
-            addPanel(tf3);
+            addPanel(p3);
         }
     }
 

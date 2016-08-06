@@ -58,17 +58,17 @@ public class KmlChooserView extends Dialog {
         int iSize = fileNames.length;
         for (int i = 0; i < iSize; i++){
             final String fileName = fileNames[i];
-            SubPanel tf = new SubPanel(context);
-            float textSize = SubPanel.TEXT_SIZE_TINY;
-            tf.setText(fileName);
-            tf.width = WIDTH;
-            tf.setScale(SCALE);
-            tf.modelRequireUpdate = true;
-            tf.setTextSize(textSize);
-            tf.setAlignment(Layout.Alignment.ALIGN_CENTER);
-            tf.create(shaders);
+            TextField p = new TextField(context);
+            float textSize = TextField.TEXT_SIZE_TINY;
+            p.setCcntent(fileName);
+            p.width = WIDTH;
+            p.setScale(SCALE);
+            p.modelRequireUpdate = true;
+            p.setTextSize(textSize);
+            p.setAlignment(Layout.Alignment.ALIGN_CENTER);
+            p.create(shaders);
             if (!fileName.equals(lastKmlFileName)) {
-                tf.setOnClickListener(new GlModel.ClickListener() {
+                p.setOnClickListener(new GlModel.ClickListener() {
                     @Override
                     public void onClick(GlModel model) {
                         if (eventListener != null) {
@@ -77,7 +77,7 @@ public class KmlChooserView extends Dialog {
                     }
                 });
             }
-            addPanel(tf);
+            addPanel(p);
         }
     }
 

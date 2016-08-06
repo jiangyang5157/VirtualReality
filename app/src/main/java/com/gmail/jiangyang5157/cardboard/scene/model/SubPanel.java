@@ -2,13 +2,8 @@ package com.gmail.jiangyang5157.cardboard.scene.model;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
-import android.text.Layout;
-import android.text.StaticLayout;
-import android.text.TextPaint;
 import android.util.Log;
 import android.util.TypedValue;
 
@@ -21,26 +16,15 @@ import com.gmail.jiangyang5157.tookit.render.GlesUtils;
  * @author Yang
  * @since 5/8/2016
  */
-public class SubPanel extends Panel {
+public abstract class SubPanel extends Panel {
     private static final String TAG = "[SubPanel]";
-
-    private static final float ALPHA_BACKGROUND = 0.2f;
-
-    protected static final float TEXT_SIZE_LARGE = 12f;
-    protected static final float TEXT_SIZE_MEDIUM = 10f;
-    protected static final float TEXT_SIZE_SMALL = 8f;
-    protected static final float TEXT_SIZE_TINY = 6f;
 
     private float scaleNormal;
     private float scaleFocused;
     private float scaleGradient;
     private float scaleSelector;
 
-    private String text;
-
-    private float textSize;
-
-    private Layout.Alignment alignment;
+    protected String content;
 
     public SubPanel(Context context) {
         super(context);
@@ -80,32 +64,7 @@ public class SubPanel extends Panel {
         }
     }
 
-    protected Bitmap buildBitmap() {
-        return buildTextBitmap(text);
-    }
-
-    protected Bitmap buildTextBitmap(String text) {
-        TextPaint textPaint = new TextPaint();
-        float textSizePixels = SubPanel.dp2px(context, textSize);
-        textPaint.setTextSize(textSizePixels);
-        textPaint.setAntiAlias(true);
-        textPaint.setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.DeepOrange, null));
-
-        StaticLayout staticLayout = new StaticLayout(text, textPaint, (int) width, alignment, 1.0f, 0.0f, false);
-        int lines = staticLayout.getLineCount();
-        Paint.FontMetrics fm = textPaint.getFontMetrics();
-        height = fm.descent + lines * (textSizePixels + fm.bottom);
-
-        Bitmap ret = Bitmap.createBitmap((int) width, (int) height, Bitmap.Config.ARGB_4444);
-        Canvas canvas = new Canvas(ret);
-        ret.eraseColor(getColorWithAlpha(ALPHA_BACKGROUND));
-        canvas.save();
-        canvas.translate(0, fm.descent);
-        staticLayout.draw(canvas);
-        canvas.restore();
-
-        return ret;
-    }
+    protected abstract Bitmap buildBitmap();
 
     public static float dp2px(Context context, float dp) {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.getResources().getDisplayMetrics());
@@ -168,28 +127,12 @@ public class SubPanel extends Panel {
         modelRequireUpdate = true;
     }
 
-    public String getText() {
-        return text;
+    public String getContent() {
+        return content;
     }
 
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public float getTextSize() {
-        return textSize;
-    }
-
-    public void setTextSize(float textSize) {
-        this.textSize = textSize;
-    }
-
-    public Layout.Alignment getAlignment() {
-        return alignment;
-    }
-
-    public void setAlignment(Layout.Alignment alignment) {
-        this.alignment = alignment;
+    public void setCcntent(String content) {
+        this.content = content;
     }
 
     @Override
