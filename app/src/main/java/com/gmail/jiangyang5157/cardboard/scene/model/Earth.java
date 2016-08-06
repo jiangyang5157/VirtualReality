@@ -210,7 +210,7 @@ public class Earth extends UvSphere implements Creation {
 
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texBuffers[0]);
-        GLES20.glUniform1i(texIdHandle, 0); // 0: GL_TEXTURE0, texBuffers[0]
+        GLES20.glUniform1i(texIdHandle, 0); // the 0: GL_TEXTURE0, texBuffers[0]
 
         GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, indicesBuffHandle);
         GLES20.glDrawElements(GLES20.GL_TRIANGLES, indicesBufferCapacity, GLES20.GL_UNSIGNED_SHORT, 0);
