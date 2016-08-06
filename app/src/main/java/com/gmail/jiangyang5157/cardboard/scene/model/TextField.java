@@ -71,31 +71,40 @@ public class TextField extends Panel {
         if (texBuffers[0] == 0) {
             throw new RuntimeException("Error loading texture.");
         } else {
-            TextPaint textPaint = new TextPaint();
-            float textSizePixels = dp2px(context, textSize);
-            textPaint.setTextSize(textSizePixels);
-            textPaint.setAntiAlias(true);
-            textPaint.setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.DeepOrange, null));
-
-            StaticLayout staticLayout = new StaticLayout(text, textPaint, (int) width, alignment, 1.0f, 0.0f, false);
-            int lines = staticLayout.getLineCount();
-            Paint.FontMetrics fm = textPaint.getFontMetrics();
-            height = fm.descent + lines * (textSizePixels + fm.bottom);
-
-            Bitmap bitmap = Bitmap.createBitmap((int) width, (int) height, Bitmap.Config.ARGB_4444);
-            Canvas canvas = new Canvas(bitmap);
-            bitmap.eraseColor(getColorWithAlpha(ALPHA_BACKGROUND));
-            canvas.save();
-            canvas.translate(0, fm.descent);
-            staticLayout.draw(canvas);
-            canvas.restore();
-
+            Bitmap bitmap = buildBitmap();
             GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texBuffers[0]);
             GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
             GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_NEAREST);
             GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
             bitmap.recycle();
         }
+    }
+
+    protected Bitmap buildBitmap() {
+        return buildTextBitmap(text);
+    }
+
+    protected Bitmap buildTextBitmap(String text) {
+        TextPaint textPaint = new TextPaint();
+        float textSizePixels = dp2px(context, textSize);
+        textPaint.setTextSize(textSizePixels);
+        textPaint.setAntiAlias(true);
+        textPaint.setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.DeepOrange, null));
+
+        StaticLayout staticLayout = new StaticLayout(text, textPaint, (int) width, alignment, 1.0f, 0.0f, false);
+        int lines = staticLayout.getLineCount();
+        Paint.FontMetrics fm = textPaint.getFontMetrics();
+        height = fm.descent + lines * (textSizePixels + fm.bottom);
+
+        Bitmap ret = Bitmap.createBitmap((int) width, (int) height, Bitmap.Config.ARGB_4444);
+        Canvas canvas = new Canvas(ret);
+        ret.eraseColor(getColorWithAlpha(ALPHA_BACKGROUND));
+        canvas.save();
+        canvas.translate(0, fm.descent);
+        staticLayout.draw(canvas);
+        canvas.restore();
+
+        return ret;
     }
 
     private float dp2px(Context context, float dp) {
@@ -146,7 +155,7 @@ public class TextField extends Panel {
 
     @Override
     public void onFocuse(boolean isFocused) {
-        if (isFocused){
+        if (isFocused) {
             if (scaleSelector > scaleFocused) {
                 scaleSelector += scaleGradient;
             }
