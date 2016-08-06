@@ -86,7 +86,7 @@ public class TextField extends Panel {
 
     protected Bitmap buildTextBitmap(String text) {
         TextPaint textPaint = new TextPaint();
-        float textSizePixels = dp2px(context, textSize);
+        float textSizePixels = TextField.dp2px(context, textSize);
         textPaint.setTextSize(textSizePixels);
         textPaint.setAntiAlias(true);
         textPaint.setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.DeepOrange, null));
@@ -107,7 +107,7 @@ public class TextField extends Panel {
         return ret;
     }
 
-    private float dp2px(Context context, float dp) {
+    public static float dp2px(Context context, float dp) {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.getResources().getDisplayMetrics());
     }
 
