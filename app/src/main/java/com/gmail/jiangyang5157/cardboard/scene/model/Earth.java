@@ -156,6 +156,7 @@ public class Earth extends UvSphere implements Creation {
                 final BitmapFactory.Options options = new BitmapFactory.Options();
                 options.inScaled = false;
                 final Bitmap bitmap = BitmapFactory.decodeStream(in, null, options);
+
                 GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texBuffers[0]);
                 GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
                 GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_NEAREST);

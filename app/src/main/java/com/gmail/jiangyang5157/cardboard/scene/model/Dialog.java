@@ -9,6 +9,7 @@ import android.util.Log;
 import com.gmail.jiangyang5157.cardboard.scene.RayIntersection;
 import com.gmail.jiangyang5157.tookit.app.AppUtils;
 import com.gmail.jiangyang5157.tookit.math.Vector;
+import com.gmail.jiangyang5157.tookit.render.GlesUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,6 +30,8 @@ public abstract class Dialog extends Panel {
     public static final float SCALE = 0.3f;
 
     protected ArrayList<Panel> panels;
+
+    protected final int[] texBuffers = new int[1];
 
     public Dialog(Context context) {
         super(context);
@@ -55,6 +58,7 @@ public abstract class Dialog extends Panel {
         } else {
             Bitmap bitmap = Bitmap.createBitmap((int) width, (int) height, Bitmap.Config.ARGB_4444);
             bitmap.eraseColor(getColorWithAlpha(ALPHA_BACKGROUND));
+
             GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texBuffers[0]);
             GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
             GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_NEAREST);
@@ -78,18 +82,37 @@ public abstract class Dialog extends Panel {
         for(int i = 0; i < iSize; i++){
             panels.get(i).draw();
         }
-        super.draw();
-    }
 
-    @Override
-    public void destroy() {
-        Log.d(TAG, "destroy");
-        int iSize = panels.size();
-        for(int i = 0; i < iSize; i++){
-            panels.get(i).destroy();
+        if (!isCreated() || !isVisible()) {
+            return;
         }
-        panels.clear();
-        super.destroy();
+
+        GLES20.glUseProgram(program);
+        GLES20.glEnableVertexAttribArray(vertexHandle);
+        GLES20.glEnableVertexAttribArray(texCoordHandle);
+
+        GLES20.glUniformMatrix4fv(modelHandle, 1, false, model, 0);
+        GLES20.glUniformMatrix4fv(viewHandle, 1, false, view, 0);
+        GLES20.glUniformMatrix4fv(perspectiveHandle, 1, false, perspective, 0);
+
+        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, verticesBuffHandle);
+        GLES20.glVertexAttribPointer(vertexHandle, 3, GLES20.GL_FLOAT, false, 0, 0);
+
+        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, texturesBuffHandle);
+        GLES20.glVertexAttribPointer(texCoordHandle, 2, GLES20.GL_FLOAT, false, 0, 0);
+
+        GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texBuffers[0]);
+        GLES20.glUniform1i(texIdHandle, 0);
+
+        GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, indicesBuffHandle);
+        GLES20.glDrawElements(GLES20.GL_TRIANGLE_STRIP, indicesBufferCapacity, GLES20.GL_UNSIGNED_SHORT, 0);
+
+        GLES20.glDisableVertexAttribArray(vertexHandle);
+        GLES20.glDisableVertexAttribArray(texCoordHandle);
+        GLES20.glUseProgram(0);
+
+        GlesUtils.printGlError(TAG + " - draw end");
     }
 
     public void addPanel(Panel panel) {
@@ -160,5 +183,17 @@ public abstract class Dialog extends Panel {
             cameraPos[1] -= up[1] * SCALED_PANEL_HALF_HEIGHT;
             cameraPos[2] -= up[2] * SCALED_PANEL_HALF_HEIGHT;
         }
+    }
+
+    @Override
+    public void destroy() {
+        Log.d(TAG, "destroy");
+        int iSize = panels.size();
+        for(int i = 0; i < iSize; i++){
+            panels.get(i).destroy();
+        }
+        panels.clear();
+        super.destroy();
+        GLES20.glDeleteTextures(texBuffers.length, texBuffers, 0);
     }
 }
