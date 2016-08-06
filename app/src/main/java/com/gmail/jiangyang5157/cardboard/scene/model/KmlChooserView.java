@@ -58,8 +58,8 @@ public class KmlChooserView extends Dialog {
         int iSize = fileNames.length;
         for (int i = 0; i < iSize; i++){
             final String fileName = fileNames[i];
-            TextField tf = new TextField(context);
-            float textSize = TextField.TEXT_SIZE_TINY;
+            SubPanel tf = new SubPanel(context);
+            float textSize = SubPanel.TEXT_SIZE_TINY;
             tf.setText(fileName);
             tf.width = WIDTH;
             tf.setScale(SCALE);

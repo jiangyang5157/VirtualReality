@@ -21,8 +21,8 @@ import com.gmail.jiangyang5157.tookit.render.GlesUtils;
  * @author Yang
  * @since 5/8/2016
  */
-public class TextField extends Panel {
-    private static final String TAG = "[TextField]";
+public class SubPanel extends Panel {
+    private static final String TAG = "[SubPanel]";
 
     private static final float ALPHA_BACKGROUND = 0.2f;
 
@@ -42,7 +42,7 @@ public class TextField extends Panel {
 
     private Layout.Alignment alignment;
 
-    public TextField(Context context) {
+    public SubPanel(Context context) {
         super(context);
     }
 
@@ -86,7 +86,7 @@ public class TextField extends Panel {
 
     protected Bitmap buildTextBitmap(String text) {
         TextPaint textPaint = new TextPaint();
-        float textSizePixels = TextField.dp2px(context, textSize);
+        float textSizePixels = SubPanel.dp2px(context, textSize);
         textPaint.setTextSize(textSizePixels);
         textPaint.setAntiAlias(true);
         textPaint.setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.DeepOrange, null));
