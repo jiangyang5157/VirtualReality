@@ -3,8 +3,8 @@ package com.gmail.jiangyang5157.cardboard.vr;
 import android.content.Context;
 import android.preference.PreferenceManager;
 
-import com.gmail.jiangyang5157.tookit.app.AppUtils;
-import com.gmail.jiangyang5157.tookit.app.RegularExpressionUtils;
+import com.gmail.jiangyang5157.tookit.android.base.AppUtils;
+import com.gmail.jiangyang5157.tookit.base.data.RegularExpressionUtils;
 
 import java.io.File;
 import java.text.ParseException;

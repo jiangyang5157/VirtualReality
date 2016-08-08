@@ -8,7 +8,7 @@ import android.hardware.SensorManager;
 import android.support.annotation.NonNull;
 
 import com.gmail.jiangyang5157.cardboard.scene.model.Earth;
-import com.gmail.jiangyang5157.tookit.app.TimeUtils;
+import com.gmail.jiangyang5157.tookit.base.time.TimeUtils;
 
 /**
  * @author Yang

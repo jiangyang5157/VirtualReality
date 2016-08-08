@@ -12,7 +12,6 @@ import com.gmail.jiangyang5157.cardboard.scene.tree.OcTreeNode;
 import com.gmail.jiangyang5157.cardboard.scene.tree.OcTreeObject;
 import com.gmail.jiangyang5157.cardboard.vr.R;
 import com.gmail.jiangyang5157.tookit.math.Vector;
-import com.gmail.jiangyang5157.tookit.render.GlesUtils;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 

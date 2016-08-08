@@ -1,1 +1,1 @@
-include ':app', ':tookit-debug', ':base', ':common'
+include ':app', ':base', ':common', ':tookit-base', ':tookit-math', ':tookit-android-base-debug'

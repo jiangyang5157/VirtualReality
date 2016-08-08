@@ -7,9 +7,8 @@ import android.opengl.GLUtils;
 import android.util.Log;
 
 import com.gmail.jiangyang5157.cardboard.scene.RayIntersection;
-import com.gmail.jiangyang5157.tookit.app.AppUtils;
+import com.gmail.jiangyang5157.tookit.android.base.AppUtils;
 import com.gmail.jiangyang5157.tookit.math.Vector;
-import com.gmail.jiangyang5157.tookit.render.GlesUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -44,7 +43,7 @@ public abstract class Dialog extends Panel {
 
     @Override
     public void create(int program) {
-        setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.Red, null));
+        setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.android.base.R.color.Red, null));
         createPanels();
         adjustBounds(WIDTH);
         super.create(program);

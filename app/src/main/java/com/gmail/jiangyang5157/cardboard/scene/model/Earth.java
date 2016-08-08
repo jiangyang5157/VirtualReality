@@ -11,9 +11,8 @@ import com.android.volley.VolleyError;
 import com.gmail.jiangyang5157.cardboard.net.Downloader;
 import com.gmail.jiangyang5157.cardboard.scene.Creation;
 import com.gmail.jiangyang5157.cardboard.vr.Constant;
-import com.gmail.jiangyang5157.tookit.app.AppUtils;
-import com.gmail.jiangyang5157.tookit.data.buffer.BufferUtils;
-import com.gmail.jiangyang5157.tookit.render.GlesUtils;
+import com.gmail.jiangyang5157.tookit.android.base.AppUtils;
+import com.gmail.jiangyang5157.tookit.base.data.BufferUtils;
 
 import java.io.File;
 import java.io.FileInputStream;

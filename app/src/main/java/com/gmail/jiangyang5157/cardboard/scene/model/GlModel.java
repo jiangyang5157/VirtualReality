@@ -10,7 +10,6 @@ import android.support.annotation.NonNull;
 import android.util.ArrayMap;
 
 import com.gmail.jiangyang5157.cardboard.scene.Lighting;
-import com.gmail.jiangyang5157.tookit.render.GlesUtils;
 
 /**
  * @author Yang

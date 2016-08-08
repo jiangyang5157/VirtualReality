@@ -12,8 +12,7 @@ import com.gmail.jiangyang5157.cardboard.scene.Creation;
 import com.gmail.jiangyang5157.cardboard.scene.RayIntersection;
 import com.gmail.jiangyang5157.cardboard.scene.Lighting;
 import com.gmail.jiangyang5157.cardboard.vr.Constant;
-import com.gmail.jiangyang5157.tookit.app.AppUtils;
-import com.gmail.jiangyang5157.tookit.app.Performance;
+import com.gmail.jiangyang5157.tookit.android.base.AppUtils;
 import com.gmail.jiangyang5157.tookit.math.Vector;
 
 import org.xmlpull.v1.XmlPullParserException;

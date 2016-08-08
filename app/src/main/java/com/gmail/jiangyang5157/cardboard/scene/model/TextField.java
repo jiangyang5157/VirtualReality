@@ -8,7 +8,7 @@ import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 
-import com.gmail.jiangyang5157.tookit.app.AppUtils;
+import com.gmail.jiangyang5157.tookit.android.base.AppUtils;
 
 /**
  * @author Yang
@@ -41,7 +41,7 @@ public class TextField extends SubPanel {
         float textSizePixels = SubPanel.dp2px(context, textSize);
         textPaint.setTextSize(textSizePixels);
         textPaint.setAntiAlias(true);
-        textPaint.setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.R.color.DeepOrange, null));
+        textPaint.setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.android.base.R.color.DeepOrange, null));
 
         StaticLayout staticLayout = new StaticLayout(text, textPaint, (int) width, alignment, 1.0f, 0.0f, false);
         int lines = staticLayout.getLineCount();

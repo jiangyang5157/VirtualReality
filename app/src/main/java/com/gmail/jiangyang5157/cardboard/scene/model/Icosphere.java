@@ -3,8 +3,7 @@ package com.gmail.jiangyang5157.cardboard.scene.model;
 import android.content.Context;
 import android.opengl.GLES20;
 
-import com.gmail.jiangyang5157.tookit.data.buffer.BufferUtils;
-import com.gmail.jiangyang5157.tookit.render.GlesUtils;
+import com.gmail.jiangyang5157.tookit.base.data.BufferUtils;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;

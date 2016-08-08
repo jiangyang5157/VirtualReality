@@ -3,9 +3,6 @@ package com.gmail.jiangyang5157.cardboard.scene.model;
 import android.content.Context;
 import android.opengl.GLES20;
 
-import com.gmail.jiangyang5157.tookit.app.AppUtils;
-import com.gmail.jiangyang5157.tookit.render.GlesUtils;
-
 /**
  * This GlModel cannot be created and draw individually. Its a component of AtomMarkers, which is responsible to create / update / draw AtomMarker.
  *

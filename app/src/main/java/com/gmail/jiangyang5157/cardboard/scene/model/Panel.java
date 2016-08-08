@@ -6,10 +6,9 @@ import android.opengl.Matrix;
 
 import com.gmail.jiangyang5157.cardboard.scene.RayIntersection;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
-import com.gmail.jiangyang5157.tookit.data.buffer.BufferUtils;
+import com.gmail.jiangyang5157.tookit.base.data.BufferUtils;
 import com.gmail.jiangyang5157.tookit.math.Vector;
 import com.gmail.jiangyang5157.tookit.math.Vector3d;
-import com.gmail.jiangyang5157.tookit.render.GlesUtils;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;

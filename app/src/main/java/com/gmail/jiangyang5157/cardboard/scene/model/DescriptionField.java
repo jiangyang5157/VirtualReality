@@ -3,8 +3,6 @@ package com.gmail.jiangyang5157.cardboard.scene.model;
 import android.content.Context;
 import android.graphics.Bitmap;
 
-import com.gmail.jiangyang5157.tookit.app.RegularExpressionUtils;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
