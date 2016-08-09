@@ -2,10 +2,12 @@ package com.gmail.jiangyang5157.cardboard.net;
 
 import android.util.Log;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.gmail.jiangyang5157.app.VolleyApplication;
+import com.gmail.jiangyang5157.cardboard.vr.Constant;
 import com.gmail.jiangyang5157.tookit.base.data.IoUtils;
 
 import java.io.ByteArrayInputStream;
@@ -68,6 +70,7 @@ public class Downloader {
             }
         });
 
+        request.setRetryPolicy(new DefaultRetryPolicy(Constant.TIMEOUT_MS, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         VolleyApplication.getInstance().addToRequestQueue(request);
     }
 }
