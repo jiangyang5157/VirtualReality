@@ -24,12 +24,10 @@ public abstract class UvSphere extends Sphere implements GlModel.BindableTexture
 
     @Override
     public void create(int program) {
-        bindTextureBuffers();
-        buildData();
-
         super.create(program);
         bindHandles();
         bindBuffers();
+        bindTextureBuffers();
     }
 
     @Override

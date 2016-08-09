@@ -71,11 +71,8 @@ public class AtomMap extends GlModel implements Creation {
                             @Override
                             public void onComplete(java.util.Map<String, String> headers) {
                                 prepareKml(fileKml);
-
-                                if (checkPreparation()) {
-                                    ray.subtractBusy();
-                                    creationState = STATE_BEFORE_CREATE;
-                                }
+                                ray.subtractBusy();
+                                creationState = STATE_BEFORE_CREATE;
                             }
 
                             @Override
