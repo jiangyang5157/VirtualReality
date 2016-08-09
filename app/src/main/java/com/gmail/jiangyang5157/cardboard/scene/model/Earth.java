@@ -35,7 +35,7 @@ public class Earth extends UvSphere implements Creation {
 
     protected final int[] buffers = new int[3];
     protected final int[] texBuffers = new int[1];
-    private Bitmap[] textureBitmap = new Bitmap[1];
+    protected Bitmap[] textureBitmap = new Bitmap[1];
 
     private String urlTexture;
 
