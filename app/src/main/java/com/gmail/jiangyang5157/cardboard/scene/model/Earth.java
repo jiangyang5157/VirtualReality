@@ -98,7 +98,11 @@ public class Earth extends UvSphere implements Creation {
     @Override
     public void create(int program) {
         creationState = STATE_CREATING;
+
         super.create(program);
+        bindHandles();
+        bindBuffers();
+        bindTextureBuffers();
 
         setCreated(true);
         setVisible(true);
