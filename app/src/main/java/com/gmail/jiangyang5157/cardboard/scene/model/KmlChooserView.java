@@ -87,7 +87,7 @@ public class KmlChooserView extends Dialog implements Creation {
 
         String lastKmlFileName = Constant.getLastKmlFileName(context);
         int iSize = fileNames.length;
-        for (int i = 0; i < iSize; i++){
+        for (int i = 0; i < iSize; i++) {
             final String fileName = fileNames[i];
             TextField p = new TextField(context);
             float textSize = TextField.TEXT_SIZE_TINY;
