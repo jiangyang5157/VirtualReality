@@ -6,6 +6,7 @@ import android.text.Layout;
 import android.util.ArrayMap;
 
 import com.gmail.jiangyang5157.cardboard.vr.R;
+import com.gmail.jiangyang5157.tookit.android.base.AppUtils;
 
 /**
  * @author Yang
@@ -28,6 +29,9 @@ public class MarkerDetailView extends Dialog {
 
     @Override
     public void create(int program) {
+        setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.android.base.R.color.Red, null));
+        createPanels();
+        adjustBounds(WIDTH);
         super.create(program);
 
         setCreated(true);

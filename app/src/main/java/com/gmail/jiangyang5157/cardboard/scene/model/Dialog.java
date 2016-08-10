@@ -42,14 +42,6 @@ public abstract class Dialog extends Panel {
     protected abstract void createPanels();
 
     @Override
-    public void create(int program) {
-        setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.android.base.R.color.Red, null));
-        createPanels();
-        adjustBounds(WIDTH);
-        super.create(program);
-    }
-
-    @Override
     public void bindTextureBuffers() {
         GLES20.glGenTextures(1, texBuffers, 0);
         if (texBuffers[0] == 0) {

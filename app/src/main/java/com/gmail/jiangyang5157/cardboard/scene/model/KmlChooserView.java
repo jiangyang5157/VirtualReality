@@ -7,6 +7,7 @@ import android.util.ArrayMap;
 
 import com.gmail.jiangyang5157.cardboard.vr.Constant;
 import com.gmail.jiangyang5157.cardboard.vr.R;
+import com.gmail.jiangyang5157.tookit.android.base.AppUtils;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -29,6 +30,9 @@ public class KmlChooserView extends Dialog {
 
     @Override
     public void create(int program) {
+        setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.android.base.R.color.Red, null));
+        createPanels();
+        adjustBounds(WIDTH);
         super.create(program);
 
         setCreated(true);
