@@ -108,8 +108,8 @@ public class ObjModel extends GlModel implements GlModel.BindableBuffer, Creatio
     public void create(int program) {
         creationState = STATE_CREATING;
         setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.android.base.R.color.DeepOrange, null));
-        super.create(program);
 
+        super.create(program);
         bindHandles();
         bindBuffers();
 
