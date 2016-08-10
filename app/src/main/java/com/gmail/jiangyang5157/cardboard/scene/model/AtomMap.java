@@ -126,8 +126,21 @@ public class AtomMap extends GlModel implements Creation {
     }
 
     @Override
-    protected void buildData() {
-        // do nothing
+    public void update(float[] view, float[] perspective) {
+//        Log.d(TAG, "update markers"); //
+//        Performance.getInstance().addBreakpoint();
+        markers.update(view, perspective);
+//        Performance.getInstance().addBreakpoint();
+//        Performance.getInstance().printEvaluationInMilliseconds();
+    }
+
+    @Override
+    public void draw() {
+//        Log.d(TAG, "draw markers"); // 460-12ms
+//        Performance.getInstance().addBreakpoint();
+        markers.draw();
+//        Performance.getInstance().addBreakpoint();
+//        Performance.getInstance().printEvaluationInMilliseconds();
     }
 
     public RayIntersection getIntersection(Vector cameraPos_vec, Vector headForwardFrac_vec, final float[] headView) {
@@ -152,24 +165,6 @@ public class AtomMap extends GlModel implements Creation {
 
     public AtomMarkers getAtomMarkers() {
         return markers;
-    }
-
-    @Override
-    public void update(float[] view, float[] perspective) {
-//        Log.d(TAG, "update markers"); //
-//        Performance.getInstance().addBreakpoint();
-        markers.update(view, perspective);
-//        Performance.getInstance().addBreakpoint();
-//        Performance.getInstance().printEvaluationInMilliseconds();
-    }
-
-    @Override
-    public void draw() {
-//        Log.d(TAG, "draw markers"); // 460-12ms
-//        Performance.getInstance().addBreakpoint();
-        markers.draw();
-//        Performance.getInstance().addBreakpoint();
-//        Performance.getInstance().printEvaluationInMilliseconds();
     }
 
     @Override

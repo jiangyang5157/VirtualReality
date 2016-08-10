@@ -185,7 +185,6 @@ public class ObjModel extends GlModel implements GlModel.BindableBuffer, Creatio
         normalsBuffer.limit(0);
     }
 
-    @Override
     protected void buildData() {
         v = new java.util.Vector<>();
         vt = new java.util.Vector<>();

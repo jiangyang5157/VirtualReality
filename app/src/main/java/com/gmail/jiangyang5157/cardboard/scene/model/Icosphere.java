@@ -30,6 +30,13 @@ public abstract class Icosphere extends Sphere {
         this.recursionLevel = recursionLevel;
     }
 
+    protected void buildData() {
+        IcosphereVertex icosphereVertex = IcosphereBuilder.getInstance().build(recursionLevel);
+        vertices = icosphereVertex.getVertices();
+        normals = vertices.clone();
+        indices = icosphereVertex.getIndices();
+    }
+
     @Override
     protected void bindHandles() {
         modelHandle = GLES20.glGetUniformLocation(program, MODEL_HANDLE);
@@ -41,14 +48,6 @@ public abstract class Icosphere extends Sphere {
 
         vertexHandle = GLES20.glGetAttribLocation(program, VERTEX_HANDLE);
         normalHandle = GLES20.glGetAttribLocation(program, NORMAL_HANDLE);
-    }
-
-    @Override
-    protected void buildData() {
-        IcosphereVertex icosphereVertex = IcosphereBuilder.getInstance().build(recursionLevel);
-        vertices = icosphereVertex.getVertices();
-        normals = vertices.clone();
-        indices = icosphereVertex.getIndices();
     }
 
     @Override

@@ -115,8 +115,6 @@ public abstract class GlModel {
 
     protected abstract void bindHandles();
 
-    protected abstract void buildData();
-
     public void update(float[] view, float[] perspective) {
         if (modelRequireUpdate) {
             updateModel();

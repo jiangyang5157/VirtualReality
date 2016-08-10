@@ -62,6 +62,7 @@ public class Earth extends UvSphere implements Creation {
                 ray.addBusy();
 
                 if (checkPreparation()) {
+                    buildTextureBuffers();
                     buildData();
                     ray.subtractBusy();
                     creationState = STATE_BEFORE_CREATE;
@@ -77,6 +78,7 @@ public class Earth extends UvSphere implements Creation {
 
                             @Override
                             public void onComplete(Map<String, String> headers) {
+                                buildTextureBuffers();
                                 buildData();
                                 ray.subtractBusy();
                                 creationState = STATE_BEFORE_CREATE;
@@ -101,12 +103,44 @@ public class Earth extends UvSphere implements Creation {
 
         super.create(program);
         bindHandles();
-        bindBuffers();
         bindTextureBuffers();
+        bindBuffers();
 
         setCreated(true);
         setVisible(true);
         creationState = STATE_BEFORE_CREATE;
+    }
+
+    protected void buildTextureBuffers() {
+        InputStream in = null;
+        try {
+            in = new FileInputStream(new File(Constant.getAbsolutePath(context, Constant.getPath(urlTexture))));
+            final BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inScaled = false;
+            textureBitmap[0] = BitmapFactory.decodeStream(in, null, options);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    @Override
+    protected void bindHandles() {
+        modelHandle = GLES20.glGetUniformLocation(program, MODEL_HANDLE);
+        viewHandle = GLES20.glGetUniformLocation(program, VIEW_HANDLE);
+        perspectiveHandle = GLES20.glGetUniformLocation(program, PERSPECTIVE_HANDLE);
+
+        texIdHandle = GLES20.glGetUniformLocation(program, TEXTURE_ID_HANDLE);
+
+        vertexHandle = GLES20.glGetAttribLocation(program, VERTEX_HANDLE);
+        texCoordHandle = GLES20.glGetAttribLocation(program, TEXTURE_COORDS_HANDLE);
     }
 
     @Override
@@ -143,29 +177,6 @@ public class Earth extends UvSphere implements Creation {
     }
 
     @Override
-    protected void buildData() {
-        super.buildData();
-
-        InputStream in = null;
-        try {
-            in = new FileInputStream(new File(Constant.getAbsolutePath(context, Constant.getPath(urlTexture))));
-            final BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inScaled = false;
-            textureBitmap[0] = BitmapFactory.decodeStream(in, null, options);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (in != null) {
-                try {
-                    in.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
-    @Override
     public void bindTextureBuffers() {
         GLES20.glGenTextures(1, texBuffers, 0);
         if (texBuffers[0] == 0) {
@@ -177,18 +188,6 @@ public class Earth extends UvSphere implements Creation {
             GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, textureBitmap[0], 0);
             textureBitmap[0].recycle();
         }
-    }
-
-    @Override
-    protected void bindHandles() {
-        modelHandle = GLES20.glGetUniformLocation(program, MODEL_HANDLE);
-        viewHandle = GLES20.glGetUniformLocation(program, VIEW_HANDLE);
-        perspectiveHandle = GLES20.glGetUniformLocation(program, PERSPECTIVE_HANDLE);
-
-        texIdHandle = GLES20.glGetUniformLocation(program, TEXTURE_ID_HANDLE);
-
-        vertexHandle = GLES20.glGetAttribLocation(program, VERTEX_HANDLE);
-        texCoordHandle = GLES20.glGetAttribLocation(program, TEXTURE_COORDS_HANDLE);
     }
 
     @Override

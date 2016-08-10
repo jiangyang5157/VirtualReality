@@ -169,7 +169,6 @@ public abstract class Panel extends Rectangle implements GlModel.BindableBuffer,
         normal_vec = ((Vector3d) tl_tr_vec).cross((Vector3d) tl_bl_vec).direction();
     }
 
-    @Override
     protected void buildData() {
         buildCorners(UP, RIGHT);
 
