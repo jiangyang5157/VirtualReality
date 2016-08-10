@@ -5,6 +5,7 @@ import android.opengl.GLES20;
 import android.text.Layout;
 import android.util.ArrayMap;
 
+import com.gmail.jiangyang5157.cardboard.scene.Creation;
 import com.gmail.jiangyang5157.cardboard.vr.R;
 import com.gmail.jiangyang5157.tookit.android.base.AppUtils;
 
@@ -12,13 +13,14 @@ import com.gmail.jiangyang5157.tookit.android.base.AppUtils;
  * @author Yang
  * @since 5/13/2016
  */
-public class MarkerDetailView extends Dialog {
+public class MarkerDetailView extends Dialog implements Creation {
 
     private Event eventListener;
-
     public interface Event {
         void showObjModel(ObjModel model);
     }
+
+    protected int creationState = STATE_BEFORE_PREPARE;
 
     private AtomMarker marker;
 
@@ -27,8 +29,24 @@ public class MarkerDetailView extends Dialog {
         this.marker = marker;
     }
 
+    public void prepare(final Ray ray) {
+        getHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                creationState = STATE_PREPARING;
+                ray.addBusy();
+
+
+
+                ray.subtractBusy();
+                creationState = STATE_BEFORE_CREATE;
+            }
+        });
+    }
+
     @Override
     public void create(int program) {
+        creationState = STATE_CREATING;
         setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.android.base.R.color.Red, null));
 
         createPanels();
@@ -44,6 +62,7 @@ public class MarkerDetailView extends Dialog {
 
         setCreated(true);
         setVisible(true);
+        creationState = STATE_BEFORE_CREATE;
     }
 
     @Override
@@ -97,5 +116,10 @@ public class MarkerDetailView extends Dialog {
 
     public void setEventListener(Event eventListener) {
         this.eventListener = eventListener;
+    }
+
+    @Override
+    public int getCreationState() {
+        return creationState;
     }
 }

@@ -19,11 +19,10 @@ import java.io.FilenameFilter;
  */
 public class KmlChooserView extends Dialog implements Creation {
 
+    private Event eventListener;
     public interface Event {
         void onKmlSelected(String fileName);
     }
-
-    private Event eventListener;
 
     protected int creationState = STATE_BEFORE_PREPARE;
 
@@ -37,6 +36,7 @@ public class KmlChooserView extends Dialog implements Creation {
             public void run() {
                 creationState = STATE_PREPARING;
                 ray.addBusy();
+
 
 
                 ray.subtractBusy();
