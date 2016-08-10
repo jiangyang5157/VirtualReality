@@ -20,9 +20,9 @@ public class MarkerDetailView extends Dialog implements Creation {
         void showObjModel(ObjModel model);
     }
 
-    protected int creationState = STATE_BEFORE_PREPARE;
-
     private AtomMarker marker;
+
+    protected int creationState = STATE_BEFORE_PREPARE;
 
     public MarkerDetailView(Context context, AtomMarker marker) {
         super(context);
