@@ -1,7 +1,9 @@
 package com.gmail.jiangyang5157.cardboard.scene.model;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.opengl.GLES20;
+import android.opengl.GLUtils;
 import android.opengl.Matrix;
 
 import com.gmail.jiangyang5157.cardboard.scene.RayIntersection;
@@ -37,6 +39,8 @@ public abstract class Panel extends Rectangle implements GlModel.BindableBuffer,
     private Vector normal_vec;
 
     protected final int[] buffers = new int[3];
+    protected final int[] texBuffers = new int[1];
+    protected Bitmap[] textureBitmap = new Bitmap[1];
 
     protected Panel(Context context) {
         super(context);
@@ -131,6 +135,20 @@ public abstract class Panel extends Rectangle implements GlModel.BindableBuffer,
         texCoordHandle = GLES20.glGetAttribLocation(program, TEXTURE_COORDS_HANDLE);
     }
 
+    @Override
+    public void bindTextureBuffers() {
+        GLES20.glGenTextures(1, texBuffers, 0);
+        if (texBuffers[0] == 0) {
+            throw new RuntimeException("Error loading texture.");
+        } else {
+            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texBuffers[0]);
+            GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
+            GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_NEAREST);
+            GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, textureBitmap[0], 0);
+            textureBitmap[0].recycle();
+        }
+    }
+
     protected void buildCorners(float[] up, float[] right) {
         Vector up_vec = new Vector(up[0], up[1], up[2]);
         Vector right_vec = new Vector(right[0], right[1], right[2]);
@@ -168,6 +186,8 @@ public abstract class Panel extends Rectangle implements GlModel.BindableBuffer,
         tl_bl_vec = new Vector3d(bl_vec.minus(tl_vec));
         normal_vec = ((Vector3d) tl_tr_vec).cross((Vector3d) tl_bl_vec).direction();
     }
+
+    protected abstract void buildTextureBuffers();
 
     protected void buildData() {
         buildCorners(UP, RIGHT);
@@ -235,5 +255,6 @@ public abstract class Panel extends Rectangle implements GlModel.BindableBuffer,
     public void destroy() {
         super.destroy();
         GLES20.glDeleteBuffers(buffers.length, buffers, 0);
+        GLES20.glDeleteTextures(texBuffers.length, texBuffers, 0);
     }
 }

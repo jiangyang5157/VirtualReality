@@ -1,10 +1,7 @@
 package com.gmail.jiangyang5157.cardboard.scene.model;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.opengl.GLES20;
-import android.opengl.GLUtils;
-import android.util.Log;
 import android.util.TypedValue;
 
 import com.gmail.jiangyang5157.cardboard.scene.RayIntersection;
@@ -28,8 +25,6 @@ public abstract class SubPanel extends Panel {
         super(context);
     }
 
-    protected final int[] texBuffers = new int[1];
-
     private void initScaleSelector(float normal) {
         scaleNormal = normal;
         scaleFocused = normal * 0.92f;
@@ -42,23 +37,6 @@ public abstract class SubPanel extends Panel {
         initScaleSelector(scale);
         super.create(program);
     }
-
-    @Override
-    public void bindTextureBuffers() {
-        GLES20.glGenTextures(1, texBuffers, 0);
-        if (texBuffers[0] == 0) {
-            throw new RuntimeException("Error loading texture.");
-        } else {
-            Bitmap bitmap = buildBitmap();
-            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texBuffers[0]);
-            GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
-            GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_NEAREST);
-            GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
-            bitmap.recycle();
-        }
-    }
-
-    protected abstract Bitmap buildBitmap();
 
     public static float dp2px(Context context, float dp) {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.getResources().getDisplayMetrics());
@@ -127,12 +105,5 @@ public abstract class SubPanel extends Panel {
 
     public void setCcntent(String content) {
         this.content = content;
-    }
-
-    @Override
-    public void destroy() {
-        Log.d(TAG, "destroy");
-        super.destroy();
-        GLES20.glDeleteTextures(texBuffers.length, texBuffers, 0);
     }
 }

@@ -19,8 +19,8 @@ public class DescriptionField extends TextField {
     }
 
     @Override
-    protected Bitmap buildBitmap() {
-
+    protected void buildTextureBuffers() {
+        super.buildTextureBuffers();
 //        Pattern pattern = Pattern.compile(RegularExpressionUtils.URL_TEMPLATE);
 //        Matcher matcher = pattern.matcher(content);
 //        boolean find = matcher.find();
@@ -28,8 +28,6 @@ public class DescriptionField extends TextField {
 //        if (find) {
 //            System.out.println("start, end: " + matcher.start() + ", " + matcher.end());
 //        }
-
-        return super.buildBitmap();
     }
 
 

@@ -53,11 +53,12 @@ public class KmlChooserView extends Dialog implements Creation {
         createPanels(); // move to prepare
         adjustBounds(WIDTH);// move to prepare
 
-        bindTextureBuffers();
+        buildTextureBuffers();
         buildData();
 
         super.create(program);
         bindHandles();
+        bindTextureBuffers();
         bindBuffers();
 
         setCreated(true);

@@ -3,11 +3,9 @@ package com.gmail.jiangyang5157.cardboard.scene.model;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.opengl.GLES20;
-import android.opengl.GLUtils;
 import android.util.Log;
 
 import com.gmail.jiangyang5157.cardboard.scene.RayIntersection;
-import com.gmail.jiangyang5157.tookit.android.base.AppUtils;
 import com.gmail.jiangyang5157.tookit.math.Vector;
 
 import java.util.ArrayList;
@@ -30,8 +28,6 @@ public abstract class Dialog extends Panel {
 
     protected ArrayList<Panel> panels;
 
-    protected final int[] texBuffers = new int[1];
-
     public Dialog(Context context) {
         super(context);
         scale = SCALE;
@@ -42,26 +38,15 @@ public abstract class Dialog extends Panel {
     protected abstract void createPanels();
 
     @Override
-    public void bindTextureBuffers() {
-        GLES20.glGenTextures(1, texBuffers, 0);
-        if (texBuffers[0] == 0) {
-            throw new RuntimeException("Gl Error - Unable to create texture.");
-        } else {
-            Bitmap bitmap = Bitmap.createBitmap((int) width, (int) height, Bitmap.Config.ARGB_4444);
-            bitmap.eraseColor(getColorWithAlpha(ALPHA_BACKGROUND));
-
-            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texBuffers[0]);
-            GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
-            GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_NEAREST);
-            GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
-            bitmap.recycle();
-        }
+    protected void buildTextureBuffers() {
+        textureBitmap[0] = Bitmap.createBitmap((int) width, (int) height, Bitmap.Config.ARGB_4444);
+        textureBitmap[0].eraseColor(getColorWithAlpha(ALPHA_BACKGROUND));
     }
 
     @Override
     public void update(float[] view, float[] perspective) {
         int iSize = panels.size();
-        for(int i = 0; i < iSize; i++){
+        for (int i = 0; i < iSize; i++) {
             panels.get(i).update(view, perspective);
         }
         super.update(view, perspective);
@@ -70,7 +55,7 @@ public abstract class Dialog extends Panel {
     @Override
     public void draw() {
         int iSize = panels.size();
-        for(int i = 0; i < iSize; i++){
+        for (int i = 0; i < iSize; i++) {
             panels.get(i).draw();
         }
 
@@ -119,7 +104,7 @@ public abstract class Dialog extends Panel {
         RayIntersection ret = null;
         ArrayList<RayIntersection> rayIntersections = new ArrayList<>();
         int iSize = panels.size();
-        for(int i = 0; i < iSize; i++) {
+        for (int i = 0; i < iSize; i++) {
             RayIntersection rayIntersection = panels.get(i).getIntersection(cameraPos_vec, headForward_vec);
             if (rayIntersection != null) {
                 rayIntersections.add(rayIntersection);
@@ -142,7 +127,7 @@ public abstract class Dialog extends Panel {
     protected void adjustBounds(float width) {
         float h = 0;
         int iSize = panels.size();
-        for(int i = 0; i < iSize; i++){
+        for (int i = 0; i < iSize; i++) {
             h += panels.get(i).height;
         }
         this.width = width;
@@ -160,7 +145,7 @@ public abstract class Dialog extends Panel {
         cameraPos[2] += up[2] * SCALED_HALF_HEIGHT;
 
         int iSize = panels.size();
-        for(int i = 0; i < iSize; i++){
+        for (int i = 0; i < iSize; i++) {
             Panel panel = panels.get(i);
 
             final float SCALED_PANEL_HALF_HEIGHT = panel.height / 2 * scale;
@@ -180,11 +165,10 @@ public abstract class Dialog extends Panel {
     public void destroy() {
         Log.d(TAG, "destroy");
         int iSize = panels.size();
-        for(int i = 0; i < iSize; i++){
+        for (int i = 0; i < iSize; i++) {
             panels.get(i).destroy();
         }
         panels.clear();
         super.destroy();
-        GLES20.glDeleteTextures(texBuffers.length, texBuffers, 0);
     }
 }

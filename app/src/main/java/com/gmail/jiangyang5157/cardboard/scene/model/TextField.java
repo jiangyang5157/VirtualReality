@@ -35,11 +35,12 @@ public class TextField extends SubPanel {
     public void create(int program) {
         setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.android.base.R.color.White, null));
 
-        bindTextureBuffers();
+        buildTextureBuffers();
         buildData();
 
         super.create(program);
         bindHandles();
+        bindTextureBuffers();
         bindBuffers();
 
         setCreated(true);
@@ -47,8 +48,8 @@ public class TextField extends SubPanel {
     }
 
     @Override
-    protected Bitmap buildBitmap() {
-        return buildTextBitmap(content);
+    protected void buildTextureBuffers() {
+        textureBitmap[0] = buildTextBitmap(content);
     }
 
     private Bitmap buildTextBitmap(String text) {
