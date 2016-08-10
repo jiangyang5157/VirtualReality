@@ -29,15 +29,6 @@ public abstract class Point extends GlModel implements GlModel.BindableBuffer {
     }
 
     @Override
-    public void create(int program) {
-        buildData();
-
-        super.create(program);
-        bindHandles();
-        bindBuffers();
-    }
-
-    @Override
     protected void buildData() {
         vertices = new float[0];
     }

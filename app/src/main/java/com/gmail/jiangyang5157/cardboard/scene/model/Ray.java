@@ -38,7 +38,12 @@ public class Ray extends Point {
     @Override
     public void create(int program) {
         setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.android.base.R.color.DeepOrange, null));
+
+        buildData();
+
         super.create(program);
+        bindHandles();
+        bindBuffers();
 
         setCreated(true);
         setVisible(true);
