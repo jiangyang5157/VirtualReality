@@ -42,16 +42,6 @@ public abstract class Panel extends Rectangle implements GlModel.BindableBuffer,
         super(context);
     }
 
-    @Override
-    public void create(int program) {
-        bindTextureBuffers();
-        buildData();
-
-        super.create(program);
-        bindHandles();
-        bindBuffers();
-    }
-
     public void setPosition(float[] cameraPos, float[] forward, float distance, float[] quaternion, float[] up, float[] right) {
         float[] position = new float[]{
                 cameraPos[0] + forward[0] * distance,

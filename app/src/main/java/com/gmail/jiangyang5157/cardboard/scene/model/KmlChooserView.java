@@ -5,6 +5,7 @@ import android.opengl.GLES20;
 import android.text.Layout;
 import android.util.ArrayMap;
 
+import com.gmail.jiangyang5157.cardboard.scene.Creation;
 import com.gmail.jiangyang5157.cardboard.vr.Constant;
 import com.gmail.jiangyang5157.cardboard.vr.R;
 import com.gmail.jiangyang5157.tookit.android.base.AppUtils;
@@ -16,7 +17,7 @@ import java.io.FilenameFilter;
  * @author Yang
  * @since 6/24/2016
  */
-public class KmlChooserView extends Dialog {
+public class KmlChooserView extends Dialog implements Creation {
 
     public interface Event {
         void onKmlSelected(String fileName);
@@ -24,19 +25,44 @@ public class KmlChooserView extends Dialog {
 
     private Event eventListener;
 
+    protected int creationState = STATE_BEFORE_PREPARE;
+
     public KmlChooserView(Context context) {
         super(context);
     }
 
+    public void prepare(final Ray ray) {
+        getHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                creationState = STATE_PREPARING;
+                ray.addBusy();
+
+
+                ray.subtractBusy();
+                creationState = STATE_BEFORE_CREATE;
+            }
+        });
+    }
+
     @Override
     public void create(int program) {
+        creationState = STATE_CREATING;
         setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.android.base.R.color.Red, null));
-        createPanels();
-        adjustBounds(WIDTH);
+
+        createPanels(); // move to prepare
+        adjustBounds(WIDTH);// move to prepare
+
+        bindTextureBuffers();
+        buildData();
+
         super.create(program);
+        bindHandles();
+        bindBuffers();
 
         setCreated(true);
         setVisible(true);
+        creationState = STATE_BEFORE_CREATE;
     }
 
     @Override
@@ -87,5 +113,10 @@ public class KmlChooserView extends Dialog {
 
     public void setEventListener(Event eventListener) {
         this.eventListener = eventListener;
+    }
+
+    @Override
+    public int getCreationState() {
+        return creationState;
     }
 }

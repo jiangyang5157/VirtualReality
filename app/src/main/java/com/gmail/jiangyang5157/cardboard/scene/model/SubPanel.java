@@ -8,7 +8,6 @@ import android.util.Log;
 import android.util.TypedValue;
 
 import com.gmail.jiangyang5157.cardboard.scene.RayIntersection;
-import com.gmail.jiangyang5157.tookit.android.base.AppUtils;
 import com.gmail.jiangyang5157.tookit.math.Vector;
 
 /**
@@ -40,12 +39,8 @@ public abstract class SubPanel extends Panel {
 
     @Override
     public void create(int program) {
-        setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.android.base.R.color.White, null));
         initScaleSelector(scale);
         super.create(program);
-
-        setCreated(true);
-        setVisible(true);
     }
 
     @Override

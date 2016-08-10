@@ -30,9 +30,16 @@ public class MarkerDetailView extends Dialog {
     @Override
     public void create(int program) {
         setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.android.base.R.color.Red, null));
-        createPanels();
-        adjustBounds(WIDTH);
+
+        createPanels(); // move to prepare
+        adjustBounds(WIDTH);// move to prepare
+
+        bindTextureBuffers();
+        buildData();
+
         super.create(program);
+        bindHandles();
+        bindBuffers();
 
         setCreated(true);
         setVisible(true);
