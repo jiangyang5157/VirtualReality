@@ -19,7 +19,6 @@ public class Constant {
     public static final int DEBUG = 0;
 
     public static final int GLES_VERSION_REQUIRED = 0x00030000;
-    public static final int TIMEOUT_MS = 2000;
 
     public static final String URL_ = "http://192.168.1.68:8080/assets/";
 
