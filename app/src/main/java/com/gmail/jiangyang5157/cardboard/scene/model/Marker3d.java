@@ -42,7 +42,12 @@ public class Marker3d extends Icosphere {
         if (color == null) {
             setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.android.base.R.color.Yellow, null));
         }
+
+        buildData();
+
         super.create(program);
+        bindHandles();
+        bindBuffers();
 
         setCreated(true);
         setVisible(true);

@@ -31,15 +31,6 @@ public abstract class Icosphere extends Sphere {
     }
 
     @Override
-    public void create(int program) {
-        buildData();
-
-        super.create(program);
-        bindHandles();
-        bindBuffers();
-    }
-
-    @Override
     protected void bindHandles() {
         modelHandle = GLES20.glGetUniformLocation(program, MODEL_HANDLE);
         viewHandle = GLES20.glGetUniformLocation(program, VIEW_HANDLE);
