@@ -41,7 +41,6 @@ public class DescriptionField extends TextField {
         if (find) {
             Log.d(TAG, "start, end: " + matcher.start() + ", " + matcher.end());
             String url = content.substring(matcher.start(), matcher.end());
-            String dotgif = "http://www.pineswcd.com/vertical/Sites/%7BB4CF315C-B365-47D6-A226-5F80C04C0D48%7D/uploads/tree_clipart.gif";
             ImageRequest request = new ImageRequest(url,
                     new Response.Listener<Bitmap>() {
                         @Override
