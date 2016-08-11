@@ -3,15 +3,12 @@ package com.gmail.jiangyang5157.cardboard.scene.model;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.Log;
-import android.widget.ImageView;
 
-import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.ImageRequest;
-import com.gmail.jiangyang5157.app.VolleyApplication;
+import com.gmail.jiangyang5157.cardboard.net.BitmapLoader;
 import com.gmail.jiangyang5157.tookit.base.data.RegularExpressionUtils;
 
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -37,32 +34,25 @@ public class DescriptionField extends TextField {
         Pattern pattern = Pattern.compile(RegularExpressionUtils.URL_TEMPLATE);
         Matcher matcher = pattern.matcher(content);
         boolean find = matcher.find();
-        Log.d(TAG, "matcher find " + find + ": " + content);
         if (find) {
-            Log.d(TAG, "URL matcher find: content: " + content);
             String url = content.substring(matcher.start(), matcher.end());
-            Log.d(TAG, "URL matcher find: url: " + url);
-            ImageRequest request = new ImageRequest(url,
-                    new Response.Listener<Bitmap>() {
-                        @Override
-                        public void onResponse(Bitmap bitmap) {
-                            Log.d(TAG, "ImageRequest.onResponse: w/h: " + bitmap.getWidth() + ", " + bitmap.getHeight());
-                            textureBitmap[0] = bitmap;
-                            height = bitmap.getHeight();
-                            buildData();
-                            eventListener.onPrepareComplete();
-                        }
-                    }, (int) width, 0, ImageView.ScaleType.CENTER_INSIDE, Bitmap.Config.ARGB_4444,
-                    new Response.ErrorListener() {
-                        public void onErrorResponse(VolleyError error) {
-                            Log.d(TAG, "ImageRequest.onErrorResponse: " + error.toString());
-                            textureBitmap[0] = buildTextBitmap(ellipsizeString(url, MAX_TEXT_LENGTH));
-                            buildData();
-                            eventListener.onPrepareComplete();
-                        }
-                    });
-            request.setRetryPolicy(new DefaultRetryPolicy(VolleyApplication.TIMEOUT_MS, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-            VolleyApplication.getInstance().addToRequestQueue(request);
+            Log.d(TAG, "URL matcher content: " + content + "\n" + url);
+            new BitmapLoader(url, (int) width, new BitmapLoader.ResponseListener() {
+                @Override
+                public void onComplete(Map<String, String> headers, Bitmap bitmap) {
+                    textureBitmap[0] = bitmap;
+                    height = bitmap.getHeight();
+                    buildData();
+                    eventListener.onPrepareComplete();
+                }
+
+                @Override
+                public void onError(String url, VolleyError volleyError) {
+                    textureBitmap[0] = buildTextBitmap(ellipsizeString(url, MAX_TEXT_LENGTH));
+                    buildData();
+                    eventListener.onPrepareComplete();
+                }
+            }).start();
         } else {
             textureBitmap[0] = buildTextBitmap(ellipsizeString(content, MAX_TEXT_LENGTH));
             buildData();

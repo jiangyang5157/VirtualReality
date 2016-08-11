@@ -98,7 +98,7 @@ public class ObjModel extends GlModel implements GlModel.BindableBuffer, Creatio
                                 ray.subtractBusy();
                                 creationState = STATE_BEFORE_PREPARE;
                             }
-                        });
+                        }).start();
                     }
                 }
             }

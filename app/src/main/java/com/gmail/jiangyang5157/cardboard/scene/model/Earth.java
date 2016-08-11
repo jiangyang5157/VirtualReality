@@ -90,7 +90,7 @@ public class Earth extends UvSphere implements Creation {
                                 ray.subtractBusy();
                                 creationState = STATE_BEFORE_PREPARE;
                             }
-                        });
+                        }).start();
                     }
                 }
             }

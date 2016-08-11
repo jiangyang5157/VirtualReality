@@ -135,7 +135,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
             public void onError(String url, VolleyError volleyError) {
                 Log.d(TAG, "onError:" + url + " " + volleyError.toString());
             }
-        });
+        }).start();
     }
 
     /**

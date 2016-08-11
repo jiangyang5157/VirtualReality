@@ -81,7 +81,7 @@ public class AtomMap extends GlModel implements Creation {
                                 ray.subtractBusy();
                                 creationState = STATE_BEFORE_PREPARE;
                             }
-                        });
+                        }).start();
                     }
                 }
             }

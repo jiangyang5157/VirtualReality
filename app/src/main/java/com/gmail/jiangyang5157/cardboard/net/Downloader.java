@@ -13,13 +13,22 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Map;
 
 /**
  * @author Yang
  * @since 6/19/2016
  */
-public class Downloader {
+public class Downloader extends NetRequest {
     private static final String TAG = "[Downloader]";
+
+    public interface ResponseListener {
+        boolean onStart(Map<String, String> headers);
+
+        void onComplete(Map<String, String> headers);
+
+        void onError(String url, VolleyError volleyError);
+    }
 
     private final InputStreamRequest request;
 
@@ -59,7 +68,10 @@ public class Downloader {
                 listener.onError(url, volleyError);
             }
         });
+    }
 
+    @Override
+    public void start() {
         request.setRetryPolicy(new DefaultRetryPolicy(VolleyApplication.TIMEOUT_MS, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         VolleyApplication.getInstance().addToRequestQueue(request);
     }
