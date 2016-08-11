@@ -2,7 +2,6 @@ package com.gmail.jiangyang5157.cardboard.scene.model;
 
 import android.content.Context;
 import android.opengl.GLES20;
-import android.util.TypedValue;
 
 import com.gmail.jiangyang5157.cardboard.scene.RayIntersection;
 import com.gmail.jiangyang5157.tookit.math.Vector;
@@ -36,10 +35,6 @@ public abstract class SubPanel extends Panel {
     public void create(int program) {
         initScaleSelector(scale);
         super.create(program);
-    }
-
-    public static float dp2px(Context context, float dp) {
-        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.getResources().getDisplayMetrics());
     }
 
     @Override
