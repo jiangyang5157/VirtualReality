@@ -2,6 +2,7 @@ package com.gmail.jiangyang5157.cardboard.scene.model;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.util.Log;
 
 import com.android.volley.VolleyError;
@@ -43,16 +44,19 @@ public class DescriptionField extends TextField {
                     int w = bitmap.getWidth();
                     int h = bitmap.getHeight();
                     height = h;
-                    // TODO: 8/12/2016  
-                    Log.d("####", "bitmap_w/h field_w/h: " + w + ", " + h + " - " + width + ", " + height);
-                    textureBitmap[0] = bitmap;
+                    Bitmap texture = Bitmap.createBitmap((int) width, (int) height, Bitmap.Config.ARGB_4444);
+                    Canvas canvas = new Canvas(texture);
+                    texture.eraseColor(getColorWithAlpha(ALPHA_BACKGROUND));
+                    canvas.drawBitmap(bitmap, (width - w) / 2, 0, null);
+
+                    textureBitmap[0] = texture;
                     buildData();
                     eventListener.onPrepareComplete();
                 }
 
                 @Override
                 public void onError(String url, VolleyError volleyError) {
-                    textureBitmap[0] = buildTextBitmap(ellipsizeString(url, MAX_TEXT_LENGTH));
+                    textureBitmap[0] = buildTextBitmap(ellipsizeString(content, MAX_TEXT_LENGTH));
                     buildData();
                     eventListener.onPrepareComplete();
                 }
