@@ -40,8 +40,12 @@ public class DescriptionField extends TextField {
             new BitmapLoader(url, (int) width, new BitmapLoader.ResponseListener() {
                 @Override
                 public void onComplete(Map<String, String> headers, Bitmap bitmap) {
+                    int w = bitmap.getWidth();
+                    int h = bitmap.getHeight();
+                    height = h;
+                    // TODO: 8/12/2016  
+                    Log.d("####", "bitmap_w/h field_w/h: " + w + ", " + h + " - " + width + ", " + height);
                     textureBitmap[0] = bitmap;
-                    height = bitmap.getHeight();
                     buildData();
                     eventListener.onPrepareComplete();
                 }
