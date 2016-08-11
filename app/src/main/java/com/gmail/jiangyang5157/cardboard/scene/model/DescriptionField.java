@@ -16,8 +16,20 @@ import java.util.regex.Pattern;
 public class DescriptionField extends TextField {
     private static final String TAG = "[DescriptionField]";
 
+    private Event eventListener;
+    public interface Event {
+        void onPrepareComplete();
+    }
+
     public DescriptionField(Context context) {
         super(context);
+    }
+
+    @Override
+    public void prepare(final Ray ray) {
+        super.prepare(ray);
+//        buildTextureBuffers();
+//        buildData();
     }
 
     @Override

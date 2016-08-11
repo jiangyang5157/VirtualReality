@@ -38,8 +38,6 @@ public abstract class Dialog extends Panel implements Creation {
         panels = new ArrayList<>();
     }
 
-    protected abstract void buildPanels();
-
     @Override
     protected void buildTextureBuffers() {
         textureBitmap[0] = Bitmap.createBitmap((int) width, (int) height, Bitmap.Config.ARGB_4444);

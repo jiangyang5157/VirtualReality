@@ -17,7 +17,6 @@ public class KmlChooserView extends Dialog {
     private static final String TAG = "[KmlChooserView]";
 
     private Event eventListener;
-
     public interface Event {
         void onKmlSelected(String fileName);
     }
@@ -68,7 +67,6 @@ public class KmlChooserView extends Dialog {
         creationState = STATE_BEFORE_CREATE;
     }
 
-    @Override
     protected void buildPanels() {
         File directory = new File(Constant.getAbsolutePath(context, Constant.getKmlPath("")));
         if (!directory.exists() || !directory.isDirectory()) {

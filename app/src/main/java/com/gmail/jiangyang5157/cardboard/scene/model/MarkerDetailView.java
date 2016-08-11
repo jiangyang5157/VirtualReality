@@ -13,7 +13,6 @@ public class MarkerDetailView extends Dialog {
     private static final String TAG = "[MarkerDetailView]";
 
     private Event eventListener;
-
     public interface Event {
         void showObjModel(ObjModel model);
     }
@@ -67,7 +66,6 @@ public class MarkerDetailView extends Dialog {
         creationState = STATE_BEFORE_CREATE;
     }
 
-    @Override
     protected void buildPanels() {
         if (marker.getName() != null) {
             TextField p1 = new TextField(context);
