@@ -1,7 +1,6 @@
 package com.gmail.jiangyang5157.cardboard.scene.model;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.gmail.jiangyang5157.tookit.base.data.RegularExpressionUtils;
@@ -27,9 +26,11 @@ public class DescriptionField extends TextField {
 
     @Override
     public void prepare(final Ray ray) {
+
+
+
         super.prepare(ray);
-//        buildTextureBuffers();
-//        buildData();
+
     }
 
     @Override
