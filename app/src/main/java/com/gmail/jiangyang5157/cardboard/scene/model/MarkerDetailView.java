@@ -13,6 +13,7 @@ public class MarkerDetailView extends Dialog {
     private static final String TAG = "[MarkerDetailView]";
 
     private Event eventListener;
+
     public interface Event {
         void showObjModel(ObjModel model);
     }
@@ -32,11 +33,51 @@ public class MarkerDetailView extends Dialog {
                 creationState = STATE_PREPARING;
                 ray.addBusy();
 
-                buildPanels();
-                int iSize = panels.size();
-                for (int i = 0; i < iSize; i++) {
-                    panels.get(i).prepare(ray);
+                if (marker.getName() != null) {
+                    TextField pName = new TextField(context);
+                    pName.setCcntent(marker.getName());
+                    pName.width = WIDTH;
+                    pName.setScale(SCALE);
+                    pName.modelRequireUpdate = true;
+                    pName.setTextSize(TextField.TEXT_SIZE_LARGE);
+                    pName.setAlignment(Layout.Alignment.ALIGN_CENTER);
+
+                    pName.prepare(ray);
+                    addPanel(pName);
                 }
+                if (marker.getObjModel() != null) {
+                    TextField pObjModel = new TextField(context);
+                    pObjModel.setCcntent(marker.getObjModel().getTitle());
+                    pObjModel.width = WIDTH;
+                    pObjModel.setScale(SCALE);
+                    pObjModel.modelRequireUpdate = true;
+                    pObjModel.setTextSize(TextField.TEXT_SIZE_TINY);
+                    pObjModel.setAlignment(Layout.Alignment.ALIGN_NORMAL);
+                    pObjModel.setOnClickListener(new GlModel.ClickListener() {
+                        @Override
+                        public void onClick(GlModel model) {
+                            if (eventListener != null) {
+                                eventListener.showObjModel(marker.getObjModel());
+                            }
+                        }
+                    });
+
+                    pObjModel.prepare(ray);
+                    addPanel(pObjModel);
+                }
+                if (marker.getDescription() != null) {
+                    DescriptionField pDescription = new DescriptionField(context);
+                    pDescription.setCcntent(marker.getDescription());
+                    pDescription.width = WIDTH;
+                    pDescription.setScale(SCALE);
+                    pDescription.modelRequireUpdate = true;
+                    pDescription.setTextSize(TextField.TEXT_SIZE_TINY);
+                    pDescription.setAlignment(Layout.Alignment.ALIGN_NORMAL);
+
+                    pDescription.prepare(ray);
+                    addPanel(pDescription);
+                }
+
                 adjustBounds(WIDTH);
 
                 buildTextureBuffers();
@@ -64,50 +105,6 @@ public class MarkerDetailView extends Dialog {
         setCreated(true);
         setVisible(true);
         creationState = STATE_BEFORE_CREATE;
-    }
-
-    protected void buildPanels() {
-        if (marker.getName() != null) {
-            TextField p1 = new TextField(context);
-            p1.setCcntent(marker.getName());
-            p1.width = WIDTH;
-            p1.setScale(SCALE);
-            p1.modelRequireUpdate = true;
-            p1.setTextSize(TextField.TEXT_SIZE_LARGE);
-            p1.setAlignment(Layout.Alignment.ALIGN_CENTER);
-
-            addPanel(p1);
-        }
-        if (marker.getDescription() != null) {
-            DescriptionField p2 = new DescriptionField(context);
-            p2.setCcntent(marker.getDescription());
-            p2.width = WIDTH;
-            p2.setScale(SCALE);
-            p2.modelRequireUpdate = true;
-            p2.setTextSize(TextField.TEXT_SIZE_TINY);
-            p2.setAlignment(Layout.Alignment.ALIGN_NORMAL);
-
-            addPanel(p2);
-        }
-        if (marker.getObjModel() != null) {
-            TextField p3 = new TextField(context);
-            p3.setCcntent(marker.getObjModel().getTitle());
-            p3.width = WIDTH;
-            p3.setScale(SCALE);
-            p3.modelRequireUpdate = true;
-            p3.setTextSize(TextField.TEXT_SIZE_TINY);
-            p3.setAlignment(Layout.Alignment.ALIGN_NORMAL);
-            p3.setOnClickListener(new GlModel.ClickListener() {
-                @Override
-                public void onClick(GlModel model) {
-                    if (eventListener != null) {
-                        eventListener.showObjModel(marker.getObjModel());
-                    }
-                }
-            });
-
-            addPanel(p3);
-        }
     }
 
     public void setEventListener(Event eventListener) {

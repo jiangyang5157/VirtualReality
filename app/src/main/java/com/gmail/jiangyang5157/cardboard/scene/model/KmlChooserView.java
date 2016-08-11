@@ -17,6 +17,7 @@ public class KmlChooserView extends Dialog {
     private static final String TAG = "[KmlChooserView]";
 
     private Event eventListener;
+
     public interface Event {
         void onKmlSelected(String fileName);
     }
@@ -33,11 +34,34 @@ public class KmlChooserView extends Dialog {
                 creationState = STATE_PREPARING;
                 ray.addBusy();
 
-                buildPanels();
-                int iSize = panels.size();
+                String[] kmlFileNames = getKmlFileNames();
+                String lastKmlFileName = Constant.getLastKmlFileName(context);
+                int iSize = kmlFileNames.length;
                 for (int i = 0; i < iSize; i++) {
-                    panels.get(i).prepare(ray);
+                    final String fileName = kmlFileNames[i];
+                    TextField p = new TextField(context);
+                    float textSize = TextField.TEXT_SIZE_TINY;
+                    p.setCcntent(fileName);
+                    p.width = WIDTH;
+                    p.setScale(SCALE);
+                    p.modelRequireUpdate = true;
+                    p.setTextSize(textSize);
+                    p.setAlignment(Layout.Alignment.ALIGN_CENTER);
+                    if (!fileName.equals(lastKmlFileName)) {
+                        p.setOnClickListener(new GlModel.ClickListener() {
+                            @Override
+                            public void onClick(GlModel model) {
+                                if (eventListener != null) {
+                                    eventListener.onKmlSelected(fileName);
+                                }
+                            }
+                        });
+                    }
+
+                    p.prepare(ray);
+                    addPanel(p);
                 }
+
                 adjustBounds(WIDTH);
 
                 buildTextureBuffers();
@@ -67,45 +91,21 @@ public class KmlChooserView extends Dialog {
         creationState = STATE_BEFORE_CREATE;
     }
 
-    protected void buildPanels() {
+    private String[] getKmlFileNames() {
+        String[] ret = null;
+
         File directory = new File(Constant.getAbsolutePath(context, Constant.getKmlPath("")));
         if (!directory.exists() || !directory.isDirectory()) {
             directory.mkdirs();
-            return;
+        } else {
+            ret = directory.list(new FilenameFilter() {
+                @Override
+                public boolean accept(File dir, String filename) {
+                    return filename.endsWith(".kml");
+                }
+            });
         }
-
-        String[] fileNames = directory.list(new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String filename) {
-                return filename.endsWith(".kml");
-            }
-        });
-
-        String lastKmlFileName = Constant.getLastKmlFileName(context);
-        int iSize = fileNames.length;
-        for (int i = 0; i < iSize; i++) {
-            final String fileName = fileNames[i];
-            TextField p = new TextField(context);
-            float textSize = TextField.TEXT_SIZE_TINY;
-            p.setCcntent(fileName);
-            p.width = WIDTH;
-            p.setScale(SCALE);
-            p.modelRequireUpdate = true;
-            p.setTextSize(textSize);
-            p.setAlignment(Layout.Alignment.ALIGN_CENTER);
-            if (!fileName.equals(lastKmlFileName)) {
-                p.setOnClickListener(new GlModel.ClickListener() {
-                    @Override
-                    public void onClick(GlModel model) {
-                        if (eventListener != null) {
-                            eventListener.onKmlSelected(fileName);
-                        }
-                    }
-                });
-            }
-
-            addPanel(p);
-        }
+        return ret;
     }
 
     public void setEventListener(Event eventListener) {
