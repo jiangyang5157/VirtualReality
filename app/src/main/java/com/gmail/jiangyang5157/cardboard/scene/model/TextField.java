@@ -52,7 +52,7 @@ public class TextField extends SubPanel {
 
     @Override
     protected void buildTextureBuffers() {
-        String text = limitedString(content, MAX_TEXT_LENGTH);
+        String text = ellipsizeString(content, MAX_TEXT_LENGTH);
         textureBitmap[0] = buildTextBitmap(text);
     }
 
@@ -79,8 +79,13 @@ public class TextField extends SubPanel {
         return ret;
     }
 
-    protected String limitedString(String str, int maxLength){
-        return str.substring(0, Math.min(str.length(), maxLength));
+    protected String ellipsizeString(String str, int maxLength) {
+        String ret = str;
+        int length = str.length();
+        if (length > maxLength) {
+            ret = str.substring(0, maxLength) + "......";
+        }
+        return ret;
     }
 
     public float getTextSize() {

@@ -30,9 +30,9 @@ public class DescriptionField extends TextField {
         if (find) {
             Log.d(TAG, "start, end: " + matcher.start() + ", " + matcher.end());
             String url = content.substring(matcher.start(), matcher.end());
-            text = limitedString(url, MAX_TEXT_LENGTH);
+            text = ellipsizeString(url, MAX_TEXT_LENGTH);
         } else {
-            text = limitedString(content, MAX_TEXT_LENGTH);
+            text = ellipsizeString(content, MAX_TEXT_LENGTH);
         }
         textureBitmap[0] = buildTextBitmap(text);
 
