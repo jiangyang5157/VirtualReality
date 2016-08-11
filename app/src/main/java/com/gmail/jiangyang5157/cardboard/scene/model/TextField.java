@@ -16,7 +16,7 @@ import com.gmail.jiangyang5157.tookit.android.base.AppUtils;
  */
 public class TextField extends SubPanel {
 
-    protected static final int MAX_TEXT_LENGTH = 64;
+    protected static final int MAX_TEXT_LENGTH = 256;
 
     protected static final float ALPHA_BACKGROUND = 0.2f;
 
@@ -52,10 +52,11 @@ public class TextField extends SubPanel {
 
     @Override
     protected void buildTextureBuffers() {
-        textureBitmap[0] = buildTextBitmap(getLimitedLengthString(content));
+        String text = limitedString(content, MAX_TEXT_LENGTH);
+        textureBitmap[0] = buildTextBitmap(text);
     }
 
-    private Bitmap buildTextBitmap(String text) {
+    protected Bitmap buildTextBitmap(String text) {
         TextPaint textPaint = new TextPaint();
         float textSizePixels = SubPanel.dp2px(context, textSize);
         textPaint.setTextSize(textSizePixels);
@@ -78,8 +79,8 @@ public class TextField extends SubPanel {
         return ret;
     }
 
-    protected String getLimitedLengthString(String str){
-        return content.substring(0, MAX_TEXT_LENGTH);
+    protected String limitedString(String str, int maxLength){
+        return str.substring(0, Math.min(str.length(), maxLength));
     }
 
     public float getTextSize() {
