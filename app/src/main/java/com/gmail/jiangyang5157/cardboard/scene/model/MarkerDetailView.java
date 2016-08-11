@@ -2,7 +2,6 @@ package com.gmail.jiangyang5157.cardboard.scene.model;
 
 import android.content.Context;
 import android.text.Layout;
-import android.util.Log;
 
 import com.gmail.jiangyang5157.tookit.android.base.AppUtils;
 

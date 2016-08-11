@@ -43,6 +43,7 @@ import java.text.ParseException;
 
 import javax.microedition.khronos.egl.EGLConfig;
 
+// TODO: 8/11/2016 [WHY] E/libEGL: call to OpenGL ES API with no current context (logged once per thread)
 public class MainActivity extends GvrActivity implements GvrView.StereoRenderer {
     private static final String TAG = "[MainActivity]";
 
