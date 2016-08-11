@@ -39,8 +39,9 @@ public class DescriptionField extends TextField {
         boolean find = matcher.find();
         Log.d(TAG, "matcher find " + find + ": " + content);
         if (find) {
-            Log.d(TAG, "start, end: " + matcher.start() + ", " + matcher.end());
+            Log.d(TAG, "URL matcher find: content: " + content);
             String url = content.substring(matcher.start(), matcher.end());
+            Log.d(TAG, "URL matcher find: url: " + url);
             ImageRequest request = new ImageRequest(url,
                     new Response.Listener<Bitmap>() {
                         @Override
