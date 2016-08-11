@@ -39,7 +39,7 @@ public class MarkerDetailView extends Dialog {
                     pName.width = WIDTH;
                     pName.setScale(SCALE);
                     pName.modelRequireUpdate = true;
-                    pName.setTextSize(TextField.TEXT_SIZE_LARGE);
+                    pName.setTextSize(TextField.TEXT_SIZE_MEDIUM);
                     pName.setAlignment(Layout.Alignment.ALIGN_CENTER);
 
                     pName.prepare(ray);
