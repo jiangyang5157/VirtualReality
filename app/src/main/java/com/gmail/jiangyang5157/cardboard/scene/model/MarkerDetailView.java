@@ -1,32 +1,30 @@
 package com.gmail.jiangyang5157.cardboard.scene.model;
 
 import android.content.Context;
-import android.opengl.GLES20;
 import android.text.Layout;
-import android.util.ArrayMap;
+import android.util.Log;
 
-import com.gmail.jiangyang5157.cardboard.scene.Creation;
-import com.gmail.jiangyang5157.cardboard.vr.R;
 import com.gmail.jiangyang5157.tookit.android.base.AppUtils;
 
 /**
  * @author Yang
  * @since 5/13/2016
  */
-public class MarkerDetailView extends Dialog implements Creation {
+public class MarkerDetailView extends Dialog {
+    private static final String TAG = "[MarkerDetailView]";
 
     private Event eventListener;
+
     public interface Event {
         void showObjModel(ObjModel model);
     }
 
     private AtomMarker marker;
 
-    protected int creationState = STATE_BEFORE_PREPARE;
-
     public MarkerDetailView(Context context, AtomMarker marker) {
         super(context);
         this.marker = marker;
+        setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.android.base.R.color.Red, null));
     }
 
     public void prepare(final Ray ray) {
@@ -36,7 +34,15 @@ public class MarkerDetailView extends Dialog implements Creation {
                 creationState = STATE_PREPARING;
                 ray.addBusy();
 
+                buildPanels();
+                int iSize = panels.size();
+                for (int i = 0; i < iSize; i++) {
+                    panels.get(i).prepare(ray);
+                }
+                adjustBounds(WIDTH);
 
+                buildTextureBuffers();
+                buildData();
 
                 ray.subtractBusy();
                 creationState = STATE_BEFORE_CREATE;
@@ -47,18 +53,15 @@ public class MarkerDetailView extends Dialog implements Creation {
     @Override
     public void create(int program) {
         creationState = STATE_CREATING;
-        setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.android.base.R.color.Red, null));
-
-        createPanels();
-        adjustBounds(WIDTH);
-
-        buildTextureBuffers();
-        buildData();
-
         super.create(program);
         bindHandles();
         bindTextureBuffers();
         bindBuffers();
+
+        int iSize = panels.size();
+        for (int i = 0; i < iSize; i++) {
+            panels.get(i).create(program);
+        }
 
         setCreated(true);
         setVisible(true);
@@ -66,11 +69,7 @@ public class MarkerDetailView extends Dialog implements Creation {
     }
 
     @Override
-    protected void createPanels() {
-        ArrayMap<Integer, Integer> shaders = new ArrayMap<>();
-        shaders.put(GLES20.GL_VERTEX_SHADER, R.raw.panel_vertex_shader);
-        shaders.put(GLES20.GL_FRAGMENT_SHADER, R.raw.panel_fragment_shader);
-
+    protected void buildPanels() {
         if (marker.getName() != null) {
             TextField p1 = new TextField(context);
             p1.setCcntent(marker.getName());
@@ -79,7 +78,7 @@ public class MarkerDetailView extends Dialog implements Creation {
             p1.modelRequireUpdate = true;
             p1.setTextSize(TextField.TEXT_SIZE_LARGE);
             p1.setAlignment(Layout.Alignment.ALIGN_CENTER);
-            p1.create(shaders);
+
             addPanel(p1);
         }
         if (marker.getDescription() != null) {
@@ -90,7 +89,7 @@ public class MarkerDetailView extends Dialog implements Creation {
             p2.modelRequireUpdate = true;
             p2.setTextSize(TextField.TEXT_SIZE_TINY);
             p2.setAlignment(Layout.Alignment.ALIGN_NORMAL);
-            p2.create(shaders);
+
             addPanel(p2);
         }
         if (marker.getObjModel() != null) {
@@ -101,7 +100,6 @@ public class MarkerDetailView extends Dialog implements Creation {
             p3.modelRequireUpdate = true;
             p3.setTextSize(TextField.TEXT_SIZE_TINY);
             p3.setAlignment(Layout.Alignment.ALIGN_NORMAL);
-            p3.create(shaders);
             p3.setOnClickListener(new GlModel.ClickListener() {
                 @Override
                 public void onClick(GlModel model) {
@@ -110,16 +108,12 @@ public class MarkerDetailView extends Dialog implements Creation {
                     }
                 }
             });
+
             addPanel(p3);
         }
     }
 
     public void setEventListener(Event eventListener) {
         this.eventListener = eventListener;
-    }
-
-    @Override
-    public int getCreationState() {
-        return creationState;
     }
 }

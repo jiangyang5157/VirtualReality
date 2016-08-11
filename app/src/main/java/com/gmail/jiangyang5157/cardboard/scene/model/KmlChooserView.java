@@ -1,13 +1,10 @@
 package com.gmail.jiangyang5157.cardboard.scene.model;
 
 import android.content.Context;
-import android.opengl.GLES20;
 import android.text.Layout;
-import android.util.ArrayMap;
+import android.util.Log;
 
-import com.gmail.jiangyang5157.cardboard.scene.Creation;
 import com.gmail.jiangyang5157.cardboard.vr.Constant;
-import com.gmail.jiangyang5157.cardboard.vr.R;
 import com.gmail.jiangyang5157.tookit.android.base.AppUtils;
 
 import java.io.File;
@@ -17,17 +14,18 @@ import java.io.FilenameFilter;
  * @author Yang
  * @since 6/24/2016
  */
-public class KmlChooserView extends Dialog implements Creation {
+public class KmlChooserView extends Dialog {
+    private static final String TAG = "[KmlChooserView]";
 
     private Event eventListener;
+
     public interface Event {
         void onKmlSelected(String fileName);
     }
 
-    protected int creationState = STATE_BEFORE_PREPARE;
-
     public KmlChooserView(Context context) {
         super(context);
+        setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.android.base.R.color.Red, null));
     }
 
     public void prepare(final Ray ray) {
@@ -37,7 +35,15 @@ public class KmlChooserView extends Dialog implements Creation {
                 creationState = STATE_PREPARING;
                 ray.addBusy();
 
+                buildPanels();
+                int iSize = panels.size();
+                for (int i = 0; i < iSize; i++) {
+                    panels.get(i).prepare(ray);
+                }
+                adjustBounds(WIDTH);
 
+                buildTextureBuffers();
+                buildData();
 
                 ray.subtractBusy();
                 creationState = STATE_BEFORE_CREATE;
@@ -48,18 +54,15 @@ public class KmlChooserView extends Dialog implements Creation {
     @Override
     public void create(int program) {
         creationState = STATE_CREATING;
-        setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.android.base.R.color.Red, null));
-
-        createPanels(); // move to prepare
-        adjustBounds(WIDTH);// move to prepare
-
-        buildTextureBuffers();
-        buildData();
-
         super.create(program);
         bindHandles();
         bindTextureBuffers();
         bindBuffers();
+
+        int iSize = panels.size();
+        for (int i = 0; i < iSize; i++) {
+            panels.get(i).create(program);
+        }
 
         setCreated(true);
         setVisible(true);
@@ -67,7 +70,7 @@ public class KmlChooserView extends Dialog implements Creation {
     }
 
     @Override
-    protected void createPanels() {
+    protected void buildPanels() {
         File directory = new File(Constant.getAbsolutePath(context, Constant.getKmlPath("")));
         if (!directory.exists() || !directory.isDirectory()) {
             directory.mkdirs();
@@ -81,10 +84,6 @@ public class KmlChooserView extends Dialog implements Creation {
             }
         });
 
-        ArrayMap<Integer, Integer> shaders = new ArrayMap<>();
-        shaders.put(GLES20.GL_VERTEX_SHADER, R.raw.panel_vertex_shader);
-        shaders.put(GLES20.GL_FRAGMENT_SHADER, R.raw.panel_fragment_shader);
-
         String lastKmlFileName = Constant.getLastKmlFileName(context);
         int iSize = fileNames.length;
         for (int i = 0; i < iSize; i++) {
@@ -97,7 +96,6 @@ public class KmlChooserView extends Dialog implements Creation {
             p.modelRequireUpdate = true;
             p.setTextSize(textSize);
             p.setAlignment(Layout.Alignment.ALIGN_CENTER);
-            p.create(shaders);
             if (!fileName.equals(lastKmlFileName)) {
                 p.setOnClickListener(new GlModel.ClickListener() {
                     @Override
@@ -108,16 +106,12 @@ public class KmlChooserView extends Dialog implements Creation {
                     }
                 });
             }
+
             addPanel(p);
         }
     }
 
     public void setEventListener(Event eventListener) {
         this.eventListener = eventListener;
-    }
-
-    @Override
-    public int getCreationState() {
-        return creationState;
     }
 }

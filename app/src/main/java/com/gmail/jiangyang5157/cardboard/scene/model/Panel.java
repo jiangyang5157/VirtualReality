@@ -7,6 +7,7 @@ import android.opengl.GLUtils;
 import android.opengl.Matrix;
 import android.util.TypedValue;
 
+import com.gmail.jiangyang5157.cardboard.scene.Creation;
 import com.gmail.jiangyang5157.cardboard.scene.RayIntersection;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
 import com.gmail.jiangyang5157.tookit.base.data.BufferUtils;
@@ -46,6 +47,8 @@ public abstract class Panel extends Rectangle implements GlModel.BindableBuffer,
     protected Panel(Context context) {
         super(context);
     }
+
+    public abstract void prepare(final Ray ray);
 
     public void setPosition(float[] cameraPos, float[] forward, float distance, float[] quaternion, float[] up, float[] right) {
         float[] position = new float[]{

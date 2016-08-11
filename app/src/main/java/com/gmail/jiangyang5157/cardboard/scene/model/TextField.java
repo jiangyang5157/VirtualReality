@@ -8,14 +8,13 @@ import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 
-import com.gmail.jiangyang5157.cardboard.scene.Creation;
 import com.gmail.jiangyang5157.tookit.android.base.AppUtils;
 
 /**
  * @author Yang
  * @since 8/6/2016
  */
-public class TextField extends SubPanel implements Creation {
+public class TextField extends SubPanel {
 
     protected static final float ALPHA_BACKGROUND = 0.2f;
 
@@ -28,35 +27,18 @@ public class TextField extends SubPanel implements Creation {
 
     private Layout.Alignment alignment;
 
-    protected int creationState = STATE_BEFORE_PREPARE;
-
     public TextField(Context context) {
         super(context);
+        setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.android.base.R.color.White, null));
     }
 
     public void prepare(final Ray ray) {
-        getHandler().post(new Runnable() {
-            @Override
-            public void run() {
-                creationState = STATE_PREPARING;
-                ray.addBusy();
-
-
-
-                ray.subtractBusy();
-                creationState = STATE_BEFORE_CREATE;
-            }
-        });
+        buildTextureBuffers();
+        buildData();
     }
 
     @Override
     public void create(int program) {
-        creationState = STATE_CREATING;
-        setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.android.base.R.color.White, null));
-
-        buildTextureBuffers();
-        buildData();
-
         super.create(program);
         bindHandles();
         bindTextureBuffers();
@@ -64,7 +46,6 @@ public class TextField extends SubPanel implements Creation {
 
         setCreated(true);
         setVisible(true);
-        creationState = STATE_BEFORE_CREATE;
     }
 
     @Override
@@ -109,10 +90,5 @@ public class TextField extends SubPanel implements Creation {
 
     public void setAlignment(Layout.Alignment alignment) {
         this.alignment = alignment;
-    }
-
-    @Override
-    public int getCreationState() {
-        return creationState;
     }
 }

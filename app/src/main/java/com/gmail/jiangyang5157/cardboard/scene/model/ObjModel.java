@@ -54,6 +54,7 @@ public class ObjModel extends GlModel implements GlModel.BindableBuffer, Creatio
         super(context);
         this.title = title;
         this.url = url;
+        setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.android.base.R.color.DeepOrange, null));
     }
 
     public boolean checkPreparation() {
@@ -107,8 +108,6 @@ public class ObjModel extends GlModel implements GlModel.BindableBuffer, Creatio
     @Override
     public void create(int program) {
         creationState = STATE_CREATING;
-        setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.android.base.R.color.DeepOrange, null));
-
         super.create(program);
         bindHandles();
         bindBuffers();

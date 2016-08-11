@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.opengl.GLES20;
 import android.util.Log;
 
+import com.gmail.jiangyang5157.cardboard.scene.Creation;
 import com.gmail.jiangyang5157.cardboard.scene.RayIntersection;
 import com.gmail.jiangyang5157.tookit.math.Vector;
 
@@ -15,7 +16,7 @@ import java.util.Collections;
  * @author Yang
  * @since 5/13/2016
  */
-public abstract class Dialog extends Panel {
+public abstract class Dialog extends Panel implements Creation {
     private static final String TAG = "[Dialog]";
 
     protected static final float ALPHA_BACKGROUND = 0.0f;
@@ -28,6 +29,8 @@ public abstract class Dialog extends Panel {
 
     protected ArrayList<Panel> panels;
 
+    protected int creationState = STATE_BEFORE_PREPARE;
+
     public Dialog(Context context) {
         super(context);
         scale = SCALE;
@@ -35,7 +38,7 @@ public abstract class Dialog extends Panel {
         panels = new ArrayList<>();
     }
 
-    protected abstract void createPanels();
+    protected abstract void buildPanels();
 
     @Override
     protected void buildTextureBuffers() {
@@ -159,6 +162,11 @@ public abstract class Dialog extends Panel {
             cameraPos[1] -= up[1] * SCALED_PANEL_HALF_HEIGHT;
             cameraPos[2] -= up[2] * SCALED_PANEL_HALF_HEIGHT;
         }
+    }
+
+    @Override
+    public int getCreationState() {
+        return creationState;
     }
 
     @Override

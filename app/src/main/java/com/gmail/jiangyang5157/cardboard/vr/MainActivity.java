@@ -229,11 +229,15 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
 
         if (markerDetailView != null) {
             if (!markerDetailView.isCreated()) {
-                ArrayMap<Integer, Integer> shaders = new ArrayMap<>();
-                shaders.put(GLES20.GL_VERTEX_SHADER, R.raw.panel_vertex_shader);
-                shaders.put(GLES20.GL_FRAGMENT_SHADER, R.raw.panel_fragment_shader);
-                markerDetailView.create(shaders);
-                markerDetailView.setPosition(head.getCamera().getPosition(), head.getForward(), Dialog.DISTANCE, head.getQuaternion(), head.getUp(), head.getRight());
+                if (markerDetailView.getCreationState() == Creation.STATE_BEFORE_PREPARE) {
+                    markerDetailView.prepare(ray);
+                } else if (markerDetailView.getCreationState() == Creation.STATE_BEFORE_CREATE) {
+                    ArrayMap<Integer, Integer> shaders = new ArrayMap<>();
+                    shaders.put(GLES20.GL_VERTEX_SHADER, R.raw.panel_vertex_shader);
+                    shaders.put(GLES20.GL_FRAGMENT_SHADER, R.raw.panel_fragment_shader);
+                    markerDetailView.create(shaders);
+                    markerDetailView.setPosition(head.getCamera().getPosition(), head.getForward(), Dialog.DISTANCE, head.getQuaternion(), head.getUp(), head.getRight());
+                }
             }
 
             if (objModel != null) {
@@ -253,11 +257,15 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
 
         if (kmlChooserView != null) {
             if (!kmlChooserView.isCreated()) {
-                ArrayMap<Integer, Integer> shaders = new ArrayMap<>();
-                shaders.put(GLES20.GL_VERTEX_SHADER, R.raw.panel_vertex_shader);
-                shaders.put(GLES20.GL_FRAGMENT_SHADER, R.raw.panel_fragment_shader);
-                kmlChooserView.create(shaders);
-                kmlChooserView.setPosition(head.getCamera().getPosition(), head.getForward(), Dialog.DISTANCE, head.getQuaternion(), head.getUp(), head.getRight());
+                if (kmlChooserView.getCreationState() == Creation.STATE_BEFORE_PREPARE) {
+                    kmlChooserView.prepare(ray);
+                } else if (kmlChooserView.getCreationState() == Creation.STATE_BEFORE_CREATE) {
+                    ArrayMap<Integer, Integer> shaders = new ArrayMap<>();
+                    shaders.put(GLES20.GL_VERTEX_SHADER, R.raw.panel_vertex_shader);
+                    shaders.put(GLES20.GL_FRAGMENT_SHADER, R.raw.panel_fragment_shader);
+                    kmlChooserView.create(shaders);
+                    kmlChooserView.setPosition(head.getCamera().getPosition(), head.getForward(), Dialog.DISTANCE, head.getQuaternion(), head.getUp(), head.getRight());
+                }
             }
         }
     }

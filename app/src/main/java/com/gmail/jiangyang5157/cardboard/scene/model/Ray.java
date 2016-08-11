@@ -33,12 +33,11 @@ public class Ray extends Point {
         super(context);
         this.head = head;
         pointSize = POINT_SIZE_NORMAL;
+        setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.android.base.R.color.DeepOrange, null));
     }
 
     @Override
     public void create(int program) {
-        setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.android.base.R.color.DeepOrange, null));
-
         buildData();
 
         super.create(program);

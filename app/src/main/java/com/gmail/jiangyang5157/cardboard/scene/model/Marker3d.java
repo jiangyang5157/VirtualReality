@@ -35,14 +35,11 @@ public class Marker3d extends Icosphere {
     public Marker3d(Context context) {
         super(context, 3);
         setRadius(RADIUS);
+        setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.android.base.R.color.Yellow, null));
     }
 
     @Override
     public void create(int program) {
-        if (color == null) {
-            setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.android.base.R.color.Yellow, null));
-        }
-
         buildData();
 
         super.create(program);
