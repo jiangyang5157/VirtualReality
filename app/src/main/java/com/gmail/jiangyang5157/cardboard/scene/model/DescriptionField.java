@@ -20,7 +20,7 @@ public class DescriptionField extends TextField {
 
     @Override
     protected void buildTextureBuffers() {
-        super.buildTextureBuffers(); // textureBitmap[0] = buildTextBitmap(content);
+        super.buildTextureBuffers(); // textureBitmap[0] = buildTextBitmap(getLimitedLengthString(content));
 
 //        Pattern pattern = Pattern.compile(RegularExpressionUtils.URL_TEMPLATE);
 //        Matcher matcher = pattern.matcher(content);
