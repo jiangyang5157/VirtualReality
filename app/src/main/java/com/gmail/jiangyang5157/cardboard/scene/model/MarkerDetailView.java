@@ -73,18 +73,30 @@ public class MarkerDetailView extends Dialog {
                     pDescription.modelRequireUpdate = true;
                     pDescription.setTextSize(TextField.TEXT_SIZE_TINY);
                     pDescription.setAlignment(Layout.Alignment.ALIGN_NORMAL);
+                    pDescription.setEventListener(new DescriptionField.Event() {
+                        @Override
+                        public void onPrepareComplete() {
+                            adjustBounds(WIDTH);
+
+                            buildTextureBuffers();
+                            buildData();
+
+                            ray.subtractBusy();
+                            creationState = STATE_BEFORE_CREATE;
+                        }
+                    });
 
                     pDescription.prepare(ray);
                     addPanel(pDescription);
+                } else {
+                    adjustBounds(WIDTH);
+
+                    buildTextureBuffers();
+                    buildData();
+
+                    ray.subtractBusy();
+                    creationState = STATE_BEFORE_CREATE;
                 }
-
-                adjustBounds(WIDTH);
-
-                buildTextureBuffers();
-                buildData();
-
-                ray.subtractBusy();
-                creationState = STATE_BEFORE_CREATE;
             }
         });
     }
