@@ -15,29 +15,27 @@ import java.util.Map;
  * @author Yang
  * @since 8/11/2016
  */
-public class BitmapLoader extends NetRequest {
-    private static final String TAG = "[BitmapLoader]";
+public class DescriptionLoader extends NetRequest {
+    private static final String TAG = "[DescriptionLoader]";
 
     public interface ResponseListener {
-        void onComplete(Map<String, String> headers, Bitmap bitmap);
+        void onComplete(Map<String, String> headers, Object object);
 
         void onError(String url, VolleyError volleyError);
     }
 
-    private BitmapRequest request;
+    private DescriptionRequest request;
 
-    public BitmapLoader(final String url, int width, final ResponseListener listener) {
-        request = new BitmapRequest(url,
-                new Response.Listener<Bitmap>() {
+    public DescriptionLoader(final String url, int width, final ResponseListener listener) {
+        request = new DescriptionRequest(url,
+                new Response.Listener<Object>() {
                     @Override
-                    public void onResponse(Bitmap bitmap) {
-                        Log.d(TAG, "ImageRequest.onResponse: w/h: " + bitmap.getWidth() + ", " + bitmap.getHeight());
-                        listener.onComplete(request.getResponseHeaders(), bitmap);
+                    public void onResponse(Object object) {
+                        listener.onComplete(request.getResponseHeaders(), object);
                     }
                 }, width, 0, ImageView.ScaleType.CENTER_INSIDE, Bitmap.Config.ARGB_4444,
                 new Response.ErrorListener() {
                     public void onErrorResponse(VolleyError volleyError) {
-                        Log.d(TAG, "ImageRequest.onErrorResponse: " + volleyError.toString());
                         listener.onError(url, volleyError);
                     }
                 }

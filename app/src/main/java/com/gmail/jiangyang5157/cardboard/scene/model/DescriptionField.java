@@ -6,7 +6,7 @@ import android.graphics.Canvas;
 import android.util.Log;
 
 import com.android.volley.VolleyError;
-import com.gmail.jiangyang5157.cardboard.net.BitmapLoader;
+import com.gmail.jiangyang5157.cardboard.net.DescriptionLoader;
 import com.gmail.jiangyang5157.tookit.base.data.RegularExpressionUtils;
 
 import java.util.Map;
@@ -38,9 +38,12 @@ public class DescriptionField extends TextField {
         if (find) {
             String url = content.substring(matcher.start(), matcher.end());
             Log.d(TAG, "URL matcher content: " + content + "\n" + url);
-            new BitmapLoader(url, (int) width, new BitmapLoader.ResponseListener() {
+            new DescriptionLoader(url, (int) width, new DescriptionLoader.ResponseListener() {
                 @Override
-                public void onComplete(Map<String, String> headers, Bitmap bitmap) {
+                public void onComplete(Map<String, String> headers, Object object) {
+                    Bitmap bitmap = (Bitmap) object;
+                    Log.d(TAG, "Response.Listener.onResponse: bitmap w/h: " + bitmap.getWidth() + ", " + bitmap.getHeight());
+
                     int w = bitmap.getWidth();
                     int h = bitmap.getHeight();
                     height = h;
@@ -56,6 +59,7 @@ public class DescriptionField extends TextField {
 
                 @Override
                 public void onError(String url, VolleyError volleyError) {
+                    Log.d(TAG, "Response.Listener.onErrorResponse: " + volleyError.toString());
                     textureBitmap[0] = buildTextBitmap(ellipsizeString(content, MAX_TEXT_LENGTH));
                     buildData();
                     eventListener.onPrepareComplete();
