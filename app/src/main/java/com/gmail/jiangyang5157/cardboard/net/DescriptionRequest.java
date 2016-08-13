@@ -1,5 +1,5 @@
 /*
-Reference: com.android.volley.toolbox.ImageRequest
+Reference: com.android.volley.toolbox.*
  * Copyright (C) 2011 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -32,6 +32,7 @@ import com.android.volley.toolbox.HttpHeaderParser;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Document;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Iterator;
@@ -190,8 +191,24 @@ public class DescriptionRequest extends Request<Object> {
             }
         } else if (contentType.startsWith("text/html")) {
             responseType = RESPONSE_TYPE_STRING;
-
             // TODO: 8/12/2016
+
+
+
+
+            Log.d(TAG, response.data.toString());
+
+
+// https://en.wikipedia.org/wiki/Android_operating_system
+
+
+
+
+
+
+//            Document doc = Jsoup.parse(html);
+//            String postTitle = doc.select("h1.post-title").first().html();
+//            String postContent = doc.select("div.post-content").first().html();
 //            String parsed;
 //            try {
 //                parsed = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
