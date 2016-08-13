@@ -7,9 +7,9 @@ import android.util.Log;
 
 import com.android.volley.VolleyError;
 import com.gmail.jiangyang5157.cardboard.net.DescriptionLoader;
+import com.gmail.jiangyang5157.tookit.android.base.AppUtils;
 import com.gmail.jiangyang5157.tookit.base.data.RegularExpressionUtils;
 
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -40,12 +40,10 @@ public class DescriptionField extends TextField {
             Log.d(TAG, "URL matcher content: " + content + "\n" + url);
             new DescriptionLoader(url, (int) width, new DescriptionLoader.ResponseListener() {
                 @Override
-                public void onComplete(Map<String, String> headers, Object object) {
-                    Bitmap bitmap = (Bitmap) object;
-                    Log.d(TAG, "Response.Listener.onResponse: bitmap w/h: " + bitmap.getWidth() + ", " + bitmap.getHeight());
-
+                public void onComplete(Bitmap bitmap) {
                     int w = bitmap.getWidth();
                     int h = bitmap.getHeight();
+                    Log.d(TAG, "Response.Listener.onResponse: bitmap w/h: " + w + ", " + h);
                     height = h;
                     Bitmap texture = Bitmap.createBitmap((int) width, (int) height, Bitmap.Config.ARGB_4444);
                     Canvas canvas = new Canvas(texture);
@@ -58,8 +56,17 @@ public class DescriptionField extends TextField {
                 }
 
                 @Override
+                public void onComplete(String string) {
+                    Log.d(TAG, "Response.Listener.onResponse: string: " + string);
+                    textureBitmap[0] = buildTextBitmap(ellipsizeString(string, MAX_TEXT_LENGTH));
+                    buildData();
+                    eventListener.onPrepareComplete();
+                }
+
+                @Override
                 public void onError(String url, VolleyError volleyError) {
                     Log.d(TAG, "Response.Listener.onErrorResponse: " + volleyError.toString());
+                    AppUtils.buildToast(context, "Error: Description Parser");
                     textureBitmap[0] = buildTextBitmap(ellipsizeString(content, MAX_TEXT_LENGTH));
                     buildData();
                     eventListener.onPrepareComplete();

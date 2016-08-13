@@ -9,8 +9,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.gmail.jiangyang5157.app.VolleyApplication;
 
-import java.util.Map;
-
 /**
  * @author Yang
  * @since 8/11/2016
@@ -19,7 +17,9 @@ public class DescriptionLoader extends NetRequest {
     private static final String TAG = "[DescriptionLoader]";
 
     public interface ResponseListener {
-        void onComplete(Map<String, String> headers, Object object);
+        void onComplete(Bitmap bitmap);
+
+        void onComplete(String string);
 
         void onError(String url, VolleyError volleyError);
     }
@@ -31,7 +31,17 @@ public class DescriptionLoader extends NetRequest {
                 new Response.Listener<Object>() {
                     @Override
                     public void onResponse(Object object) {
-                        listener.onComplete(request.getResponseHeaders(), object);
+                        switch (request.responseType) {
+                            case DescriptionRequest.RESPONSE_TYPE_BITMAP:
+                                listener.onComplete((Bitmap) object);
+                                break;
+                            case DescriptionRequest.RESPONSE_TYPE_STRING:
+                                listener.onComplete((String) object);
+                                break;
+                            default:
+                                Log.e(TAG, "DescriptionLoader.onResponse returns an unknown type.");
+                                break;
+                        }
                     }
                 }, width, 0, ImageView.ScaleType.CENTER_INSIDE, Bitmap.Config.ARGB_4444,
                 new Response.ErrorListener() {

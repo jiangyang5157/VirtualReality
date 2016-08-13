@@ -29,6 +29,12 @@ import com.android.volley.Response;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.HttpHeaderParser;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -42,6 +48,9 @@ public class DescriptionRequest extends Request<Object> {
 
     private Map<String, String> responseHeaders;
 
+    protected static final int RESPONSE_TYPE_BITMAP = 1;
+    protected static final int RESPONSE_TYPE_STRING = 2;
+    protected int responseType;
 
     /**
      * Socket timeout in milliseconds for image requests
@@ -169,6 +178,7 @@ public class DescriptionRequest extends Request<Object> {
         Log.d(TAG, "headers.contentType: " + contentType);
 
         if (contentType.startsWith("image/jpeg")) {
+            responseType = RESPONSE_TYPE_BITMAP;
             // Serialize all decode on a global lock to reduce concurrent heap usage.
             synchronized (sDecodeLock) {
                 try {
@@ -179,7 +189,46 @@ public class DescriptionRequest extends Request<Object> {
                 }
             }
         } else if (contentType.startsWith("text/html")) {
+            responseType = RESPONSE_TYPE_STRING;
+
             // TODO: 8/12/2016
+//            String parsed;
+//            try {
+//                parsed = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
+//            } catch (UnsupportedEncodingException e) {
+//                parsed = new String(response.data);
+//            }
+//            Log.d(TAG, parsed);
+//            return Response.success(parsed, HttpHeaderParser.parseCacheHeaders(response));
+//            return Response.error(new ParseError());
+
+//            try {
+//                final String PROTOCOL_CHARSET = "utf-8";
+//                String jsonString = new String(response.data,
+//                        HttpHeaderParser.parseCharset(response.headers, PROTOCOL_CHARSET));
+//                Log.d(TAG, jsonString);
+//                Log.d(TAG, "======================================");
+//                JSONArray jsonArray = new JSONArray(jsonString);
+//                int size = jsonArray.length();
+//                for (int i = 0; i < size; i++) {
+//                    String jsonObj = jsonArray.getString(i);
+//                    Log.d(TAG, jsonObj.toString());
+//                    Log.d(TAG, "################");
+//                    JSONObject o = jsonArray.getJSONObject(i);
+//                    Log.d(TAG, o.toString());
+//                }
+//                Log.d(TAG, "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+//                Log.d(TAG, jsonArray.toString());
+//
+//                return Response.error(new ParseError());
+//                return Response.success(new JSONArray(jsonString),
+//                        HttpHeaderParser.parseCacheHeaders(response));
+//            } catch (UnsupportedEncodingException e) {
+//                return Response.error(new ParseError(e));
+//            } catch (JSONException je) {
+//                return Response.error(new ParseError(je));
+//            }
+
             return Response.error(new ParseError());
         } else {
             return Response.error(new ParseError());
