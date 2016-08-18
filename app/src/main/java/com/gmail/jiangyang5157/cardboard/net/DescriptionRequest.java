@@ -207,6 +207,7 @@ public class DescriptionRequest extends Request<Object> {
             }
             return Response.success(content, HttpHeaderParser.parseCacheHeaders(response));
         } else {
+            Log.w(TAG, "Unsupported headers.contentType: " + contentType);
             return Response.error(new ParseError());
         }
     }
