@@ -16,7 +16,7 @@ import com.gmail.jiangyang5157.tookit.android.base.AppUtils;
  */
 public class TextField extends SubPanel {
 
-    protected static final int MAX_TEXT_LENGTH = 256;
+    protected static final int MAX_TEXT_LENGTH = 320;
 
     protected static final float ALPHA_BACKGROUND = 0.2f;
 
