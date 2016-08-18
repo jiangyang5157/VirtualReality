@@ -29,13 +29,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.HttpHeaderParser;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.w3c.dom.Document;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 
 import java.io.UnsupportedEncodingException;
-import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -172,9 +170,9 @@ public class DescriptionRequest extends Request<Object> {
     @Override
     protected Response<Object> parseNetworkResponse(NetworkResponse response) {
         responseHeaders = response.headers;
-//        for (Map.Entry<String, String> entry : responseHeaders.entrySet()) {
-//            Log.d(TAG, "headers: key/value: " + entry.getKey() + ", " + entry.getValue());
-//        }
+        for (Map.Entry<String, String> entry : responseHeaders.entrySet()) {
+            Log.d(TAG, "headers: key/value: " + entry.getKey() + ", " + entry.getValue());
+        }
         String contentType = responseHeaders.get("Content-Type");
         Log.d(TAG, "headers.contentType: " + contentType);
 
@@ -191,62 +189,23 @@ public class DescriptionRequest extends Request<Object> {
             }
         } else if (contentType.startsWith("text/html")) {
             responseType = RESPONSE_TYPE_STRING;
-            // TODO: 8/12/2016
+            String parsed;
+            try {
+                parsed = new String(response.data, HttpHeaderParser.parseCharset(responseHeaders));
+            } catch (UnsupportedEncodingException e) {
+                parsed = new String(response.data);
+            }
+            Document doc = Jsoup.parse(parsed);
 
+            // for <title>Hello World</title>
+            String content = doc.title();
 
-
-
-            Log.d(TAG, response.data.toString());
-
-
-// https://en.wikipedia.org/wiki/Android_operating_system
-
-
-
-
-
-
-//            Document doc = Jsoup.parse(html);
-//            String postTitle = doc.select("h1.post-title").first().html();
-//            String postContent = doc.select("div.post-content").first().html();
-//            String parsed;
-//            try {
-//                parsed = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
-//            } catch (UnsupportedEncodingException e) {
-//                parsed = new String(response.data);
-//            }
-//            Log.d(TAG, parsed);
-//            return Response.success(parsed, HttpHeaderParser.parseCacheHeaders(response));
-//            return Response.error(new ParseError());
-
-//            try {
-//                final String PROTOCOL_CHARSET = "utf-8";
-//                String jsonString = new String(response.data,
-//                        HttpHeaderParser.parseCharset(response.headers, PROTOCOL_CHARSET));
-//                Log.d(TAG, jsonString);
-//                Log.d(TAG, "======================================");
-//                JSONArray jsonArray = new JSONArray(jsonString);
-//                int size = jsonArray.length();
-//                for (int i = 0; i < size; i++) {
-//                    String jsonObj = jsonArray.getString(i);
-//                    Log.d(TAG, jsonObj.toString());
-//                    Log.d(TAG, "################");
-//                    JSONObject o = jsonArray.getJSONObject(i);
-//                    Log.d(TAG, o.toString());
-//                }
-//                Log.d(TAG, "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-//                Log.d(TAG, jsonArray.toString());
-//
-//                return Response.error(new ParseError());
-//                return Response.success(new JSONArray(jsonString),
-//                        HttpHeaderParser.parseCacheHeaders(response));
-//            } catch (UnsupportedEncodingException e) {
-//                return Response.error(new ParseError(e));
-//            } catch (JSONException je) {
-//                return Response.error(new ParseError(je));
-//            }
-
-            return Response.error(new ParseError());
+            // for <meta property="og:description" content="Hello world." />
+            Element mataPropertyOgDescription = doc.select("meta[property^=og:description]").first();
+            if (mataPropertyOgDescription != null) {
+                content += "\n\n" + mataPropertyOgDescription.attr("content");
+            }
+            return Response.success(content, HttpHeaderParser.parseCacheHeaders(response));
         } else {
             return Response.error(new ParseError());
         }
