@@ -37,6 +37,7 @@ public class DescriptionField extends TextField {
         boolean find = matcher.find();
         if (find) {
             String url = content.substring(matcher.start(), matcher.end());
+            url = url.replaceFirst(".wikipedia.org/wiki/", ".wikipedia.org/w/api.php?format=json&action=query&redirects=1&prop=extracts&exintro=&explaintext=&indexpageids=&titles=");
             Log.d(TAG, "URL matcher content: " + content + "\n" + url);
             new DescriptionLoader(url, (int) width, new DescriptionLoader.ResponseListener() {
                 @Override
