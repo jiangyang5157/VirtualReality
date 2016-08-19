@@ -66,10 +66,8 @@ public class DescriptionField extends TextField {
 
                 @Override
                 public void onError(String url, VolleyError volleyError) {
-                    Log.d(TAG, "Response.Listener.onErrorResponse: " + volleyError.toString());
-                    // TODO: 8/18/2016
-                    AppUtils.buildToast(context, "Error: Description Parser");
-                    textureBitmap[0] = buildTextBitmap(ellipsizeString(content, MAX_TEXT_LENGTH));
+                    Log.e(TAG, "Response.Listener.onErrorResponse: " + volleyError.toString());
+                    textureBitmap[0] = buildTextBitmap(ellipsizeString("Failed to load the description.", MAX_TEXT_LENGTH));
                     buildData();
                     eventListener.onPrepareComplete();
                 }
