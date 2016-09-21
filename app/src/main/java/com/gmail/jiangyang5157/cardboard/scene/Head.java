@@ -77,6 +77,7 @@ public class Head implements SensorEventListener {
         lastTime = thisTime;
 //        Log.d(TAG, "estimated time: " + estimatedTime);
 
+        // s = v * t
         if (lastVelocity[0] != 0 || lastVelocity[1] != 0 || lastVelocity[2] != 0) {
             float offsetX = (float) (lastVelocity[0] * estimatedTime);
             float offsetY = (float) (lastVelocity[1] * estimatedTime);
@@ -91,10 +92,12 @@ public class Head implements SensorEventListener {
             }
         }
 
+        // v = v * damping
         lastVelocity[0] *= VELOCITY_DAMPING;
         lastVelocity[1] *= VELOCITY_DAMPING;
         lastVelocity[2] *= VELOCITY_DAMPING;
 
+        // v = v + a
         if (stepsCounter > 0) {
             lastVelocity[0] += forward[0] * ACCELERATION_PULSE * stepsCounter;
             lastVelocity[1] += forward[1] * ACCELERATION_PULSE * stepsCounter;

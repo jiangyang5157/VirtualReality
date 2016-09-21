@@ -8,24 +8,25 @@ import android.content.Context;
  */
 public abstract class UvSphere extends Sphere implements GlModel.BindableTextureBuffer {
 
-    private int stacks;
-    private int slices;
+    private int rings;
+    private int segments;
 
     protected float[] vertices;
     protected float[] normals;
     protected short[] indices;
     protected float[] textures;
 
-    protected UvSphere(Context context, int stacks, int slices) {
+    protected UvSphere(Context context, int rings, int segments) {
         super(context);
-        this.stacks = stacks;
-        this.slices = slices;
+        this.rings = rings;
+        this.segments = segments;
     }
 
+	// (rings, segments = 5, 4) maps to (4 stacks, 4 slices) UV sphere
     protected void buildData() {
-        vertices = new float[stacks * slices * 3];
-        indices = new short[stacks * slices * 6];
-        textures = new float[stacks * slices * 2];
+        vertices = new float[rings * segments * 3];
+        indices = new short[rings * segments * 6];
+        textures = new float[rings * segments * 2];
 
         int vertexIndex = 0;
         int textureIndex = 0;
@@ -33,16 +34,17 @@ public abstract class UvSphere extends Sphere implements GlModel.BindableTexture
 
         float PI = (float) Math.PI;
         float PIx2 = PI * 2.0f;
-        final float STACKS_FACTOR = 1f / (float) (stacks - 1);
-        final float SLICES_FACTOR = 1f / (float) (slices - 1);
-        for (int r = 0; r < stacks; r++) {
-            float v = r * STACKS_FACTOR;
+        final float RINGS_FACTOR = 1f / (float) (rings - 1);
+        final float SEGMENTS_FACTOR = 1f / (float) (segments - 1);
+        for (int r = 0; r < rings; r++) {
+            float v = r * RINGS_FACTOR;
             float phi = v * PI;
 
-            for (int s = 0; s < slices; s++) {
-                float u = s * SLICES_FACTOR;
+            for (int s = 0; s < segments; s++) {
+                float u = s * SEGMENTS_FACTOR;
                 float theta = u * PIx2;
 
+				// radius = 1
                 float x = (float) (Math.cos(theta) * Math.sin(phi));
                 float y = (float) Math.cos(phi);
                 float z = (float) (Math.sin(theta) * Math.sin(phi));
@@ -59,17 +61,17 @@ public abstract class UvSphere extends Sphere implements GlModel.BindableTexture
         }
 
         // GL_CCW
-        for (int r = 0; r < stacks; r++) {
-            for (int s = 0; s < slices; s++) {
-                int r_ = (r + 1 == stacks) ? 0 : r + 1;
-                int s_ = (s + 1 == slices) ? 0 : s + 1;
-                indices[indexIndex] = (short) (r * slices + s); //tlVec
-                indices[indexIndex + 1] = (short) (r_ * slices + s); //blVec
-                indices[indexIndex + 2] = (short) (r * slices + s_); //trVec
+        for (int r = 0; r < rings; r++) {
+            for (int s = 0; s < segments; s++) {
+                int r_ = (r + 1 == rings) ? 0 : r + 1;
+                int s_ = (s + 1 == segments) ? 0 : s + 1;
+                indices[indexIndex] = (short) (r * segments + s); //tlVec
+                indices[indexIndex + 1] = (short) (r_ * segments + s); //blVec
+                indices[indexIndex + 2] = (short) (r * segments + s_); //trVec
 
-                indices[indexIndex + 3] = (short) (r * slices + s_); //trVec
-                indices[indexIndex + 4] = (short) (r_ * slices + s); //blVec
-                indices[indexIndex + 5] = (short) (r_ * slices + s_); //brVec
+                indices[indexIndex + 3] = (short) (r * segments + s_); //trVec
+                indices[indexIndex + 4] = (short) (r_ * segments + s); //blVec
+                indices[indexIndex + 5] = (short) (r_ * segments + s_); //brVec
 
                 indexIndex += 6;
             }
