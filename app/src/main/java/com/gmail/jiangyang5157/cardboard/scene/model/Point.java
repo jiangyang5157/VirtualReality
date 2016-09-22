@@ -8,6 +8,7 @@ import com.gmail.jiangyang5157.tookit.base.data.BufferUtils;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
+import java.nio.ShortBuffer;
 
 /**
  * @author Yang
@@ -20,16 +21,18 @@ public abstract class Point extends GlModel implements GlModel.BindableBuffer {
     protected int pointSizeHandle;
     protected float pointSize;
 
-    protected final int[] buffers = new int[1];
+    protected final int[] buffers = new int[2];
 
     protected float[] vertices;
+    protected short[] indices;
 
     protected Point(Context context) {
         super(context);
     }
 
     protected void buildData() {
-        vertices = new float[0];
+        vertices = new float[3];
+        indices = new short[1];
     }
 
     @Override
@@ -50,12 +53,22 @@ public abstract class Point extends GlModel implements GlModel.BindableBuffer {
         verticesBuffer.put(vertices).position(0);
         vertices = null;
 
+        ShortBuffer indicesBuffer = ByteBuffer.allocateDirect(indices.length * BufferUtils.BYTES_PER_SHORT).order(ByteOrder.nativeOrder()).asShortBuffer();
+        indicesBuffer.put(indices).position(0);
+        indices = null;
+        indicesBufferCapacity = indicesBuffer.capacity();
+
         GLES20.glGenBuffers(buffers.length, buffers, 0);
         verticesBuffHandle = buffers[0];
+        indicesBuffHandle = buffers[1];
 
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, verticesBuffHandle);
         GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, verticesBuffer.capacity() * BufferUtils.BYTES_PER_FLOAT, verticesBuffer, GLES20.GL_STATIC_DRAW);
         verticesBuffer.limit(0);
+
+        GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, indicesBuffHandle);
+        GLES20.glBufferData(GLES20.GL_ELEMENT_ARRAY_BUFFER, indicesBuffer.capacity() * BufferUtils.BYTES_PER_SHORT, indicesBuffer, GLES20.GL_STATIC_DRAW);
+        indicesBuffer.limit(0);
     }
 
     @Override
@@ -77,7 +90,8 @@ public abstract class Point extends GlModel implements GlModel.BindableBuffer {
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, verticesBuffHandle);
         GLES20.glVertexAttribPointer(vertexHandle, 3, GLES20.GL_FLOAT, false, 0, 0);
 
-        GLES20.glDrawArrays(GLES20.GL_POINTS, 0, 1);
+        GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, indicesBuffHandle);
+        GLES20.glDrawElements(GLES20.GL_POINTS, indicesBufferCapacity, GLES20.GL_UNSIGNED_SHORT, 0);
 
         GLES20.glDisableVertexAttribArray(vertexHandle);
         GLES20.glUseProgram(0);

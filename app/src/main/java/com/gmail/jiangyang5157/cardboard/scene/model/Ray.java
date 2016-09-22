@@ -107,12 +107,13 @@ public class Ray extends Point {
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, verticesBuffHandle);
         GLES20.glVertexAttribPointer(vertexHandle, 3, GLES20.GL_FLOAT, false, 0, 0);
 
-        GLES20.glDrawArrays(GLES20.GL_POINTS, 0, 1);
+        GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, indicesBuffHandle);
+        GLES20.glDrawElements(GLES20.GL_POINTS, indicesBufferCapacity, GLES20.GL_UNSIGNED_SHORT, 0);
 
         GLES20.glDisableVertexAttribArray(vertexHandle);
         GLES20.glUseProgram(0);
 
-        // TODO: [WHY] 0x501 0x505
+        // TODO: [WHY] 0x501
         GlesUtils.printGlError(TAG + " - draw end");
     }
 
