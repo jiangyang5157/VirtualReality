@@ -106,7 +106,7 @@ public class Head implements SensorEventListener {
         }
     }
 
-    public static float[] getQquaternionMatrix(@NonNull float[] quaternion) {
+    public static float[] getQuaternionMatrix(@NonNull float[] quaternion) {
         float x = quaternion[0];
         float y = quaternion[1];
         float z = quaternion[2];

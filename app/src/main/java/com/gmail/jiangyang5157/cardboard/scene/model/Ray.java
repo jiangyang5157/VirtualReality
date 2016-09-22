@@ -112,7 +112,7 @@ public class Ray extends Point {
         GLES20.glDisableVertexAttribArray(vertexHandle);
         GLES20.glUseProgram(0);
 
-        // TODO: 8/11/2016 [WHY] E/GL Error: 0x501
+        // TODO: [WHY] 0x501 0x505
         GlesUtils.printGlError(TAG + " - draw end");
     }
 

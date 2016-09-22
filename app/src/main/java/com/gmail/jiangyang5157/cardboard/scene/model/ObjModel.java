@@ -130,7 +130,7 @@ public class ObjModel extends GlModel implements GlModel.BindableBuffer, Creatio
         Matrix.setIdentityM(rotationMatrix, 0);
         // it should face to eye
         float[] q = new float[]{-quaternion[0], -quaternion[1], -quaternion[2], quaternion[3]};
-        Matrix.multiplyMM(rotationMatrix, 0, Head.getQquaternionMatrix(q), 0, rotationMatrix, 0);
+        Matrix.multiplyMM(rotationMatrix, 0, Head.getQuaternionMatrix(q), 0, rotationMatrix, 0);
 
         modelRequireUpdate = true;
     }
