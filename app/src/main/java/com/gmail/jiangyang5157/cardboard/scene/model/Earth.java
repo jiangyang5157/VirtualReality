@@ -55,43 +55,40 @@ public class Earth extends UvSphere implements Creation {
     }
 
     public void prepare(final Ray ray) {
-        getHandler().post(new Runnable() {
-            @Override
-            public void run() {
-                creationState = STATE_PREPARING;
-                ray.addBusy();
+        getHandler().post(() -> {
+            creationState = STATE_PREPARING;
+            ray.addBusy();
 
-                if (checkPreparation()) {
-                    buildTextureBuffers();
-                    buildData();
-                    ray.subtractBusy();
-                    creationState = STATE_BEFORE_CREATE;
-                } else {
-                    File fileTexture = new File(Constant.getAbsolutePath(context, Constant.getPath(urlTexture)));
-                    if (!fileTexture.exists()) {
-                        Log.d(TAG, fileTexture.getAbsolutePath() + " not exist.");
-                        new Downloader(urlTexture, fileTexture, new Downloader.ResponseListener() {
-                            @Override
-                            public boolean onStart(Map<String, String> headers) {
-                                return true;
-                            }
+            if (checkPreparation()) {
+                buildTextureBuffers();
+                buildData();
+                ray.subtractBusy();
+                creationState = STATE_BEFORE_CREATE;
+            } else {
+                File fileTexture = new File(Constant.getAbsolutePath(context, Constant.getPath(urlTexture)));
+                if (!fileTexture.exists()) {
+                    Log.d(TAG, fileTexture.getAbsolutePath() + " not exist.");
+                    new Downloader(urlTexture, fileTexture, new Downloader.ResponseListener() {
+                        @Override
+                        public boolean onStart(Map<String, String> headers) {
+                            return true;
+                        }
 
-                            @Override
-                            public void onComplete(Map<String, String> headers) {
-                                buildTextureBuffers();
-                                buildData();
-                                ray.subtractBusy();
-                                creationState = STATE_BEFORE_CREATE;
-                            }
+                        @Override
+                        public void onComplete(Map<String, String> headers) {
+                            buildTextureBuffers();
+                            buildData();
+                            ray.subtractBusy();
+                            creationState = STATE_BEFORE_CREATE;
+                        }
 
-                            @Override
-                            public void onError(String url, VolleyError volleyError) {
-                                AppUtils.buildToast(context, url + " " + volleyError.toString());
-                                ray.subtractBusy();
-                                creationState = STATE_BEFORE_PREPARE;
-                            }
-                        }).start();
-                    }
+                        @Override
+                        public void onError(String url, VolleyError volleyError) {
+                            AppUtils.buildToast(context, url + " " + volleyError.toString());
+                            ray.subtractBusy();
+                            creationState = STATE_BEFORE_PREPARE;
+                        }
+                    }).start();
                 }
             }
         });

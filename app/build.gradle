@@ -1,8 +1,8 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "24.0.1"
+    compileSdkVersion 'Google Inc.:Google APIs:24'
+    buildToolsVersion '24.0.2'
 
     defaultConfig {
         applicationId "com.gmail.jiangyang5157.cardboard.vr"
@@ -33,21 +33,16 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
-
     compile 'com.android.support:appcompat-v7:23.2.1'
-
     // network
     compile 'com.android.volley:volley:1.0.0'
     // html
     compile 'org.jsoup:jsoup:1.9.2'
-
     // kml
     compile 'com.google.android.gms:play-services-maps:8.4.0'
-
     // cardboard sdk
     compile project(':base')
     compile project(':common')
-
     // my shared module
     compile project(':tookit-base')
     compile project(':tookit-math')
