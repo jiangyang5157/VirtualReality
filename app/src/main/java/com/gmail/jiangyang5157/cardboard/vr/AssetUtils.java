@@ -16,7 +16,6 @@ import java.text.SimpleDateFormat;
  */
 public class AssetUtils {
     private static final String TAG = "[AssetUtils]";
-    public static final int DEBUG = 0;
 
     public static final String URL_ = "http://192.168.1.68:8080/assets/";
 
