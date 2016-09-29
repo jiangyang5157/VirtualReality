@@ -74,7 +74,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         gvrView.setEGLConfigChooser(8, 8, 8, 8, 16, 8);
 
         gvrView.setRenderer(this);
-        if (Settings.DEBUG != 0) {
+        if (Settings.DEBUG == 0) {
             // The transition view used to prompt the user to place their phone into a GVR viewer.
             gvrView.setTransitionViewEnabled(true);
         }
