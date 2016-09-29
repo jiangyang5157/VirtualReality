@@ -2,4 +2,5 @@
     <string name="app_name">VirtualReality</string>
 
     <string name="error_gles_version_not_supported">OpenGL ES version not supported</string>
+
 </resources>

@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.gmail.jiangyang5157.cardboard.scene.model.AtomMap;
 import com.gmail.jiangyang5157.cardboard.scene.model.AtomMarker;
+import com.gmail.jiangyang5157.cardboard.vr.KmlLayerCache;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ import java.util.HashMap;
  * Reference https://github.com/googlemaps/android-maps-utils/tree/master/library/src/com/google/maps/android/kml
  * Get rid of GoogleMap dependence
  */
-/* package */ class KmlRenderer {
+/* package */ class KmlRender {
 
     private AtomMap mMap;
 
@@ -34,7 +35,7 @@ import java.util.HashMap;
 
     private Context mContext;
 
-    /* package */ KmlRenderer(AtomMap map, Context context) {
+    /* package */ KmlRender(AtomMap map, Context context) {
         mContext = context;
         mMap = map;
         mStylesRenderer = new HashMap<>();
@@ -143,6 +144,13 @@ import java.util.HashMap;
         mLayerVisible = true;
     }
 
+    /* package */ void addLayerToMap(String container) {
+        mStylesRenderer.putAll(mStyles);
+        assignStyleMap(mStyleMaps, mStylesRenderer);
+        addContainerToMap(mContainers, true, container);
+        mLayerVisible = true;
+    }
+
     /**
      * Gets the map that objects are being placed on
      *
@@ -161,6 +169,12 @@ import java.util.HashMap;
         removeLayerFromMap();
         mMap = map;
         addLayerToMap();
+    }
+
+    /* package */ void setMap(AtomMap map, String container) {
+        removeLayerFromMap();
+        mMap = map;
+        addLayerToMap(container);
     }
 
     /**
@@ -264,6 +278,31 @@ import java.util.HashMap;
             addContainerObjectToMap(container, isContainerVisible);
             if (container.hasContainers()) {
                 addContainerGroupToMap(container.getContainers(), isContainerVisible);
+            }
+        }
+    }
+
+    private void addContainerToMap(Iterable<KmlContainer> kmlContainers, boolean containerVisibility, String key) {
+        for (KmlContainer container : kmlContainers) {
+            boolean isContainerVisible = getContainerVisibility(container, containerVisibility);
+            if (container.getStyles() != null) {
+                // Stores all found styles from the container
+                mStylesRenderer.putAll(container.getStyles());
+            }
+            if (container.getStyleMap() != null) {
+                // Stores all found style maps from the container
+                assignStyleMap(container.getStyleMap(), mStylesRenderer);
+            }
+
+            String name = container.getProperty("name");
+            String[] names = key.split(KmlLayerCache.KEY_SEPARATOR);
+            if (name == null || name.equals("")
+                    || name.equals("Untitled layer") || name.equals(names[0])) {
+                addContainerObjectToMap(container, isContainerVisible);
+            }
+
+            if (container.hasContainers()) {
+                addContainerToMap(container.getContainers(), isContainerVisible, key);
             }
         }
     }

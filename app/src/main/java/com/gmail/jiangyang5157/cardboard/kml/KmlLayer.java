@@ -20,7 +20,7 @@ import java.io.InputStream;
  */
 public class KmlLayer {
 
-    private final KmlRenderer mRenderer;
+    private final KmlRender mRenderer;
 
     /**
      * Creates a new KmlLayer object - addLayerToMap() must be called to trigger rendering onto a map.
@@ -52,7 +52,7 @@ public class KmlLayer {
         }
         MapsInitializer.initialize(context);
 
-        mRenderer = new KmlRenderer(map, context);
+        mRenderer = new KmlRender(map, context);
         XmlPullParser xmlPullParser = createXmlParser(stream);
         KmlParser parser = new KmlParser(xmlPullParser);
         parser.parseKml();
@@ -142,5 +142,15 @@ public class KmlLayer {
      */
     public void setMap(AtomMap map) {
         mRenderer.setMap(map);
+    }
+
+    /**
+     * Sets the map that objects are being placed on
+     *
+     * @param map map to place placemark, container, style and ground overlays on
+     * @param container
+     */
+    public void setMap(AtomMap map, String container) {
+        mRenderer.setMap(map, container);
     }
 }
