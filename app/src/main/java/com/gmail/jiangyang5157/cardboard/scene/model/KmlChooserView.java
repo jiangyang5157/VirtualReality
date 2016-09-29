@@ -28,48 +28,45 @@ public class KmlChooserView extends Dialog {
     }
 
     public void prepare(final Ray ray) {
-        getHandler().post(new Runnable() {
-            @Override
-            public void run() {
-                creationState = STATE_PREPARING;
-                ray.addBusy();
+        getHandler().post(() -> {
+            creationState = STATE_PREPARING;
+            ray.addBusy();
 
-                String[] kmlFileNames = getKmlFileNames();
-                String lastKmlFileName = AssetUtils.getLastKmlFileName(context);
-                int iSize = kmlFileNames.length;
-                for (int i = 0; i < iSize; i++) {
-                    final String fileName = kmlFileNames[i];
-                    TextField p = new TextField(context);
-                    float textSize = TextField.TEXT_SIZE_TINY;
-                    p.setCcntent(fileName);
-                    p.width = WIDTH;
-                    p.setScale(SCALE);
-                    p.modelRequireUpdate = true;
-                    p.setTextSize(textSize);
-                    p.setAlignment(Layout.Alignment.ALIGN_CENTER);
-                    if (!fileName.equals(lastKmlFileName)) {
-                        p.setOnClickListener(new GlModel.ClickListener() {
-                            @Override
-                            public void onClick(GlModel model) {
-                                if (eventListener != null) {
-                                    eventListener.onKmlSelected(fileName);
-                                }
+            String[] kmlFileNames = getKmlFileNames();
+            String lastKmlFileName = AssetUtils.getLastKmlFileName(context);
+            int iSize = kmlFileNames.length;
+            for (int i = 0; i < iSize; i++) {
+                final String fileName = kmlFileNames[i];
+                TextField p = new TextField(context);
+                float textSize = TextField.TEXT_SIZE_TINY;
+                p.setCcntent(fileName);
+                p.width = WIDTH;
+                p.setScale(SCALE);
+                p.modelRequireUpdate = true;
+                p.setTextSize(textSize);
+                p.setAlignment(Layout.Alignment.ALIGN_CENTER);
+                if (!fileName.equals(lastKmlFileName)) {
+                    p.setOnClickListener(new ClickListener() {
+                        @Override
+                        public void onClick(GlModel model1) {
+                            if (eventListener != null) {
+                                eventListener.onKmlSelected(fileName);
                             }
-                        });
-                    }
-
-                    p.prepare(ray);
-                    addPanel(p);
+                        }
+                    });
                 }
 
-                adjustBounds(WIDTH);
-
-                buildTextureBuffers();
-                buildData();
-
-                ray.subtractBusy();
-                creationState = STATE_BEFORE_CREATE;
+                p.prepare(ray);
+                addPanel(p);
             }
+
+            adjustBounds(WIDTH);
+
+            buildTextureBuffers();
+            buildData();
+
+            ray.subtractBusy();
+            creationState = STATE_BEFORE_CREATE;
         });
     }
 

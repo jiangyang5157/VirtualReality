@@ -53,10 +53,10 @@ public class GlesUtils {
 
     public static int compileShader(Context context, int type, int resId) throws IOException {
         InputStream in = context.getResources().openRawResource(resId);
-        return compileShader(context, type, IoUtils.read(in));
+        return compileShader(type, IoUtils.read(in));
     }
 
-    public static int compileShader(Context context, int type, String code) {
+    public static int compileShader(int type, String code) {
         int shader = GLES20.glCreateShader(type);
         GLES20.glShaderSource(shader, code);
         GLES20.glCompileShader(shader);

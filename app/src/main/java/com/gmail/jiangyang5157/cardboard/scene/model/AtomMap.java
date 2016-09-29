@@ -47,42 +47,39 @@ public class AtomMap extends GlModel implements Creation {
     }
 
     public void prepare(final Ray ray) {
-        getHandler().post(new Runnable() {
-            @Override
-            public void run() {
-                creationState = STATE_PREPARING;
-                ray.addBusy();
+        getHandler().post(() -> {
+            creationState = STATE_PREPARING;
+            ray.addBusy();
 
-                if (checkPreparation()) {
-                    final File fileKml = new File(AssetUtils.getAbsolutePath(context, AssetUtils.getPath(urlKml)));
-                    prepareKml(fileKml);
-                    ray.subtractBusy();
-                    creationState = STATE_BEFORE_CREATE;
-                } else {
-                    final File fileKml = new File(AssetUtils.getAbsolutePath(context, AssetUtils.getPath(urlKml)));
-                    if (!fileKml.exists()) {
-                        Log.d(TAG, fileKml.getAbsolutePath() + " not exist.");
-                        new Downloader(urlKml, fileKml, new Downloader.ResponseListener() {
-                            @Override
-                            public boolean onStart(java.util.Map<String, String> headers) {
-                                return true;
-                            }
+            if (checkPreparation()) {
+                final File fileKml = new File(AssetUtils.getAbsolutePath(context, AssetUtils.getPath(urlKml)));
+                prepareKml(fileKml);
+                ray.subtractBusy();
+                creationState = STATE_BEFORE_CREATE;
+            } else {
+                final File fileKml = new File(AssetUtils.getAbsolutePath(context, AssetUtils.getPath(urlKml)));
+                if (!fileKml.exists()) {
+                    Log.d(TAG, fileKml.getAbsolutePath() + " not exist.");
+                    new Downloader(urlKml, fileKml, new Downloader.ResponseListener() {
+                        @Override
+                        public boolean onStart(java.util.Map<String, String> headers) {
+                            return true;
+                        }
 
-                            @Override
-                            public void onComplete(java.util.Map<String, String> headers) {
-                                prepareKml(fileKml);
-                                ray.subtractBusy();
-                                creationState = STATE_BEFORE_CREATE;
-                            }
+                        @Override
+                        public void onComplete(java.util.Map<String, String> headers) {
+                            prepareKml(fileKml);
+                            ray.subtractBusy();
+                            creationState = STATE_BEFORE_CREATE;
+                        }
 
-                            @Override
-                            public void onError(String url, VolleyError volleyError) {
-                                AppUtils.buildToast(context, url + " " + volleyError.toString());
-                                ray.subtractBusy();
-                                creationState = STATE_BEFORE_PREPARE;
-                            }
-                        }).start();
-                    }
+                        @Override
+                        public void onError(String url, VolleyError volleyError) {
+                            AppUtils.buildToast(context, url + " " + volleyError.toString());
+                            ray.subtractBusy();
+                            creationState = STATE_BEFORE_PREPARE;
+                        }
+                    }).start();
                 }
             }
         });

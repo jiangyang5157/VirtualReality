@@ -27,76 +27,73 @@ public class MarkerDetailView extends Dialog {
     }
 
     public void prepare(final Ray ray) {
-        getHandler().post(new Runnable() {
-            @Override
-            public void run() {
-                creationState = STATE_PREPARING;
-                ray.addBusy();
+        getHandler().post(() -> {
+            creationState = STATE_PREPARING;
+            ray.addBusy();
 
-                if (marker.getName() != null) {
-                    TextField pName = new TextField(context);
-                    pName.setCcntent(marker.getName());
-                    pName.width = WIDTH;
-                    pName.setScale(SCALE);
-                    pName.modelRequireUpdate = true;
-                    pName.setTextSize(TextField.TEXT_SIZE_MEDIUM);
-                    pName.setAlignment(Layout.Alignment.ALIGN_CENTER);
+            if (marker.getName() != null) {
+                TextField pName = new TextField(context);
+                pName.setCcntent(marker.getName());
+                pName.width = WIDTH;
+                pName.setScale(SCALE);
+                pName.modelRequireUpdate = true;
+                pName.setTextSize(TextField.TEXT_SIZE_MEDIUM);
+                pName.setAlignment(Layout.Alignment.ALIGN_CENTER);
 
-                    pName.prepare(ray);
-                    addPanel(pName);
-                }
-                if (marker.getObjModel() != null) {
-                    TextField pObjModel = new TextField(context);
-                    pObjModel.setCcntent(marker.getObjModel().getTitle());
-                    pObjModel.width = WIDTH;
-                    pObjModel.setScale(SCALE);
-                    pObjModel.modelRequireUpdate = true;
-                    pObjModel.setTextSize(TextField.TEXT_SIZE_TINY);
-                    pObjModel.setAlignment(Layout.Alignment.ALIGN_NORMAL);
-                    pObjModel.setOnClickListener(new GlModel.ClickListener() {
-                        @Override
-                        public void onClick(GlModel model) {
-                            if (eventListener != null) {
-                                eventListener.showObjModel(marker.getObjModel());
-                            }
+                pName.prepare(ray);
+                addPanel(pName);
+            }
+            if (marker.getObjModel() != null) {
+                TextField pObjModel = new TextField(context);
+                pObjModel.setCcntent(marker.getObjModel().getTitle());
+                pObjModel.width = WIDTH;
+                pObjModel.setScale(SCALE);
+                pObjModel.modelRequireUpdate = true;
+                pObjModel.setTextSize(TextField.TEXT_SIZE_TINY);
+                pObjModel.setAlignment(Layout.Alignment.ALIGN_NORMAL);
+                pObjModel.setOnClickListener(new ClickListener() {
+                    @Override
+                    public void onClick(GlModel model1) {
+                        if (eventListener != null) {
+                            eventListener.showObjModel(marker.getObjModel());
                         }
-                    });
+                    }
+                });
 
-                    pObjModel.prepare(ray);
-                    addPanel(pObjModel);
-                }
-                if (marker.getDescription() != null) {
-                    DescriptionField pDescription = new DescriptionField(context);
-                    pDescription.setCcntent(marker.getDescription());
-                    pDescription.width = WIDTH;
-                    pDescription.setScale(SCALE);
-                    pDescription.modelRequireUpdate = true;
-                    pDescription.setTextSize(TextField.TEXT_SIZE_TINY);
-                    pDescription.setAlignment(Layout.Alignment.ALIGN_NORMAL);
-                    pDescription.setEventListener(new DescriptionField.Event() {
-                        @Override
-                        public void onPrepareComplete() {
-                            adjustBounds(WIDTH);
+                pObjModel.prepare(ray);
+                addPanel(pObjModel);
+            }
+            if (marker.getDescription() != null) {
+                DescriptionField pDescription = new DescriptionField(context);
+                pDescription.setCcntent(marker.getDescription());
+                pDescription.width = WIDTH;
+                pDescription.setScale(SCALE);
+                pDescription.modelRequireUpdate = true;
+                pDescription.setTextSize(TextField.TEXT_SIZE_TINY);
+                pDescription.setAlignment(Layout.Alignment.ALIGN_NORMAL);
+                pDescription.setEventListener(new DescriptionField.Event() {
+                    @Override
+                    public void onPrepareComplete() {
+                        adjustBounds(WIDTH);
 
-                            buildTextureBuffers();
-                            buildData();
+                        buildTextureBuffers();
+                        buildData();
 
-                            ray.subtractBusy();
-                            creationState = STATE_BEFORE_CREATE;
-                        }
-                    });
+                        ray.subtractBusy();
+                        creationState = STATE_BEFORE_CREATE;
+                    }
+                });
 
-                    pDescription.prepare(ray);
-                    addPanel(pDescription);
-                } else {
-                    adjustBounds(WIDTH);
+                pDescription.prepare(ray);
+                addPanel(pDescription);
+            } else {
+                adjustBounds(WIDTH);
 
-                    buildTextureBuffers();
-                    buildData();
+                buildTextureBuffers();
+                buildData();
 
-                    ray.subtractBusy();
-                    creationState = STATE_BEFORE_CREATE;
-                }
+                ray.subtractBusy();
+                creationState = STATE_BEFORE_CREATE;
             }
         });
     }

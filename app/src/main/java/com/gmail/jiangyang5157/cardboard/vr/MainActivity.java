@@ -79,12 +79,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
             gvrView.setTransitionViewEnabled(true);
         }
         gvrView.setOnCardboardBackButtonListener(
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        onBackPressed();
-                    }
-                });
+                () -> onBackPressed());
         setGvrView(gvrView);
 
         head = new Head(getApplicationContext());

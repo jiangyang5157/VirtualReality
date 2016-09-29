@@ -63,43 +63,40 @@ public class ObjModel extends GlModel implements GlModel.BindableBuffer, Creatio
     }
 
     public void prepare(final Ray ray) {
-        getHandler().post(new Runnable() {
-            @Override
-            public void run() {
-                creationState = STATE_PREPARING;
-                ray.addBusy();
+        getHandler().post(() -> {
+            creationState = STATE_PREPARING;
+            ray.addBusy();
 
-                if (checkPreparation()) {
-                    buildData();
-                    ray.subtractBusy();
-                    creationState = STATE_BEFORE_CREATE;
-                } else {
-                    File file = new File(AssetUtils.getAbsolutePath(context, AssetUtils.getPath(url)));
-                    if (!file.exists()) {
-                        Log.d(TAG, file.getAbsolutePath() + " not exist.");
-                        new Downloader(url, file, new Downloader.ResponseListener() {
-                            @Override
-                            public boolean onStart(Map<String, String> headers) {
-                                return true;
-                            }
+            if (checkPreparation()) {
+                buildData();
+                ray.subtractBusy();
+                creationState = STATE_BEFORE_CREATE;
+            } else {
+                File file = new File(AssetUtils.getAbsolutePath(context, AssetUtils.getPath(url)));
+                if (!file.exists()) {
+                    Log.d(TAG, file.getAbsolutePath() + " not exist.");
+                    new Downloader(url, file, new Downloader.ResponseListener() {
+                        @Override
+                        public boolean onStart(Map<String, String> headers) {
+                            return true;
+                        }
 
-                            @Override
-                            public void onComplete(Map<String, String> headers) {
-                                if (checkPreparation()) {
-                                    buildData();
-                                    ray.subtractBusy();
-                                    creationState = STATE_BEFORE_CREATE;
-                                }
-                            }
-
-                            @Override
-                            public void onError(String url, VolleyError volleyError) {
-                                AppUtils.buildToast(context, url + " " + volleyError.toString());
+                        @Override
+                        public void onComplete(Map<String, String> headers) {
+                            if (checkPreparation()) {
+                                buildData();
                                 ray.subtractBusy();
-                                creationState = STATE_BEFORE_PREPARE;
+                                creationState = STATE_BEFORE_CREATE;
                             }
-                        }).start();
-                    }
+                        }
+
+                        @Override
+                        public void onError(String url1, VolleyError volleyError) {
+                            AppUtils.buildToast(context, url1 + " " + volleyError.toString());
+                            ray.subtractBusy();
+                            creationState = STATE_BEFORE_PREPARE;
+                        }
+                    }).start();
                 }
             }
         });
@@ -196,28 +193,25 @@ public class ObjModel extends GlModel implements GlModel.BindableBuffer, Creatio
         InputStream in = null;
         try {
             in = new FileInputStream(new File(AssetUtils.getAbsolutePath(context, AssetUtils.getPath(url))));
-            IoUtils.read(in, new IoUtils.OnReadingListener() {
-                @Override
-                public boolean onReadLine(String line) {
-                    if (line == null) {
-                        return false;
+            IoUtils.read(in, line -> {
+                if (line == null) {
+                    return false;
+                } else {
+                    // http://paulbourke.net/dataformats/obj/
+                    if (line.startsWith("#")) {
+                        parserComments(line);
+                    } else if (line.startsWith("v ")) {
+                        parserGeometricVertices(line);
+                    } else if (line.startsWith("vt ")) {
+                        parserTextureVertices(line);
+                    } else if (line.startsWith("vn ")) {
+                        parserVertexNormals(line);
+                    } else if (line.startsWith("f ")) {
+                        parserFace(line);
                     } else {
-                        // http://paulbourke.net/dataformats/obj/
-                        if (line.startsWith("#")) {
-                            parserComments(line);
-                        } else if (line.startsWith("v ")) {
-                            parserGeometricVertices(line);
-                        } else if (line.startsWith("vt ")) {
-                            parserTextureVertices(line);
-                        } else if (line.startsWith("vn ")) {
-                            parserVertexNormals(line);
-                        } else if (line.startsWith("f ")) {
-                            parserFace(line);
-                        } else {
-                            Log.w(TAG, "Unsupported regex: " + line);
-                        }
-                        return true;
+                        Log.w(TAG, "Unsupported regex: " + line);
                     }
+                    return true;
                 }
             });
         } catch (IOException e) {
