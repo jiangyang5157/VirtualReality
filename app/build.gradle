@@ -1,8 +1,8 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 'Google Inc.:Google APIs:24'
-    buildToolsVersion '24.0.2'
+    compileSdkVersion 23
+    buildToolsVersion "24.0.1"
 
     defaultConfig {
         applicationId "com.gmail.jiangyang5157.cardboard.vr"
