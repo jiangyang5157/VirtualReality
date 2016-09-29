@@ -6,6 +6,6 @@ package com.gmail.jiangyang5157.cardboard.vr;
  */
 public class Settings {
 
-    public static final int DEBUG = 0;
+    public static final int DEBUG = 1;
 
 }
