@@ -79,7 +79,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
             gvrView.setTransitionViewEnabled(true);
         }
         gvrView.setOnCardboardBackButtonListener(
-                () -> onBackPressed());
+                this::onBackPressed);
         setGvrView(gvrView);
 
         head = new Head(getApplicationContext());
@@ -434,12 +434,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
 
         atomMap = new AtomMap(getApplicationContext(), urlKml);
         atomMap.setOnMarkerClickListener(onMarkerClickListener);
-        atomMap.setMarkerLighting(new Lighting() {
-            @Override
-            public float[] getLightPosInCameraSpace() {
-                return lightPosInCameraSpace;
-            }
-        });
+        atomMap.setMarkerLighting(() -> lightPosInCameraSpace);
     }
 
     private GlModel.ClickListener onMarkerClickListener = new GlModel.ClickListener() {
