@@ -51,6 +51,8 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
     private final float[] LIGHT_POS_IN_WORLD_SPACE = new float[]{0.0f, 0.0f, 0.0f, 1.0f};
     private float[] lightPosInCameraSpace = new float[4];
 
+    private KmlLayerCache kmlLayerCache;
+
     private Head head;
 
     private Ray ray;
@@ -426,7 +428,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         onCardboardClick();
     }
 
-    private void newMap(String urlKml) {
+    private void newLayer(String urlKml) {
         destoryMap();
         destoryKmlChooserView();
         destoryObjModel();
@@ -464,7 +466,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
             }
             AssetUtils.setLastKmlFileName(getApplicationContext(), item);
 
-            newMap(AssetUtils.getKmlUrl(item));
+            newLayer(AssetUtils.getKmlUrl(item));
 
             head.centerCameraPosition();
         }
@@ -483,7 +485,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
 
         earth = new Earth(getApplicationContext(), AssetUtils.getResourceUrl(AssetUtils.EARTH_TEXTURE_FILE_NAME));
 
-        newMap(AssetUtils.getKmlUrl(AssetUtils.getLastKmlFileName(getApplicationContext())));
+        newLayer(AssetUtils.getKmlUrl(AssetUtils.getLastKmlFileName(getApplicationContext())));
     }
 
     @Override
@@ -500,12 +502,23 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
     protected void onStart() {
         super.onStart();
         // the integer pass to glesValidate() should be consistent with the glEsVersion in the Manifest
-        if (!DeviceUtils.glesValidate(getApplicationContext(), 0x00030000)) {
+        if (!DeviceUtils.glesValidate(getApplicationContext(), Settings.GL_ES_VERSION)) {
             Toast.makeText(getApplicationContext(), getString(R.string.error_gles_version_not_supported), Toast.LENGTH_SHORT).show();
             finish();
         }
+
         checkResource();
         checkPatch();
+        checkKmlLayer();
+    }
+
+    private void checkKmlLayer() {
+        if (kmlLayerCache == null) {
+            kmlLayerCache = new KmlLayerCache();
+        }
+        if (!kmlLayerCache.isReady()) {
+            kmlLayerCache.cache(this);
+        }
     }
 
     @Override
