@@ -9,7 +9,7 @@ import com.android.volley.VolleyError;
 import com.gmail.jiangyang5157.cardboard.net.Downloader;
 import com.gmail.jiangyang5157.cardboard.scene.Creation;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
-import com.gmail.jiangyang5157.cardboard.vr.Constant;
+import com.gmail.jiangyang5157.cardboard.vr.AssetUtils;
 import com.gmail.jiangyang5157.tookit.android.base.AppUtils;
 import com.gmail.jiangyang5157.tookit.base.data.BufferUtils;
 import com.gmail.jiangyang5157.tookit.base.data.IoUtils;
@@ -58,7 +58,7 @@ public class ObjModel extends GlModel implements GlModel.BindableBuffer, Creatio
     }
 
     public boolean checkPreparation() {
-        File file = new File(Constant.getAbsolutePath(context, Constant.getPath(url)));
+        File file = new File(AssetUtils.getAbsolutePath(context, AssetUtils.getPath(url)));
         return file.exists();
     }
 
@@ -74,7 +74,7 @@ public class ObjModel extends GlModel implements GlModel.BindableBuffer, Creatio
                     ray.subtractBusy();
                     creationState = STATE_BEFORE_CREATE;
                 } else {
-                    File file = new File(Constant.getAbsolutePath(context, Constant.getPath(url)));
+                    File file = new File(AssetUtils.getAbsolutePath(context, AssetUtils.getPath(url)));
                     if (!file.exists()) {
                         Log.d(TAG, file.getAbsolutePath() + " not exist.");
                         new Downloader(url, file, new Downloader.ResponseListener() {
@@ -195,7 +195,7 @@ public class ObjModel extends GlModel implements GlModel.BindableBuffer, Creatio
         // TODO: 7/5/2016 OBJ Loader
         InputStream in = null;
         try {
-            in = new FileInputStream(new File(Constant.getAbsolutePath(context, Constant.getPath(url))));
+            in = new FileInputStream(new File(AssetUtils.getAbsolutePath(context, AssetUtils.getPath(url))));
             IoUtils.read(in, new IoUtils.OnReadingListener() {
                 @Override
                 public boolean onReadLine(String line) {

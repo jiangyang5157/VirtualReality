@@ -11,7 +11,7 @@ import com.gmail.jiangyang5157.cardboard.net.Downloader;
 import com.gmail.jiangyang5157.cardboard.scene.Creation;
 import com.gmail.jiangyang5157.cardboard.scene.RayIntersection;
 import com.gmail.jiangyang5157.cardboard.scene.Lighting;
-import com.gmail.jiangyang5157.cardboard.vr.Constant;
+import com.gmail.jiangyang5157.cardboard.vr.AssetUtils;
 import com.gmail.jiangyang5157.tookit.android.base.AppUtils;
 import com.gmail.jiangyang5157.tookit.math.Vector;
 
@@ -42,7 +42,7 @@ public class AtomMap extends GlModel implements Creation {
     }
 
     public boolean checkPreparation() {
-        File fileKml = new File(Constant.getAbsolutePath(context, Constant.getPath(urlKml)));
+        File fileKml = new File(AssetUtils.getAbsolutePath(context, AssetUtils.getPath(urlKml)));
         return fileKml.exists();
     }
 
@@ -54,12 +54,12 @@ public class AtomMap extends GlModel implements Creation {
                 ray.addBusy();
 
                 if (checkPreparation()) {
-                    final File fileKml = new File(Constant.getAbsolutePath(context, Constant.getPath(urlKml)));
+                    final File fileKml = new File(AssetUtils.getAbsolutePath(context, AssetUtils.getPath(urlKml)));
                     prepareKml(fileKml);
                     ray.subtractBusy();
                     creationState = STATE_BEFORE_CREATE;
                 } else {
-                    final File fileKml = new File(Constant.getAbsolutePath(context, Constant.getPath(urlKml)));
+                    final File fileKml = new File(AssetUtils.getAbsolutePath(context, AssetUtils.getPath(urlKml)));
                     if (!fileKml.exists()) {
                         Log.d(TAG, fileKml.getAbsolutePath() + " not exist.");
                         new Downloader(urlKml, fileKml, new Downloader.ResponseListener() {

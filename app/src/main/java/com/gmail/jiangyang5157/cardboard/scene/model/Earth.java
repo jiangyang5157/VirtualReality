@@ -10,7 +10,7 @@ import android.util.Log;
 import com.android.volley.VolleyError;
 import com.gmail.jiangyang5157.cardboard.net.Downloader;
 import com.gmail.jiangyang5157.cardboard.scene.Creation;
-import com.gmail.jiangyang5157.cardboard.vr.Constant;
+import com.gmail.jiangyang5157.cardboard.vr.AssetUtils;
 import com.gmail.jiangyang5157.tookit.android.base.AppUtils;
 import com.gmail.jiangyang5157.tookit.base.data.BufferUtils;
 
@@ -50,7 +50,7 @@ public class Earth extends UvSphere implements Creation {
     }
 
     public boolean checkPreparation() {
-        File fileTexture = new File(Constant.getAbsolutePath(context, Constant.getPath(urlTexture)));
+        File fileTexture = new File(AssetUtils.getAbsolutePath(context, AssetUtils.getPath(urlTexture)));
         return fileTexture.exists();
     }
 
@@ -65,7 +65,7 @@ public class Earth extends UvSphere implements Creation {
                 ray.subtractBusy();
                 creationState = STATE_BEFORE_CREATE;
             } else {
-                File fileTexture = new File(Constant.getAbsolutePath(context, Constant.getPath(urlTexture)));
+                File fileTexture = new File(AssetUtils.getAbsolutePath(context, AssetUtils.getPath(urlTexture)));
                 if (!fileTexture.exists()) {
                     Log.d(TAG, fileTexture.getAbsolutePath() + " not exist.");
                     new Downloader(urlTexture, fileTexture, new Downloader.ResponseListener() {
@@ -111,7 +111,7 @@ public class Earth extends UvSphere implements Creation {
     protected void buildTextureBuffers() {
         InputStream in = null;
         try {
-            in = new FileInputStream(new File(Constant.getAbsolutePath(context, Constant.getPath(urlTexture))));
+            in = new FileInputStream(new File(AssetUtils.getAbsolutePath(context, AssetUtils.getPath(urlTexture))));
             final BitmapFactory.Options options = new BitmapFactory.Options();
             options.inScaled = false;
             textureBitmap[0] = BitmapFactory.decodeStream(in, null, options);

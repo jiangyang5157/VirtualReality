@@ -3,7 +3,7 @@ package com.gmail.jiangyang5157.cardboard.scene.model;
 import android.content.Context;
 import android.text.Layout;
 
-import com.gmail.jiangyang5157.cardboard.vr.Constant;
+import com.gmail.jiangyang5157.cardboard.vr.AssetUtils;
 import com.gmail.jiangyang5157.tookit.android.base.AppUtils;
 
 import java.io.File;
@@ -35,7 +35,7 @@ public class KmlChooserView extends Dialog {
                 ray.addBusy();
 
                 String[] kmlFileNames = getKmlFileNames();
-                String lastKmlFileName = Constant.getLastKmlFileName(context);
+                String lastKmlFileName = AssetUtils.getLastKmlFileName(context);
                 int iSize = kmlFileNames.length;
                 for (int i = 0; i < iSize; i++) {
                     final String fileName = kmlFileNames[i];
@@ -94,7 +94,7 @@ public class KmlChooserView extends Dialog {
     private String[] getKmlFileNames() {
         String[] ret = null;
 
-        File directory = new File(Constant.getAbsolutePath(context, Constant.getKmlPath("")));
+        File directory = new File(AssetUtils.getAbsolutePath(context, AssetUtils.getKmlPath("")));
         if (!directory.exists() || !directory.isDirectory()) {
             directory.mkdirs();
         } else {

@@ -74,7 +74,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         gvrView.setEGLConfigChooser(8, 8, 8, 8, 16, 8);
 
         gvrView.setRenderer(this);
-        if (Constant.DEBUG != 0) {
+        if (AssetUtils.DEBUG != 0) {
             // The transition view used to prompt the user to place their phone into a GVR viewer.
             gvrView.setTransitionViewEnabled(true);
         }
@@ -94,13 +94,13 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
      * To check if there is a new patch in the server, download if yes.
      */
     private void checkPatch() {
-        final File patchFile = new File(Constant.getAbsolutePath(getApplicationContext(), Constant.getPatchPath()));
-        new Downloader(Constant.getPatchUrl(), patchFile, new Downloader.ResponseListener() {
+        final File patchFile = new File(AssetUtils.getAbsolutePath(getApplicationContext(), AssetUtils.getPatchPath()));
+        new Downloader(AssetUtils.getPatchUrl(), patchFile, new Downloader.ResponseListener() {
             @Override
             public boolean onStart(java.util.Map<String, String> headers) {
                 try {
-                    long lastModifiedTime = Constant.getLastPatchLastModifiedTime(getApplicationContext());
-                    long httpDateTime = Constant.getHttpDateTime(headers.get("Last-Modified"));
+                    long lastModifiedTime = AssetUtils.getLastPatchLastModifiedTime(getApplicationContext());
+                    long httpDateTime = AssetUtils.getHttpDateTime(headers.get("Last-Modified"));
                     Log.d(TAG, "lastModifiedTime/httpDateTime: " + lastModifiedTime + "," + httpDateTime);
                     if (lastModifiedTime < httpDateTime) {
                         return true;
@@ -115,7 +115,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
             public void onComplete(java.util.Map<String, String> headers) {
                 InputStream in = null;
                 try {
-                    Constant.setLastPatchLastModifiedTime(getApplicationContext(), Constant.getHttpDateTime(headers.get("Last-Modified")));
+                    AssetUtils.setLastPatchLastModifiedTime(getApplicationContext(), AssetUtils.getHttpDateTime(headers.get("Last-Modified")));
                     in = new FileInputStream(patchFile);
                     IoUtils.unzip(in, new File(AppUtils.getProfilePath(getApplicationContext())), true);
                 } catch (ParseException | IOException e) {
@@ -143,11 +143,11 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
      * Usually this is only execute in the first time app launch
      */
     private void checkResource() {
-        File directory = new File(Constant.getAbsolutePath(getApplicationContext(), Constant.DIRECTORY_STATIC));
+        File directory = new File(AssetUtils.getAbsolutePath(getApplicationContext(), AssetUtils.DIRECTORY_STATIC));
         if (!directory.exists() || !directory.isDirectory()) {
             InputStream in = null;
             try {
-                in = getAssets().open(Constant.getPatchPath());
+                in = getAssets().open(AssetUtils.getPatchPath());
                 IoUtils.unzip(in, new File(AppUtils.getProfilePath(getApplicationContext())), true);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -468,12 +468,12 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         @Override
         public void onKmlSelected(String fileName) {
             Log.d(TAG, "onKmlSelected: " + fileName);
-            if (fileName.equals(Constant.getLastKmlFileName(getApplicationContext()))) {
+            if (fileName.equals(AssetUtils.getLastKmlFileName(getApplicationContext()))) {
                 destoryKmlChooserView();
                 return;
             }
-            Constant.setLastKmlFileName(getApplicationContext(), fileName);
-            newMap(Constant.getKmlUrl(fileName));
+            AssetUtils.setLastKmlFileName(getApplicationContext(), fileName);
+            newMap(AssetUtils.getKmlUrl(fileName));
 
             // move camera to <0,0,0>
             head.getCamera().move(-head.getCamera().getX(), -head.getCamera().getY(), -head.getCamera().getZ());
@@ -491,9 +491,9 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         shaders.put(GLES20.GL_FRAGMENT_SHADER, R.raw.ray_point_fragment_shader);
         ray.create(shaders);
 
-        earth = new Earth(getApplicationContext(), Constant.getResourceUrl(Constant.EARTH_TEXTURE_FILE_NAME));
+        earth = new Earth(getApplicationContext(), AssetUtils.getResourceUrl(AssetUtils.EARTH_TEXTURE_FILE_NAME));
 
-        newMap(Constant.getKmlUrl(Constant.getLastKmlFileName(getApplicationContext())));
+        newMap(AssetUtils.getKmlUrl(AssetUtils.getLastKmlFileName(getApplicationContext())));
     }
 
     @Override

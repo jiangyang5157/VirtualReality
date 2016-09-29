@@ -16,8 +16,8 @@ import com.gmail.jiangyang5157.tookit.android.base.AppUtils;
 public class Ray extends Point {
     private static final String TAG = "[Ray]";
 
-    private static final float POINT_SIZE_NORMAL = 18f;
-    private static final float POINT_SIZE_FOCUSED = 36f;
+    private static final float POINT_SIZE_NORMAL = 24f;
+    private static final float POINT_SIZE_FOCUSED = 42f;
     private static final float POINT_SIZE_GRADIENT_UNIT = (POINT_SIZE_FOCUSED - POINT_SIZE_NORMAL) / 8;
 
     public static final float DISTANCE = 5;
