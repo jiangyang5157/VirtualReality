@@ -67,6 +67,13 @@ public class Head implements SensorEventListener {
         }
     }
 
+    /**
+     * Move camera to <0,0,0>
+     */
+    public void centerCameraPosition() {
+        camera.move(-camera.getX(), -camera.getY(), -camera.getZ());
+    }
+
     public void update() {
         updateCameraPosition();
     }

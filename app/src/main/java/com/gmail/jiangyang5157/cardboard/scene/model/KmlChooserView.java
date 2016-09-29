@@ -7,7 +7,6 @@ import com.gmail.jiangyang5157.cardboard.vr.AssetUtils;
 import com.gmail.jiangyang5157.tookit.android.base.AppUtils;
 
 import java.io.File;
-import java.io.FilenameFilter;
 
 /**
  * @author Yang
@@ -19,7 +18,7 @@ public class KmlChooserView extends Dialog {
     private Event eventListener;
 
     public interface Event {
-        void onKmlSelected(String fileName);
+        void onKmlSelected(String item);
     }
 
     public KmlChooserView(Context context) {

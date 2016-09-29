@@ -21,7 +21,6 @@ import com.gmail.jiangyang5157.cardboard.scene.model.KmlChooserView;
 import com.gmail.jiangyang5157.cardboard.scene.model.ObjModel;
 import com.gmail.jiangyang5157.cardboard.scene.model.Ray;
 import com.gmail.jiangyang5157.cardboard.scene.model.Earth;
-import com.gmail.jiangyang5157.cardboard.scene.Lighting;
 import com.gmail.jiangyang5157.cardboard.scene.model.GlModel;
 import com.gmail.jiangyang5157.cardboard.scene.model.MarkerDetailView;
 import com.gmail.jiangyang5157.tookit.android.base.AppUtils;
@@ -56,10 +55,11 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
 
     private Ray ray;
     private Earth earth;
-    private MarkerDetailView markerDetailView;
-    private ObjModel objModel;
-    private KmlChooserView kmlChooserView;
+
     private AtomMap atomMap;
+    private ObjModel objModel;
+    private MarkerDetailView markerDetailView;
+    private KmlChooserView kmlChooserView;
 
     private static final long TIME_DELTA_DOUBLE_CLICK = 200;
     private long lastTimeOnCardboardTrigger = 0;
@@ -456,17 +456,17 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
     private KmlChooserView.Event kmlChooserEventListener = new KmlChooserView.Event() {
 
         @Override
-        public void onKmlSelected(String fileName) {
-            Log.d(TAG, "onKmlSelected: " + fileName);
-            if (fileName.equals(AssetUtils.getLastKmlFileName(getApplicationContext()))) {
+        public void onKmlSelected(String item) {
+            Log.d(TAG, "onKmlSelected: " + item);
+            if (item.equals(AssetUtils.getLastKmlFileName(getApplicationContext()))) {
                 destoryKmlChooserView();
                 return;
             }
-            AssetUtils.setLastKmlFileName(getApplicationContext(), fileName);
-            newMap(AssetUtils.getKmlUrl(fileName));
+            AssetUtils.setLastKmlFileName(getApplicationContext(), item);
 
-            // move camera to <0,0,0>
-            head.getCamera().move(-head.getCamera().getX(), -head.getCamera().getY(), -head.getCamera().getZ());
+            newMap(AssetUtils.getKmlUrl(item));
+
+            head.centerCameraPosition();
         }
     };
 
