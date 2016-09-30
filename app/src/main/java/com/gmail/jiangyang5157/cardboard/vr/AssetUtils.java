@@ -32,17 +32,17 @@ public class AssetUtils {
     public static final String PATCH_FILE_NAME = "static.zip";
     public static final String EARTH_TEXTURE_FILE_NAME = "world_map.jpg";
 
-    public static final String KML_CONTAINER_KEY = "KML_CONTAINER_KEY";
-    public static final String KML_CONTAINER_DEFAULT = "example Poles,";
+    public static final String KML_FILE_NAME_KEY = "KML_FILE_NAME_KEY";
+    public static final String KML_FILE_NAME_DEFAULT = "example1.kml";
     public static final String PATCH_LAST_MODIFIED_TIME_KEY = "PATCH_LAST_MODIFIED_KEY";
     public static final long PATCH_LAST_MODIFIED_TIME_DEFAULT = 0;
 
-    public static boolean setLastContainer(Context context, String name) {
-        return PreferenceManager.getDefaultSharedPreferences(context).edit().putString(KML_CONTAINER_KEY, name).commit();
+    public static boolean setLastKmlFileName(Context context, String fileName) {
+        return PreferenceManager.getDefaultSharedPreferences(context).edit().putString(KML_FILE_NAME_KEY, fileName).commit();
     }
 
-    public static String getLastContainer(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context).getString(KML_CONTAINER_KEY, KML_CONTAINER_DEFAULT);
+    public static String getLastKmlFileName(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getString(KML_FILE_NAME_KEY, KML_FILE_NAME_DEFAULT);
     }
 
     public static boolean setLastPatchLastModifiedTime(Context context, long time) {

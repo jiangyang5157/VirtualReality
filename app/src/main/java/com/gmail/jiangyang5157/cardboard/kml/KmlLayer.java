@@ -143,14 +143,4 @@ public class KmlLayer {
     public void setMap(AtomMap map) {
         mRenderer.setMap(map);
     }
-
-    /**
-     * Sets the map that objects are being placed on
-     *
-     * @param map map to place placemark, container, style and ground overlays on
-     * @param container
-     */
-    public void setMap(AtomMap map, String container) {
-        mRenderer.setMap(map, container);
-    }
 }

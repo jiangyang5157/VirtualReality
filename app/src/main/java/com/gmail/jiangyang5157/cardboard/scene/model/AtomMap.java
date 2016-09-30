@@ -5,13 +5,22 @@ import android.opengl.GLES20;
 import android.util.ArrayMap;
 import android.util.Log;
 
+import com.android.volley.VolleyError;
 import com.gmail.jiangyang5157.cardboard.kml.KmlLayer;
+import com.gmail.jiangyang5157.cardboard.net.Downloader;
 import com.gmail.jiangyang5157.cardboard.scene.Creation;
 import com.gmail.jiangyang5157.cardboard.scene.RayIntersection;
 import com.gmail.jiangyang5157.cardboard.scene.Lighting;
+import com.gmail.jiangyang5157.cardboard.vr.AssetUtils;
+import com.gmail.jiangyang5157.tookit.android.base.AppUtils;
 import com.gmail.jiangyang5157.tookit.math.Vector;
 
-import java.util.HashSet;
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * @author Yang
@@ -22,16 +31,19 @@ public class AtomMap extends GlModel implements Creation {
 
     protected int creationState = STATE_BEFORE_PREPARE;
 
-    private String key;
-    private HashSet<KmlLayer> layers;
+    private String urlKml;
 
     private AtomMarkers markers;
 
-    public AtomMap(Context context, String key, HashSet<KmlLayer> layers) {
+    public AtomMap(Context context, String urlKml) {
         super(context);
+        this.urlKml = urlKml;
         markers = new AtomMarkers(context);
-        this.key = key;
-        this.layers = layers;
+    }
+
+    public boolean checkPreparation() {
+        File fileKml = new File(AssetUtils.getAbsolutePath(context, AssetUtils.getPath(urlKml)));
+        return fileKml.exists();
     }
 
     public void prepare(final Ray ray) {
@@ -39,15 +51,57 @@ public class AtomMap extends GlModel implements Creation {
             creationState = STATE_PREPARING;
             ray.addBusy();
 
-            if (layers != null) {
-                for (KmlLayer layer : layers) {
-                    layer.setMap(this, key);
+            if (checkPreparation()) {
+                final File fileKml = new File(AssetUtils.getAbsolutePath(context, AssetUtils.getPath(urlKml)));
+                prepareKml(fileKml);
+                ray.subtractBusy();
+                creationState = STATE_BEFORE_CREATE;
+            } else {
+                final File fileKml = new File(AssetUtils.getAbsolutePath(context, AssetUtils.getPath(urlKml)));
+                if (!fileKml.exists()) {
+                    Log.d(TAG, fileKml.getAbsolutePath() + " not exist.");
+                    new Downloader(urlKml, fileKml, new Downloader.ResponseListener() {
+                        @Override
+                        public boolean onStart(java.util.Map<String, String> headers) {
+                            return true;
+                        }
+
+                        @Override
+                        public void onComplete(java.util.Map<String, String> headers) {
+                            prepareKml(fileKml);
+                            ray.subtractBusy();
+                            creationState = STATE_BEFORE_CREATE;
+                        }
+
+                        @Override
+                        public void onError(String url, VolleyError volleyError) {
+                            AppUtils.buildToast(context, url + " " + volleyError.toString());
+                            ray.subtractBusy();
+                            creationState = STATE_BEFORE_PREPARE;
+                        }
+                    }).start();
                 }
             }
-
-            ray.subtractBusy();
-            creationState = STATE_BEFORE_CREATE;
         });
+    }
+
+    private void prepareKml(File fileKml) {
+        InputStream in = null;
+        try {
+            in = new FileInputStream(fileKml);
+            KmlLayer kmlLayer = new KmlLayer(this, in, context);
+            kmlLayer.addLayerToMap();
+        } catch (XmlPullParserException | IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     public void create() {
