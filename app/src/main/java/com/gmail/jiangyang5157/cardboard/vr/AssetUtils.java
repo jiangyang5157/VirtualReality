@@ -17,7 +17,7 @@ import java.text.SimpleDateFormat;
 public class AssetUtils {
     private static final String TAG = "[AssetUtils]";
 
-    public static final String URL_ = "http://192.168.1.68:8080/assets/";
+    public static final String URL_ = "http://127.0.0.1:8080/assets/";
 
     // profile path:
     // /data/user/0/com.gmail.jiangyang5157.cardboard.vr
