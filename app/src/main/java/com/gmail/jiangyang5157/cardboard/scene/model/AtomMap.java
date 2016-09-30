@@ -31,19 +31,19 @@ public class AtomMap extends GlModel implements Creation {
 
     protected int creationState = STATE_BEFORE_PREPARE;
 
-    private String urlKml;
+    private String urlLayer;
 
     private AtomMarkers markers;
 
-    public AtomMap(Context context, String urlKml) {
+    public AtomMap(Context context, String urlLayer) {
         super(context);
-        this.urlKml = urlKml;
+        this.urlLayer = urlLayer;
         markers = new AtomMarkers(context);
     }
 
     public boolean checkPreparation() {
-        File fileKml = new File(AssetUtils.getAbsolutePath(context, AssetUtils.getPath(urlKml)));
-        return fileKml.exists();
+        File file = new File(AssetUtils.getAbsolutePath(context, AssetUtils.getPath(urlLayer)));
+        return file.exists();
     }
 
     public void prepare(final Ray ray) {
@@ -52,15 +52,15 @@ public class AtomMap extends GlModel implements Creation {
             ray.addBusy();
 
             if (checkPreparation()) {
-                final File fileKml = new File(AssetUtils.getAbsolutePath(context, AssetUtils.getPath(urlKml)));
-                prepareKml(fileKml);
+                final File file = new File(AssetUtils.getAbsolutePath(context, AssetUtils.getPath(urlLayer)));
+                prepareLayer(file);
                 ray.subtractBusy();
                 creationState = STATE_BEFORE_CREATE;
             } else {
-                final File fileKml = new File(AssetUtils.getAbsolutePath(context, AssetUtils.getPath(urlKml)));
-                if (!fileKml.exists()) {
-                    Log.d(TAG, fileKml.getAbsolutePath() + " not exist.");
-                    new Downloader(urlKml, fileKml, new Downloader.ResponseListener() {
+                final File file = new File(AssetUtils.getAbsolutePath(context, AssetUtils.getPath(urlLayer)));
+                if (!file.exists()) {
+                    Log.d(TAG, file.getAbsolutePath() + " not exist.");
+                    new Downloader(urlLayer, file, new Downloader.ResponseListener() {
                         @Override
                         public boolean onStart(java.util.Map<String, String> headers) {
                             return true;
@@ -68,7 +68,7 @@ public class AtomMap extends GlModel implements Creation {
 
                         @Override
                         public void onComplete(java.util.Map<String, String> headers) {
-                            prepareKml(fileKml);
+                            prepareLayer(file);
                             ray.subtractBusy();
                             creationState = STATE_BEFORE_CREATE;
                         }
@@ -85,10 +85,10 @@ public class AtomMap extends GlModel implements Creation {
         });
     }
 
-    private void prepareKml(File fileKml) {
+    private void prepareLayer(File file) {
         InputStream in = null;
         try {
-            in = new FileInputStream(fileKml);
+            in = new FileInputStream(file);
             KmlLayer kmlLayer = new KmlLayer(this, in, context);
             kmlLayer.addLayerToMap();
         } catch (XmlPullParserException | IOException e) {

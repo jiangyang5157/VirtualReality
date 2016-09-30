@@ -25,6 +25,7 @@ public class AssetUtils {
     public static final String KML_FILE_ENDS = ".kml";
 
     public static final String DIRECTORY_STATIC = "static";
+    public static final String DIRECTORY_LAYER = DIRECTORY_STATIC + File.separator + "layer";
     public static final String DIRECTORY_KML = DIRECTORY_STATIC + File.separator + "kml";
     public static final String DIRECTORY_MODEL = DIRECTORY_STATIC + File.separator + "model";
     public static final String DIRECTORY_RESOURCE = DIRECTORY_STATIC + File.separator + "resource";
@@ -32,17 +33,17 @@ public class AssetUtils {
     public static final String PATCH_FILE_NAME = "static.zip";
     public static final String EARTH_TEXTURE_FILE_NAME = "world_map.jpg";
 
-    public static final String KML_FILE_NAME_KEY = "KML_FILE_NAME_KEY";
-    public static final String KML_FILE_NAME_DEFAULT = "example1.kml";
+    public static final String LAYER_FILE_NAME_KEY = "LAYER_FILE_NAME_KEY";
+    public static final String LAYER_FILE_NAME_DEFAULT = "example1.kml";
     public static final String PATCH_LAST_MODIFIED_TIME_KEY = "PATCH_LAST_MODIFIED_KEY";
     public static final long PATCH_LAST_MODIFIED_TIME_DEFAULT = 0;
 
-    public static boolean setLastKmlFileName(Context context, String fileName) {
-        return PreferenceManager.getDefaultSharedPreferences(context).edit().putString(KML_FILE_NAME_KEY, fileName).commit();
+    public static boolean setLastLayerFileName(Context context, String fileName) {
+        return PreferenceManager.getDefaultSharedPreferences(context).edit().putString(LAYER_FILE_NAME_KEY, fileName).commit();
     }
 
-    public static String getLastKmlFileName(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context).getString(KML_FILE_NAME_KEY, KML_FILE_NAME_DEFAULT);
+    public static String getLastLayerFileName(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getString(LAYER_FILE_NAME_KEY, LAYER_FILE_NAME_DEFAULT);
     }
 
     public static boolean setLastPatchLastModifiedTime(Context context, long time) {
@@ -81,14 +82,12 @@ public class AssetUtils {
         return getUrl(getModelPath(fileName));
     }
 
-    public static String getSimpleKmlFileName(File file) {
-        String fileName = file.getName();
+    public static String getLayerPath(String fileName) {
+        return DIRECTORY_LAYER + File.separator + fileName;
+    }
 
-        if (fileName.endsWith(KML_FILE_ENDS)) {
-            return fileName.substring(0, fileName.length() - KML_FILE_ENDS.length());
-        } else {
-            return fileName;
-        }
+    public static String getLayerUrl(String fileName) {
+        return getUrl(getLayerPath(fileName));
     }
 
     public static String getKmlPath(String fileName) {
@@ -110,5 +109,14 @@ public class AssetUtils {
     public static long getHttpDateTime(String httpDate) throws ParseException {
         SimpleDateFormat format = new SimpleDateFormat(RegularExpressionUtils.DATE_TEMPLATE_HTTP_DATE);
         return format.parse(httpDate).getTime();
+    }
+
+    public static String getKmlSimpleFileName(File file) {
+        String fileName = file.getName();
+        if (fileName.endsWith(KML_FILE_ENDS)) {
+            return fileName.substring(0, fileName.length() - KML_FILE_ENDS.length());
+        } else {
+            return fileName;
+        }
     }
 }

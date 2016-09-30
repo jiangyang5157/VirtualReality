@@ -16,7 +16,7 @@ import com.gmail.jiangyang5157.cardboard.scene.RayIntersection;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
 import com.gmail.jiangyang5157.cardboard.scene.model.AtomMap;
 import com.gmail.jiangyang5157.cardboard.scene.model.AtomMarker;
-import com.gmail.jiangyang5157.cardboard.scene.model.KmlChooserView;
+import com.gmail.jiangyang5157.cardboard.scene.model.LayerChooserView;
 import com.gmail.jiangyang5157.cardboard.scene.model.Dialog;
 import com.gmail.jiangyang5157.cardboard.scene.model.ObjModel;
 import com.gmail.jiangyang5157.cardboard.scene.model.Ray;
@@ -57,7 +57,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
     private Earth earth;
     private MarkerDetailView markerDetailView;
     private ObjModel objModel;
-    private KmlChooserView kmlChooserView;
+    private LayerChooserView layerChooserView;
     private AtomMap atomMap;
 
     private static final long TIME_DELTA_DOUBLE_CLICK = 200;
@@ -250,16 +250,16 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
             }
         }
 
-        if (kmlChooserView != null) {
-            if (!kmlChooserView.isCreated()) {
-                if (kmlChooserView.getCreationState() == Creation.STATE_BEFORE_PREPARE) {
-                    kmlChooserView.prepare(ray);
-                } else if (kmlChooserView.getCreationState() == Creation.STATE_BEFORE_CREATE) {
+        if (layerChooserView != null) {
+            if (!layerChooserView.isCreated()) {
+                if (layerChooserView.getCreationState() == Creation.STATE_BEFORE_PREPARE) {
+                    layerChooserView.prepare(ray);
+                } else if (layerChooserView.getCreationState() == Creation.STATE_BEFORE_CREATE) {
                     ArrayMap<Integer, Integer> shaders = new ArrayMap<>();
                     shaders.put(GLES20.GL_VERTEX_SHADER, R.raw.panel_vertex_shader);
                     shaders.put(GLES20.GL_FRAGMENT_SHADER, R.raw.panel_fragment_shader);
-                    kmlChooserView.create(shaders);
-                    kmlChooserView.setPosition(head.getCamera().getPosition(), head.getForward(), Dialog.DISTANCE, head.getQuaternion(), head.getUp(), head.getRight());
+                    layerChooserView.create(shaders);
+                    layerChooserView.setPosition(head.getCamera().getPosition(), head.getForward(), Dialog.DISTANCE, head.getQuaternion(), head.getUp(), head.getRight());
                 }
             }
         }
@@ -281,8 +281,8 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         if (objModel != null) {
             objModel.update(view, perspective);
         }
-        if (kmlChooserView != null) {
-            kmlChooserView.update(view, perspective);
+        if (layerChooserView != null) {
+            layerChooserView.update(view, perspective);
         }
     }
 
@@ -320,12 +320,12 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
             objModel.draw();
         }
 
-        if (kmlChooserView != null) {
+        if (layerChooserView != null) {
             GLES20.glDisable(GLES20.GL_CULL_FACE);
 
             GLES20.glEnable(GLES20.GL_BLEND);
             GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
-            kmlChooserView.draw();
+            layerChooserView.draw();
             GLES20.glDisable(GLES20.GL_BLEND);
 
             GLES20.glEnable(GLES20.GL_CULL_FACE);
@@ -342,12 +342,12 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         Vector headForwardFrac_vec = new Vector3d(1.0 / headForward[0], 1.0 / headForward[1], 1.0 / headForward[2]);
 
         RayIntersection rayIntersection = null;
-        if (kmlChooserView != null) {
-            rayIntersection = kmlChooserView.getIntersection(cameraPos_vec, headForward_vec);
+        if (layerChooserView != null) {
+            rayIntersection = layerChooserView.getIntersection(cameraPos_vec, headForward_vec);
             if (rayIntersection == null) {
-                if (kmlChooserView.isCreated()) {
-                    kmlChooserView.destroy();
-                    kmlChooserView = null;
+                if (layerChooserView.isCreated()) {
+                    layerChooserView.destroy();
+                    layerChooserView = null;
                 }
             }
         }
@@ -404,11 +404,11 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
             destoryMarkerDetailView();
         }
 
-        if (kmlChooserView == null) {
-            kmlChooserView = new KmlChooserView(getApplicationContext());
-            kmlChooserView.setEventListener(kmlChooserEventListener);
-        } else if (kmlChooserView.isCreated()) {
-            destoryKmlChooserView();
+        if (layerChooserView == null) {
+            layerChooserView = new LayerChooserView(getApplicationContext());
+            layerChooserView.setEventListener(layerChooserEventListener);
+        } else if (layerChooserView.isCreated()) {
+            destoryLayerChooserView();
         }
     }
 
@@ -424,13 +424,13 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         }
     }
 
-    private boolean newLayer(String urlKml) {
+    private boolean newLayer(String urlLayer) {
         destoryMap();
-        destoryKmlChooserView();
+        destoryLayerChooserView();
         destoryObjModel();
         destoryMarkerDetailView();
 
-        atomMap = new AtomMap(getApplicationContext(), urlKml);
+        atomMap = new AtomMap(getApplicationContext(), urlLayer);
         atomMap.setOnMarkerClickListener(onMarkerClickListener);
         atomMap.setMarkerLighting(() -> lightPosInCameraSpace);
         return true;
@@ -452,19 +452,19 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         }
     };
 
-    private KmlChooserView.Event kmlChooserEventListener = new KmlChooserView.Event() {
+    private LayerChooserView.Event layerChooserEventListener = new LayerChooserView.Event() {
 
         @Override
         public void onSelected(File file) {
             String fileName = file.getName();
             Log.d(TAG, "onSelected: " + fileName);
-            if (fileName.equals(AssetUtils.getLastKmlFileName(getApplicationContext()))) {
-                destoryKmlChooserView();
+            if (fileName.equals(AssetUtils.getLastLayerFileName(getApplicationContext()))) {
+                destoryLayerChooserView();
                 return;
             }
-            AssetUtils.setLastKmlFileName(getApplicationContext(), fileName);
+            AssetUtils.setLastLayerFileName(getApplicationContext(), fileName);
 
-            newLayer(AssetUtils.getKmlUrl(fileName));
+            newLayer(AssetUtils.getLayerUrl(fileName));
 
             head.centerCameraPosition();
         }
@@ -483,7 +483,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
 
         earth = new Earth(getApplicationContext(), AssetUtils.getResourceUrl(AssetUtils.EARTH_TEXTURE_FILE_NAME));
 
-        newLayer(AssetUtils.getKmlUrl(AssetUtils.getLastKmlFileName(getApplicationContext())));
+        newLayer(AssetUtils.getLayerUrl(AssetUtils.getLastLayerFileName(getApplicationContext())));
     }
 
     @Override
@@ -532,10 +532,10 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         }
     }
 
-    private void destoryKmlChooserView() {
-        if (kmlChooserView != null) {
-            kmlChooserView.destroy();
-            kmlChooserView = null;
+    private void destoryLayerChooserView() {
+        if (layerChooserView != null) {
+            layerChooserView.destroy();
+            layerChooserView = null;
         }
     }
 
@@ -577,7 +577,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         }
 
         destoryMap();
-        destoryKmlChooserView();
+        destoryLayerChooserView();
         destoryObjModel();
         destoryMarkerDetailView();
         destoryEarth();

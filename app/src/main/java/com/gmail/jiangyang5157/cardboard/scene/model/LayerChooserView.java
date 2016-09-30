@@ -12,8 +12,8 @@ import java.io.File;
  * @author Yang
  * @since 6/24/2016
  */
-public class KmlChooserView extends Dialog {
-    private static final String TAG = "[KmlChooserView]";
+public class LayerChooserView extends Dialog {
+    private static final String TAG = "[LayerChooserView]";
 
     private Event eventListener;
 
@@ -21,7 +21,7 @@ public class KmlChooserView extends Dialog {
         void onSelected(File kml);
     }
 
-    public KmlChooserView(Context context) {
+    public LayerChooserView(Context context) {
         super(context);
         setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.android.base.R.color.Red, null));
     }
@@ -31,11 +31,11 @@ public class KmlChooserView extends Dialog {
             creationState = STATE_PREPARING;
             ray.addBusy();
 
-            File[] files = getKmlFiles(context);
+            File[] files = getKmlLayerFiles(context);
             for (final File file : files) {
                 TextField p = new TextField(context);
                 float textSize = TextField.TEXT_SIZE_TINY;
-                p.setCcntent(AssetUtils.getSimpleKmlFileName(file));
+                p.setCcntent(AssetUtils.getKmlSimpleFileName(file));
                 p.width = WIDTH;
                 p.setScale(SCALE);
                 p.modelRequireUpdate = true;
@@ -79,12 +79,12 @@ public class KmlChooserView extends Dialog {
         creationState = STATE_BEFORE_CREATE;
     }
 
-    private File[] getKmlFiles(Context context) {
+    private File[] getKmlLayerFiles(Context context) {
         File[] ret = null;
 
-        File directory = new File(AssetUtils.getAbsolutePath(context, AssetUtils.getKmlPath("")));
+        File directory = new File(AssetUtils.getAbsolutePath(context, AssetUtils.getLayerPath("")));
         if (!directory.exists() || !directory.isDirectory()) {
-            directory.mkdirs();
+            final boolean mkdirs = directory.mkdirs();
         } else {
             ret = directory.listFiles((dir, fileName) -> fileName.endsWith(AssetUtils.KML_FILE_ENDS));
         }

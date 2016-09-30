@@ -9,8 +9,6 @@ public class Settings {
     // Match with android:glEsVersion in AndroidManifest.xml
     public static final int GL_ES_VERSION = 0x00030000;
 
-    public static final int DEBUG = 0;
-
-
+    public static final int DEBUG = 1;
 
 }
