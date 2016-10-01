@@ -11,6 +11,10 @@ import org.xmlpull.v1.XmlPullParserFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 
 /**
  * Document class allows for users to input their KML data and output it onto the map
@@ -57,7 +61,7 @@ public class KmlLayer {
         KmlParser parser = new KmlParser(xmlPullParser);
         parser.parseKml();
         stream.close();
-        mRenderer.storeKmlData(parser.getStyles(), parser.getStyleMaps(), parser.getPlacemarks(), parser.getContainers());
+        mRenderer.storeKmlData(parser.getStyles(), parser.getStyleMaps(), parser.getPlacemarks(), parser.getNetworkLinks(), parser.getContainers());
     }
 
     /**
@@ -107,6 +111,41 @@ public class KmlLayer {
     public Iterable<KmlPlacemark> getPlacemarks() {
         return mRenderer.getKmlPlacemarks();
     }
+
+    public boolean hasNetworkLinks() {
+        return mRenderer.hasKmlNetworkLinks();
+    }
+
+    public Iterable<KmlNetworkLink> getNetworkLinks() {
+        return mRenderer.getKmlNetworkLinks();
+    }
+
+    public HashSet<KmlNetworkLink> getNetworkLinksCollection() {
+        HashSet<KmlNetworkLink> ret = new HashSet<>();
+
+        Iterator<KmlNetworkLink> networkLinks =  getNetworkLinks().iterator();
+        while (networkLinks.hasNext()){
+            ret.add(networkLinks.next());
+        }
+
+        if (hasContainers()) {
+            collectNetworkLinks(ret, getContainers());
+        }
+        return ret;
+    }
+
+    public void collectNetworkLinks(HashSet<KmlNetworkLink> collection, Iterable<KmlContainer> containers) {
+        for (KmlContainer container : containers) {
+            Iterator<KmlNetworkLink> networkLinks =  container.getNetworkLinks().iterator();
+            while (networkLinks.hasNext()){
+                collection.add(networkLinks.next());
+            }
+            if (container.hasContainers()) {
+                collectNetworkLinks(collection, container.getContainers());
+            }
+        }
+    }
+
 
     /**
      * Checks if the layer contains any KmlContainers

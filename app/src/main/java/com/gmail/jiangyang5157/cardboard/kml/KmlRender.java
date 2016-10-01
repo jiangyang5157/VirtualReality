@@ -21,6 +21,8 @@ import java.util.HashMap;
     private AtomMap mMap;
 
     private HashMap<KmlPlacemark, Object> mPlacemarks;
+    ;
+    private HashMap<KmlNetworkLink, Object> mNetworkLinks;
 
     private HashMap<String, String> mStyleMaps;
 
@@ -68,9 +70,14 @@ import java.util.HashMap;
     private void removePlacemarks(HashMap<KmlPlacemark, Object> placemarks) {
         // Remove map object from the map
         for (Object mapObject : placemarks.values()) {
-            if (mapObject instanceof AtomMarker) {
-                // TODO: 7/10/2016 [IMPLEMENTATION]
-            }
+            // TODO: 7/10/2016 [IMPLEMENTATION]
+        }
+    }
+
+    private void removeNetworkLinks(HashMap<KmlNetworkLink, Object> networkLinks) {
+        // Remove map object from the map
+        for (Object mapObject : networkLinks.values()) {
+            // TODO: 10/1/2016 [IMPLEMENTATION]
         }
     }
 
@@ -101,6 +108,7 @@ import java.util.HashMap;
     private void removeContainers(Iterable<KmlContainer> containers) {
         for (KmlContainer container : containers) {
             removePlacemarks(container.getPlacemarksHashMap());
+            removeNetworkLinks(container.getNetworkLinksHashMap());
             removeContainers(container.getContainers());
         }
     }
@@ -128,10 +136,13 @@ import java.util.HashMap;
      */
     /* package */ void storeKmlData(HashMap<String, KmlStyle> styles,
                                     HashMap<String, String> styleMaps,
-                                    HashMap<KmlPlacemark, Object> placemarks, ArrayList<KmlContainer> folders) {
+                                    HashMap<KmlPlacemark, Object> placemarks,
+                                    HashMap<KmlNetworkLink, Object> networkLinks,
+                                    ArrayList<KmlContainer> folders) {
         mStyles = styles;
         mStyleMaps = styleMaps;
         mPlacemarks = placemarks;
+        mNetworkLinks = networkLinks;
         mContainers = folders;
     }
 
@@ -140,6 +151,7 @@ import java.util.HashMap;
         assignStyleMap(mStyleMaps, mStylesRenderer);
         addContainerGroupToMap(mContainers, true);
         addPlacemarksToMap(mPlacemarks);
+        addNetworkLinksToMap(mNetworkLinks);
         mLayerVisible = true;
     }
 
@@ -181,6 +193,14 @@ import java.util.HashMap;
         return mPlacemarks.keySet();
     }
 
+    boolean hasKmlNetworkLinks() {
+        return mNetworkLinks.size() > 0;
+    }
+
+    Iterable<KmlNetworkLink> getKmlNetworkLinks() {
+        return mNetworkLinks.keySet();
+    }
+
     /**
      * Checks if the layer contains any KmlContainers
      *
@@ -204,6 +224,7 @@ import java.util.HashMap;
      */
     /* package */ void removeLayerFromMap() {
         removePlacemarks(mPlacemarks);
+        removeNetworkLinks(mNetworkLinks);
         if (hasNestedContainers()) {
             removeContainers(getNestedContainers());
         }
@@ -220,6 +241,12 @@ import java.util.HashMap;
             Object mapObject = addPlacemarkToMap(kmlPlacemark, isPlacemarkVisible);
             // Placemark stores a KmlPlacemark as a key, and Object as its value
             placemarks.put(kmlPlacemark, mapObject);
+        }
+    }
+
+    private void addNetworkLinksToMap(HashMap<KmlNetworkLink, Object> networkLinks) {
+        for (KmlNetworkLink kmlNetworkLink : networkLinks.keySet()) {
+            // TODO: 10/1/2016  
         }
     }
 
@@ -280,6 +307,7 @@ import java.util.HashMap;
             Object mapObject = addPlacemarkToMap(placemark, isObjectVisible);
             kmlContainer.setPlacemark(placemark, mapObject);
         }
+        // TODO: 10/1/2016 [MORE ?]
     }
 
     /**

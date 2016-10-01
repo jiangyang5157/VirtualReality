@@ -25,6 +25,8 @@ import static org.xmlpull.v1.XmlPullParser.START_TAG;
 
     private final static String PLACEMARK = "Placemark";
 
+    private final static String NETWORK_LINK_REGEX = "NetworkLink";
+
     private final static String STYLE = "Style";
 
     private final static String STYLE_MAP = "StyleMap";
@@ -67,6 +69,7 @@ import static org.xmlpull.v1.XmlPullParser.START_TAG;
         HashMap<String, String> containerProperties = new HashMap<String, String>();
         HashMap<String, KmlStyle> containerStyles = new HashMap<String, KmlStyle>();
         HashMap<KmlPlacemark, Object> containerPlacemarks = new HashMap<KmlPlacemark, Object>();
+        HashMap<KmlNetworkLink, Object> containerNetworkLinks = new HashMap<KmlNetworkLink, Object>();
         ArrayList<KmlContainer> nestedContainers = new ArrayList<KmlContainer>();
         HashMap<String, String> containerStyleMaps = new HashMap<String, String>();
         HashMap<KmlGroundOverlay, GroundOverlay> containerGroundOverlays
@@ -92,6 +95,8 @@ import static org.xmlpull.v1.XmlPullParser.START_TAG;
                     setContainerStyle(parser, containerStyles);
                 } else if (parser.getName().equals(PLACEMARK)) {
                     setContainerPlacemark(parser, containerPlacemarks);
+                } else if (parser.getName().equals(NETWORK_LINK_REGEX)) {
+                    setContainerNetworkLink(parser, containerNetworkLinks);
                 } else if (parser.getName().equals(EXTENDED_DATA)) {
                     setExtendedDataProperties(parser, containerProperties);
                 } else if (parser.getName().equals(GROUND_OVERLAY)) {
@@ -102,7 +107,7 @@ import static org.xmlpull.v1.XmlPullParser.START_TAG;
             eventType = parser.next();
         }
 
-        return new KmlContainer(containerProperties, containerStyles, containerPlacemarks,
+        return new KmlContainer(containerProperties, containerStyles, containerPlacemarks, containerNetworkLinks,
                 containerStyleMaps, nestedContainers, containerGroundOverlays, containerId);
     }
 
@@ -162,4 +167,9 @@ import static org.xmlpull.v1.XmlPullParser.START_TAG;
         containerPlacemarks.put(KmlFeatureParser.createPlacemark(parser), null);
     }
 
+    private static void setContainerNetworkLink(XmlPullParser parser,
+                                              HashMap<KmlNetworkLink, Object> containerNetworkLinks)
+            throws XmlPullParserException, IOException {
+        containerNetworkLinks.put(KmlFeatureParser.createNetworkLink(parser), null);
+    }
 }

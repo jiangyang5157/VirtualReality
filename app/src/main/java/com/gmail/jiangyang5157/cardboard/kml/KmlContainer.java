@@ -16,6 +16,8 @@ public class KmlContainer {
 
     private final HashMap<KmlPlacemark, Object> mPlacemarks;
 
+    private final HashMap<KmlNetworkLink, Object> mNetworkLinks;
+
     private final ArrayList<KmlContainer> mContainers;
 
     private final HashMap<KmlGroundOverlay, GroundOverlay> mGroundOverlays;
@@ -27,11 +29,12 @@ public class KmlContainer {
     private String mContainerId;
 
     /*package*/ KmlContainer(HashMap<String, String> properties, HashMap<String, KmlStyle> styles,
-            HashMap<KmlPlacemark, Object> placemarks, HashMap<String, String> styleMaps,
+            HashMap<KmlPlacemark, Object> placemarks, HashMap<KmlNetworkLink, Object> networkLinks, HashMap<String, String> styleMaps,
             ArrayList<KmlContainer> containers, HashMap<KmlGroundOverlay, GroundOverlay>
             groundOverlay, String Id) {
         mProperties = properties;
         mPlacemarks = placemarks;
+        mNetworkLinks = networkLinks;
         mStyles = styles;
         mStyleMap = styleMaps;
         mContainers = containers;
@@ -48,13 +51,17 @@ public class KmlContainer {
     }
 
     /**
-     * @param placemarks Placemark for the container to contain
+     * @param placemark Placemark for the container to contain
      * @param object     Corresponding GoogleMap map object of the basic_placemark (if it has been
      *                   added
      *                   to the map)
      */
-    /* package */ void setPlacemark(KmlPlacemark placemarks, Object object) {
-        mPlacemarks.put(placemarks, object);
+    /* package */ void setPlacemark(KmlPlacemark placemark, Object object) {
+        mPlacemarks.put(placemark, object);
+    }
+
+    /* package */ void setNetworkLink(KmlNetworkLink networkLink, Object object) {
+        mNetworkLinks.put(networkLink, object);
     }
 
     /**
@@ -94,6 +101,10 @@ public class KmlContainer {
      */
     /*package*/ HashMap<KmlPlacemark, Object> getPlacemarksHashMap() {
         return mPlacemarks;
+    }
+
+    /*package*/ HashMap<KmlNetworkLink, Object> getNetworkLinksHashMap() {
+        return mNetworkLinks;
     }
 
     /**
@@ -161,6 +172,10 @@ public class KmlContainer {
         return mPlacemarks.keySet();
     }
 
+    public Iterable<KmlNetworkLink> getNetworkLinks() {
+        return mNetworkLinks.keySet();
+    }
+
     /**
      * Gets whether the container has any placemarks
      *
@@ -168,6 +183,10 @@ public class KmlContainer {
      */
     public boolean hasPlacemarks() {
         return mPlacemarks.size() > 0;
+    }
+
+    public boolean hasNetworkLinks() {
+        return mNetworkLinks.size() > 0;
     }
 
     /**
@@ -184,6 +203,7 @@ public class KmlContainer {
         StringBuilder sb = new StringBuilder("Container").append("{");
         sb.append("\n properties=").append(mProperties);
         sb.append(",\n placemarks=").append(mPlacemarks);
+        sb.append(",\n networkLinks=").append(mNetworkLinks);
         sb.append(",\n containers=").append(mContainers);
         sb.append(",\n ground overlays=").append(mGroundOverlays);
         sb.append(",\n style maps=").append(mStyleMap);

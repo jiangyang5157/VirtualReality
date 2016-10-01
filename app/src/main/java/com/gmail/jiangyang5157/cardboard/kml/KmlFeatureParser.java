@@ -15,7 +15,7 @@ import static org.xmlpull.v1.XmlPullParser.START_TAG;
 
 /**
  * Parses the feature of a given KML file into a KmlPlacemark or KmlGroundOverlay object
- *
+ * <p>
  * Reference https://github.com/googlemaps/android-maps-utils/tree/master/library/src/com/google/maps/android/kml
  */
 /* package */ class KmlFeatureParser {
@@ -35,6 +35,8 @@ import static org.xmlpull.v1.XmlPullParser.START_TAG;
     private final static String STYLE_URL_TAG = "styleUrl";
 
     private final static String STYLE_TAG = "Style";
+
+    private final static String LINK_TAG = "Link";
 
     private final static String COMPASS_REGEX = "north|south|east|west";
 
@@ -68,6 +70,25 @@ import static org.xmlpull.v1.XmlPullParser.START_TAG;
             eventType = parser.next();
         }
         return new KmlPlacemark(geometry, styleId, inlineStyle, properties);
+    }
+
+    /* package */
+    static KmlNetworkLink createNetworkLink(XmlPullParser parser)
+            throws IOException, XmlPullParserException {
+        HashMap<String, String> properties = new HashMap<String, String>();
+        KmlLink link = null;
+        int eventType = parser.getEventType();
+        while (!(eventType == END_TAG && parser.getName().equals("NetworkLink"))) {
+            if (eventType == START_TAG) {
+                if (parser.getName().matches(PROPERTY_REGEX)) {
+                    properties.put(parser.getName(), parser.nextText());
+                } else if (parser.getName().equals(LINK_TAG)) {
+                    link = KmlLinkParser.createLink(parser);
+                }
+            }
+            eventType = parser.next();
+        }
+        return new KmlNetworkLink(link, properties);
     }
 
     /**

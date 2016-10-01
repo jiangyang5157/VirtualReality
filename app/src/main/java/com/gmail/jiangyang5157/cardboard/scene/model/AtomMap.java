@@ -91,6 +91,7 @@ public class AtomMap extends GlModel implements Creation {
             in = new FileInputStream(file);
             KmlLayer kmlLayer = new KmlLayer(this, in, context);
             kmlLayer.addLayerToMap();
+            Log.d("####", kmlLayer.getNetworkLinksCollection().toString());
         } catch (XmlPullParserException | IOException e) {
             e.printStackTrace();
         } finally {
