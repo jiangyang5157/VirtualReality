@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.android.volley.VolleyError;
 import com.gmail.jiangyang5157.cardboard.net.Downloader;
+import com.gmail.jiangyang5157.cardboard.net.FilePrepare;
 import com.gmail.jiangyang5157.cardboard.scene.Creation;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
 import com.gmail.jiangyang5157.cardboard.vr.AssetUtils;
@@ -57,48 +58,29 @@ public class ObjModel extends GlModel implements GlModel.BindableBuffer, Creatio
         setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.android.base.R.color.DeepOrange, null));
     }
 
-    public boolean checkPreparation() {
-        File file = new File(AssetUtils.getAbsolutePath(context, AssetUtils.getPath(url)));
-        return file.exists();
-    }
-
     public void prepare(final Ray ray) {
         getHandler().post(() -> {
-            creationState = STATE_PREPARING;
-            ray.addBusy();
-
-            if (checkPreparation()) {
-                buildData();
-                ray.subtractBusy();
-                creationState = STATE_BEFORE_CREATE;
-            } else {
-                File file = new File(AssetUtils.getAbsolutePath(context, AssetUtils.getPath(url)));
-                if (!file.exists()) {
-                    Log.d(TAG, file.getAbsolutePath() + " not exist.");
-                    new Downloader(url, file, new Downloader.ResponseListener() {
-                        @Override
-                        public boolean onStart(Map<String, String> headers) {
-                            return true;
-                        }
-
-                        @Override
-                        public void onComplete(Map<String, String> headers) {
-                            if (checkPreparation()) {
-                                buildData();
-                                ray.subtractBusy();
-                                creationState = STATE_BEFORE_CREATE;
-                            }
-                        }
-
-                        @Override
-                        public void onError(String url1, VolleyError volleyError) {
-                            AppUtils.buildToast(context, url1 + " " + volleyError.toString());
-                            ray.subtractBusy();
-                            creationState = STATE_BEFORE_PREPARE;
-                        }
-                    }).start();
+            File file = new File(AssetUtils.getAbsolutePath(context, AssetUtils.getPath(url)));
+            new FilePrepare(file, new FilePrepare.PrepareListener() {
+                @Override
+                public void onStart() {
+                    creationState = STATE_PREPARING;
+                    ray.addBusy();
                 }
-            }
+
+                @Override
+                public void onComplete(File file) {
+                    if (file != null){
+                        buildData();
+                        ray.subtractBusy();
+                        creationState = STATE_BEFORE_CREATE;
+                    } else {
+                        AppUtils.buildToast(context,  "Not able to access: " + file.getAbsolutePath());
+                        ray.subtractBusy();
+                        creationState = STATE_BEFORE_PREPARE;
+                    }
+                }
+            }).start();
         });
     }
 

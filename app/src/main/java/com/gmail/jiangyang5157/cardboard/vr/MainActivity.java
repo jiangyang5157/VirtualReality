@@ -88,7 +88,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
      * To check if there is a new patch in the server, download if yes.
      */
     private void checkPatch() {
-        final File patchFile = new File(AssetUtils.getAbsolutePath(getApplicationContext(), AssetUtils.getPatchPath()));
+        File patchFile = new File(AssetUtils.getAbsolutePath(getApplicationContext(), AssetUtils.getPatchPath()));
         new Downloader(AssetUtils.getPatchUrl(), patchFile, new Downloader.ResponseListener() {
             @Override
             public boolean onStart(java.util.Map<String, String> headers) {
@@ -97,12 +97,14 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
                     long httpDateTime = AssetUtils.getHttpDateTime(headers.get("Last-Modified"));
                     Log.d(TAG, "lastModifiedTime/httpDateTime: " + lastModifiedTime + "," + httpDateTime);
                     if (lastModifiedTime < httpDateTime) {
-                        return true;
+                        return true; // continue to download patch
+                    } else {
+                        return false; // no need to upgrade patch
                     }
                 } catch (ParseException e) {
-                    e.printStackTrace();
+                    Log.e(TAG, e.toString());
+                    return false;
                 }
-                return false;
             }
 
             @Override

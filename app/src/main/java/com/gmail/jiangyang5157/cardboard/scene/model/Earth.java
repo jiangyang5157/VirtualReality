@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.android.volley.VolleyError;
 import com.gmail.jiangyang5157.cardboard.net.Downloader;
+import com.gmail.jiangyang5157.cardboard.net.FilePrepare;
 import com.gmail.jiangyang5157.cardboard.scene.Creation;
 import com.gmail.jiangyang5157.cardboard.vr.AssetUtils;
 import com.gmail.jiangyang5157.tookit.android.base.AppUtils;
@@ -49,48 +50,30 @@ public class Earth extends UvSphere implements Creation {
         modelRequireUpdate = true;
     }
 
-    public boolean checkPreparation() {
-        File fileTexture = new File(AssetUtils.getAbsolutePath(context, AssetUtils.getPath(urlTexture)));
-        return fileTexture.exists();
-    }
-
     public void prepare(final Ray ray) {
         getHandler().post(() -> {
-            creationState = STATE_PREPARING;
-            ray.addBusy();
-
-            if (checkPreparation()) {
-                buildTextureBuffers();
-                buildData();
-                ray.subtractBusy();
-                creationState = STATE_BEFORE_CREATE;
-            } else {
-                File fileTexture = new File(AssetUtils.getAbsolutePath(context, AssetUtils.getPath(urlTexture)));
-                if (!fileTexture.exists()) {
-                    Log.d(TAG, fileTexture.getAbsolutePath() + " not exist.");
-                    new Downloader(urlTexture, fileTexture, new Downloader.ResponseListener() {
-                        @Override
-                        public boolean onStart(Map<String, String> headers) {
-                            return true;
-                        }
-
-                        @Override
-                        public void onComplete(Map<String, String> headers) {
-                            buildTextureBuffers();
-                            buildData();
-                            ray.subtractBusy();
-                            creationState = STATE_BEFORE_CREATE;
-                        }
-
-                        @Override
-                        public void onError(String url, VolleyError volleyError) {
-                            AppUtils.buildToast(context, url + " " + volleyError.toString());
-                            ray.subtractBusy();
-                            creationState = STATE_BEFORE_PREPARE;
-                        }
-                    }).start();
+            File file = new File(AssetUtils.getAbsolutePath(context, AssetUtils.getPath(urlTexture)));
+            new FilePrepare(file, new FilePrepare.PrepareListener() {
+                @Override
+                public void onStart() {
+                    creationState = STATE_PREPARING;
+                    ray.addBusy();
                 }
-            }
+
+                @Override
+                public void onComplete(File file) {
+                    if (file != null){
+                        buildTextureBuffers();
+                        buildData();
+                        ray.subtractBusy();
+                        creationState = STATE_BEFORE_CREATE;
+                    } else {
+                        AppUtils.buildToast(context,  "Not able to access: " + file.getAbsolutePath());
+                        ray.subtractBusy();
+                        creationState = STATE_BEFORE_PREPARE;
+                    }
+                }
+            }).start();
         });
     }
 

@@ -1,5 +1,6 @@
 package com.gmail.jiangyang5157.cardboard.net;
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -32,7 +33,7 @@ public class Downloader extends NetRequest {
 
     private final InputStreamRequest request;
 
-    public Downloader(final String url, final File file, final ResponseListener listener) {
+    public Downloader(String url, File file, @NonNull ResponseListener listener) {
         request = new InputStreamRequest(
                 Request.Method.GET,
                 url,
@@ -62,12 +63,7 @@ public class Downloader extends NetRequest {
                         }
                         listener.onComplete(request.getResponseHeaders());
                     }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                listener.onError(url, volleyError);
-            }
-        });
+                }, volleyError -> listener.onError(url, volleyError));
     }
 
     @Override

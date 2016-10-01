@@ -8,6 +8,7 @@ import android.util.Log;
 import com.android.volley.VolleyError;
 import com.gmail.jiangyang5157.cardboard.kml.KmlLayer;
 import com.gmail.jiangyang5157.cardboard.net.Downloader;
+import com.gmail.jiangyang5157.cardboard.net.FilePrepare;
 import com.gmail.jiangyang5157.cardboard.scene.Creation;
 import com.gmail.jiangyang5157.cardboard.scene.RayIntersection;
 import com.gmail.jiangyang5157.cardboard.scene.Lighting;
@@ -41,47 +42,29 @@ public class AtomMap extends GlModel implements Creation {
         markers = new AtomMarkers(context);
     }
 
-    public boolean checkPreparation() {
-        File file = new File(AssetUtils.getAbsolutePath(context, AssetUtils.getPath(urlLayer)));
-        return file.exists();
-    }
-
     public void prepare(final Ray ray) {
         getHandler().post(() -> {
-            creationState = STATE_PREPARING;
-            ray.addBusy();
-
-            if (checkPreparation()) {
-                final File file = new File(AssetUtils.getAbsolutePath(context, AssetUtils.getPath(urlLayer)));
-                prepareLayer(file);
-                ray.subtractBusy();
-                creationState = STATE_BEFORE_CREATE;
-            } else {
-                final File file = new File(AssetUtils.getAbsolutePath(context, AssetUtils.getPath(urlLayer)));
-                if (!file.exists()) {
-                    Log.d(TAG, file.getAbsolutePath() + " not exist.");
-                    new Downloader(urlLayer, file, new Downloader.ResponseListener() {
-                        @Override
-                        public boolean onStart(java.util.Map<String, String> headers) {
-                            return true;
-                        }
-
-                        @Override
-                        public void onComplete(java.util.Map<String, String> headers) {
-                            prepareLayer(file);
-                            ray.subtractBusy();
-                            creationState = STATE_BEFORE_CREATE;
-                        }
-
-                        @Override
-                        public void onError(String url, VolleyError volleyError) {
-                            AppUtils.buildToast(context, url + " " + volleyError.toString());
-                            ray.subtractBusy();
-                            creationState = STATE_BEFORE_PREPARE;
-                        }
-                    }).start();
+            File file = new File(AssetUtils.getAbsolutePath(context, AssetUtils.getPath(urlLayer)));
+            new FilePrepare(file, new FilePrepare.PrepareListener() {
+                @Override
+                public void onStart() {
+                    creationState = STATE_PREPARING;
+                    ray.addBusy();
                 }
-            }
+
+                @Override
+                public void onComplete(File file) {
+                    if (file != null){
+                        prepareLayer(file);
+                        ray.subtractBusy();
+                        creationState = STATE_BEFORE_CREATE;
+                    } else {
+                        AppUtils.buildToast(context,  "Not able to access: " + file.getAbsolutePath());
+                        ray.subtractBusy();
+                        creationState = STATE_BEFORE_PREPARE;
+                    }
+                }
+            }).start();
         });
     }
 
