@@ -10,6 +10,7 @@ import com.gmail.jiangyang5157.cardboard.net.Downloader;
 import com.gmail.jiangyang5157.cardboard.net.FilePrepare;
 import com.gmail.jiangyang5157.cardboard.scene.Creation;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
+import com.gmail.jiangyang5157.cardboard.vr.AssetFile;
 import com.gmail.jiangyang5157.cardboard.vr.AssetUtils;
 import com.gmail.jiangyang5157.tookit.android.base.AppUtils;
 import com.gmail.jiangyang5157.tookit.base.data.BufferUtils;
@@ -61,7 +62,8 @@ public class ObjModel extends GlModel implements GlModel.BindableBuffer, Creatio
     public void prepare(final Ray ray) {
         getHandler().post(() -> {
             File file = new File(AssetUtils.getAbsolutePath(context, AssetUtils.getPath(url)));
-            new FilePrepare(file, new FilePrepare.PrepareListener() {
+            AssetFile assetFile = new AssetFile(file, url);
+            new FilePrepare(assetFile, new FilePrepare.PrepareListener() {
                 @Override
                 public void onStart() {
                     creationState = STATE_PREPARING;
@@ -69,13 +71,13 @@ public class ObjModel extends GlModel implements GlModel.BindableBuffer, Creatio
                 }
 
                 @Override
-                public void onComplete(File file) {
-                    if (file != null){
+                public void onComplete(AssetFile assetFile) {
+                    if (assetFile.isReady()){
                         buildData();
                         ray.subtractBusy();
                         creationState = STATE_BEFORE_CREATE;
                     } else {
-                        AppUtils.buildToast(context,  "Not able to access: " + file.getAbsolutePath());
+                        AppUtils.buildToast(context, "Not able to access Obj model file");
                         ray.subtractBusy();
                         creationState = STATE_BEFORE_PREPARE;
                     }

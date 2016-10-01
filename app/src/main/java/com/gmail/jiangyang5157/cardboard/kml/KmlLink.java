@@ -24,7 +24,7 @@ public class KmlLink {
         mLinkId = linkId;
     }
 
-    /* package */ String getHref() {
+    public String getHref() {
         return mHref;
     }
 
@@ -34,7 +34,7 @@ public class KmlLink {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder("Style").append("{");
+        StringBuilder sb = new StringBuilder("Link").append("{");
         sb.append("\n link id=").append(mLinkId);
         sb.append(",\n href=").append(mHref);
         sb.append("\n}\n");

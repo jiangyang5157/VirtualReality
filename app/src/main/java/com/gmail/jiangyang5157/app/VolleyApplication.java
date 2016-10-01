@@ -14,7 +14,7 @@ import com.android.volley.toolbox.Volley;
 public class VolleyApplication extends Application {
     private static final String TAG = "[VolleyApplication]";
 
-    public static final int TIMEOUT_MS = 2000;
+    public static final int TIMEOUT_MS = 1000;
 
     private static VolleyApplication instance = null;
 

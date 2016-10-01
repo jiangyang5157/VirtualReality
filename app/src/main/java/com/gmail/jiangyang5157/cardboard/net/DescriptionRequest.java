@@ -244,7 +244,15 @@ public class DescriptionRequest extends Request<Object> {
 
     private Response<Object> doHtmlParse(NetworkResponse response) {
         String parsed = getParsedString(response);
-        Document doc = Jsoup.parse(parsed);
+
+        Document doc;
+        try {
+            doc = Jsoup.parse(parsed);
+        } catch (VerifyError | NoClassDefFoundError e){
+            // http://stackoverflow.com/questions/38059373/java-lang-verifyerror-when-downloading-data-with-jsoup-in-android-n
+            // TODO: 10/1/2016 upgrade Jsoup
+            return Response.error(new ParseError(response));
+        }
 
         // for <title>Hello World</title>
         String content = doc.title();
@@ -263,7 +271,7 @@ public class DescriptionRequest extends Request<Object> {
     private Response<Object> doBitmapParse(NetworkResponse response) {
         byte[] data = response.data;
         BitmapFactory.Options decodeOptions = new BitmapFactory.Options();
-        Bitmap bitmap = null;
+        Bitmap bitmap;
         if (mMaxWidth == 0 && mMaxHeight == 0) {
             decodeOptions.inPreferredConfig = mDecodeConfig;
             bitmap = BitmapFactory.decodeByteArray(data, 0, data.length, decodeOptions);

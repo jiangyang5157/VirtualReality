@@ -18,6 +18,11 @@ android {
     }
 
     compileOptions {
+        /*
+        JavaVersion.VERSION_1_8
+        dependencies: jackOptions
+        support: lambda
+         */
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }

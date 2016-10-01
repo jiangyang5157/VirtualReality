@@ -88,8 +88,9 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
      * To check if there is a new patch in the server, download if yes.
      */
     private void checkPatch() {
-        File patchFile = new File(AssetUtils.getAbsolutePath(getApplicationContext(), AssetUtils.getPatchPath()));
-        new Downloader(AssetUtils.getPatchUrl(), patchFile, new Downloader.ResponseListener() {
+        File file = new File(AssetUtils.getAbsolutePath(getApplicationContext(), AssetUtils.getPatchPath()));
+        AssetFile assetFile = new AssetFile(file, AssetUtils.getPatchUrl());
+        new Downloader(assetFile, new Downloader.ResponseListener() {
             @Override
             public boolean onStart(java.util.Map<String, String> headers) {
                 try {
@@ -108,11 +109,11 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
             }
 
             @Override
-            public void onComplete(java.util.Map<String, String> headers) {
+            public void onComplete(AssetFile assetFile, java.util.Map<String, String> headers) {
                 InputStream in = null;
                 try {
                     AssetUtils.setLastPatchLastModifiedTime(getApplicationContext(), AssetUtils.getHttpDateTime(headers.get("Last-Modified")));
-                    in = new FileInputStream(patchFile);
+                    in = new FileInputStream(assetFile.getFile());
                     IoUtils.unzip(in, new File(AppUtils.getProfilePath(getApplicationContext())), true);
                 } catch (ParseException | IOException e) {
                     e.printStackTrace();
@@ -128,8 +129,8 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
             }
 
             @Override
-            public void onError(String url, VolleyError volleyError) {
-                Log.d(TAG, "onError:" + url + " " + volleyError.toString());
+            public void onError(AssetFile assetFile, VolleyError volleyError) {
+                Log.d(TAG, "onError:" + assetFile.getUrl() + " " + volleyError.toString());
             }
         }).start();
     }

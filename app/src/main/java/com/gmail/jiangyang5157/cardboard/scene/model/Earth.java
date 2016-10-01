@@ -11,6 +11,7 @@ import com.android.volley.VolleyError;
 import com.gmail.jiangyang5157.cardboard.net.Downloader;
 import com.gmail.jiangyang5157.cardboard.net.FilePrepare;
 import com.gmail.jiangyang5157.cardboard.scene.Creation;
+import com.gmail.jiangyang5157.cardboard.vr.AssetFile;
 import com.gmail.jiangyang5157.cardboard.vr.AssetUtils;
 import com.gmail.jiangyang5157.tookit.android.base.AppUtils;
 import com.gmail.jiangyang5157.tookit.base.data.BufferUtils;
@@ -53,7 +54,8 @@ public class Earth extends UvSphere implements Creation {
     public void prepare(final Ray ray) {
         getHandler().post(() -> {
             File file = new File(AssetUtils.getAbsolutePath(context, AssetUtils.getPath(urlTexture)));
-            new FilePrepare(file, new FilePrepare.PrepareListener() {
+            AssetFile assetFile = new AssetFile(file, urlTexture);
+            new FilePrepare(assetFile, new FilePrepare.PrepareListener() {
                 @Override
                 public void onStart() {
                     creationState = STATE_PREPARING;
@@ -61,14 +63,14 @@ public class Earth extends UvSphere implements Creation {
                 }
 
                 @Override
-                public void onComplete(File file) {
-                    if (file != null){
+                public void onComplete(AssetFile assetFile) {
+                    if (assetFile.isReady()){
                         buildTextureBuffers();
                         buildData();
                         ray.subtractBusy();
                         creationState = STATE_BEFORE_CREATE;
                     } else {
-                        AppUtils.buildToast(context,  "Not able to access: " + file.getAbsolutePath());
+                        AppUtils.buildToast(context, "Not able to access the Earth texture file");
                         ray.subtractBusy();
                         creationState = STATE_BEFORE_PREPARE;
                     }

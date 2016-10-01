@@ -28,27 +28,20 @@ public class DescriptionLoader extends NetRequest {
 
     public DescriptionLoader(final String url, int width, final ResponseListener listener) {
         request = new DescriptionRequest(url,
-                new Response.Listener<Object>() {
-                    @Override
-                    public void onResponse(Object object) {
-                        switch (request.responseType) {
-                            case DescriptionRequest.RESPONSE_TYPE_BITMAP:
-                                listener.onComplete((Bitmap) object);
-                                break;
-                            case DescriptionRequest.RESPONSE_TYPE_STRING:
-                                listener.onComplete((String) object);
-                                break;
-                            default:
-                                Log.e(TAG, "DescriptionLoader.onResponse returns an unknown type.");
-                                break;
-                        }
+                object -> {
+                    switch (request.responseType) {
+                        case DescriptionRequest.RESPONSE_TYPE_BITMAP:
+                            listener.onComplete((Bitmap) object);
+                            break;
+                        case DescriptionRequest.RESPONSE_TYPE_STRING:
+                            listener.onComplete((String) object);
+                            break;
+                        default:
+                            Log.e(TAG, "DescriptionLoader.onResponse returns an unknown type.");
+                            break;
                     }
                 }, width, 0, ImageView.ScaleType.CENTER_INSIDE, Bitmap.Config.ARGB_4444,
-                new Response.ErrorListener() {
-                    public void onErrorResponse(VolleyError volleyError) {
-                        listener.onError(url, volleyError);
-                    }
-                }
+                volleyError -> listener.onError(url, volleyError)
         );
     }
 

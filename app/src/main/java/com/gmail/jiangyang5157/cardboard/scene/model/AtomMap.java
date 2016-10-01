@@ -5,13 +5,14 @@ import android.opengl.GLES20;
 import android.util.ArrayMap;
 import android.util.Log;
 
-import com.android.volley.VolleyError;
 import com.gmail.jiangyang5157.cardboard.kml.KmlLayer;
-import com.gmail.jiangyang5157.cardboard.net.Downloader;
+import com.gmail.jiangyang5157.cardboard.kml.KmlNetworkLink;
 import com.gmail.jiangyang5157.cardboard.net.FilePrepare;
+import com.gmail.jiangyang5157.cardboard.net.MultiFilePrepare;
 import com.gmail.jiangyang5157.cardboard.scene.Creation;
 import com.gmail.jiangyang5157.cardboard.scene.RayIntersection;
 import com.gmail.jiangyang5157.cardboard.scene.Lighting;
+import com.gmail.jiangyang5157.cardboard.vr.AssetFile;
 import com.gmail.jiangyang5157.cardboard.vr.AssetUtils;
 import com.gmail.jiangyang5157.tookit.android.base.AppUtils;
 import com.gmail.jiangyang5157.tookit.math.Vector;
@@ -22,6 +23,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author Yang
@@ -45,7 +51,8 @@ public class AtomMap extends GlModel implements Creation {
     public void prepare(final Ray ray) {
         getHandler().post(() -> {
             File file = new File(AssetUtils.getAbsolutePath(context, AssetUtils.getPath(urlLayer)));
-            new FilePrepare(file, new FilePrepare.PrepareListener() {
+            AssetFile assetFile = new AssetFile(file, urlLayer);
+            new FilePrepare(assetFile, new FilePrepare.PrepareListener() {
                 @Override
                 public void onStart() {
                     creationState = STATE_PREPARING;
@@ -53,13 +60,12 @@ public class AtomMap extends GlModel implements Creation {
                 }
 
                 @Override
-                public void onComplete(File file) {
-                    if (file != null){
-                        prepareLayer(file);
-                        ray.subtractBusy();
-                        creationState = STATE_BEFORE_CREATE;
+                public void onComplete(AssetFile assetFile) {
+                    if (assetFile.isReady()) {
+                        todo++;
+                        prepareLayer(ray, assetFile);
                     } else {
-                        AppUtils.buildToast(context,  "Not able to access: " + file.getAbsolutePath());
+                        AppUtils.buildToast(context, "Not able to access Kml file");
                         ray.subtractBusy();
                         creationState = STATE_BEFORE_PREPARE;
                     }
@@ -68,13 +74,63 @@ public class AtomMap extends GlModel implements Creation {
         });
     }
 
-    private void prepareLayer(File file) {
+    private void prepareNetworkLinks(final Ray ray, HashSet<KmlNetworkLink> networkLinks) {
+        HashSet<AssetFile> assetFileSet = new HashSet<>();
+        Iterator<KmlNetworkLink> it = networkLinks.iterator();
+        while (it.hasNext()) {
+            KmlNetworkLink networkLink = it.next();
+            String url = networkLink.getLink().getHref();
+            File file = new File(AssetUtils.getAbsolutePath(context, AssetUtils.getPath(url)));
+            AssetFile assetFile = new AssetFile(file, url);
+            Log.d(TAG, "prepareNetworkLinks: " + assetFile);
+            assetFileSet.add(assetFile);
+        }
+
+        new MultiFilePrepare(assetFileSet, new MultiFilePrepare.PrepareListener() {
+            @Override
+            public void onStart() {
+            }
+
+            @Override
+            public void onComplete(HashSet<AssetFile> assetFileSet) {
+                Iterator it = assetFileSet.iterator();
+                while (it.hasNext()) {
+                    AssetFile assetFile = (AssetFile) it.next();
+                    if (assetFile.isReady()) {
+                        todo++;
+                        prepareLayer(ray, assetFile);
+                    }
+                    complete(ray, assetFile);
+                }
+            }
+        }).start();
+    }
+
+    private int todo = 0;
+
+    private void complete(Ray ray, AssetFile assetFile) {
+        todo--;
+        Log.d(TAG, "complete: " + assetFile.toString() + "\ntodo:" + todo);
+        if (todo <= 0) {
+            ray.subtractBusy();
+            creationState = STATE_BEFORE_CREATE;
+        }
+    }
+
+    private void prepareLayer(final Ray ray, AssetFile assetFile) {
+        Log.d(TAG, "prepareLayer: " + assetFile);
         InputStream in = null;
         try {
-            in = new FileInputStream(file);
+            in = new FileInputStream(assetFile.getFile());
             KmlLayer kmlLayer = new KmlLayer(this, in, context);
+            HashSet<KmlNetworkLink> networkLinks = kmlLayer.getNetworkLinksCollection();
             kmlLayer.addLayerToMap();
-            Log.d("####", kmlLayer.getNetworkLinksCollection().toString());
+            int networkLinksSize = networkLinks.size();
+            if (networkLinksSize > 0) {
+                todo += networkLinksSize;
+                prepareNetworkLinks(ray, kmlLayer.getNetworkLinksCollection());
+            }
+            complete(ray, assetFile);
         } catch (XmlPullParserException | IOException e) {
             e.printStackTrace();
         } finally {
