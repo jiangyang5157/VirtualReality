@@ -95,8 +95,10 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
             public boolean onStart(java.util.Map<String, String> headers) {
                 try {
                     long lastModifiedTime = AssetUtils.getLastPatchLastModifiedTime(getApplicationContext());
-                    long httpDateTime = AssetUtils.getHttpDateTime(headers.get("Last-Modified"));
-                    Log.d(TAG, "lastModifiedTime/httpDateTime: " + lastModifiedTime + "," + httpDateTime);
+                    Log.d(TAG, "lastModifiedTime: " + lastModifiedTime);
+                    String httpDate = headers.get("Last-Modified");
+                    long httpDateTime = AssetUtils.getHttpDateTime(httpDate);
+                    Log.d(TAG, "httpDateTime: " + httpDateTime);
                     if (lastModifiedTime < httpDateTime) {
                         return true; // continue to download patch
                     } else {
@@ -110,6 +112,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
 
             @Override
             public void onComplete(AssetFile assetFile, java.util.Map<String, String> headers) {
+                Log.d(TAG, "Patch onComplete: " + assetFile);
                 InputStream in = null;
                 try {
                     AssetUtils.setLastPatchLastModifiedTime(getApplicationContext(), AssetUtils.getHttpDateTime(headers.get("Last-Modified")));

@@ -196,7 +196,9 @@ public abstract class GlModel {
         } else if (handlerThread.getState() == Thread.State.NEW) {
             handlerThread.start();
             handler = new Handler(handlerThread.getLooper());
-        } else if (handlerThread.getState() == Thread.State.WAITING) {
+        } else if (handlerThread.getState() == Thread.State.WAITING
+                || handlerThread.getState() == Thread.State.TIMED_WAITING
+                || handlerThread.getState() == Thread.State.BLOCKED) {
             handler = new Handler(handlerThread.getLooper());
         } else if (handlerThread.getState() == Thread.State.TERMINATED) {
             handlerThread = null;
@@ -204,7 +206,6 @@ public abstract class GlModel {
             handlerThread.start();
             handler = new Handler(handlerThread.getLooper());
         }
-
         return handler;
     }
 

@@ -71,17 +71,14 @@ public class MarkerDetailView extends Dialog {
                 pDescription.modelRequireUpdate = true;
                 pDescription.setTextSize(TextField.TEXT_SIZE_TINY);
                 pDescription.setAlignment(Layout.Alignment.ALIGN_NORMAL);
-                pDescription.setEventListener(new DescriptionField.Event() {
-                    @Override
-                    public void onPrepareComplete() {
-                        adjustBounds(WIDTH);
+                pDescription.setEventListener(() -> {
+                    adjustBounds(WIDTH);
 
-                        buildTextureBuffers();
-                        buildData();
+                    buildTextureBuffers();
+                    buildData();
 
-                        ray.subtractBusy();
-                        creationState = STATE_BEFORE_CREATE;
-                    }
+                    ray.subtractBusy();
+                    creationState = STATE_BEFORE_CREATE;
                 });
 
                 pDescription.prepare(ray);

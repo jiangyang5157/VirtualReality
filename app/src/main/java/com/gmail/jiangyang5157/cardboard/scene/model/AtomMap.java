@@ -14,7 +14,6 @@ import com.gmail.jiangyang5157.cardboard.scene.RayIntersection;
 import com.gmail.jiangyang5157.cardboard.scene.Lighting;
 import com.gmail.jiangyang5157.cardboard.vr.AssetFile;
 import com.gmail.jiangyang5157.cardboard.vr.AssetUtils;
-import com.gmail.jiangyang5157.tookit.android.base.AppUtils;
 import com.gmail.jiangyang5157.tookit.math.Vector;
 
 import org.xmlpull.v1.XmlPullParserException;
@@ -23,11 +22,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * @author Yang
@@ -50,7 +46,7 @@ public class AtomMap extends GlModel implements Creation {
 
     public void prepare(final Ray ray) {
         getHandler().post(() -> {
-            File file = new File(AssetUtils.getAbsolutePath(context, AssetUtils.getPath(urlLayer)));
+            File file = new File(AssetUtils.getAbsolutePath(context, AssetUtils.getAssetPath(urlLayer)));
             AssetFile assetFile = new AssetFile(file, urlLayer);
             new FilePrepare(assetFile, new FilePrepare.PrepareListener() {
                 @Override
@@ -65,7 +61,6 @@ public class AtomMap extends GlModel implements Creation {
                         todo++;
                         prepareLayer(ray, assetFile);
                     } else {
-                        AppUtils.buildToast(context, "Not able to access Kml file");
                         ray.subtractBusy();
                         creationState = STATE_BEFORE_PREPARE;
                     }
@@ -79,8 +74,9 @@ public class AtomMap extends GlModel implements Creation {
         Iterator<KmlNetworkLink> it = networkLinks.iterator();
         while (it.hasNext()) {
             KmlNetworkLink networkLink = it.next();
-            String url = networkLink.getLink().getHref();
-            File file = new File(AssetUtils.getAbsolutePath(context, AssetUtils.getPath(url)));
+            String href = networkLink.getLink().getHref();
+            String url = AssetUtils.localhost2RealMachine(href);
+            File file = new File(AssetUtils.getAbsolutePath(context, AssetUtils.getAssetPath(url)));
             AssetFile assetFile = new AssetFile(file, url);
             Log.d(TAG, "prepareNetworkLinks: " + assetFile);
             assetFileSet.add(assetFile);

@@ -5,8 +5,6 @@ import android.opengl.GLES20;
 import android.opengl.Matrix;
 import android.util.Log;
 
-import com.android.volley.VolleyError;
-import com.gmail.jiangyang5157.cardboard.net.Downloader;
 import com.gmail.jiangyang5157.cardboard.net.FilePrepare;
 import com.gmail.jiangyang5157.cardboard.scene.Creation;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
@@ -24,7 +22,6 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
-import java.util.Map;
 import java.util.Vector;
 
 /**
@@ -61,7 +58,7 @@ public class ObjModel extends GlModel implements GlModel.BindableBuffer, Creatio
 
     public void prepare(final Ray ray) {
         getHandler().post(() -> {
-            File file = new File(AssetUtils.getAbsolutePath(context, AssetUtils.getPath(url)));
+            File file = new File(AssetUtils.getAbsolutePath(context, AssetUtils.getAssetPath(url)));
             AssetFile assetFile = new AssetFile(file, url);
             new FilePrepare(assetFile, new FilePrepare.PrepareListener() {
                 @Override
@@ -77,7 +74,6 @@ public class ObjModel extends GlModel implements GlModel.BindableBuffer, Creatio
                         ray.subtractBusy();
                         creationState = STATE_BEFORE_CREATE;
                     } else {
-                        AppUtils.buildToast(context, "Not able to access Obj model file");
                         ray.subtractBusy();
                         creationState = STATE_BEFORE_PREPARE;
                     }
@@ -176,7 +172,7 @@ public class ObjModel extends GlModel implements GlModel.BindableBuffer, Creatio
         // TODO: 7/5/2016 OBJ Loader
         InputStream in = null;
         try {
-            in = new FileInputStream(new File(AssetUtils.getAbsolutePath(context, AssetUtils.getPath(url))));
+            in = new FileInputStream(new File(AssetUtils.getAbsolutePath(context, AssetUtils.getAssetPath(url))));
             IoUtils.read(in, line -> {
                 if (line == null) {
                     return false;

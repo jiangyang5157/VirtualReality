@@ -7,13 +7,10 @@ import android.opengl.GLES20;
 import android.opengl.GLUtils;
 import android.util.Log;
 
-import com.android.volley.VolleyError;
-import com.gmail.jiangyang5157.cardboard.net.Downloader;
 import com.gmail.jiangyang5157.cardboard.net.FilePrepare;
 import com.gmail.jiangyang5157.cardboard.scene.Creation;
 import com.gmail.jiangyang5157.cardboard.vr.AssetFile;
 import com.gmail.jiangyang5157.cardboard.vr.AssetUtils;
-import com.gmail.jiangyang5157.tookit.android.base.AppUtils;
 import com.gmail.jiangyang5157.tookit.base.data.BufferUtils;
 
 import java.io.File;
@@ -24,7 +21,6 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
-import java.util.Map;
 
 /**
  * @author Yang
@@ -53,7 +49,7 @@ public class Earth extends UvSphere implements Creation {
 
     public void prepare(final Ray ray) {
         getHandler().post(() -> {
-            File file = new File(AssetUtils.getAbsolutePath(context, AssetUtils.getPath(urlTexture)));
+            File file = new File(AssetUtils.getAbsolutePath(context, AssetUtils.getAssetPath(urlTexture)));
             AssetFile assetFile = new AssetFile(file, urlTexture);
             new FilePrepare(assetFile, new FilePrepare.PrepareListener() {
                 @Override
@@ -70,7 +66,6 @@ public class Earth extends UvSphere implements Creation {
                         ray.subtractBusy();
                         creationState = STATE_BEFORE_CREATE;
                     } else {
-                        AppUtils.buildToast(context, "Not able to access the Earth texture file");
                         ray.subtractBusy();
                         creationState = STATE_BEFORE_PREPARE;
                     }
@@ -96,7 +91,7 @@ public class Earth extends UvSphere implements Creation {
     protected void buildTextureBuffers() {
         InputStream in = null;
         try {
-            in = new FileInputStream(new File(AssetUtils.getAbsolutePath(context, AssetUtils.getPath(urlTexture))));
+            in = new FileInputStream(new File(AssetUtils.getAbsolutePath(context, AssetUtils.getAssetPath(urlTexture))));
             final BitmapFactory.Options options = new BitmapFactory.Options();
             options.inScaled = false;
             textureBitmap[0] = BitmapFactory.decodeStream(in, null, options);

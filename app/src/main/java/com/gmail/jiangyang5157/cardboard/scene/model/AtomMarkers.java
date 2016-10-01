@@ -10,6 +10,7 @@ import com.gmail.jiangyang5157.cardboard.scene.Lighting;
 import com.gmail.jiangyang5157.cardboard.scene.tree.OcTree;
 import com.gmail.jiangyang5157.cardboard.scene.tree.OcTreeNode;
 import com.gmail.jiangyang5157.cardboard.scene.tree.OcTreeObject;
+import com.gmail.jiangyang5157.cardboard.vr.AssetUtils;
 import com.gmail.jiangyang5157.cardboard.vr.R;
 import com.gmail.jiangyang5157.tookit.math.Vector;
 import com.google.android.gms.maps.model.LatLng;
@@ -128,13 +129,9 @@ public class AtomMarkers extends Marker3d {
 
         String objProperty = kmlPlacemark.getProperty("obj");
         if (objProperty != null) {
-            ObjModel objModel = new ObjModel(context, kmlPlacemark.getProperty("title"), objProperty);
-            objModel.setLighting(new Lighting() {
-                @Override
-                public float[] getLightPosInCameraSpace() {
-                    return Lighting.LIGHT_POS_IN_CAMERA_SPACE_CENTER;
-                }
-            });
+            String url = AssetUtils.localhost2RealMachine(objProperty);
+            ObjModel objModel = new ObjModel(context, kmlPlacemark.getProperty("title"), url);
+            objModel.setLighting(() -> Lighting.LIGHT_POS_IN_CAMERA_SPACE_CENTER);
             marker.setObjModel(objModel);
         }
 

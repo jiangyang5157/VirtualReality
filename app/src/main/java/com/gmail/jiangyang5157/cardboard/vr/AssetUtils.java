@@ -2,6 +2,7 @@ package com.gmail.jiangyang5157.cardboard.vr;
 
 import android.content.Context;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.gmail.jiangyang5157.tookit.android.base.AppUtils;
 import com.gmail.jiangyang5157.tookit.base.data.RegularExpressionUtils;
@@ -9,6 +10,7 @@ import com.gmail.jiangyang5157.tookit.base.data.RegularExpressionUtils;
 import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 /**
  * @author Yang
@@ -17,7 +19,27 @@ import java.text.SimpleDateFormat;
 public class AssetUtils {
     private static final String TAG = "[AssetUtils]";
 
-    public static final String URL_ = "http://192.168.1.68:8080/assets/";
+
+    public static final String URL_PROTOCOL = "http";
+    public static final String PORT = "8080";
+    /*
+    Android device: use real machine Ip address.
+    Android emulator: use 10.0.2.2 instead of 127.0.0.1 or localhost.
+  */
+    public static final String IP_ADDRESS = "192.168.1.67";
+    public static final String IP_ADDRESS_LOCALHOST = "127.0.0.1";
+
+    public static String getApiUrlPrefix(String ipAddress) {
+        return URL_PROTOCOL + "://" + ipAddress + ":" + PORT + "/api/";
+    }
+
+    public static String getAssetsUrlPrefix(String ipAddress) {
+        return URL_PROTOCOL + "://" + ipAddress + ":" + PORT + "/assets/";
+    }
+
+    public static String localhost2RealMachine(String url) {
+        return url.replaceFirst(getAssetsUrlPrefix(IP_ADDRESS_LOCALHOST), getAssetsUrlPrefix(IP_ADDRESS));
+    }
 
     // profile path:
     // /data/user/0/com.gmail.jiangyang5157.cardboard.vr
@@ -54,12 +76,12 @@ public class AssetUtils {
         return PreferenceManager.getDefaultSharedPreferences(context).getLong(PATCH_LAST_MODIFIED_TIME_KEY, PATCH_LAST_MODIFIED_TIME_DEFAULT);
     }
 
-    public static String getUrl(String path) {
-        return URL_ + path;
+    public static String getAssetUrl(String path) {
+        return getAssetsUrlPrefix(IP_ADDRESS) + path;
     }
 
-    public static String getPath(String url) {
-        return url.replaceFirst(URL_, "");
+    public static String getAssetPath(String url) {
+        return url.replaceFirst(getAssetsUrlPrefix(IP_ADDRESS), "");
     }
 
     public static String getAbsolutePath(Context context, String path) {
@@ -71,7 +93,7 @@ public class AssetUtils {
     }
 
     public static String getResourceUrl(String fileName) {
-        return getUrl(getResourcePath(fileName));
+        return getAssetUrl(getResourcePath(fileName));
     }
 
     public static String getModelPath(String fileName) {
@@ -79,7 +101,7 @@ public class AssetUtils {
     }
 
     public static String getModelUrl(String fileName) {
-        return getUrl(getModelPath(fileName));
+        return getAssetUrl(getModelPath(fileName));
     }
 
     public static String getLayerPath(String fileName) {
@@ -87,7 +109,7 @@ public class AssetUtils {
     }
 
     public static String getLayerUrl(String fileName) {
-        return getUrl(getLayerPath(fileName));
+        return getAssetUrl(getLayerPath(fileName));
     }
 
     public static String getKmlPath(String fileName) {
@@ -95,7 +117,7 @@ public class AssetUtils {
     }
 
     public static String getKmlUrl(String fileName) {
-        return getUrl(getKmlPath(fileName));
+        return getAssetUrl(getKmlPath(fileName));
     }
 
     public static String getPatchPath() {
@@ -103,11 +125,14 @@ public class AssetUtils {
     }
 
     public static String getPatchUrl() {
-        return getUrl(getPatchPath());
+        return getAssetUrl(getPatchPath());
     }
 
     public static long getHttpDateTime(String httpDate) throws ParseException {
-        SimpleDateFormat format = new SimpleDateFormat(RegularExpressionUtils.DATE_TEMPLATE_HTTP_DATE);
+        // java.text.ParseException: Unparseable date: "Sat, 01 Oct 2016 13:06:42 GMT"
+        // Sat, 01 Oct 2016 13:06:42 GMT
+        // EEE, dd MMM yyyy HH:mm:ss zzz
+        SimpleDateFormat format = new SimpleDateFormat(RegularExpressionUtils.DATE_TEMPLATE_HTTP_DATE, Locale.ENGLISH);
         return format.parse(httpDate).getTime();
     }
 
