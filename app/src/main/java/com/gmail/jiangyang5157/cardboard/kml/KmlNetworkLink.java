@@ -13,7 +13,7 @@ public class KmlNetworkLink {
     private HashMap<String, String> mProperties;
 
     public KmlNetworkLink(KmlLink link, HashMap<String, String> properties) {
-        mProperties = new HashMap<String, String>();
+        mProperties = new HashMap<>();
         mLink = link;
         mProperties.putAll(properties);
     }

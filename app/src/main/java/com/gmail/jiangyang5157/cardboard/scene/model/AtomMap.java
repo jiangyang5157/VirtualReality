@@ -78,7 +78,9 @@ public class AtomMap extends GlModel implements Creation {
             String url = AssetUtils.localhost2RealMachine(href);
             File file = new File(AssetUtils.getAbsolutePath(context, AssetUtils.getAssetPath(url)));
             AssetFile assetFile = new AssetFile(file, url);
-            Log.d(TAG, "prepareNetworkLinks: " + assetFile);
+            String update = networkLink.getProperty("update");
+            Log.d(TAG, "prepareNetworkLinks (update=" + update + "): " + assetFile);
+            // TODO: 10/2/2016 update property = 1: force update
             assetFileSet.add(assetFile);
         }
 

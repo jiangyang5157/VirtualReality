@@ -127,9 +127,9 @@ public class AtomMarkers extends Marker3d {
         marker.setName(kmlPlacemark.getProperty("name"));
         marker.setDescription(kmlPlacemark.getProperty("description"));
 
-        String objProperty = kmlPlacemark.getProperty("obj");
-        if (objProperty != null) {
-            String url = AssetUtils.localhost2RealMachine(objProperty);
+        String obj = kmlPlacemark.getProperty("obj");
+        if (obj != null) {
+            String url = AssetUtils.localhost2RealMachine(obj);
             ObjModel objModel = new ObjModel(context, kmlPlacemark.getProperty("title"), url);
             objModel.setLighting(() -> Lighting.LIGHT_POS_IN_CAMERA_SPACE_CENTER);
             marker.setObjModel(objModel);

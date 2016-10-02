@@ -84,6 +84,8 @@ import static org.xmlpull.v1.XmlPullParser.START_TAG;
                     properties.put(parser.getName(), parser.nextText());
                 } else if (parser.getName().equals(LINK_TAG)) {
                     link = KmlLinkParser.createLink(parser);
+                } else if (parser.getName().equals(EXTENDED_DATA)) {
+                    properties.putAll(setExtendedDataProperties(parser));
                 }
             }
             eventType = parser.next();
