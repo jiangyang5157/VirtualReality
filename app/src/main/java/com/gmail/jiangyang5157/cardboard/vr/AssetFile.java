@@ -59,15 +59,15 @@ public class AssetFile {
     }
 
     @Override
-    public boolean equals(Object that) {
-        if (that != null && that instanceof AssetFile) {
-            AssetFile thatAssetFile = (AssetFile) that;
-            if (this.url.equalsIgnoreCase(thatAssetFile.getUrl())
-                    && this.file.getAbsolutePath().equalsIgnoreCase(thatAssetFile.file.getAbsolutePath())) {
-                return true;
-            }
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        } else if (!(o instanceof AssetFile)) {
+            return false;
+        } else {
+            AssetFile that = (AssetFile) o;
+            return this.url.equalsIgnoreCase(that.getUrl()) && this.file.getAbsolutePath().equalsIgnoreCase(that.file.getAbsolutePath());
         }
-        return false;
     }
 
     @Override

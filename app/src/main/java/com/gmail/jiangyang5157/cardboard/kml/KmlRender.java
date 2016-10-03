@@ -246,7 +246,7 @@ import java.util.HashMap;
 
     private void addNetworkLinksToMap(HashMap<KmlNetworkLink, Object> networkLinks) {
         for (KmlNetworkLink kmlNetworkLink : networkLinks.keySet()) {
-            // TODO: 10/1/2016  
+            // TODO: 10/1/2016 [IMPLEMENTATION]
         }
     }
 
@@ -307,7 +307,6 @@ import java.util.HashMap;
             Object mapObject = addPlacemarkToMap(placemark, isObjectVisible);
             kmlContainer.setPlacemark(placemark, mapObject);
         }
-        // TODO: 10/1/2016 [MORE ?]
     }
 
     /**
