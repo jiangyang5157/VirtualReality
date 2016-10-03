@@ -209,31 +209,6 @@ public class OcTreeNode extends TreeNode {
 //        return true;
     }
 
-    @Override
-    protected boolean isValid() {
-        return objects.size() > 0;
-    }
-
-    protected ArrayList<OcTreeNode> getValidNodes() {
-        ArrayList<OcTreeNode> ret = new ArrayList<>();
-
-        if (isValid()) {
-            ret.add(this);
-        }
-
-        if (nodes != null) {
-            for (int key : nodes.keySet()) {
-                ret.addAll(nodes.get(key).getValidNodes());
-            }
-        }
-
-        return ret;
-    }
-
-    public ArrayMap<OcTreeObject, Integer> getObjects() {
-        return objects;
-    }
-
     private boolean[] getBooleanOctant(int index) {
         return new boolean[]{
                 (index & 1) == 0, // 0, 2, 4, 6
@@ -282,6 +257,26 @@ public class OcTreeNode extends TreeNode {
         }
     }
 
+    protected ArrayList<OcTreeNode> getValidNodes() {
+        ArrayList<OcTreeNode> ret = new ArrayList<>();
+
+        if (isValid()) {
+            ret.add(this);
+        }
+
+        if (nodes != null) {
+            for (int key : nodes.keySet()) {
+                ret.addAll(nodes.get(key).getValidNodes());
+            }
+        }
+
+        return ret;
+    }
+
+    public ArrayMap<OcTreeObject, Integer> getObjects() {
+        return objects;
+    }
+
     @Override
     public void clean() {
         if (nodes != null) {
@@ -293,7 +288,6 @@ public class OcTreeNode extends TreeNode {
         }
         objects.clear();
     }
-
 
     @Override
     protected int getDepth() {
@@ -323,6 +317,11 @@ public class OcTreeNode extends TreeNode {
             }
         }
         return ret;
+    }
+
+    @Override
+    protected boolean isValid() {
+        return objects.size() > 0;
     }
 
     @Override
