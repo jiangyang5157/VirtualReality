@@ -1,8 +1,10 @@
 package com.gmail.jiangyang5157.cardboard.vr;
 
+import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.util.ArrayMap;
 import android.util.Log;
 import android.widget.Toast;
@@ -46,6 +48,8 @@ import javax.microedition.khronos.egl.EGLConfig;
 public class MainActivity extends GvrActivity implements GvrView.StereoRenderer {
     private static final String TAG = "[MainActivity]";
 
+    private Vibrator vibrator;
+
     private GvrView gvrView;
 
     private final float[] LIGHT_POS_IN_WORLD_SPACE = new float[]{0.0f, 0.0f, 0.0f, 1.0f};
@@ -67,6 +71,8 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
         gvrView = (GvrView) findViewById(R.id.gvr_view);
         gvrView.setEGLContextClientVersion(3);
@@ -387,6 +393,8 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
     }
 
     private void onCardboardClick() {
+        vibrator.vibrate(25);
+
         if (objModel != null && objModel.isCreated()) {
             destoryObjModel();
             return;
@@ -403,6 +411,8 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
     }
 
     private void onCardboardDoubleClick() {
+        vibrator.vibrate(25);
+
         if (objModel != null && objModel.isCreated()) {
             destoryObjModel();
         }
