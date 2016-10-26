@@ -7,7 +7,6 @@ import android.util.Log;
 
 import com.android.volley.VolleyError;
 import com.gmail.jiangyang5157.cardboard.net.DescriptionLoader;
-import com.gmail.jiangyang5157.tookit.android.base.AppUtils;
 import com.gmail.jiangyang5157.tookit.base.data.RegularExpressionUtils;
 
 import java.util.regex.Matcher;

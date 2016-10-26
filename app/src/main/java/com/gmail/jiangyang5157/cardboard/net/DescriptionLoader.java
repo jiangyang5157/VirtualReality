@@ -5,7 +5,6 @@ import android.util.Log;
 import android.widget.ImageView;
 
 import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.gmail.jiangyang5157.app.VolleyApplication;
 
