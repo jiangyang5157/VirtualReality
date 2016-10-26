@@ -47,8 +47,8 @@ public class Coordinate {
         double z = (n * (1 - e2) + h) * sinPhi;
 
         // Ecef coord system is [y-east z-north(up)], and x points to the 0,0
-        // Our coord system is [x-east, y-north(up)], and x points to the 0,180
-        // So,we reversal x, and use z as y
+        // Our coord system is [x-east, y-north(up)], and z points to the 0,180
+        // So,we reversal x, and switch z and y
         return new double[]{-x, z, y};
     }
 

@@ -64,6 +64,7 @@ public abstract class UvSphere extends Sphere implements GlModel.BindableTexture
                 indices[indexIndex] = (short) (r * segments + s); //tl
                 indices[indexIndex + 1] = (short) (r_ * segments + s); //bl
                 indices[indexIndex + 2] = (short) (r * segments + s_); //tr
+
                 indices[indexIndex + 3] = (short) (r * segments + s_); //tr
                 indices[indexIndex + 4] = (short) (r_ * segments + s); //bl
                 indices[indexIndex + 5] = (short) (r_ * segments + s_); //br
