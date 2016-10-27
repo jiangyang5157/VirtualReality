@@ -39,10 +39,10 @@ public class ObjModel extends GlModel implements GlModel.BindableBuffer, Creatio
     private String url;
 
     private Vector<Float> v;
-    private Vector<Float> vt; // unsupported
+    private Vector<Float> vt; // cache, unsupported
     private Vector<Float> vn;
     private Vector<Short> fv;
-    private Vector<Short> fvt; // unsupported
+    private Vector<Short> fvt; // cache, but unsupported
     private Vector<Short> fvn;
 
     protected final int[] buffers = new int[3];
@@ -105,7 +105,7 @@ public class ObjModel extends GlModel implements GlModel.BindableBuffer, Creatio
         Matrix.translateM(translationMatrix, 0, position[0], position[1], position[2]);
 
         Matrix.setIdentityM(rotationMatrix, 0);
-        // it should face to eye
+        // Reverse direction for facing to eye
         float[] q = new float[]{-quaternion[0], -quaternion[1], -quaternion[2], quaternion[3]};
         Matrix.multiplyMM(rotationMatrix, 0, Head.getQuaternionMatrix(q), 0, rotationMatrix, 0);
 

@@ -15,7 +15,7 @@ void main()
     mat4 mv = u_ViewMatrix * u_ModelMatrix;
     mat4 mvp = u_PerspectiveMatrix * mv;
 
-    // Draw an object that looks the same size regarles the distance in perspective view.
+    // Draw an object that looks the same size regardless of the distance in perspective view.
     const float reciprocalScaleOnScreen = 0.01;
     // Transform the vector <0, 0, 0> to clipspace. This will get the w the object's pivot will be divided by.
     float w = (mvp * vec4(0, 0, 0, 1)).w * reciprocalScaleOnScreen;
