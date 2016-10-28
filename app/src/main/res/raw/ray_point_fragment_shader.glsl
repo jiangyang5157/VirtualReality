@@ -11,9 +11,9 @@ out vec4 FragColor;
 
 void main()
 {
-    // Transform coord from range [0, 1] to [-0.5, 0.5]
+    // transform coord from range [0, 1] to [-0.5, 0.5]
     vec2 coord = gl_PointCoord - vec2(0.5);
-    // The distance to the center
+    // distance from the center
     float length = length(coord);
 
     float weight = 4.0 / v_PointSize;
@@ -22,19 +22,19 @@ void main()
     float pointerUp = spinnerDown - weight * 0.6;
     float pointerDown = (u_Busy == 0) ? pointerUp - weight : 0.0;
 
-    bool isPointer =  pointerDown < length && length < pointerUp;
-    if (isPointer){
+    bool belongsToPointer = pointerDown < length && length < pointerUp;
+    if (belongsToPointer){
         FragColor = vec4(u_Color, 1.0);
         return;
     }
 
-    bool isSpinner = spinnerDown < length && length < spinnerUp;
-    if (isSpinner){
+    bool belongsToSpinner = spinnerDown < length && length < spinnerUp;
+    if (belongsToSpinner){
         // atan returns (-PI, PI)
-        isSpinner = atan (coord.y, coord.x) < u_Spinner;
+        belongsToSpinner = atan (-coord.x, coord.y) < u_Spinner;
     }
 
-    if (isSpinner){
+    if (belongsToSpinner){
         FragColor = vec4(u_Color, 1.0);
         return;
     }
