@@ -13,8 +13,7 @@ void main()
 {
     // transform coord from range [0, 1] to [-0.5, 0.5]
     vec2 coord = gl_PointCoord - vec2(0.5);
-    // distance from the center
-    float length = length(coord);
+    float length = length(coord); // distance from the center
 
     float weight = 4.0 / v_PointSize;
     float spinnerUp = 0.4;
