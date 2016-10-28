@@ -394,6 +394,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
 
     private void onCardboardClick() {
         vibrator.vibrate(25);
+        ray.resetSpinner();
 
         if (objModel != null && objModel.isCreated()) {
             destoryObjModel();
@@ -486,12 +487,20 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         }
     };
 
+    private Ray.SpinnerListener spinnerListener = new Ray.SpinnerListener() {
+        @Override
+        public void onComplete() {
+            onCardboardClick();
+        }
+    };
+
     @Override
     public void onSurfaceCreated(EGLConfig eglConfig) {
         // Dark background so text shows up well.
         GLES20.glClearColor(0.1f, 0.1f, 0.1f, 0.5f);
 
         ray = new Ray(getApplicationContext(), head);
+        ray.setSpinnerListener(spinnerListener);
         ArrayMap<Integer, Integer> shaders = new ArrayMap<>();
         shaders.put(GLES20.GL_VERTEX_SHADER, R.raw.ray_point_vertex_shader);
         shaders.put(GLES20.GL_FRAGMENT_SHADER, R.raw.ray_point_fragment_shader);

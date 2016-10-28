@@ -16,15 +16,29 @@ import com.gmail.jiangyang5157.tookit.android.base.AppUtils;
 public class Ray extends Point {
     private static final String TAG = "[Ray]";
 
-    private static final float POINT_SIZE_NORMAL = 24f;
-    private static final float POINT_SIZE_FOCUSED = 42f;
+    public interface SpinnerListener {
+        void onComplete();
+    }
+
+    private static final float POINT_SIZE_NORMAL = 48f;
+    private static final float POINT_SIZE_FOCUSED = 64f;
     private static final float POINT_SIZE_GRADIENT_UNIT = (POINT_SIZE_FOCUSED - POINT_SIZE_NORMAL) / 8;
 
     public static final float DISTANCE = 5;
 
+    // Track unfinished background thread.
     private static final String BUSY_HANDLE = "u_Busy";
     private int busyHandle;
     private int busy = 0;
+
+    //  Spinner on Ray when user staring at the target, trigger click event when it reaches to 100.
+    private static final float SPINNER_HEAD = (float) -Math.PI;
+    private static final float SPINNER_TAIL = (float) Math.PI;
+    private static final float SPINNER_GRADIENT_UNIT = (SPINNER_TAIL - SPINNER_HEAD) / 80;
+    private static final String SPINNER_HANDLE = "u_Spinner";
+    private int spinnerHandle;
+    private float spinner = SPINNER_HEAD;
+    private SpinnerListener spinnerListener;
 
     private Head head;
     private RayIntersection rayIntersection;
@@ -71,20 +85,57 @@ public class Ray extends Point {
     @Override
     public void onFocuse(boolean isFocused) {
         if (isFocused) {
-            if (pointSize < POINT_SIZE_FOCUSED) {
-                pointSize += POINT_SIZE_GRADIENT_UNIT;
+            addPointSize();
+            if (busy > 0) {
+                resetSpinner();
+            } else {
+                updateSpinner();
             }
         } else {
-            if (pointSize > POINT_SIZE_NORMAL) {
-                pointSize -= POINT_SIZE_GRADIENT_UNIT;
+            subtractPointSize();
+            resetSpinner();
+        }
+    }
+
+    private void addPointSize() {
+        pointSize += POINT_SIZE_GRADIENT_UNIT;
+        pointSize = pointSize > POINT_SIZE_FOCUSED ? POINT_SIZE_FOCUSED : pointSize;
+    }
+
+    private void subtractPointSize() {
+        pointSize -= POINT_SIZE_GRADIENT_UNIT;
+        pointSize = pointSize < POINT_SIZE_NORMAL ? POINT_SIZE_NORMAL : pointSize;
+    }
+
+    public void updateSpinner() {
+        spinner += SPINNER_GRADIENT_UNIT;
+        spinner = spinner > SPINNER_TAIL ? SPINNER_TAIL : spinner;
+
+        if (spinner == SPINNER_TAIL) {
+            if (spinnerListener != null) {
+                spinnerListener.onComplete();
             }
         }
+    }
+
+    public void resetSpinner() {
+        spinner = SPINNER_HEAD;
+    }
+
+    public void addBusy() {
+        busy++;
+    }
+
+    public void subtractBusy() {
+        busy--;
+        busy = busy < 0 ? 0 : busy;
     }
 
     @Override
     protected void bindHandles() {
         super.bindHandles();
         busyHandle = GLES20.glGetUniformLocation(program, BUSY_HANDLE);
+        spinnerHandle = GLES20.glGetUniformLocation(program, SPINNER_HANDLE);
     }
 
     @Override
@@ -103,6 +154,7 @@ public class Ray extends Point {
         GLES20.glUniform3fv(colorHandle, 1, color, 0);
         GLES20.glUniform1f(pointSizeHandle, pointSize);
         GLES20.glUniform1i(busyHandle, busy);
+        GLES20.glUniform1f(spinnerHandle, spinner);
 
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, verticesBuffHandle);
         GLES20.glVertexAttribPointer(vertexHandle, 3, GLES20.GL_FLOAT, false, 0, 0);
@@ -117,21 +169,21 @@ public class Ray extends Point {
         GlesUtils.printGlError(TAG + " - draw end");
     }
 
-    public void addBusy() {
-        busy++;
-    }
-
-    public void subtractBusy() {
-        busy--;
-        busy = busy < 0 ? 0 : busy;
-    }
-
     public void setIntersections(RayIntersection rayIntersection) {
+        if (rayIntersection != null && this.rayIntersection != null
+                && rayIntersection.getModel() != this.rayIntersection.getModel()) {
+            resetSpinner();
+        }
+
         this.rayIntersection = rayIntersection;
     }
 
     public RayIntersection getRayIntersection() {
         return rayIntersection;
+    }
+
+    public void setSpinnerListener(SpinnerListener spinnerListener) {
+        this.spinnerListener = spinnerListener;
     }
 
     @Override
