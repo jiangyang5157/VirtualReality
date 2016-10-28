@@ -490,6 +490,9 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
     private Ray.SpinnerListener spinnerListener = new Ray.SpinnerListener() {
         @Override
         public void onComplete() {
+            if (objModel != null && objModel.isCreated()) {
+                return;
+            }
             onCardboardClick();
         }
     };
