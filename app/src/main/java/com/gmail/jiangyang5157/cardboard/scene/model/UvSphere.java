@@ -7,7 +7,6 @@ import android.content.Context;
  * @since 4/12/2016.
  */
 public abstract class UvSphere extends Sphere implements GlModel.BindableTextureBuffer {
-    private static final String TAG = "[UvSphere]";
 
     private int rings;
     private int segments;
