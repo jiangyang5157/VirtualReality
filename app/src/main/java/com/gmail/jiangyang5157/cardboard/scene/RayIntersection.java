@@ -11,8 +11,7 @@ import com.gmail.jiangyang5157.cardboard.scene.model.GlModel;
 public class RayIntersection implements Comparable<RayIntersection> {
 
     private final GlModel model;
-    // t is the "distance" along the ray to the closest intersection
-    private final double t;
+    private final double t; // indicate the "distance" along the ray to the closest intersection
 
     public RayIntersection(GlModel model, double t) {
         this.model = model;
@@ -27,15 +26,18 @@ public class RayIntersection implements Comparable<RayIntersection> {
         return t;
     }
 
+    /**
+     * @return -1; less than; 1; greater than; 0; equals to
+     */
     @Override
     public int compareTo(@NonNull RayIntersection that) {
         double ret = this.t - that.t;
         if (ret < 0) {
-            return -1; // this less than that
+            return -1;
         } else if (ret > 0) {
-            return 1; // this greater than that
+            return 1;
         } else {
-            return 0; // this equals to that
+            return 0;
         }
     }
 }

@@ -36,7 +36,7 @@ public class DescriptionLoader extends NetRequest {
                             listener.onComplete((String) object);
                             break;
                         default:
-                            Log.e(TAG, "DescriptionLoader.onResponse returns an unknown type.");
+                            Log.w(TAG, "Unsupported responseType " + request.responseType);
                             break;
                     }
                 }, width, 0, ImageView.ScaleType.CENTER_INSIDE, Bitmap.Config.ARGB_4444,

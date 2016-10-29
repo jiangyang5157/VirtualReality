@@ -28,7 +28,7 @@ public class IcosphereBuilder {
     protected IcosphereVertex build(int recursionLevel) {
         final int MAX_RECURSION_LEVEL = IcosphereVertex.VERTEX_COUNTS.length - 1;
         if (recursionLevel > MAX_RECURSION_LEVEL) {
-            throw new RuntimeException("Unable to build a Icosphere with recursion level greater than " + MAX_RECURSION_LEVEL);
+            throw new RuntimeException(TAG + ": Unable to created Icosephere with recursion level greater than " + MAX_RECURSION_LEVEL);
         }
 
         Integer vertexCount = IcosphereVertex.VERTEX_COUNTS[recursionLevel];
@@ -36,7 +36,7 @@ public class IcosphereBuilder {
         if (ret == null) {
             ret = new IcosphereVertex(recursionLevel);
             icosphereVertices.put(vertexCount, ret);
-            Log.d(TAG, "IcosphereBuilder: created IcosephereVertex object with vertexCount=" + vertexCount);
+            Log.d(TAG, "Created Icosephere with recursionLevel=" + recursionLevel + " vertexCount=" + vertexCount);
         }
         return ret;
     }

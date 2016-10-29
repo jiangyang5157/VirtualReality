@@ -1,7 +1,6 @@
 package com.gmail.jiangyang5157.cardboard.net;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.android.volley.VolleyError;
 import com.gmail.jiangyang5157.cardboard.vr.AssetFile;
@@ -15,7 +14,6 @@ import java.util.Map;
  */
 
 public class MultiFilePrepare extends NetRequest {
-    private static final String TAG = "[MultiFilePrepare]";
 
     private HashSet<AssetFile> assetFileSet;
 

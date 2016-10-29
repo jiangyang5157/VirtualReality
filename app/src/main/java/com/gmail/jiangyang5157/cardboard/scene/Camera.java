@@ -1,7 +1,6 @@
 package com.gmail.jiangyang5157.cardboard.scene;
 
 import android.opengl.Matrix;
-import android.support.annotation.NonNull;
 
 import com.gmail.jiangyang5157.cardboard.scene.model.AtomMarker;
 import com.gmail.jiangyang5157.cardboard.scene.model.Dialog;

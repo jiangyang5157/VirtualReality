@@ -7,6 +7,7 @@ import android.content.Context;
  * @since 4/12/2016.
  */
 public abstract class UvSphere extends Sphere implements GlModel.BindableTextureBuffer {
+    private static final String TAG = "[UvSphere]";
 
     private int rings;
     private int segments;
@@ -22,7 +23,7 @@ public abstract class UvSphere extends Sphere implements GlModel.BindableTexture
         this.segments = segments;
     }
 
-    // (rings, segments = 5, 4) maps to (4 stacks, 4 slices) UV sphere
+    // eg: (rings, segments = 5, 4) maps to (4 stacks, 4 slices) UV sphere
     protected void buildData() {
         final float PI = (float) Math.PI;
         final float PItimes2 = PI * 2.0f;

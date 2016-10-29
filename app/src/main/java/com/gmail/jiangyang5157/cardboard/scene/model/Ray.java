@@ -65,8 +65,6 @@ public class Ray extends Point {
     @Override
     public void update() {
         super.update();
-        boolean isFocused = rayIntersection != null && rayIntersection.getModel().onClickListener != null;
-        onFocuse(isFocused);
 
         if (rayIntersection != null) {
             float[] forward = head.getForward();
@@ -85,14 +83,15 @@ public class Ray extends Point {
     @Override
     public void onFocuse(boolean isFocused) {
         if (isFocused) {
-            addPointSize();
+            addPointSize(); // enlarge the Pointer
             if (busy > 0) {
+                // disable spinner when app is busy
                 resetSpinner();
             } else {
                 updateSpinner();
             }
         } else {
-            subtractPointSize();
+            subtractPointSize(); // shrink the Pointer
             resetSpinner();
         }
     }
@@ -165,15 +164,18 @@ public class Ray extends Point {
         GLES20.glDisableVertexAttribArray(vertexHandle);
         GLES20.glUseProgram(0);
 
-        // TODO: [WHY] 0x501
         GlesUtils.printGlError(TAG + " - draw end");
     }
 
     public void setIntersections(RayIntersection rayIntersection) {
         if (rayIntersection != null && this.rayIntersection != null
                 && rayIntersection.getModel() != this.rayIntersection.getModel()) {
+            // looking at a different target
             resetSpinner();
         }
+
+        boolean isFocused = rayIntersection != null && rayIntersection.getModel().onClickListener != null;
+        onFocuse(isFocused);
 
         this.rayIntersection = rayIntersection;
     }
@@ -188,7 +190,7 @@ public class Ray extends Point {
 
     @Override
     public void destroy() {
-        Log.d(TAG, "destroy");
+//        Log.d(TAG, "destroy");
         super.destroy();
     }
 }

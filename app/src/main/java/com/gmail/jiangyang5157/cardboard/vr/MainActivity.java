@@ -29,6 +29,7 @@ import com.gmail.jiangyang5157.cardboard.scene.model.MarkerDetailView;
 import com.gmail.jiangyang5157.tookit.android.base.AppUtils;
 import com.gmail.jiangyang5157.tookit.android.base.DeviceUtils;
 import com.gmail.jiangyang5157.tookit.base.data.IoUtils;
+import com.gmail.jiangyang5157.tookit.base.time.Performance;
 import com.gmail.jiangyang5157.tookit.math.Vector;
 import com.gmail.jiangyang5157.tookit.math.Vector3d;
 import com.google.vr.sdk.base.Eye;
@@ -45,7 +46,6 @@ import java.text.ParseException;
 
 import javax.microedition.khronos.egl.EGLConfig;
 
-// TODO: 8/11/2016 [WHY] E/libEGL: call to OpenGL ES API with no current context (logged once per thread)
 public class MainActivity extends GvrActivity implements GvrView.StereoRenderer {
     private static final String TAG = "[MainActivity]";
 
@@ -102,14 +102,12 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
             public boolean onStart(java.util.Map<String, String> headers) {
                 try {
                     long lastModifiedTime = AssetUtils.getLastPatchLastModifiedTime(getApplicationContext());
-                    Log.d(TAG, "lastModifiedTime: " + lastModifiedTime);
-                    String httpDate = headers.get("Last-Modified");
-                    long httpDateTime = AssetUtils.getHttpDateTime(httpDate);
-                    Log.d(TAG, "httpDateTime: " + httpDateTime);
+                    long httpDateTime = AssetUtils.getHttpDateTime(headers.get("Last-Modified"));
+                    Log.d(TAG, "Patch httpDateTime=" + httpDateTime + " lastModifiedTime=" + lastModifiedTime);
                     if (lastModifiedTime < httpDateTime) {
-                        return true; // continue to download patch
+                        return true; // continue to download
                     } else {
-                        return false; // no need to upgrade patch
+                        return false;
                     }
                 } catch (ParseException e) {
                     Log.e(TAG, e.toString());
@@ -119,14 +117,14 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
 
             @Override
             public void onComplete(AssetFile assetFile, java.util.Map<String, String> headers) {
-                Log.d(TAG, "Patch onComplete: " + assetFile);
                 InputStream in = null;
                 try {
-                    AssetUtils.setLastPatchLastModifiedTime(getApplicationContext(), AssetUtils.getHttpDateTime(headers.get("Last-Modified")));
                     in = new FileInputStream(assetFile.getFile());
                     IoUtils.unzip(in, new File(AppUtils.getProfilePath(getApplicationContext())), true);
+                    AssetUtils.setLastPatchLastModifiedTime(getApplicationContext(), AssetUtils.getHttpDateTime(headers.get("Last-Modified")));
+                    Log.d(TAG, "Patch onComplete: " + assetFile);
                 } catch (ParseException | IOException e) {
-                    e.printStackTrace();
+                    Log.e(TAG, AppUtils.getString(getApplicationContext(), R.string.error_patch_retrieve));
                 } finally {
                     try {
                         if (in != null) {
@@ -140,7 +138,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
 
             @Override
             public void onError(AssetFile assetFile, VolleyError volleyError) {
-                Log.d(TAG, "onError:" + assetFile.getUrl() + " " + volleyError.toString());
+                Log.e(TAG, "Patch onError:" + assetFile.getUrl() + " " + volleyError.toString());
             }
         }).start();
     }
@@ -157,7 +155,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
                 in = getAssets().open(AssetUtils.getPatchPath());
                 IoUtils.unzip(in, new File(AppUtils.getProfilePath(getApplicationContext())), true);
             } catch (IOException e) {
-                e.printStackTrace();
+                Log.e(TAG, AppUtils.getString(getApplicationContext(), R.string.error_resource_retrieve));
             } finally {
                 try {
                     if (in != null) {
@@ -172,7 +170,8 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
 
     @Override
     public void onNewFrame(HeadTransform headTransform) {
-//        Log.d(TAG, "onNewFrame");
+//        Performance.getInstance().addBreakpoint();
+
         headTransform.getHeadView(head.getHeadView(), 0);
         headTransform.getForwardVector(head.getForward(), 0);
         headTransform.getUpVector(head.getUp(), 0);
@@ -192,7 +191,6 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
 
     @Override
     public void onDrawEye(Eye eye) {
-//        Log.d(TAG, "onDrawEye");
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 
         // Apply the eye transformation to the matrix.
@@ -208,7 +206,6 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
 
     @Override
     public void onFinishFrame(Viewport viewport) {
-//        Log.d(TAG, "onFinishFrame");
         if (earth != null) {
             if (!earth.isCreated()) {
                 if (earth.getCreationState() == Creation.STATE_BEFORE_PREPARE) {
@@ -273,6 +270,9 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
                 }
             }
         }
+
+//        Performance.getInstance().addBreakpoint();
+//        Performance.getInstance().printEvaluationInMilliseconds();
     }
 
     private void updateScene(float[] view, float[] perspective) {
@@ -446,7 +446,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
     public void onCardboardTrigger() {
         long thisTime = System.currentTimeMillis();
         if (thisTime - lastTimeOnCardboardTrigger < TIME_DELTA_DOUBLE_CLICK) {
-            lastTimeOnCardboardTrigger = 0; //  The next quick click time won't trigger double click
+            lastTimeOnCardboardTrigger = 0;
             onCardboardDoubleClick();
         } else {
             lastTimeOnCardboardTrigger = thisTime;
@@ -467,7 +467,6 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
     }
 
     private GlModel.ClickListener onMarkerClickListener = new GlModel.ClickListener() {
-
         @Override
         public void onClick(GlModel model) {
             markerDetailView = new MarkerDetailView(getApplicationContext(), (AtomMarker) model);
@@ -483,19 +482,16 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
     };
 
     private LayerChooserView.Event layerChooserEventListener = new LayerChooserView.Event() {
-
         @Override
         public void onSelected(File file) {
             String fileName = file.getName();
-            Log.d(TAG, "onSelected: " + fileName);
+            Log.d(TAG, "LayerChooserView.onSelected: " + fileName);
             if (fileName.equals(AssetUtils.getLastLayerFileName(getApplicationContext()))) {
                 destoryLayerChooserView();
                 return;
             }
-            AssetUtils.setLastLayerFileName(getApplicationContext(), fileName);
-
             newLayer(AssetUtils.getLayerUrl(fileName));
-
+            AssetUtils.setLastLayerFileName(getApplicationContext(), fileName);
             head.centerCameraPosition();
         }
     };
@@ -506,13 +502,13 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
             if (objModel != null && objModel.isCreated()) {
                 return;
             }
+            // trigger a click when user looking at the target after a certain of time
             onCardboardClick();
         }
     };
 
     @Override
     public void onSurfaceCreated(EGLConfig eglConfig) {
-        // Dark background so text shows up well.
         GLES20.glClearColor(0.1f, 0.1f, 0.1f, 0.5f);
 
         ray = new Ray(getApplicationContext(), head);
@@ -532,15 +528,16 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         Log.d(TAG, "onSurfaceChanged");
     }
 
+    // TODO: 7/4/2016 [WHY] never get called
     @Override
-    public void onRendererShutdown() { // TODO: 7/4/2016 [WHY] never get called
+    public void onRendererShutdown() {
         Log.d(TAG, "onRendererShutdown");
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        // the integer pass to glesValidate() should be consistent with the glEsVersion in the Manifest
+        // the GL_ES_VERSION should be consistent with the glEsVersion decorated in the AndroidManifest.xml
         if (!DeviceUtils.glesValidate(getApplicationContext(), Settings.GL_ES_VERSION)) {
             Toast.makeText(getApplicationContext(), getString(R.string.error_gles_version_not_supported), Toast.LENGTH_SHORT).show();
             finish();

@@ -22,6 +22,9 @@ public class OcTree implements TreePhase {
         node.clean();
     }
 
+    /**
+     * @return Nodes which has object directly relative to
+     */
     public ArrayList<OcTreeNode> getValidNodes() {
         return node.getValidNodes();
     }
@@ -33,6 +36,6 @@ public class OcTree implements TreePhase {
 
     @Override
     public String toString() {
-        return TAG + "Node Size: " + node.getNodeSize() + ", Leaf Size: " + node.getLeafSize();
+        return TAG + "Nodes=" + node.getNodeSize() + ", Leaves=" + node.getLeafSize();
     }
 }

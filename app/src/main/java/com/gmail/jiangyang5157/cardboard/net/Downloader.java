@@ -1,7 +1,6 @@
 package com.gmail.jiangyang5157.cardboard.net;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -20,7 +19,6 @@ import java.util.Map;
  * @since 6/19/2016
  */
 public class Downloader extends NetRequest {
-    private static final String TAG = "[Downloader]";
 
     private AssetFile assetFile;
 
@@ -47,7 +45,6 @@ public class Downloader extends NetRequest {
                 Request.Method.GET,
                 assetFile.getUrl(),
                 response -> {
-                    Log.d(TAG, "onResponse: " + assetFile.getUrl());
                     boolean c = listener.onStart(request.getResponseHeaders());
                     if (!c) {
                         return;

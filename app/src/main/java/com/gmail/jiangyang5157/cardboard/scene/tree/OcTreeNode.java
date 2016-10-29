@@ -4,7 +4,6 @@ import android.util.ArrayMap;
 
 import com.gmail.jiangyang5157.cardboard.scene.RayIntersection;
 import com.gmail.jiangyang5157.tookit.math.Vector;
-import com.gmail.jiangyang5157.tookit.math.Vector3d;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,14 +19,14 @@ public class OcTreeNode extends TreeNode {
 
     protected static final int MIN_OBJECT_SIZE = 5; // size > 0
 
-    protected float[] center; // center position of this node
-    protected float step; // half of edge's length of this node
-    protected float[] lb; // lb position of this node
-    protected float[] rt; // rt position of this node
+    protected float[] center; // center position
+    protected float step; // half of edge's length
+    protected float[] lbb; // left-bottom-back corner position
+    protected float[] rtf; // right-top-front corner position
 
-    protected final int depth; // depth of this node
-    private ArrayMap<Integer, OcTreeNode> nodes; // the child nodes - <octant code, node>
-    private ArrayMap<OcTreeObject, Integer> objects; // the objects stored at this node - <object, octant code>
+    protected final int depth; // the level of partition depth
+    private ArrayMap<Integer, OcTreeNode> nodes; // child nodes - <octant code, node>
+    private ArrayMap<OcTreeObject, Integer> objects; // objects that directly relative to - <object, octant code>
 
     public OcTreeNode(float[] center, float step, int depth) {
         this.center = center;
@@ -35,12 +34,12 @@ public class OcTreeNode extends TreeNode {
         this.depth = depth;
         objects = new ArrayMap<>();
 
-        lb = new float[]{
+        lbb = new float[]{
                 center[0] - step,
                 center[1] - step,
                 center[2] - step
         };
-        rt = new float[]{
+        rtf = new float[]{
                 center[0] + step,
                 center[1] + step,
                 center[2] + step
@@ -53,8 +52,7 @@ public class OcTreeNode extends TreeNode {
         float halfStep = step * 0.5f;
         for (int i = 0; i < 8; i++) {
              /*
-            // Octants numbering
-            //
+            // Octants Numbering
             //                                 +Y                 -Z
             //                                 |                  /
             //                                 |                 /
@@ -83,9 +81,6 @@ public class OcTreeNode extends TreeNode {
             //             |               |               | /
             //             |               |               |/
             //             o---------------o---------------o
-            //
-            //
-            //
             */
             boolean[] octant = getBooleanOctant(i);
             float offsetX = octant[0] ? halfStep : -halfStep;
@@ -126,18 +121,18 @@ public class OcTreeNode extends TreeNode {
         double tmin, tmax, tymin, tymax, tzmin, tzmax;
 
         if (headForwardFrac_vec.getData(0) >= 0) {
-            tmin = (lb[0] - cameraPos_vec.getData(0)) * headForwardFrac_vec.getData(0);
-            tmax = (rt[0] - cameraPos_vec.getData(0)) * headForwardFrac_vec.getData(0);
+            tmin = (lbb[0] - cameraPos_vec.getData(0)) * headForwardFrac_vec.getData(0);
+            tmax = (rtf[0] - cameraPos_vec.getData(0)) * headForwardFrac_vec.getData(0);
         } else {
-            tmin = (rt[0] - cameraPos_vec.getData(0)) * headForwardFrac_vec.getData(0);
-            tmax = (lb[0] - cameraPos_vec.getData(0)) * headForwardFrac_vec.getData(0);
+            tmin = (rtf[0] - cameraPos_vec.getData(0)) * headForwardFrac_vec.getData(0);
+            tmax = (lbb[0] - cameraPos_vec.getData(0)) * headForwardFrac_vec.getData(0);
         }
         if (headForwardFrac_vec.getData(1) >= 0) {
-            tymin = (lb[1] - cameraPos_vec.getData(1)) * headForwardFrac_vec.getData(1);
-            tymax = (rt[1] - cameraPos_vec.getData(1)) * headForwardFrac_vec.getData(1);
+            tymin = (lbb[1] - cameraPos_vec.getData(1)) * headForwardFrac_vec.getData(1);
+            tymax = (rtf[1] - cameraPos_vec.getData(1)) * headForwardFrac_vec.getData(1);
         } else {
-            tymin = (rt[1] - cameraPos_vec.getData(1)) * headForwardFrac_vec.getData(1);
-            tymax = (lb[1] - cameraPos_vec.getData(1)) * headForwardFrac_vec.getData(1);
+            tymin = (rtf[1] - cameraPos_vec.getData(1)) * headForwardFrac_vec.getData(1);
+            tymax = (lbb[1] - cameraPos_vec.getData(1)) * headForwardFrac_vec.getData(1);
         }
 
         if ((tmin > tymax) || (tymin > tmax)) {
@@ -151,11 +146,11 @@ public class OcTreeNode extends TreeNode {
         }
 
         if (headForwardFrac_vec.getData(2) >= 0) {
-            tzmin = (lb[2] - cameraPos_vec.getData(2)) * headForwardFrac_vec.getData(2);
-            tzmax = (rt[2] - cameraPos_vec.getData(2)) * headForwardFrac_vec.getData(2);
+            tzmin = (lbb[2] - cameraPos_vec.getData(2)) * headForwardFrac_vec.getData(2);
+            tzmax = (rtf[2] - cameraPos_vec.getData(2)) * headForwardFrac_vec.getData(2);
         } else {
-            tzmin = (rt[2] - cameraPos_vec.getData(2)) * headForwardFrac_vec.getData(2);
-            tzmax = (lb[2] - cameraPos_vec.getData(2)) * headForwardFrac_vec.getData(2);
+            tzmin = (rtf[2] - cameraPos_vec.getData(2)) * headForwardFrac_vec.getData(2);
+            tzmax = (lbb[2] - cameraPos_vec.getData(2)) * headForwardFrac_vec.getData(2);
         }
 
         if ((tmin > tzmax) || (tzmin > tmax)) {
@@ -176,37 +171,6 @@ public class OcTreeNode extends TreeNode {
         }
 
         return true;
-
-        // ray-sphere using diagonal of the box as the radius
-//        Vector pos_camera_vec = new Vector3d(
-//                cameraPos_vec.getData(0) - center[0],
-//                cameraPos_vec.getData(1) - center[1],
-//                cameraPos_vec.getData(2) - center[2]
-//        );
-//
-//        double stepPower2 = step * step;
-//        double twoStepPower2 = stepPower2 + stepPower2;
-//        double threeStepPower2 = twoStepPower2 + stepPower2;
-//        double radius = Math.sqrt(threeStepPower2);
-//        final double b = headForwardFrac_vec.dot(pos_camera_vec);
-//        final double c = pos_camera_vec.dot(pos_camera_vec) - (radius * radius);
-//
-//        final double f = b * b - c; // the quadratic equation
-//        if (f <= Vector.EPSILON) {
-//            return false; // ray misses sphere
-//        }
-//
-//        final double sqrtF = Math.sqrt(f);
-//        final double t0 = -b + sqrtF;
-//        final double t1 = -b - sqrtF;
-//
-//        // pick the smaller of the two results if both are positive
-//        final double t = t0 < 0.0f ? Math.max(t1, 0.0f) : (t1 < 0.0f ? t0 : Math.min(t0, t1));
-//        if (t == 0) {
-//            return false; // both intersections are behind the matrix
-//        }
-//
-//        return true;
     }
 
     private boolean[] getBooleanOctant(int index) {
@@ -234,8 +198,8 @@ public class OcTreeNode extends TreeNode {
             float delta = obj.center[i] - center[i];
             octant[i] = delta >= 0;
         }
-        int index = getIndex(octant); // index of the straddled octant
 
+        int index = getIndex(octant); // index of the straddled octant
         if (depth < OcTree.MAX_DEPTH) {
             if (nodes == null) {
                 if (objects.size() < MIN_OBJECT_SIZE) {

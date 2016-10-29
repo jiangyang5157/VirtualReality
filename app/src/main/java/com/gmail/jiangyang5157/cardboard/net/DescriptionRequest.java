@@ -173,11 +173,11 @@ public class DescriptionRequest extends Request<Object> {
     @Override
     protected Response<Object> parseNetworkResponse(NetworkResponse response) {
         responseHeaders = response.headers;
-        for (Map.Entry<String, String> entry : responseHeaders.entrySet()) {
-            Log.d(TAG, "headers: key/value: " + entry.getKey() + ", " + entry.getValue());
-        }
+//        for (Map.Entry<String, String> entry : responseHeaders.entrySet()) {
+//            Log.d(TAG, "headers: key/value: " + entry.getKey() + ", " + entry.getValue());
+//        }
         String contentType = responseHeaders.get("Content-Type");
-        Log.d(TAG, "headers.contentType: " + contentType);
+        Log.d(TAG, "parseNetworkResponse.contentType: " + contentType);
 
         if (contentType.startsWith("image/jpeg")) {
             responseType = RESPONSE_TYPE_BITMAP;
@@ -197,7 +197,7 @@ public class DescriptionRequest extends Request<Object> {
             responseType = RESPONSE_TYPE_STRING;
             return doJsonParse(response);
         } else {
-            Log.w(TAG, "Unsupported headers.contentType: " + contentType + ": " + getUrl());
+            Log.w(TAG, "Unsupported contentType: " + contentType + " from " + getUrl());
             return Response.error(new ParseError());
         }
     }
@@ -233,8 +233,8 @@ public class DescriptionRequest extends Request<Object> {
 //                    Log.d(TAG, "String extract: " + extract);
                 return Response.success(extract, HttpHeaderParser.parseCacheHeaders(response));
             } catch (JSONException e) {
-                // catch expected "No Value For" exception
-                Log.e(TAG, "JSONException: " + e.getMessage());
+                // expected exception "No Value For"
+                Log.w(TAG, "JSONException: " + e.getMessage());
                 return Response.error(new ParseError());
             }
         } else {
@@ -248,7 +248,7 @@ public class DescriptionRequest extends Request<Object> {
         Document doc;
         try {
             doc = Jsoup.parse(parsed);
-        } catch (VerifyError | NoClassDefFoundError e){
+        } catch (VerifyError | NoClassDefFoundError e) {
             // http://stackoverflow.com/questions/38059373/java-lang-verifyerror-when-downloading-data-with-jsoup-in-android-n
             // TODO: 10/1/2016 upgrade Jsoup
             return Response.error(new ParseError(response));

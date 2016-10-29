@@ -19,13 +19,13 @@ import java.util.Locale;
 public class AssetUtils {
     private static final String TAG = "[AssetUtils]";
 
-
     public static final String URL_PROTOCOL = "http";
     public static final String PORT = "8080";
+
     /*
     Android device: use real machine Ip address.
     Android emulator: use 10.0.2.2 instead of 127.0.0.1 or localhost.
-  */
+    */
     public static final String IP_ADDRESS = "192.168.1.67";
     public static final String IP_ADDRESS_LOCALHOST = "127.0.0.1";
 

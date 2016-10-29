@@ -31,7 +31,7 @@ public class IcosphereVertex implements Geometry {
         final int VERTEX_ARRAY_LENGTH = VERTEX_COUNTS[recursionLevel] * 3;
         vertices = new float[VERTEX_ARRAY_LENGTH];
 
-        // create 12 vertices of a icosahedron - http://blog.andreaskahler.com/2009/06/creating-icosphere-mesh-in-code.html
+        // Initialize 12 vertices Icosahedron
         short vIndex = 0;
         float ratio = (float) GOLDEN_RATIO;
         addVertex(-1, ratio, 0, vIndex++);

@@ -1,12 +1,10 @@
 package com.gmail.jiangyang5157.cardboard.net;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.android.volley.VolleyError;
 import com.gmail.jiangyang5157.cardboard.vr.AssetFile;
 
-import java.io.File;
 import java.util.Map;
 
 /**
@@ -15,7 +13,6 @@ import java.util.Map;
  */
 
 public class FilePrepare extends NetRequest {
-    private static final String TAG = "[FilePrepare]";
 
     private AssetFile assetFile;
 
@@ -54,7 +51,6 @@ public class FilePrepare extends NetRequest {
 
         @Override
         public void onError(AssetFile assetFile, VolleyError volleyError) {
-            Log.d(TAG, "onError:" + assetFile.getUrl() + " " + volleyError.toString());
             prepareListener.onComplete(assetFile);
         }
     };

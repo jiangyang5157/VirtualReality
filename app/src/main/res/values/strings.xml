@@ -2,5 +2,7 @@
     <string name="app_name">VirtualReality</string>
 
     <string name="error_gles_version_not_supported">OpenGL ES version not supported</string>
+    <string name="error_patch_retrieve">Failed to retrieve the latest Patch.</string>
+    <string name="error_resource_retrieve">Failed to retrieve build-in resource.</string>
 
 </resources>
