@@ -40,7 +40,11 @@ public class Earth extends UvSphere implements Creation {
     protected int creationState = STATE_BEFORE_PREPARE;
 
     public Earth(Context context, String urlTexture) {
-        super(context, 180, 180);
+        this(context, urlTexture, 180, 180);
+    }
+
+    public Earth(Context context, String urlTexture, int rings, int segments) {
+        super(context, rings, segments);
         this.urlTexture = urlTexture;
         setRadius(RADIUS);
 
@@ -60,7 +64,7 @@ public class Earth extends UvSphere implements Creation {
 
                 @Override
                 public void onComplete(AssetFile assetFile) {
-                    if (assetFile.isReady()){
+                    if (assetFile.isReady()) {
                         buildTextureBuffers();
                         buildData();
                         ray.subtractBusy();

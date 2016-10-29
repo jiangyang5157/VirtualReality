@@ -170,8 +170,6 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
 
     @Override
     public void onNewFrame(HeadTransform headTransform) {
-//        Performance.getInstance().addBreakpoint();
-
         headTransform.getHeadView(head.getHeadView(), 0);
         headTransform.getForwardVector(head.getForward(), 0);
         headTransform.getUpVector(head.getUp(), 0);
@@ -270,9 +268,6 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
                 }
             }
         }
-
-//        Performance.getInstance().addBreakpoint();
-//        Performance.getInstance().printEvaluationInMilliseconds();
     }
 
     private void updateScene(float[] view, float[] perspective) {
