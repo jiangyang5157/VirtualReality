@@ -23,7 +23,7 @@ public abstract class UvSphere extends Sphere implements GlModel.BindableTexture
     }
 
     // eg: (rings, segments = 5, 4) maps to (4 stacks, 4 slices) UV sphere
-    protected void buildData() {
+    public void buildData() {
         final float PI = (float) Math.PI;
         final float PItimes2 = PI * 2.0f;
         final float RINGS_FACTOR = 1.0f / (float) (rings - 1);

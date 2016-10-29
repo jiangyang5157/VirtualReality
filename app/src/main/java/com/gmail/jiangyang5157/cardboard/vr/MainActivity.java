@@ -19,6 +19,8 @@ import com.gmail.jiangyang5157.cardboard.scene.RayIntersection;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
 import com.gmail.jiangyang5157.cardboard.scene.model.AtomMap;
 import com.gmail.jiangyang5157.cardboard.scene.model.AtomMarker;
+import com.gmail.jiangyang5157.cardboard.scene.model.IcosphereBuilder;
+import com.gmail.jiangyang5157.cardboard.scene.model.IcosphereVertex;
 import com.gmail.jiangyang5157.cardboard.scene.model.LayerChooserView;
 import com.gmail.jiangyang5157.cardboard.scene.model.Dialog;
 import com.gmail.jiangyang5157.cardboard.scene.model.ObjModel;
@@ -271,133 +273,133 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
     }
 
     private void updateScene(float[] view, float[] perspective) {
-        Trace.beginSection(TAG + ".updateScene");
-        try {
-            if (ray != null) {
-                ray.update(view, perspective);
-            }
-            if (atomMap != null) {
+        if (ray != null) {
+            ray.update(view, perspective);
+        }
+        if (atomMap != null) {
+            Trace.beginSection(TAG + ".atomMap.updateScene");
+            try {
                 atomMap.update(view, perspective);
+            } finally {
+                Trace.endSection();
             }
-            if (earth != null) {
-                earth.update(view, perspective);
-            }
-            if (markerDetailView != null) {
-                markerDetailView.update(view, perspective);
-            }
-            if (objModel != null) {
-                objModel.update(view, perspective);
-            }
-            if (layerChooserView != null) {
-                layerChooserView.update(view, perspective);
-            }
-        } finally {
-            Trace.endSection();
+        }
+        if (earth != null) {
+            earth.update(view, perspective);
+        }
+        if (markerDetailView != null) {
+            markerDetailView.update(view, perspective);
+        }
+        if (objModel != null) {
+            objModel.update(view, perspective);
+        }
+        if (layerChooserView != null) {
+            layerChooserView.update(view, perspective);
         }
     }
 
     private void drawScene() {
-        Trace.beginSection(TAG + ".drawScene");
-        try {
-            GLES20.glEnable(GLES20.GL_DEPTH_TEST);
+        GLES20.glEnable(GLES20.GL_DEPTH_TEST);
+
+        GLES20.glEnable(GLES20.GL_CULL_FACE);
+        GLES20.glFrontFace(GLES20.GL_CCW);
+        GLES20.glCullFace(GLES20.GL_BACK);
+
+        if (ray != null) {
+            ray.draw();
+        }
+
+        if (atomMap != null) {
+            Trace.beginSection(TAG + ".atomMap.drawScene");
+            try {
+                atomMap.draw();
+            } finally {
+                Trace.endSection();
+            }
+        }
+
+        if (earth != null) {
+            earth.draw();
+        }
+
+        if (markerDetailView != null) {
+            GLES20.glDisable(GLES20.GL_CULL_FACE);
+
+            GLES20.glEnable(GLES20.GL_BLEND);
+            GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
+            markerDetailView.draw();
+            GLES20.glDisable(GLES20.GL_BLEND);
 
             GLES20.glEnable(GLES20.GL_CULL_FACE);
-            GLES20.glFrontFace(GLES20.GL_CCW);
-            GLES20.glCullFace(GLES20.GL_BACK);
-
-            if (ray != null) {
-                ray.draw();
-            }
-
-            if (atomMap != null) {
-                atomMap.draw();
-            }
-
-            if (earth != null) {
-                earth.draw();
-            }
-
-            if (markerDetailView != null) {
-                GLES20.glDisable(GLES20.GL_CULL_FACE);
-
-                GLES20.glEnable(GLES20.GL_BLEND);
-                GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
-                markerDetailView.draw();
-                GLES20.glDisable(GLES20.GL_BLEND);
-
-                GLES20.glEnable(GLES20.GL_CULL_FACE);
-            }
-
-            if (objModel != null) {
-                objModel.draw();
-            }
-
-            if (layerChooserView != null) {
-                GLES20.glDisable(GLES20.GL_CULL_FACE);
-
-                GLES20.glEnable(GLES20.GL_BLEND);
-                GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
-                layerChooserView.draw();
-                GLES20.glDisable(GLES20.GL_BLEND);
-
-                GLES20.glEnable(GLES20.GL_CULL_FACE);
-            }
-
-            GLES20.glDisable(GLES20.GL_DEPTH_TEST);
-            GLES20.glDisable(GLES20.GL_CULL_FACE);
-        } finally {
-            Trace.endSection();
         }
+
+        if (objModel != null) {
+            objModel.draw();
+        }
+
+        if (layerChooserView != null) {
+            GLES20.glDisable(GLES20.GL_CULL_FACE);
+
+            GLES20.glEnable(GLES20.GL_BLEND);
+            GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
+            layerChooserView.draw();
+            GLES20.glDisable(GLES20.GL_BLEND);
+
+            GLES20.glEnable(GLES20.GL_CULL_FACE);
+        }
+
+        GLES20.glDisable(GLES20.GL_DEPTH_TEST);
+        GLES20.glDisable(GLES20.GL_CULL_FACE);
     }
 
     private RayIntersection getIntersection() {
-        Trace.beginSection(TAG + ".getIntersection");
-        try {
-            float[] headForward = head.getForward();
-            Vector cameraPos_vec = new Vector3d(head.getCamera().getX(), head.getCamera().getY(), head.getCamera().getZ());
-            Vector headForward_vec = new Vector3d(headForward[0], headForward[1], headForward[2]);
-            Vector headForwardFrac_vec = new Vector3d(1.0 / headForward[0], 1.0 / headForward[1], 1.0 / headForward[2]);
+        float[] headForward = head.getForward();
+        Vector cameraPos_vec = new Vector3d(head.getCamera().getX(), head.getCamera().getY(), head.getCamera().getZ());
+        Vector headForward_vec = new Vector3d(headForward[0], headForward[1], headForward[2]);
+        Vector headForwardFrac_vec = new Vector3d(1.0 / headForward[0], 1.0 / headForward[1], 1.0 / headForward[2]);
 
-            RayIntersection rayIntersection = null;
-            if (layerChooserView != null) {
-                rayIntersection = layerChooserView.getIntersection(cameraPos_vec, headForward_vec);
-                if (rayIntersection == null) {
-                    if (layerChooserView.isCreated()) {
-                        layerChooserView.destroy();
-                        layerChooserView = null;
-                    }
+        RayIntersection rayIntersection = null;
+        if (layerChooserView != null) {
+            rayIntersection = layerChooserView.getIntersection(cameraPos_vec, headForward_vec);
+            if (rayIntersection == null) {
+                if (layerChooserView.isCreated()) {
+                    layerChooserView.destroy();
+                    layerChooserView = null;
                 }
             }
-            if (rayIntersection == null) {
-                if (markerDetailView != null) {
-                    rayIntersection = markerDetailView.getIntersection(cameraPos_vec, headForward_vec);
-                    if (rayIntersection == null) {
-                        if (markerDetailView.isCreated()) {
-                            markerDetailView.destroy();
-                            markerDetailView = null;
-                            if (objModel != null) {
-                                objModel.destroy();
-                                objModel = null;
-                            }
+        }
+        if (rayIntersection == null) {
+            if (markerDetailView != null) {
+                rayIntersection = markerDetailView.getIntersection(cameraPos_vec, headForward_vec);
+                if (rayIntersection == null) {
+                    if (markerDetailView.isCreated()) {
+                        markerDetailView.destroy();
+                        markerDetailView = null;
+                        if (objModel != null) {
+                            objModel.destroy();
+                            objModel = null;
                         }
                     }
                 }
             }
-            if (rayIntersection == null) {
-                if (atomMap != null) {
-                    rayIntersection = atomMap.getIntersection(cameraPos_vec, headForwardFrac_vec, head.getHeadView());
-                }
-            }
-            if (rayIntersection == null) {
-                if (earth != null) {
-                    rayIntersection = earth.getIntersection(cameraPos_vec, headForward_vec);
-                }
-            }
-
-            return rayIntersection;
-        } finally {
-            Trace.endSection();
         }
+        if (rayIntersection == null) {
+            if (atomMap != null) {
+                Trace.beginSection(TAG + ".atomMap.getIntersection");
+                try {
+                    rayIntersection = atomMap.getIntersection(cameraPos_vec, headForwardFrac_vec, head.getHeadView());
+                } finally {
+                    Trace.endSection();
+                }
+            }
+        }
+        if (rayIntersection == null) {
+            if (earth != null) {
+                rayIntersection = earth.getIntersection(cameraPos_vec, headForward_vec);
+            }
+        }
+
+        return rayIntersection;
     }
 
     private void onCardboardClick() {
@@ -616,4 +618,24 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         destoryEarth();
         destoryRay();
     }
+
+//    private void testPerformanceIcosphere(){
+//        for (int i = 0; i < IcosphereVertex.VERTEX_COUNTS.length; i++) {
+//            Log.d(Performance.TAG, "Icosphere VERTEX_COUNTS=" + IcosphereVertex.VERTEX_COUNTS[i]);
+//            Performance.getInstance().addBreakpoint();
+//            IcosphereBuilder.getInstance().build(i);
+//            Performance.getInstance().addBreakpoint();
+//            Performance.getInstance().printEvaluationInMilliseconds();
+//        }
+//    }
+//
+//    private void testPerformanceUvSphere(){
+//        for (int i = 50; i < 551; i += 100){
+//            Log.d(Performance.TAG, "UV Sphere rings/segments=" + i + "/" + i);
+//            Performance.getInstance().addBreakpoint();
+//            new Earth(null, null, i, i).buildData();
+//            Performance.getInstance().addBreakpoint();
+//            Performance.getInstance().printEvaluationInMilliseconds();
+//        }
+//    }
 }
