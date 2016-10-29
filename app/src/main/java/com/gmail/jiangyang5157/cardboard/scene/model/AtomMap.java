@@ -2,6 +2,7 @@ package com.gmail.jiangyang5157.cardboard.scene.model;
 
 import android.content.Context;
 import android.opengl.GLES20;
+import android.os.Trace;
 import android.util.ArrayMap;
 import android.util.Log;
 
@@ -162,20 +163,22 @@ public class AtomMap extends GlModel implements Creation {
 
     @Override
     public void update(float[] view, float[] perspective) {
-//        Log.d(TAG, "update markers"); //
-//        Performance.getInstance().addBreakpoint();
-        markers.update(view, perspective);
-//        Performance.getInstance().addBreakpoint();
-//        Performance.getInstance().printEvaluationInMilliseconds();
+        Trace.beginSection(TAG + ".update");
+        try {
+            markers.update(view, perspective);
+        } finally {
+            Trace.endSection();
+        }
     }
 
     @Override
     public void draw() {
-//        Log.d(TAG, "draw markers"); // 460-12ms
-//        Performance.getInstance().addBreakpoint();
-        markers.draw();
-//        Performance.getInstance().addBreakpoint();
-//        Performance.getInstance().printEvaluationInMilliseconds();
+        Trace.beginSection(TAG + ".draw"); // 460-12ms
+        try {
+            markers.draw();
+        } finally {
+            Trace.endSection();
+        }
     }
 
     public RayIntersection getIntersection(Vector cameraPos_vec, Vector headForwardFrac_vec, final float[] headView) {
