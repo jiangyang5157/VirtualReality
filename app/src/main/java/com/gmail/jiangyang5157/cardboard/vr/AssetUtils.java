@@ -56,7 +56,7 @@ public class AssetUtils {
     public static final String EARTH_TEXTURE_FILE_NAME = "world_map.jpg";
 
     public static final String LAYER_FILE_NAME_KEY = "LAYER_FILE_NAME_KEY";
-    public static final String LAYER_FILE_NAME_DEFAULT = "example1.kml";
+    public static final String LAYER_FILE_NAME_DEFAULT = "example_combined.kml";
     public static final String PATCH_LAST_MODIFIED_TIME_KEY = "PATCH_LAST_MODIFIED_KEY";
     public static final long PATCH_LAST_MODIFIED_TIME_DEFAULT = 0;
 

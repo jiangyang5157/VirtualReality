@@ -33,7 +33,7 @@ public class Marker3d extends Icosphere {
     private ObjModel objModel;
 
     public Marker3d(Context context) {
-        super(context, 3);
+        super(context, 0);
         setRadius(RADIUS);
         setColor(AppUtils.getColor(context, com.gmail.jiangyang5157.tookit.android.base.R.color.Yellow, null));
     }
