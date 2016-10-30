@@ -3,6 +3,7 @@ package com.gmail.jiangyang5157.cardboard.scene.model;
 import android.content.Context;
 import android.opengl.GLES20;
 
+import com.gmail.jiangyang5157.app.Performance;
 import com.gmail.jiangyang5157.cardboard.kml.KmlPlacemark;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
 import com.gmail.jiangyang5157.cardboard.scene.RayIntersection;
@@ -78,9 +79,12 @@ public class AtomMarkers extends Marker {
 
     @Override
     public void update(float[] view, float[] perspective) {
+//        Performance.getInstance().addBreakpoint();
         for (Marker marker : markers) {
             marker.update(view, perspective);
         }
+//        Performance.getInstance().addBreakpoint();
+//        Performance.getInstance().printEvaluationInMilliseconds();
     }
 
     public void removeMarker(Marker marker) {
