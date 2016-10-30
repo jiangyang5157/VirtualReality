@@ -212,7 +212,6 @@ public class Earth extends UvSphere implements Creation {
 
     @Override
     public void destroy() {
-        Log.d(TAG, "destroy");
         super.destroy();
         GLES20.glDeleteBuffers(buffers.length, buffers, 0);
         GLES20.glDeleteTextures(texBuffers.length, texBuffers, 0);

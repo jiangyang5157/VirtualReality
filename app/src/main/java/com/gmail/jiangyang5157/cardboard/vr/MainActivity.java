@@ -101,7 +101,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
                 try {
                     long lastModifiedTime = AssetUtils.getLastPatchLastModifiedTime(getApplicationContext());
                     long httpDateTime = AssetUtils.getHttpDateTime(headers.get("Last-Modified"));
-                    Log.d(TAG, "Patch httpDateTime=" + httpDateTime + " lastModifiedTime=" + lastModifiedTime);
+//                    Log.d(TAG, "Patch httpDateTime=" + httpDateTime + " lastModifiedTime=" + lastModifiedTime);
                     if (lastModifiedTime < httpDateTime) {
                         return true; // continue to download
                     } else {
@@ -120,7 +120,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
                     in = new FileInputStream(assetFile.getFile());
                     IoUtils.unzip(in, new File(AppUtils.getProfilePath(getApplicationContext())), true);
                     AssetUtils.setLastPatchLastModifiedTime(getApplicationContext(), AssetUtils.getHttpDateTime(headers.get("Last-Modified")));
-                    Log.d(TAG, "Patch onComplete: " + assetFile);
+//                    Log.d(TAG, "Patch onComplete: " + assetFile);
                 } catch (ParseException | IOException e) {
                     Log.e(TAG, AppUtils.getString(getApplicationContext(), R.string.error_patch_retrieve));
                 } finally {
@@ -463,7 +463,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         @Override
         public void onSelected(File file) {
             String fileName = file.getName();
-            Log.d(TAG, "LayerChooserView.onSelected: " + fileName);
+//            Log.d(TAG, "LayerChooserView.onSelected: " + fileName);
             if (fileName.equals(AssetUtils.getLastLayerFileName(getApplicationContext()))) {
                 destoryLayerChooserView();
                 return;
@@ -503,13 +503,13 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
 
     @Override
     public void onSurfaceChanged(int width, int height) {
-        Log.d(TAG, "onSurfaceChanged");
+//        Log.d(TAG, "onSurfaceChanged");
     }
 
     // TODO: 7/4/2016 [WHY] never get called
     @Override
     public void onRendererShutdown() {
-        Log.d(TAG, "onRendererShutdown");
+//        Log.d(TAG, "onRendererShutdown");
     }
 
     @Override

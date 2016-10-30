@@ -94,7 +94,6 @@ public class Marker3d extends Icosphere {
 
     @Override
     public void destroy() {
-        Log.d(TAG, "destroy");
         super.destroy();
     }
 

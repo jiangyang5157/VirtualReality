@@ -177,8 +177,7 @@ public class DescriptionRequest extends Request<Object> {
 //            Log.d(TAG, "headers: key/value: " + entry.getKey() + ", " + entry.getValue());
 //        }
         String contentType = responseHeaders.get("Content-Type");
-        Log.d(TAG, "parseNetworkResponse.contentType: " + contentType);
-
+//        Log.d(TAG, "parseNetworkResponse.contentType: " + contentType);
         if (contentType.startsWith("image/jpeg")) {
             responseType = RESPONSE_TYPE_BITMAP;
             // Serialize all decode on a global lock to reduce concurrent heap usage.

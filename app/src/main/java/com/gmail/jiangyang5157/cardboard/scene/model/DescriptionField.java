@@ -37,13 +37,13 @@ public class DescriptionField extends TextField {
         if (find) {
             String url = content.substring(matcher.start(), matcher.end());
             url = url.replaceFirst(".wikipedia.org/wiki/", ".wikipedia.org/w/api.php?format=json&action=query&redirects=1&prop=extracts&exintro=&explaintext=&indexpageids=&titles=");
-            Log.d(TAG, "URL matcher content: " + content + "\n" + url);
+//            Log.d(TAG, "URL matcher content: " + content + "\n" + url);
             new DescriptionLoader(url, (int) width, new DescriptionLoader.ResponseListener() {
                 @Override
                 public void onComplete(Bitmap bitmap) {
                     int w = bitmap.getWidth();
                     int h = bitmap.getHeight();
-                    Log.d(TAG, "Response.Listener.onResponse: bitmap w/h: " + w + ", " + h);
+//                    Log.d(TAG, "Response.Listener.onResponse: bitmap w/h: " + w + ", " + h);
                     height = h;
                     Bitmap texture = Bitmap.createBitmap((int) width, (int) height, Bitmap.Config.ARGB_4444);
                     Canvas canvas = new Canvas(texture);
@@ -57,7 +57,7 @@ public class DescriptionField extends TextField {
 
                 @Override
                 public void onComplete(String string) {
-                    Log.d(TAG, "Response.Listener.onResponse: string: " + string);
+//                    Log.d(TAG, "Response.Listener.onResponse: string: " + string);
                     textureBitmap[0] = buildTextBitmap(ellipsizeString(string, MAX_TEXT_LENGTH));
                     buildData();
                     eventListener.onPrepareComplete();

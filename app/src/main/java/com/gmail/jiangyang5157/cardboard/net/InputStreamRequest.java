@@ -39,9 +39,8 @@ public class InputStreamRequest extends Request<byte[]> {
 //        for (Map.Entry<String, String> entry : responseHeaders.entrySet()) {
 //            Log.d(TAG, "headers: key/value: " + entry.getKey() + ", " + entry.getValue());
 //        }
-        String contentType = responseHeaders.get("Content-Type");
-        Log.d(TAG, "parseNetworkResponse.contentType: " + contentType);
-
+//        String contentType = responseHeaders.get("Content-Type");
+//        Log.d(TAG, "parseNetworkResponse.contentType: " + contentType);
         //Pass the response data here
         return Response.success(response.data, HttpHeaderParser.parseCacheHeaders(response));
     }
