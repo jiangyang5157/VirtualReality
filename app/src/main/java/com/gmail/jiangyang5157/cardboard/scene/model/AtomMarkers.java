@@ -12,6 +12,7 @@ import com.gmail.jiangyang5157.cardboard.scene.tree.OcTreeNode;
 import com.gmail.jiangyang5157.cardboard.scene.tree.OcTreeObject;
 import com.gmail.jiangyang5157.cardboard.vr.AssetUtils;
 import com.gmail.jiangyang5157.cardboard.vr.R;
+import com.gmail.jiangyang5157.tookit.base.time.Performance;
 import com.gmail.jiangyang5157.tookit.math.Vector;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -72,36 +73,46 @@ public class AtomMarkers extends Marker3d {
         if (!isCreated() || !isVisible()) {
             return;
         }
-
+        Performance.getInstance().addBreakpoint();
         GLES20.glUseProgram(program);
         GLES20.glEnableVertexAttribArray(vertexHandle);
         GLES20.glEnableVertexAttribArray(normalHandle);
+        Performance.getInstance().addBreakpoint();
         if (lighting != null) {
             GLES20.glUniform3fv(lightPosHandle, 1, lighting.getLightPosInCameraSpace(), 0);
         }
 
+        Performance.getInstance().addBreakpoint();
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, verticesBuffHandle);
         GLES20.glVertexAttribPointer(vertexHandle, 3, GLES20.GL_FLOAT, false, 0, 0);
+        Performance.getInstance().addBreakpoint();
 
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, normalsBuffHandle);
         GLES20.glVertexAttribPointer(normalHandle, 3, GLES20.GL_FLOAT, false, 0, 0);
+        Performance.getInstance().addBreakpoint();
 
         GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, indicesBuffHandle);
+        Performance.getInstance().addBreakpoint();
 
         int iSize = markers.size();
         for (int i = 0; i < iSize; i++) {
             markers.get(i).draw();
         }
+        Performance.getInstance().addBreakpoint();
 
         GLES20.glDisableVertexAttribArray(vertexHandle);
         GLES20.glDisableVertexAttribArray(normalHandle);
         GLES20.glUseProgram(0);
 
         GlesUtils.printGlError(TAG + " - draw end");
+        Performance.getInstance().addBreakpoint();
+        Performance.getInstance().printEvaluationInMilliseconds();
     }
 
     @Override
     public void update(float[] view, float[] perspective) {
+//        Log.d(Performance.TAG, "" + markers.size() + " Placemarks Update");
+//        Performance.getInstance().addBreakpoint();
         this.view = view;
         this.perspective = perspective;
 
@@ -109,6 +120,8 @@ public class AtomMarkers extends Marker3d {
         for (int i = 0; i < iSize; i++) {
             markers.get(i).update(view, perspective);
         }
+//        Performance.getInstance().addBreakpoint();
+//        Performance.getInstance().printEvaluationInMilliseconds();
     }
 
     private void addMarker(AtomMarker marker) {
@@ -143,7 +156,8 @@ public class AtomMarkers extends Marker3d {
         if (!isCreated() || !isVisible()) {
             return null;
         }
-
+//        Log.d(Performance.TAG, "" + markers.size() + " Placemarks Intersection");
+//        Performance.getInstance().addBreakpoint();
         RayIntersection ret = null;
         ArrayList<RayIntersection> rayIntersections = new ArrayList<>();
         int iSize = ocTreeNodes.size();
@@ -161,7 +175,8 @@ public class AtomMarkers extends Marker3d {
             }
             ret = rayIntersections.get(0);
         }
-
+//        Performance.getInstance().addBreakpoint();
+//        Performance.getInstance().printEvaluationInMilliseconds();
         return ret;
     }
 

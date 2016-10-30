@@ -2,6 +2,9 @@ package com.gmail.jiangyang5157.cardboard.scene.model;
 
 import android.content.Context;
 import android.opengl.GLES20;
+import android.util.Log;
+
+import com.gmail.jiangyang5157.tookit.base.time.Performance;
 
 /**
  * This GlModel cannot be created and draw individually. Its a component of AtomMarkers, which is responsible to create / update / draw AtomMarker.
@@ -28,7 +31,11 @@ public class AtomMarker extends Marker3d {
 
         GLES20.glUniform3fv(colorHandle, 1, color, 0);
 
+//        Log.d(Performance.TAG, "AtomMarker glDrawElements");
+//        Performance.getInstance().addBreakpoint();
         GLES20.glDrawElements(GLES20.GL_TRIANGLES, indicesBufferCapacity, GLES20.GL_UNSIGNED_SHORT, 0);
+//        Performance.getInstance().addBreakpoint();
+//        Performance.getInstance().printEvaluationInMilliseconds();
 
         GlesUtils.printGlError(TAG + " - draw end");
     }
