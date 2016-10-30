@@ -106,7 +106,6 @@ public class AtomMarkers extends Marker3d {
 
     @Override
     public void update(float[] view, float[] perspective) {
-//        Log.d(Performance.TAG, "" + markers.size() + " Placemarks Update");
 //        Performance.getInstance().addBreakpoint();
         this.view = view;
         this.perspective = perspective;
