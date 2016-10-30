@@ -79,9 +79,9 @@ public class AtomMap extends GlModel implements Creation {
             String url = AssetUtils.localhost2RealMachine(href);
             File file = new File(AssetUtils.getAbsolutePath(context, AssetUtils.getAssetPath(url)));
             AssetFile assetFile = new AssetFile(file, url);
-            String update = networkLink.getProperty("update");
-            Log.d(TAG, "prepareNetworkLinks (update=" + update + "): " + assetFile);
             // TODO: 10/2/2016 update property = 1: force update
+            String update = networkLink.getProperty("update");
+//            Log.d(TAG, "prepareNetworkLinks (update=" + update + "): " + assetFile);
             assetFileSet.add(assetFile);
         }
 
@@ -109,7 +109,7 @@ public class AtomMap extends GlModel implements Creation {
 
     private void complete(Ray ray, AssetFile assetFile) {
         todo--;
-        Log.d(TAG, "complete: " + assetFile.toString() + "\ntodo:" + todo);
+//        Log.d(TAG, "complete: " + assetFile.toString() + "\ntodo:" + todo);
         if (todo <= 0) {
             ray.subtractBusy();
             creationState = STATE_BEFORE_CREATE;

@@ -118,7 +118,7 @@ public class ObjModel extends GlModel implements GlModel.BindableBuffer, Creatio
         int vSize = fvSize * 3;
         int fvnSize = fvn.size();
         int vnSize = vn.size();
-        Log.d(TAG, "fvSize/vSize/fvnSize/vnSize: " + fvSize + "," + vSize + "," + fvnSize + "," + vnSize);
+//        Log.d(TAG, "fvSize/vSize/fvnSize/vnSize: " + fvSize + "," + vSize + "," + fvnSize + "," + vnSize);
         FloatBuffer verticesBuffer = ByteBuffer.allocateDirect(vSize * BufferUtils.BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
         FloatBuffer normalsBuffer = ByteBuffer.allocateDirect(vSize * BufferUtils.BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
         ShortBuffer indicesBuffer = ByteBuffer.allocateDirect(fvSize * BufferUtils.BYTES_PER_SHORT).order(ByteOrder.nativeOrder()).asShortBuffer();
@@ -420,7 +420,6 @@ public class ObjModel extends GlModel implements GlModel.BindableBuffer, Creatio
 
     @Override
     public void destroy() {
-        Log.d(TAG, "destroy");
         super.destroy();
         GLES20.glDeleteBuffers(buffers.length, buffers, 0);
     }

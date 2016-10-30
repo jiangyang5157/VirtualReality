@@ -36,7 +36,7 @@ public class IcosphereBuilder {
         if (ret == null) {
             ret = new IcosphereVertex(recursionLevel);
             icosphereVertices.put(vertexCount, ret);
-            Log.d(TAG, "Created Icosephere with recursionLevel=" + recursionLevel + " vertexCount=" + vertexCount);
+//            Log.d(TAG, "Created Icosephere with recursionLevel=" + recursionLevel + " vertexCount=" + vertexCount);
         }
         return ret;
     }

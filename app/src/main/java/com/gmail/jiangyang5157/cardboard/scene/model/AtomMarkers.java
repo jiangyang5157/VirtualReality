@@ -47,7 +47,7 @@ public class AtomMarkers extends Marker3d {
         super.create(program);
 
         ocTreeNodes = ocTree.getValidNodes();
-        Log.d(TAG, "ocTree: " + ocTree.toString() + ", valid ocTreeNodes: " + ocTreeNodes.size());
+//        Log.d(TAG, "ocTree: " + ocTree.toString() + ", valid ocTreeNodes: " + ocTreeNodes.size());
 
         int iSize = markers.size();
         for (int i = 0; i < iSize; i++) {

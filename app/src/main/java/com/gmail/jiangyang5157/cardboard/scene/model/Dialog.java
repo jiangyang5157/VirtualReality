@@ -169,7 +169,6 @@ public abstract class Dialog extends Panel implements Creation {
 
     @Override
     public void destroy() {
-        Log.d(TAG, "destroy");
         int iSize = panels.size();
         for (int i = 0; i < iSize; i++) {
             panels.get(i).destroy();
