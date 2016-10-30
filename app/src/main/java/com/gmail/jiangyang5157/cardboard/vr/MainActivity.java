@@ -18,6 +18,8 @@ import com.gmail.jiangyang5157.cardboard.scene.RayIntersection;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
 import com.gmail.jiangyang5157.cardboard.scene.model.AtomMap;
 import com.gmail.jiangyang5157.cardboard.scene.model.AtomMarker;
+import com.gmail.jiangyang5157.cardboard.scene.model.IcosphereBuilder;
+import com.gmail.jiangyang5157.cardboard.scene.model.IcosphereVertex;
 import com.gmail.jiangyang5157.cardboard.scene.model.LayerChooserView;
 import com.gmail.jiangyang5157.cardboard.scene.model.Dialog;
 import com.gmail.jiangyang5157.cardboard.scene.model.ObjModel;
@@ -28,6 +30,7 @@ import com.gmail.jiangyang5157.cardboard.scene.model.MarkerDetailView;
 import com.gmail.jiangyang5157.tookit.android.base.AppUtils;
 import com.gmail.jiangyang5157.tookit.android.base.DeviceUtils;
 import com.gmail.jiangyang5157.tookit.base.data.IoUtils;
+import com.gmail.jiangyang5157.tookit.base.time.Performance;
 import com.gmail.jiangyang5157.tookit.math.Vector;
 import com.gmail.jiangyang5157.tookit.math.Vector3d;
 import com.google.vr.sdk.base.Eye;
@@ -598,5 +601,25 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         destoryMarkerDetailView();
         destoryEarth();
         destoryRay();
+    }
+
+    private void testPerformanceIcosphere() {
+        for (int i = 0; i < IcosphereVertex.VERTEX_COUNTS.length; i++) {
+            Log.d(Performance.TAG, "Icosphere VERTEX_COUNTS=" + IcosphereVertex.VERTEX_COUNTS[i]);
+            Performance.getInstance().addBreakpoint();
+            IcosphereBuilder.getInstance().build(i);
+            Performance.getInstance().addBreakpoint();
+            Performance.getInstance().printEvaluationInMilliseconds();
+        }
+    }
+
+    private void testPerformanceUvSphere() {
+        for (int i = 50; i < 551; i += 100) {
+            Log.d(Performance.TAG, "UV Sphere rings/segments=" + i + "/" + i);
+            Performance.getInstance().addBreakpoint();
+            new Earth(null, null, i, i).buildData();
+            Performance.getInstance().addBreakpoint();
+            Performance.getInstance().printEvaluationInMilliseconds();
+        }
     }
 }

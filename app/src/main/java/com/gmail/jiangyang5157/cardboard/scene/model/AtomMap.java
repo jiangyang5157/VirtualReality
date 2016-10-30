@@ -14,6 +14,7 @@ import com.gmail.jiangyang5157.cardboard.scene.RayIntersection;
 import com.gmail.jiangyang5157.cardboard.scene.Lighting;
 import com.gmail.jiangyang5157.cardboard.vr.AssetFile;
 import com.gmail.jiangyang5157.cardboard.vr.AssetUtils;
+import com.gmail.jiangyang5157.tookit.base.time.Performance;
 import com.gmail.jiangyang5157.tookit.math.Vector;
 
 import org.xmlpull.v1.XmlPullParserException;
@@ -116,6 +117,9 @@ public class AtomMap extends GlModel implements Creation {
     }
 
     private void prepareLayer(final Ray ray, AssetFile assetFile) {
+//        Log.d(Performance.TAG, "Prepare layer=" + assetFile);
+//        Performance.getInstance().addBreakpoint();
+
         InputStream in = null;
         try {
             in = new FileInputStream(assetFile.getFile());
@@ -139,6 +143,8 @@ public class AtomMap extends GlModel implements Creation {
                 }
             }
         }
+//        Performance.getInstance().addBreakpoint();
+//        Performance.getInstance().printEvaluationInMilliseconds();
     }
 
     public void create() {
