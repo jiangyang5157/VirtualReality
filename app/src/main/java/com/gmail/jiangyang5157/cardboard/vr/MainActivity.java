@@ -277,12 +277,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
             ray.update(view, perspective);
         }
         if (atomMap != null) {
-            Trace.beginSection(TAG + ".atomMap.updateScene");
-            try {
-                atomMap.update(view, perspective);
-            } finally {
-                Trace.endSection();
-            }
+            atomMap.update(view, perspective);
         }
         if (earth != null) {
             earth.update(view, perspective);
@@ -310,12 +305,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         }
 
         if (atomMap != null) {
-            Trace.beginSection(TAG + ".atomMap.drawScene");
-            try {
-                atomMap.draw();
-            } finally {
-                Trace.endSection();
-            }
+            atomMap.draw();
         }
 
         if (earth != null) {
@@ -385,12 +375,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
         }
         if (rayIntersection == null) {
             if (atomMap != null) {
-                Trace.beginSection(TAG + ".atomMap.getIntersection");
-                try {
-                    rayIntersection = atomMap.getIntersection(cameraPos_vec, headForwardFrac_vec, head.getHeadView());
-                } finally {
-                    Trace.endSection();
-                }
+                rayIntersection = atomMap.getIntersection(cameraPos_vec, headForwardFrac_vec, head.getHeadView());
             }
         }
         if (rayIntersection == null) {
