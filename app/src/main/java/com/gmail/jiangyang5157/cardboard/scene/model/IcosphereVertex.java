@@ -16,6 +16,8 @@ public class IcosphereVertex implements Geometry {
      * recursion level 1 vertexCount= 42 faceCount=80 edgeCount=120
      * recursion level 2 vertexCount= 162 faceCount=320 edgeCount=480
      * recursion level 3 vertexCount= 642 faceCount=1280 edgeCount=1920
+     * recursion level 4 vertexCount= 2562
+     * recursion level 5 vertexCount= 10242
      * ...
      */
     public static final int[] VERTEX_COUNTS = new int[]{12, 42, 162, 642, 2562, 10242};
