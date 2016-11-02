@@ -108,7 +108,6 @@ public class AtomMap extends GlModel implements Creation {
 
     private void complete(Ray ray, AssetFile assetFile) {
         todo--;
-//        Log.d(TAG, "complete: " + assetFile.toString() + "\ntodo:" + todo);
         if (todo <= 0) {
             ray.subtractBusy();
             creationState = STATE_BEFORE_CREATE;

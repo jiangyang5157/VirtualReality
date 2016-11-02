@@ -5,6 +5,7 @@ package com.gmail.jiangyang5157.cardboard.scene.tree;
  * @since 7/10/2016
  */
 public abstract class TreeNode implements TreePhase {
+
     abstract void split();
 
     abstract boolean isValid();
