@@ -2,7 +2,6 @@ package com.gmail.jiangyang5157.cardboard.vr;
 
 import android.content.Context;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import com.gmail.jiangyang5157.tookit.android.base.AppUtils;
 import com.gmail.jiangyang5157.tookit.base.data.RegularExpressionUtils;
@@ -17,17 +16,35 @@ import java.util.Locale;
  * @since 6/5/2016
  */
 public class AssetUtils {
-    private static final String TAG = "[AssetUtils]";
+
+    public static final String IP_ADDRESS = "192.168.1.70";
+
+    /**
+     * For a convenience of modify KML, using default IP address decorated in KML.
+     * App will extract this IP and replace with IP_ADDRESS, which should be the real server IP address.
+     */
+    public static final String IP_ADDRESS_LOCALHOST = "127.0.0.1";
 
     public static final String URL_PROTOCOL = "http";
     public static final String PORT = "8080";
 
-    /*
-    Android device: use real machine Ip address.
-    Android emulator: use 10.0.2.2 instead of 127.0.0.1 or localhost.
-    */
-    public static final String IP_ADDRESS = "192.168.1.67";
-    public static final String IP_ADDRESS_LOCALHOST = "127.0.0.1";
+    // App Profile Path: /data/user/0/com.gmail.jiangyang5157.cardboard.vr
+    public static final String DIRECTORY_STATIC = "static";
+    public static final String DIRECTORY_LAYER = DIRECTORY_STATIC + File.separator + "layer";
+    public static final String DIRECTORY_KML = DIRECTORY_STATIC + File.separator + "kml";
+    public static final String DIRECTORY_MODEL = DIRECTORY_STATIC + File.separator + "model";
+    public static final String DIRECTORY_RESOURCE = DIRECTORY_STATIC + File.separator + "resource";
+
+    public static final String KML_FILE_ENDS = ".kml";
+
+    public static final String LAYER_FILE_NAME_KEY = "LAYER_FILE_NAME_KEY";
+    public static final String LAYER_FILE_NAME_DEFAULT = "example_combined" + KML_FILE_ENDS;
+
+    public static final String PATCH_FILE_NAME = "static.zip";
+    public static final String EARTH_TEXTURE_FILE_NAME = "world_map.jpg";
+
+    public static final String PATCH_LAST_MODIFIED_TIME_KEY = "PATCH_LAST_MODIFIED_KEY";
+    public static final long PATCH_LAST_MODIFIED_TIME_DEFAULT = 0;
 
     public static String getApiUrlPrefix(String ipAddress) {
         return URL_PROTOCOL + "://" + ipAddress + ":" + PORT + "/api/";
@@ -40,25 +57,6 @@ public class AssetUtils {
     public static String localhost2RealMachine(String url) {
         return url.replaceFirst(getAssetsUrlPrefix(IP_ADDRESS_LOCALHOST), getAssetsUrlPrefix(IP_ADDRESS));
     }
-
-    // profile path:
-    // /data/user/0/com.gmail.jiangyang5157.cardboard.vr
-
-    public static final String KML_FILE_ENDS = ".kml";
-
-    public static final String DIRECTORY_STATIC = "static";
-    public static final String DIRECTORY_LAYER = DIRECTORY_STATIC + File.separator + "layer";
-    public static final String DIRECTORY_KML = DIRECTORY_STATIC + File.separator + "kml";
-    public static final String DIRECTORY_MODEL = DIRECTORY_STATIC + File.separator + "model";
-    public static final String DIRECTORY_RESOURCE = DIRECTORY_STATIC + File.separator + "resource";
-
-    public static final String PATCH_FILE_NAME = "static.zip";
-    public static final String EARTH_TEXTURE_FILE_NAME = "world_map.jpg";
-
-    public static final String LAYER_FILE_NAME_KEY = "LAYER_FILE_NAME_KEY";
-    public static final String LAYER_FILE_NAME_DEFAULT = "example_combined.kml";
-    public static final String PATCH_LAST_MODIFIED_TIME_KEY = "PATCH_LAST_MODIFIED_KEY";
-    public static final long PATCH_LAST_MODIFIED_TIME_DEFAULT = 0;
 
     public static boolean setLastLayerFileName(Context context, String fileName) {
         return PreferenceManager.getDefaultSharedPreferences(context).edit().putString(LAYER_FILE_NAME_KEY, fileName).commit();
