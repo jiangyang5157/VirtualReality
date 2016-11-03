@@ -38,6 +38,8 @@ public class AtomMap extends GlModel implements Creation {
 
     private AtomMarkers markers;
 
+    private int todo = 0;
+
     public AtomMap(Context context, String urlLayer) {
         super(context);
         this.urlLayer = urlLayer;
@@ -98,15 +100,13 @@ public class AtomMap extends GlModel implements Creation {
                         todo++;
                         prepareLayer(ray, assetFile);
                     }
-                    complete(ray, assetFile);
+                    complete(ray);
                 }
             }
         }).start();
     }
 
-    private int todo = 0;
-
-    private void complete(Ray ray, AssetFile assetFile) {
+    private void complete(Ray ray) {
         todo--;
         if (todo <= 0) {
             ray.subtractBusy();
@@ -126,8 +126,9 @@ public class AtomMap extends GlModel implements Creation {
                 todo += networkLinksSize;
                 prepareNetworkLinks(ray, kmlLayer.getNetworkLinksCollection());
             }
-            complete(ray, assetFile);
+            complete(ray);
         } catch (XmlPullParserException | IOException e) {
+            complete(ray);
             e.printStackTrace();
         } finally {
             if (in != null) {

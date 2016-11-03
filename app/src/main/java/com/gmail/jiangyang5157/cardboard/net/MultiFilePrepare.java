@@ -17,6 +17,8 @@ public class MultiFilePrepare extends NetRequest {
 
     private HashSet<AssetFile> assetFileSet;
 
+    private int todo = 0;
+
     public interface PrepareListener {
         void onStart();
 
@@ -44,7 +46,6 @@ public class MultiFilePrepare extends NetRequest {
         }
     }
 
-    private int todo = 0;
     private void complete(AssetFile assetFile) {
         todo--;
         if (todo <= 0) {
