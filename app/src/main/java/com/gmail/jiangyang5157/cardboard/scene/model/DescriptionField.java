@@ -58,6 +58,7 @@ public class DescriptionField extends TextField {
                 @Override
                 public void onComplete(String string) {
 //                    Log.d(TAG, "Response.Listener.onResponse: string: " + string);
+                    content = contentFilter(content);
                     textureBitmap[0] = buildTextBitmap(ellipsizeString(string, MAX_TEXT_LENGTH));
                     buildData();
                     eventListener.onPrepareComplete();
@@ -72,10 +73,19 @@ public class DescriptionField extends TextField {
                 }
             }).start();
         } else {
+            content = contentFilter(content);
             textureBitmap[0] = buildTextBitmap(ellipsizeString(content, MAX_TEXT_LENGTH));
             buildData();
             eventListener.onPrepareComplete();
         }
+    }
+
+    // TODO: 11/4/2016 ignore strange symbols https://regex101.com/
+    // "<!\\[CDATA\\[(.*)\\]>"
+    // /\u02c8s\u026adni/
+    // (/\u02c8\u0254\u02d0kl\u0259nd/ AWK-l\u0259nd)
+    private String contentFilter(String content) {
+        return content;
     }
 
     public void setEventListener(Event eventListener) {
