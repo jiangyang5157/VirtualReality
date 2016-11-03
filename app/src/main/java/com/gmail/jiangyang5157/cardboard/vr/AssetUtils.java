@@ -38,7 +38,7 @@ public class AssetUtils {
     public static final String KML_FILE_ENDS = ".kml";
 
     public static final String LAYER_FILE_NAME_KEY = "LAYER_FILE_NAME_KEY";
-    public static final String LAYER_FILE_NAME_DEFAULT = "example_combined" + KML_FILE_ENDS;
+    public static final String LAYER_FILE_NAME_DEFAULT = "example" + KML_FILE_ENDS;
 
     public static final String PATCH_FILE_NAME = "static.zip";
     public static final String EARTH_TEXTURE_FILE_NAME = "world_map.jpg";
