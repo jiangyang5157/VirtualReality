@@ -70,20 +70,19 @@ public class Marker3d extends Icosphere {
                 getTranslationY() - cameraPos_vec.getData(1),
                 getTranslationZ() - cameraPos_vec.getData(2)
         };
-        // Convenience vector for extracting the position from a matrix via multiplication.
-        float[] posMultiply = new float[]{(float) camera_pos[0], (float) camera_pos[1], (float) camera_pos[2], 0.0f};
-        // position in camera space
-        float[] posInCameraSpace = new float[4];
         // Convert object space to camera space - Use the headView from onNewFrame.
         float[] mv = new float[16];
         Matrix.multiplyMM(mv, 0, headView, 0, model, 0);
+        // Position in camera space
+        float[] posInCameraSpace = new float[4];
+        // Convenience vector for extracting the position from a matrix via multiplication.
+        float[] posMultiply = new float[]{(float) camera_pos[0], (float) camera_pos[1], (float) camera_pos[2], 0.0f};
         Matrix.multiplyMV(posInCameraSpace, 0, mv, 0, posMultiply, 0);
 
         double pitch = Math.atan2(posInCameraSpace[1], -posInCameraSpace[2]);
         double yaw = Math.atan2(posInCameraSpace[0], -posInCameraSpace[2]);
-        final double PITCH_LIMIT = 0.02;
-        final double YAW_LIMIT = 0.02;
-        if (Math.abs(pitch) > PITCH_LIMIT || Math.abs(yaw) > YAW_LIMIT) {
+        final double TOLERANCE = 0.02;
+        if (Math.abs(pitch) > TOLERANCE || Math.abs(yaw) > TOLERANCE) {
             return null;
         } else {
             double dot = camera_pos[0] * camera_pos[0] + camera_pos[1] * camera_pos[1] + camera_pos[2] * camera_pos[2];
