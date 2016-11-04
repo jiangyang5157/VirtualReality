@@ -128,7 +128,7 @@ public class AssetUtils {
         // java.text.ParseException: Unparseable date: "Sat, 01 Oct 2016 13:06:42 GMT"
         // Sat, 01 Oct 2016 13:06:42 GMT
         // EEE, dd MMM yyyy HH:mm:ss zzz
-        SimpleDateFormat format = new SimpleDateFormat(RegularExpressionUtils.DATE_TEMPLATE_HTTP_DATE, Locale.ENGLISH);
+        SimpleDateFormat format = new SimpleDateFormat(RegularExpressionUtils.DATE_REGEX_HTTP_DATE, Locale.ENGLISH);
         return format.parse(httpDate).getTime();
     }
 
