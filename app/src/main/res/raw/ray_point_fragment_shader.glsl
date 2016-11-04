@@ -28,7 +28,7 @@ void main()
     }
 
     bool belongsToSpinner = spinnerDown < length && length < spinnerUp;
-    float theta = atan (-coord.x, coord.y); //  (-PI, PI)
+    float theta = atan (-coord.x, coord.y); // (-PI, PI)
     belongsToSpinner = belongsToSpinner && theta < u_Spinner;
     if (belongsToSpinner){
         FragColor = vec4(u_Color, 1.0);
