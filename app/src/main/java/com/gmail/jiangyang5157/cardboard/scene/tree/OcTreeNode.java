@@ -174,14 +174,6 @@ public class OcTreeNode extends TreeNode {
         return true;
     }
 
-    private boolean[] getOctant(int index) {
-        return new boolean[]{
-                (index & 1) == 0, // 0, 2, 4, 6
-                (index & 2) == 0, // 0, 1, 4, 5
-                (index & 4) == 0, // 0, 1, 2, 3
-        };
-    }
-
     private int getIndex(boolean[] octant) {
         int ret = 0;
         for (int i = 0; i < 3; i++) {
@@ -192,14 +184,26 @@ public class OcTreeNode extends TreeNode {
         return ret;
     }
 
-    @Override
-    public void insertObject(OcTreeObject obj) {
+    private boolean[] getOctant(int index) {
+        return new boolean[]{
+                (index & 1) == 0, // 0, 2, 4, 6
+                (index & 2) == 0, // 0, 1, 4, 5
+                (index & 4) == 0, // 0, 1, 2, 3
+        };
+    }
+
+    private boolean[] getOctant(OcTreeObject obj){
         boolean[] octant = new boolean[3];
         for (int i = 0; i < 3; i++) {
-            float delta = obj.center[i] - center[i];
+            float delta = obj.center[i] - this.center[i];
             octant[i] = delta >= 0;
         }
+        return octant;
+    }
 
+    @Override
+    public void insertObject(OcTreeObject obj) {
+        boolean[] octant = getOctant(obj);
         int index = getIndex(octant);
         insertObject(index, obj);
     }
