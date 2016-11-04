@@ -83,7 +83,7 @@ public class OcTreeNode extends TreeNode {
             //             |               |               |/
             //             o---------------o---------------o
             */
-            boolean[] octant = getBooleanOctant(i);
+            boolean[] octant = getOctant(i);
             float offsetX = octant[0] ? halfStep : -halfStep;
             float offsetY = octant[1] ? halfStep : -halfStep;
             float offsetZ = octant[2] ? halfStep : -halfStep;
@@ -174,7 +174,7 @@ public class OcTreeNode extends TreeNode {
         return true;
     }
 
-    private boolean[] getBooleanOctant(int index) {
+    private boolean[] getOctant(int index) {
         return new boolean[]{
                 (index & 1) == 0, // 0, 2, 4, 6
                 (index & 2) == 0, // 0, 1, 4, 5
