@@ -33,15 +33,17 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity
-            android:name="com.gmail.jiangyang5157.cardboard.vr.MainActivity"
-            android:screenOrientation="landscape">
+        <activity android:name="com.gmail.jiangyang5157.cardboard.vr.EntryActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="com.google.intent.category.CARDBOARD" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name="com.gmail.jiangyang5157.cardboard.vr.MainActivity"
+            android:screenOrientation="landscape">
         </activity>
     </application>
 

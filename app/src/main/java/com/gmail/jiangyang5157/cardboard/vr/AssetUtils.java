@@ -17,16 +17,15 @@ import java.util.Locale;
  */
 public class AssetUtils {
 
-    public static final String IP_ADDRESS = "192.168.1.70";
-
     /**
-     * For a convenience of modify KML, using default IP address decorated in KML.
+     * For a convenience of modify KML, using default IP address (localhost) decorated in KML.
      * App will extract this IP and replace with IP_ADDRESS, which should be the real server IP address.
      */
+    public static String IP_ADDRESS = "192.168.1.70";
     public static final String IP_ADDRESS_LOCALHOST = "127.0.0.1";
+    public static String PORT = "8080";
 
     public static final String URL_PROTOCOL = "http";
-    public static final String PORT = "8080";
 
     // App Profile Path: /data/user/0/com.gmail.jiangyang5157.cardboard.vr
     public static final String DIRECTORY_STATIC = "static";
@@ -35,16 +34,15 @@ public class AssetUtils {
     public static final String DIRECTORY_MODEL = DIRECTORY_STATIC + File.separator + "model";
     public static final String DIRECTORY_RESOURCE = DIRECTORY_STATIC + File.separator + "resource";
 
-    public static final String KML_FILE_ENDS = ".kml";
-
-    public static final String LAYER_FILE_NAME_KEY = "LAYER_FILE_NAME_KEY";
-    public static final String LAYER_FILE_NAME_DEFAULT = "example" + KML_FILE_ENDS;
-
     public static final String PATCH_FILE_NAME = "static.zip";
     public static final String EARTH_TEXTURE_FILE_NAME = "world_map.jpg";
 
     public static final String PATCH_LAST_MODIFIED_TIME_KEY = "PATCH_LAST_MODIFIED_KEY";
     public static final long PATCH_LAST_MODIFIED_TIME_DEFAULT = 0;
+
+    public static final String KML_FILE_ENDS = ".kml";
+    public static final String LAYER_FILE_NAME_KEY = "LAYER_FILE_NAME_KEY";
+    public static final String LAYER_FILE_NAME_DEFAULT = "example" + KML_FILE_ENDS;
 
     public static String getApiUrlPrefix(String ipAddress) {
         return URL_PROTOCOL + "://" + ipAddress + ":" + PORT + "/api/";
@@ -130,7 +128,7 @@ public class AssetUtils {
         // java.text.ParseException: Unparseable date: "Sat, 01 Oct 2016 13:06:42 GMT"
         // Sat, 01 Oct 2016 13:06:42 GMT
         // EEE, dd MMM yyyy HH:mm:ss zzz
-        SimpleDateFormat format = new SimpleDateFormat(RegularExpressionUtils.DATE_TEMPLATE_HTTP_DATE, Locale.ENGLISH);
+        SimpleDateFormat format = new SimpleDateFormat(RegularExpressionUtils.DATE_REGEX_HTTP_DATE, Locale.ENGLISH);
         return format.parse(httpDate).getTime();
     }
 

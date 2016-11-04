@@ -31,7 +31,7 @@ public class DescriptionField extends TextField {
 
     @Override
     public void prepare(final Ray ray) {
-        Pattern pattern = Pattern.compile(RegularExpressionUtils.URL_TEMPLATE);
+        Pattern pattern = Pattern.compile(RegularExpressionUtils.URL_REGEX);
         Matcher matcher = pattern.matcher(content);
         boolean find = matcher.find();
         if (find) {
