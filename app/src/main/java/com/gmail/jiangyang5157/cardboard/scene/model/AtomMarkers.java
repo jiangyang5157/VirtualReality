@@ -89,13 +89,10 @@ public class AtomMarkers extends Marker3d {
 
         GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, indicesBuffHandle);
 
-//        Performance.getInstance().addBreakpoint();
         int iSize = markers.size();
         for (int i = 0; i < iSize; i++) {
             markers.get(i).draw();
         }
-//        Performance.getInstance().addBreakpoint();
-//        Performance.getInstance().printEvaluationInMilliseconds();
 
         GLES20.glDisableVertexAttribArray(vertexHandle);
         GLES20.glDisableVertexAttribArray(normalHandle);

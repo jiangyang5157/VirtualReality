@@ -3,6 +3,7 @@ package com.gmail.jiangyang5157.cardboard.scene.model;
 import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
+import android.os.Trace;
 import android.util.Log;
 
 import com.gmail.jiangyang5157.cardboard.scene.Head;
@@ -159,7 +160,10 @@ public class Ray extends Point {
         GLES20.glVertexAttribPointer(vertexHandle, 3, GLES20.GL_FLOAT, false, 0, 0);
 
         GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, indicesBuffHandle);
+
+        Trace.beginSection("Processing glDrawElements");
         GLES20.glDrawElements(GLES20.GL_POINTS, indicesBufferCapacity, GLES20.GL_UNSIGNED_SHORT, 0);
+        Trace.endSection();
 
         GLES20.glDisableVertexAttribArray(vertexHandle);
         GLES20.glUseProgram(0);

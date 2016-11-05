@@ -31,10 +31,7 @@ public class AtomMarker extends Marker3d {
 
         GLES20.glUniform3fv(colorHandle, 1, color, 0);
 
-//        Performance.getInstance().addBreakpoint();
         GLES20.glDrawElements(GLES20.GL_TRIANGLES, indicesBufferCapacity, GLES20.GL_UNSIGNED_SHORT, 0);
-//        Performance.getInstance().addBreakpoint();
-//        Performance.getInstance().printEvaluationInMilliseconds();
 
         GlesUtils.printGlError(TAG + " - draw end");
     }
