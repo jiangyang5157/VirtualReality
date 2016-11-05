@@ -9,6 +9,7 @@ import android.util.Log;
 import com.gmail.jiangyang5157.cardboard.scene.Head;
 import com.gmail.jiangyang5157.cardboard.scene.RayIntersection;
 import com.gmail.jiangyang5157.tookit.android.base.AppUtils;
+import com.gmail.jiangyang5157.tookit.base.time.Performance;
 
 /**
  * @author Yang
@@ -160,10 +161,7 @@ public class Ray extends Point {
         GLES20.glVertexAttribPointer(vertexHandle, 3, GLES20.GL_FLOAT, false, 0, 0);
 
         GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, indicesBuffHandle);
-
-//        Trace.beginSection("Processing glDrawElements");
         GLES20.glDrawElements(GLES20.GL_POINTS, indicesBufferCapacity, GLES20.GL_UNSIGNED_SHORT, 0);
-//        Trace.endSection();
 
         GLES20.glDisableVertexAttribArray(vertexHandle);
         GLES20.glUseProgram(0);
