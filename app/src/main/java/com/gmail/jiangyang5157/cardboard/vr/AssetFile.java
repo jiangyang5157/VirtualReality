@@ -15,27 +15,16 @@ public class AssetFile {
 
     private String url;
 
-    public static final int STATUS_NOT_READY = 0;
-    public static final int STATUS_ERROR = -1;
-    public static final int STATUS_READY = 1;
-
-    private int status = STATUS_NOT_READY;
+    private final boolean requireUpdate;
 
     public AssetFile(@NonNull File file, @NonNull String url) {
+        this(file, url, false);
+    }
+
+    public AssetFile(@NonNull File file, @NonNull String url, boolean requireUpdate) {
         this.file = file;
         this.url = url;
-
-        if (file.exists()) {
-            status = STATUS_READY;
-        }
-    }
-
-    public boolean exists() {
-        return file.exists();
-    }
-
-    public String getAbsolutePath() {
-        return file.getAbsolutePath();
+        this.requireUpdate = requireUpdate;
     }
 
     public File getFile() {
@@ -46,16 +35,8 @@ public class AssetFile {
         return url;
     }
 
-    public void setStatus(int status) {
-        this.status = status;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public boolean isReady() {
-        return status == STATUS_READY;
+    public boolean isRequireUpdate() {
+        return requireUpdate;
     }
 
     @Override
@@ -78,17 +59,12 @@ public class AssetFile {
         return ret;
     }
 
-    public static int hashCode(double d) {
-        long longBits = Double.doubleToLongBits(d);
-        return (int) (longBits ^ (longBits >>> 32));
-    }
-
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("AssetFile").append("{");
         sb.append("\n file=").append(file.getAbsolutePath());
         sb.append(",\n url=").append(url);
-        sb.append(",\n status=").append(status);
+        sb.append(",\n requireUpdate=").append(requireUpdate);
         sb.append("\n}\n");
         return sb.toString();
     }

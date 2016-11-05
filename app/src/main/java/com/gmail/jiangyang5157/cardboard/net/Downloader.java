@@ -65,10 +65,9 @@ public class Downloader extends NetRequest {
                             e.printStackTrace();
                         }
                     }
-                    assetFile.setStatus(AssetFile.STATUS_READY);
                     listener.onComplete(assetFile, request.getResponseHeaders());
-                }, volleyError -> {
-            assetFile.setStatus(AssetFile.STATUS_ERROR);
+                },
+                volleyError -> {
             listener.onError(assetFile, volleyError);
         });
 

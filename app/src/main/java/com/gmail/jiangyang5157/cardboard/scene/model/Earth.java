@@ -64,7 +64,7 @@ public class Earth extends UvSphere implements Creation {
 
                 @Override
                 public void onComplete(AssetFile assetFile) {
-                    if (assetFile.isReady()) {
+                    if (assetFile.getFile().exists()) {
                         buildTextureBuffers();
                         buildData();
                         ray.subtractBusy();

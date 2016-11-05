@@ -97,7 +97,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
      */
     private void checkPatch() {
         File file = new File(AssetUtils.getAbsolutePath(getApplicationContext(), AssetUtils.getPatchPath()));
-        AssetFile assetFile = new AssetFile(file, AssetUtils.getPatchUrl());
+        AssetFile assetFile = new AssetFile(file, AssetUtils.getPatchUrl(), true);
         new Downloader(assetFile, new Downloader.ResponseListener() {
             @Override
             public boolean onStart(java.util.Map<String, String> headers) {
