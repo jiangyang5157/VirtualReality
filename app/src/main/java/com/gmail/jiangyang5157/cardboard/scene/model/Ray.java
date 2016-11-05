@@ -161,9 +161,9 @@ public class Ray extends Point {
 
         GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, indicesBuffHandle);
 
-        Trace.beginSection("Processing glDrawElements");
+//        Trace.beginSection("Processing glDrawElements");
         GLES20.glDrawElements(GLES20.GL_POINTS, indicesBufferCapacity, GLES20.GL_UNSIGNED_SHORT, 0);
-        Trace.endSection();
+//        Trace.endSection();
 
         GLES20.glDisableVertexAttribArray(vertexHandle);
         GLES20.glUseProgram(0);
