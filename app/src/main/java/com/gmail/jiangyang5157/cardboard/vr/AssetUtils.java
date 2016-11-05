@@ -21,8 +21,8 @@ public class AssetUtils {
      * For a convenience of editing URLs in the KML, always use the localhost IP to decorate URLs.
      * App will extract the localhost IP (if found) and replace it with real IP address.
      */
-    public static final String IP_ADDRESS_LOCALHOST = "localhost";
     public static String IP_ADDRESS = "192.168.1.101";
+    public static final String IP_ADDRESS_LOCALHOST = "localhost";
     public static final String PORT = "5157";
 
     public static final String URL_PROTOCOL = "http";
