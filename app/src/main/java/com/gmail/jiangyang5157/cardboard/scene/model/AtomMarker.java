@@ -2,6 +2,7 @@ package com.gmail.jiangyang5157.cardboard.scene.model;
 
 import android.content.Context;
 import android.opengl.GLES20;
+import android.os.Trace;
 import android.util.Log;
 
 import com.gmail.jiangyang5157.tookit.base.time.Performance;
@@ -31,7 +32,9 @@ public class AtomMarker extends Marker3d {
 
         GLES20.glUniform3fv(colorHandle, 1, color, 0);
 
+//        Trace.beginSection("Processing glDrawElements");
         GLES20.glDrawElements(GLES20.GL_TRIANGLES, indicesBufferCapacity, GLES20.GL_UNSIGNED_SHORT, 0);
+//        Trace.endSection();
 
         GlesUtils.printGlError(TAG + " - draw end");
     }
