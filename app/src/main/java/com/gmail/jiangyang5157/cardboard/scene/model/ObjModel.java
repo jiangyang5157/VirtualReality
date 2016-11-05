@@ -69,7 +69,7 @@ public class ObjModel extends GlModel implements GlModel.BindableBuffer, Creatio
 
                 @Override
                 public void onComplete(AssetFile assetFile) {
-                    if (assetFile.isReady()){
+                    if (assetFile.getFile().exists()) {
                         buildData();
                         ray.subtractBusy();
                         creationState = STATE_BEFORE_CREATE;

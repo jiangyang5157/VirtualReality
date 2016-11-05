@@ -1,6 +1,7 @@
 package com.gmail.jiangyang5157.cardboard.net;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.android.volley.VolleyError;
 import com.gmail.jiangyang5157.cardboard.vr.AssetFile;
@@ -13,11 +14,13 @@ import java.util.Map;
  */
 
 public class FilePrepare extends NetRequest {
+    public static final String TAG = "[FilePrepare]";
 
     private AssetFile assetFile;
 
     public interface PrepareListener {
         void onStart();
+
         void onComplete(AssetFile assetFile);
     }
 
@@ -31,10 +34,10 @@ public class FilePrepare extends NetRequest {
     @Override
     public void start() {
         prepareListener.onStart();
-        if (assetFile.isReady()){
-            prepareListener.onComplete(assetFile);
-        } else{
+        if (!assetFile.getFile().exists() || assetFile.isRequireUpdate()) {
             new Downloader(assetFile, responseListener).start();
+        } else {
+            prepareListener.onComplete(assetFile);
         }
     }
 
@@ -51,6 +54,7 @@ public class FilePrepare extends NetRequest {
 
         @Override
         public void onError(AssetFile assetFile, VolleyError volleyError) {
+            Log.e(TAG, "responseListener.onError:" + assetFile.getUrl() + " " + volleyError.toString());
             prepareListener.onComplete(assetFile);
         }
     };

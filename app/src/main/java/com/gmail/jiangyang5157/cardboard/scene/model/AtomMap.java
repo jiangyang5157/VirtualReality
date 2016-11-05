@@ -59,7 +59,7 @@ public class AtomMap extends GlModel implements Creation {
 
                 @Override
                 public void onComplete(AssetFile assetFile) {
-                    if (assetFile.isReady()) {
+                    if (assetFile.getFile().exists()) {
                         todo++;
                         prepareLayer(ray, assetFile);
                     } else {
@@ -78,11 +78,10 @@ public class AtomMap extends GlModel implements Creation {
             KmlNetworkLink networkLink = it.next();
             String href = networkLink.getLink().getHref();
             String url = AssetUtils.localhost2RealMachine(href);
+            String sync = networkLink.getProperty("sync");
+            boolean requireUpdate = sync != null && sync.equals("1");
             File file = new File(AssetUtils.getAbsolutePath(context, AssetUtils.getAssetPath(url)));
-            AssetFile assetFile = new AssetFile(file, url);
-            // TODO: 10/2/2016 update property = 1: force update
-            String update = networkLink.getProperty("update");
-//            Log.d(TAG, "prepareNetworkLinks (update=" + update + "): " + assetFile);
+            AssetFile assetFile = new AssetFile(file, url, requireUpdate);
             assetFileSet.add(assetFile);
         }
 
@@ -96,7 +95,7 @@ public class AtomMap extends GlModel implements Creation {
                 Iterator it = assetFileSet.iterator();
                 while (it.hasNext()) {
                     AssetFile assetFile = (AssetFile) it.next();
-                    if (assetFile.isReady()) {
+                    if (assetFile.getFile().exists()) {
                         todo++;
                         prepareLayer(ray, assetFile);
                     }
