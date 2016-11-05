@@ -21,9 +21,7 @@ import java.util.regex.Pattern;
 public class EntryActivity extends AppCompatActivity {
 
     private TextInputLayout layoutIpAddress;
-    private TextInputLayout layoutPort;
     private TextInputEditText etIpAddress;
-    private TextInputEditText etPort;
     private Button btnDone;
 
     @Override
@@ -35,11 +33,8 @@ public class EntryActivity extends AppCompatActivity {
 
     private void setupViews() {
         layoutIpAddress = (TextInputLayout) findViewById(R.id.layout_ip_address);
-        layoutPort = (TextInputLayout) findViewById(R.id.layout_port);
         etIpAddress = (TextInputEditText) findViewById(R.id.et_ip_address);
         etIpAddress.setText(AssetUtils.IP_ADDRESS);
-        etPort = (TextInputEditText) findViewById(R.id.et_port);
-        etPort.setText(AssetUtils.PORT);
         btnDone = (Button) findViewById(R.id.btn_done);
         btnDone.setOnClickListener(btnDoneOnClickListener);
     }
@@ -48,22 +43,11 @@ public class EntryActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             String ipAddress = contentFilter(etIpAddress.getText().toString().trim(), RegularExpressionUtils.IP_ADDRESS_REGEX);
-            String port = contentFilter(etPort.getText().toString().trim(), RegularExpressionUtils.PORT_REGEX);
-            if (ipAddress == null) {
-                layoutIpAddress.setErrorEnabled(true);
+            layoutIpAddress.setErrorEnabled(ipAddress == null);
+            if (layoutIpAddress.isErrorEnabled()) {
                 layoutIpAddress.setError(AppUtils.getString(getApplicationContext(), R.string.error_invalid));
             } else {
-                layoutIpAddress.setErrorEnabled(false);
-            }
-            if (port == null) {
-                layoutPort.setErrorEnabled(true);
-                layoutPort.setError(AppUtils.getString(getApplicationContext(), R.string.error_invalid));
-            } else {
-                layoutPort.setErrorEnabled(false);
-            }
-            if (!layoutIpAddress.isErrorEnabled() && !layoutPort.isErrorEnabled()) {
                 AssetUtils.IP_ADDRESS = ipAddress;
-                AssetUtils.PORT = port;
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
                 finish();

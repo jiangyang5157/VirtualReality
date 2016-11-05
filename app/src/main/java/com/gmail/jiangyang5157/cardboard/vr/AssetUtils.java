@@ -18,12 +18,12 @@ import java.util.Locale;
 public class AssetUtils {
 
     /**
-     * For a convenience of modify KML, using default IP address (localhost) decorated in KML.
-     * App will extract this IP and replace with IP_ADDRESS, which should be the real server IP address.
+     * For a convenience of editing URLs in the KML, always use the localhost IP to decorate URLs.
+     * App will extract the localhost IP (if found) and replace it with real IP address.
      */
-    public static String IP_ADDRESS = "192.168.1.70";
-    public static final String IP_ADDRESS_LOCALHOST = "127.0.0.1";
-    public static String PORT = "8080";
+    public static final String IP_ADDRESS_LOCALHOST = "localhost";
+    public static String IP_ADDRESS = "192.168.1.101";
+    public static final String PORT = "5157";
 
     public static final String URL_PROTOCOL = "http";
 
@@ -125,9 +125,6 @@ public class AssetUtils {
     }
 
     public static long getHttpDateTime(String httpDate) throws ParseException {
-        // java.text.ParseException: Unparseable date: "Sat, 01 Oct 2016 13:06:42 GMT"
-        // Sat, 01 Oct 2016 13:06:42 GMT
-        // EEE, dd MMM yyyy HH:mm:ss zzz
         SimpleDateFormat format = new SimpleDateFormat(RegularExpressionUtils.DATE_REGEX_HTTP_DATE, Locale.ENGLISH);
         return format.parse(httpDate).getTime();
     }
