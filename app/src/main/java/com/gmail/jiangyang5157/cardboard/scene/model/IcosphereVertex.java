@@ -25,7 +25,7 @@ public class IcosphereVertex implements Geometry {
     private float[] vertices;
     private short[] indices;
 
-    protected IcosphereVertex(int recursionLevel) {
+    public IcosphereVertex(int recursionLevel) {
         build(recursionLevel);
     }
 

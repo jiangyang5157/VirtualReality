@@ -2,6 +2,7 @@ package com.gmail.jiangyang5157.cardboard.scene.model;
 
 import android.content.Context;
 import android.opengl.GLES20;
+import android.os.Trace;
 import android.util.Log;
 
 import com.gmail.jiangyang5157.cardboard.kml.KmlPlacemark;
@@ -103,16 +104,15 @@ public class AtomMarkers extends Marker3d {
 
     @Override
     public void update(float[] view, float[] perspective) {
-//        Performance.getInstance().addBreakpoint();
         this.view = view;
         this.perspective = perspective;
 
         int iSize = markers.size();
+        Trace.beginSection("Processing Placemarks update: " + iSize);
         for (int i = 0; i < iSize; i++) {
             markers.get(i).update(view, perspective);
         }
-//        Performance.getInstance().addBreakpoint();
-//        Performance.getInstance().printEvaluationInMilliseconds();
+        Trace.endSection();
     }
 
     private void addMarker(AtomMarker marker) {
@@ -147,11 +147,11 @@ public class AtomMarkers extends Marker3d {
         if (!isCreated() || !isVisible()) {
             return null;
         }
-//        Log.d(Performance.TAG, "" + markers.size() + " Placemarks Intersection");
-//        Performance.getInstance().addBreakpoint();
+
         RayIntersection ret = null;
         ArrayList<RayIntersection> rayIntersections = new ArrayList<>();
         int iSize = ocTreeNodes.size();
+        Trace.beginSection("Processing Placemarks Intersection: " + iSize);
         for (int i = 0; i < iSize; i++) {
             RayIntersection rayIntersection = ocTreeNodes.get(i).getObjectIntersection(cameraPos_vec, headForwardFrac_vec, headView);
             if (rayIntersection != null) {
@@ -166,8 +166,8 @@ public class AtomMarkers extends Marker3d {
             }
             ret = rayIntersections.get(0);
         }
-//        Performance.getInstance().addBreakpoint();
-//        Performance.getInstance().printEvaluationInMilliseconds();
+        Trace.endSection();
+
         return ret;
     }
 

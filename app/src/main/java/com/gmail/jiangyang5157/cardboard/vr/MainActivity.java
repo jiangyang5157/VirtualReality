@@ -434,6 +434,9 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
             lastTimeOnCardboardTrigger = thisTime;
             onCardboardClick();
         }
+
+//        testPerformanceIcosphere();
+//        testPerformanceUvSphere();
     }
 
     private boolean newLayer(String urlLayer) {
@@ -607,14 +610,14 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
     private void testPerformanceIcosphere() {
         for (int i = 0; i < IcosphereVertex.VERTEX_COUNTS.length; i++) {
             Trace.beginSection("Processing Icosphere Builder VERTEX_COUNTS=" + IcosphereVertex.VERTEX_COUNTS[i]);
-            IcosphereBuilder.getInstance().build(i);
+            new IcosphereVertex(i);
             Trace.endSection();
         }
     }
 
     private void testPerformanceUvSphere() {
-        for (int i = 50; i < 551; i += 100) {
-            Trace.beginSection("Processing UV Sphere Builder rings/segments=" + i + "/" + i);
+        for (int i = 5; i < 161; i *= 2) {
+            Trace.beginSection("Processing UV Sphere Builder rings:segments=" + i);
             new Earth(null, null, i, i).buildData();
             Trace.endSection();
         }

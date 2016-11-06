@@ -2,6 +2,7 @@ package com.gmail.jiangyang5157.cardboard.scene.model;
 
 import android.content.Context;
 import android.opengl.GLES20;
+import android.os.Trace;
 import android.util.ArrayMap;
 import android.util.Log;
 
@@ -115,9 +116,7 @@ public class AtomMap extends GlModel implements Creation {
     }
 
     private void prepareLayer(final Ray ray, AssetFile assetFile) {
-//        Log.d(Performance.TAG, "Prepare layer=" + assetFile);
-//        Performance.getInstance().addBreakpoint();
-
+        Trace.beginSection("Processing Prepare layer: " + assetFile);
         InputStream in = null;
         try {
             in = new FileInputStream(assetFile.getFile());
@@ -142,8 +141,7 @@ public class AtomMap extends GlModel implements Creation {
                 }
             }
         }
-//        Performance.getInstance().addBreakpoint();
-//        Performance.getInstance().printEvaluationInMilliseconds();
+        Trace.endSection();
     }
 
     public void create() {
