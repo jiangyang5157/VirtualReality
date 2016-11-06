@@ -1,8 +1,8 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    compileSdkVersion 24
+    buildToolsVersion "24.0.1"
 
     defaultConfig {
         applicationId "com.gmail.jiangyang5157.cardboard.vr"
@@ -10,11 +10,33 @@ android {
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
+
+        jackOptions {
+            // From "javac (.java --> .class) --> dx (.class --> .dex)" to "Jack (.java --> .jack --> .dex)"
+            enabled true
+        }
     }
+
+    compileOptions {
+        /*
+        JavaVersion.VERSION_1_8
+        dependencies: jackOptions
+        support: lambda
+         */
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            debuggable true
+            jniDebuggable true
+            renderscriptDebuggable true
+            testCoverageEnabled = false
         }
     }
 }
@@ -22,12 +44,12 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
+    compile 'com.android.support:appcompat-v7:24.2.1'
 
-    compile 'com.android.volley:volley:1.0.0'
-    compile 'com.android.support:appcompat-v7:23.2.1'
-    compile 'com.google.android.gms:play-services-maps:8.4.0'
+    compile 'com.google.android.gms:play-services-maps:9.6.0' // KML dependency
+    compile 'com.android.volley:volley:1.0.0' // HTTP library
 
-    compile project(':base')
-    compile project(':common')
+    compile project(':base') // Google VR SDK module
+    compile project(':common') // Google VR SDK module
     compile project(':tookit-debug')
 }

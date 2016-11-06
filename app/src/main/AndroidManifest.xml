@@ -15,7 +15,10 @@
         android:name="android.hardware.sensor.gyroscope"
         android:required="true" />
 
-    <!-- Tell the system this app requires OpenGL ES. -->
+    <!--
+    Tell the system this app requires OpenGL ES.
+    glEsVersion: the higher 16 bits represent the major number and the lower 16 bits represent the minor number. eg: 0x00030002 for gles 3.2
+    -->
     <uses-feature
         android:glEsVersion="0x00020000"
         android:required="true" />
