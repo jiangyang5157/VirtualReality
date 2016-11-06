@@ -148,10 +148,10 @@ public class AtomMarkers extends Marker3d {
             return null;
         }
 
+        Trace.beginSection("Placemarks getIntersection: " + markers.size());
         RayIntersection ret = null;
         ArrayList<RayIntersection> rayIntersections = new ArrayList<>();
         int iSize = ocTreeNodes.size();
-        Trace.beginSection("Placemarks getIntersection: " + iSize);
         for (int i = 0; i < iSize; i++) {
             RayIntersection rayIntersection = ocTreeNodes.get(i).getObjectIntersection(cameraPos_vec, headForwardFrac_vec, headView);
             if (rayIntersection != null) {
