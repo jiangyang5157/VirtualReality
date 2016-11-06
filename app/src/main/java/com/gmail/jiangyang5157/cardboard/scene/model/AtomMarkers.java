@@ -108,7 +108,7 @@ public class AtomMarkers extends Marker3d {
         this.perspective = perspective;
 
         int iSize = markers.size();
-        Trace.beginSection("Processing Placemarks update: " + iSize);
+        Trace.beginSection("Placemarks update: " + iSize);
         for (int i = 0; i < iSize; i++) {
             markers.get(i).update(view, perspective);
         }
@@ -151,7 +151,7 @@ public class AtomMarkers extends Marker3d {
         RayIntersection ret = null;
         ArrayList<RayIntersection> rayIntersections = new ArrayList<>();
         int iSize = ocTreeNodes.size();
-        Trace.beginSection("Processing Placemarks Intersection: " + iSize);
+        Trace.beginSection("Placemarks getIntersection: " + iSize);
         for (int i = 0; i < iSize; i++) {
             RayIntersection rayIntersection = ocTreeNodes.get(i).getObjectIntersection(cameraPos_vec, headForwardFrac_vec, headView);
             if (rayIntersection != null) {

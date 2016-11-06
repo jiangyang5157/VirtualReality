@@ -609,7 +609,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
 
     private void testPerformanceIcosphere() {
         for (int i = 0; i < IcosphereVertex.VERTEX_COUNTS.length; i++) {
-            Trace.beginSection("Processing Icosphere Builder VERTEX_COUNTS=" + IcosphereVertex.VERTEX_COUNTS[i]);
+            Trace.beginSection("Icosphere Builder VERTEX_COUNTS=" + IcosphereVertex.VERTEX_COUNTS[i]);
             new IcosphereVertex(i);
             Trace.endSection();
         }
@@ -617,7 +617,7 @@ public class MainActivity extends GvrActivity implements GvrView.StereoRenderer 
 
     private void testPerformanceUvSphere() {
         for (int i = 5; i < 161; i *= 2) {
-            Trace.beginSection("Processing UV Sphere Builder rings:segments=" + i);
+            Trace.beginSection("UV Sphere Builder rings:segments=" + i);
             new Earth(null, null, i, i).buildData();
             Trace.endSection();
         }

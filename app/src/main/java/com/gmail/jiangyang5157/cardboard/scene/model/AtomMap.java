@@ -116,7 +116,7 @@ public class AtomMap extends GlModel implements Creation {
     }
 
     private void prepareLayer(final Ray ray, AssetFile assetFile) {
-        Trace.beginSection("Processing Prepare layer: " + assetFile);
+        Trace.beginSection("Prepare: " + assetFile.getFile().getName());
         InputStream in = null;
         try {
             in = new FileInputStream(assetFile.getFile());
