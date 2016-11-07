@@ -17,15 +17,15 @@ import java.util.Locale;
  */
 public class AssetUtils {
 
+
+    public static final String URL_PROTOCOL = "http";
+    public static final String PORT = "5157";
     /**
      * For a convenience of editing URLs in the KML, always use the localhost IP to decorate URLs.
      * App will extract the localhost IP (if found) and replace it with real IP address.
      */
-    public static String IP_ADDRESS = "192.168.1.101";
     public static final String IP_ADDRESS_LOCALHOST = "localhost";
-    public static final String PORT = "5157";
-
-    public static final String URL_PROTOCOL = "http";
+    public static String IP_ADDRESS_DEFAULT = "192.168.1.101";
 
     // App Profile Path: /data/user/0/com.gmail.jiangyang5157.cardboard.vr
     public static final String DIRECTORY_STATIC = "static";
@@ -53,7 +53,7 @@ public class AssetUtils {
     }
 
     public static String localhost2RealMachine(String url) {
-        return url.replaceFirst(getAssetsUrlPrefix(IP_ADDRESS_LOCALHOST), getAssetsUrlPrefix(IP_ADDRESS));
+        return url.replaceFirst(getAssetsUrlPrefix(IP_ADDRESS_LOCALHOST), getAssetsUrlPrefix(IP_ADDRESS_DEFAULT));
     }
 
     public static boolean setLastLayerFileName(Context context, String fileName) {
@@ -73,11 +73,11 @@ public class AssetUtils {
     }
 
     public static String getAssetUrl(String path) {
-        return getAssetsUrlPrefix(IP_ADDRESS) + path;
+        return getAssetsUrlPrefix(IP_ADDRESS_DEFAULT) + path;
     }
 
     public static String getAssetPath(String url) {
-        return url.replaceFirst(getAssetsUrlPrefix(IP_ADDRESS), "");
+        return url.replaceFirst(getAssetsUrlPrefix(IP_ADDRESS_DEFAULT), "");
     }
 
     public static String getAbsolutePath(Context context, String path) {

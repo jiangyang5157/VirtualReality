@@ -34,7 +34,7 @@ public class EntryActivity extends AppCompatActivity {
     private void setupViews() {
         layoutIpAddress = (TextInputLayout) findViewById(R.id.layout_ip_address);
         etIpAddress = (TextInputEditText) findViewById(R.id.et_ip_address);
-        etIpAddress.setText(AssetUtils.IP_ADDRESS);
+        etIpAddress.setText(AssetUtils.IP_ADDRESS_DEFAULT);
         btnDone = (Button) findViewById(R.id.btn_done);
         btnDone.setOnClickListener(btnDoneOnClickListener);
     }
@@ -47,7 +47,7 @@ public class EntryActivity extends AppCompatActivity {
             if (layoutIpAddress.isErrorEnabled()) {
                 layoutIpAddress.setError(AppUtils.getString(getApplicationContext(), R.string.error_invalid));
             } else {
-                AssetUtils.IP_ADDRESS = ipAddress;
+                AssetUtils.IP_ADDRESS_DEFAULT = ipAddress;
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
                 finish();
