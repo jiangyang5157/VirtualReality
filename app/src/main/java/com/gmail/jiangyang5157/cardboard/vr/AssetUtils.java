@@ -25,7 +25,7 @@ public class AssetUtils {
      * App will extract the localhost IP (if found) and replace it with real IP address.
      */
     public static final String IP_ADDRESS_LOCALHOST = "localhost";
-    public static String IP_ADDRESS_DEFAULT = "192.168.1.101";
+    public static String IP_ADDRESS = "192.168.1.101";
 
     // App Profile Path: /data/user/0/com.gmail.jiangyang5157.cardboard.vr
     public static final String DIRECTORY_STATIC = "static";
@@ -34,7 +34,7 @@ public class AssetUtils {
     public static final String DIRECTORY_MODEL = DIRECTORY_STATIC + File.separator + "model";
     public static final String DIRECTORY_RESOURCE = DIRECTORY_STATIC + File.separator + "resource";
 
-    public static final String PATCH_FILE_NAME = "static.zip";
+    public static final String PATCH_FILE_NAME = "patch.zip";
     public static final String EARTH_TEXTURE_FILE_NAME = "world_map.jpg";
 
     public static final String PATCH_LAST_MODIFIED_TIME_KEY = "PATCH_LAST_MODIFIED_KEY";
@@ -53,7 +53,7 @@ public class AssetUtils {
     }
 
     public static String localhost2RealMachine(String url) {
-        return url.replaceFirst(getAssetsUrlPrefix(IP_ADDRESS_LOCALHOST), getAssetsUrlPrefix(IP_ADDRESS_DEFAULT));
+        return url.replaceFirst(getAssetsUrlPrefix(IP_ADDRESS_LOCALHOST), getAssetsUrlPrefix(IP_ADDRESS));
     }
 
     public static boolean setLastLayerFileName(Context context, String fileName) {
@@ -73,11 +73,11 @@ public class AssetUtils {
     }
 
     public static String getAssetUrl(String path) {
-        return getAssetsUrlPrefix(IP_ADDRESS_DEFAULT) + path;
+        return getAssetsUrlPrefix(IP_ADDRESS) + path;
     }
 
     public static String getAssetPath(String url) {
-        return url.replaceFirst(getAssetsUrlPrefix(IP_ADDRESS_DEFAULT), "");
+        return url.replaceFirst(getAssetsUrlPrefix(IP_ADDRESS), "");
     }
 
     public static String getAbsolutePath(Context context, String path) {
