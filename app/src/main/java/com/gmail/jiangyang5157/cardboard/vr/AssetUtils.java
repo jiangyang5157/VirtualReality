@@ -34,7 +34,7 @@ public class AssetUtils {
     public static final String DIRECTORY_MODEL = DIRECTORY_STATIC + File.separator + "model";
     public static final String DIRECTORY_RESOURCE = DIRECTORY_STATIC + File.separator + "resource";
 
-    public static final String PATCH_FILE_NAME = "patch.zip";
+    public static final String PATCH_FILE_NAME = "static.zip";
     public static final String EARTH_TEXTURE_FILE_NAME = "world_map.jpg";
 
     public static final String PATCH_LAST_MODIFIED_TIME_KEY = "PATCH_LAST_MODIFIED_KEY";
